@@ -4,11 +4,29 @@ import ModuleCard from "@/components/ModuleCard";
 import { modules, program, learners } from "@/data/courseData";
 import { BookOpen, Users, Award, CalendarCheck, CheckCircle } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function Dashboard() {
+  const [enrolledCount, setEnrolledCount] = useState<number>(learners.length);
   const totalModules = modules.length;
   const readyModules = modules.filter((m) => m.status === "Ready").length;
   const totalCredits = modules.reduce((sum, m) => sum + m.credits, 0);
+
+  useEffect(() => {
+    const loadEnrolledCount = async () => {
+      const rpc = supabase as unknown as {
+        rpc: (fn: string, params?: Record<string, unknown>) => Promise<{ data: Array<{ id: string }> | null; error: { message: string } | null }>;
+      };
+
+      const { data, error } = await rpc.rpc("cet_enrolled_learners");
+      if (!error) {
+        setEnrolledCount((data ?? []).length);
+      }
+    };
+
+    loadEnrolledCount();
+  }, []);
 
   return (
     <AppLayout title="Dashboard" subtitle="FET Certificate: IT Systems Development — SAQA 78965">
@@ -33,7 +51,7 @@ export default function Dashboard() {
         <StatCard label="Total Modules" value={totalModules} icon={<BookOpen size={20} />} variant="accent" />
         <StatCard label="Modules Ready" value={readyModules} icon={<CheckCircle size={20} />} variant="success" />
         <StatCard label="Total Credits" value={totalCredits} icon={<Award size={20} />} />
-        <StatCard label="Enrolled Learners" value={learners.length} icon={<Users size={20} />} variant="warning" />
+        <StatCard label="Enrolled Learners" value={enrolledCount} icon={<Users size={20} />} variant="warning" />
       </div>
 
       {/* Block overview */}

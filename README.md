@@ -1,73 +1,97 @@
-# Welcome to your Lovable project
+# CET Connect Portal (DSA Course Manager)
 
-## Project info
+## Deduction (Current App State)
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+This project is a frontend-first course management portal for the DSA delivery of:
 
-## How can I edit this code?
+- **Qualification:** FET Certificate: IT Systems Development
+- **SAQA ID:** 78965
+- **NQF Level:** 4
+- **Provider shown in app:** Data Science Academy
 
-There are several ways of editing your application.
+Based on the current codebase, this is an **MVP UI/admin tracker** that already supports navigation and core teaching operations views, but it is still mostly powered by **local in-memory mock data** (no persistent backend flows implemented yet).
 
-**Use Lovable**
+## What is implemented
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+- Dashboard with program banner, credit coverage indicator, module stats, and block-based module overview.
+- Modules listing with filters by module type (`All`, `Knowledge`, `Practical`) and block (`All`, `1`, `2`, `3`).
+- Module detail pages with objectives, content, activities, resources, status, and metadata.
+- Learners table with learner list and progress bars.
+- Attendance screen with per-session learner checkboxes and present count.
+- Lesson plans list linked to module details.
+- Assessments matrix generated from module metadata.
+- Programs summary page.
+- Compliance checklist grouped by category with toggleable completion.
+- Announcements page with seeded notices.
+- Messages placeholder page indicating backend integration is pending.
 
-Changes made via Lovable will be committed automatically to this repo.
+## What is not implemented yet (inferred)
 
-**Use your preferred IDE**
+- No persistent database writes for attendance, compliance, messages, or learner progress.
+- No authentication/authorization or role separation.
+- No API integration currently wired into page flows.
+- No real messaging system (page is a placeholder).
+- No robust test coverage yet (only a basic sample test exists).
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Tech stack
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- React + TypeScript + Vite
+- Tailwind CSS + shadcn/ui + Radix UI
+- React Router
+- TanStack Query (installed and provider configured)
+- Vitest + Testing Library (minimal test scaffolding)
+- Supabase client folder exists but is not yet actively used in feature flows
 
-Follow these steps:
+## App routes
+
+- `/` Dashboard
+- `/modules` Modules list
+- `/modules/:id` Module detail
+- `/learners` Learners
+- `/attendance` Attendance
+- `/lesson-plans` Lesson plans
+- `/assessments` Assessments
+- `/programs` Programs
+- `/compliance` Compliance
+- `/announcements` Announcements
+- `/messages` Messages
+
+## Local development
+
+### Prerequisites
+
+- Node.js 18+ (recommended)
+- npm
+
+### Run
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Quality checks
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```sh
+npm run lint
+npm run test
+npm run build
+```
 
-**Use GitHub Codespaces**
+## Documentation status
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+This README now reflects the app behavior currently present in code (deduction pass 1).
 
-## What technologies are used for this project?
+Once you share supporting docs, we can expand this with:
 
-This project is built with:
+- business requirements mapping,
+- user roles and permissions,
+- data model + API contract,
+- deployment and offline operations guide,
+- QA/UAT checklist and release notes.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Immediate next implementation
 
-## How can I deploy this project?
+See the execution guide in:
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+- [supabase/NEXT_STEPS_AUTH_AND_DASHBOARDS.md](supabase/NEXT_STEPS_AUTH_AND_DASHBOARDS.md)

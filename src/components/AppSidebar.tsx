@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import {
   LayoutDashboard,
   Users,
@@ -50,10 +51,16 @@ const navItems: NavItem[] = [
   { label: "Compliance", icon: <ShieldCheck size={18} />, href: "/compliance" },
 ];
 
+const learnerNavItems: NavItem[] = [
+  { label: "Learner Portal", icon: <LayoutDashboard size={18} />, href: "/learner" },
+];
+
 export default function AppSidebar() {
+  const { role } = useAuth();
   const location = useLocation();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({ Academics: true });
   const [mobileOpen, setMobileOpen] = useState(false);
+  const items = role === "learner" ? learnerNavItems : navItems;
 
   const toggleSection = (label: string) => {
     setExpanded((prev) => ({ ...prev, [label]: !prev[label] }));
@@ -68,12 +75,14 @@ export default function AppSidebar() {
         <h1 className="font-display text-lg font-bold text-sidebar-primary-foreground tracking-tight">
           DSA<span className="text-sidebar-primary"> Tracker</span>
         </h1>
-        <p className="text-xs text-sidebar-muted mt-0.5">Course Management System</p>
+        <p className="text-xs text-sidebar-muted mt-0.5">
+          {role === "learner" ? "Learner Portal" : "Course Management System"}
+        </p>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        {navItems.map((item) =>
+        {items.map((item) =>
           item.children ? (
             <div key={item.label}>
               <button
@@ -128,7 +137,7 @@ export default function AppSidebar() {
       <div className="px-5 py-4 border-t border-sidebar-border">
         <div className="text-xs text-sidebar-muted">
           <p>SAQA 78965 • NQF Level 4</p>
-          <p className="mt-0.5">CET Venda • Block 1–3</p>
+          <p className="mt-0.5">{role === "learner" ? "Learner Access" : "CET Venda • Block 1–3"}</p>
         </div>
       </div>
     </div>
