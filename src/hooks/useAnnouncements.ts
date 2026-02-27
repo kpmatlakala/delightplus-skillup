@@ -13,50 +13,6 @@ export interface Announcement {
   author: string;
 }
 
-// ── Fallback seed (shown while DB is unreachable or migration not run) ─────────
-const FALLBACK: Announcement[] = [
-  {
-    id: "seed-1",
-    title: "Block 1 Schedule Confirmed",
-    message:
-      "Block 1 training begins 02 March 2026 at CET Venda. All 5 modules (Days 1–5) are confirmed. Facilitator guides and learner workbooks will be distributed via USB on Day 1.",
-    audience: "All",
-    date: "2026-02-25",
-    pinned: true,
-    author: "Admin",
-  },
-  {
-    id: "seed-2",
-    title: "Offline Portal Available",
-    message:
-      "The CET Connect portal is available offline. Connect to the local Wi-Fi hotspot and navigate to http://192.168.1.100:5173 to access all materials without internet.",
-    audience: "All",
-    date: "2026-02-25",
-    pinned: true,
-    author: "Admin",
-  },
-  {
-    id: "seed-3",
-    title: "Assessment Submissions Open",
-    message:
-      "Summative assessment briefs for Block 1 are now available in each module's Assessment tab. Learners must complete the quiz before the assessment unlocks.",
-    audience: "Block 1",
-    date: "2026-02-26",
-    pinned: false,
-    author: "Admin",
-  },
-  {
-    id: "seed-4",
-    title: "Facilitator Resource Pack Updated",
-    message:
-      "Updated Facilitator Guides and Lesson Plan packs for Block 1 are available under each module's Facilitator Guide tab.",
-    audience: "Admin Only",
-    date: "2026-02-26",
-    pinned: false,
-    author: "Admin",
-  },
-];
-
 // ── Shape returned by cet_get_announcements() ─────────────────────────────────
 interface DbRow {
   id: string;
@@ -93,27 +49,59 @@ export function useAnnouncements() {
   const [items, setItems] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
   const [source, setSource] = useState<"db" | "fallback">("fallback");
+  const [error, setError] = useState<string | null>(null);
+  const [rpcUnavailable, setRpcUnavailable] = useState(false);
+
+  const isRpcMissingError = (message: string) => {
+    const normalized = message.toLowerCase();
+    return (
+      normalized.includes("404") ||
+      normalized.includes("not found") ||
+      normalized.includes("could not find") ||
+      normalized.includes("cet_get_announcements")
+    );
+  };
 
   const load = useCallback(async () => {
+    if (rpcUnavailable) {
+      setLoading(false);
+      return;
+    }
+
     try {
       const rpc = supabase as unknown as Rpc;
       const { data, error } = await rpc.rpc("cet_get_announcements");
-      if (!error && Array.isArray(data) && data.length > 0) {
+      if (!error && Array.isArray(data)) {
         setItems((data as DbRow[]).map(mapRow));
+        setError(null);
         setSource("db");
         setLoading(false);
         return;
       }
+
+      if (error?.message) {
+        if (isRpcMissingError(error.message)) {
+          setRpcUnavailable(true);
+          setError("Announcements RPC is missing in Supabase. Run supabase/sql/fix_announcements_rpc.sql.");
+        } else {
+          setError(error.message);
+        }
+      }
     } catch {
-      // fall through to empty
+      setError("Unable to load announcements right now.");
     }
+
     setItems([]);
     setSource("fallback");
     setLoading(false);
-  }, []);
+  }, [rpcUnavailable]);
 
   useEffect(() => {
     void load();
+
+    if (rpcUnavailable) {
+      return;
+    }
 
     // Realtime: re-fetch whenever the cet.announcements table changes
     const channel = supabase
@@ -127,12 +115,16 @@ export function useAnnouncements() {
       .subscribe();
 
     return () => { void supabase.removeChannel(channel); };
-  }, [load]);
+  }, [load, rpcUnavailable]);
 
   // ── Admin mutations ──────────────────────────────────────────────────────────
 
   const post = useCallback(
     async (title: string, message: string, audience: Audience): Promise<{ error: { message: string } | null }> => {
+      if (rpcUnavailable) {
+        return { error: { message: "Announcements RPC is missing in Supabase." } };
+      }
+
       const rpc = supabase as unknown as Rpc;
       // Optimistic insert
       const tempId = `temp-${Date.now()}`;
@@ -153,14 +145,22 @@ export function useAnnouncements() {
         p_message: message,
         p_audience: audience,
       });
+
+      if (error?.message && isRpcMissingError(error.message)) {
+        setRpcUnavailable(true);
+        setError("Announcements RPC is missing in Supabase. Run supabase/sql/fix_announcements_rpc.sql.");
+      }
+
       void load(); // reconcile with DB (replaces temp id with real uuid)
       return { error: error as { message: string } | null };
     },
-    [load]
+    [load, rpcUnavailable]
   );
 
   const togglePin = useCallback(
     async (id: string) => {
+      if (rpcUnavailable) return;
+
       const current = items.find((a) => a.id === id);
       if (!current) return;
       const newPinned = !current.pinned;
@@ -169,23 +169,35 @@ export function useAnnouncements() {
       const rpc = supabase as unknown as Rpc;
       const { error } = await rpc.rpc("cet_pin_announcement", { p_id: id, p_pinned: newPinned });
       if (error) {
+        if (isRpcMissingError(error.message)) {
+          setRpcUnavailable(true);
+          setError("Announcements RPC is missing in Supabase. Run supabase/sql/fix_announcements_rpc.sql.");
+        }
         // Revert on failure
         setItems((prev) => prev.map((a) => (a.id === id ? { ...a, pinned: !newPinned } : a)));
       }
     },
-    [items]
+    [items, rpcUnavailable]
   );
 
   const remove = useCallback(
     async (id: string) => {
+      if (rpcUnavailable) return;
+
       // Optimistic remove
       setItems((prev) => prev.filter((a) => a.id !== id));
       const rpc = supabase as unknown as Rpc;
       const { error } = await rpc.rpc("cet_delete_announcement", { p_id: id });
-      if (error) void load(); // reload if it failed
+      if (error) {
+        if (isRpcMissingError(error.message)) {
+          setRpcUnavailable(true);
+          setError("Announcements RPC is missing in Supabase. Run supabase/sql/fix_announcements_rpc.sql.");
+        }
+        void load(); // reload if it failed
+      }
     },
-    [load]
+    [load, rpcUnavailable]
   );
 
-  return { items, loading, source, post, togglePin, remove };
+  return { items, loading, source, error, post, togglePin, remove };
 }

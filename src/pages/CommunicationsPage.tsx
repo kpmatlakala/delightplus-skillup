@@ -92,11 +92,12 @@ function getInitials(name: string) {
 // ─── Announcements panel ───────────────────────────────────────────────────────
 
 function AnnouncementsPanel({ isAdmin }: { isAdmin: boolean }) {
-  const { items, loading, source, post: dbPost, togglePin, remove } = useAnnouncements();
+  const { items, loading, source, error, post: dbPost, togglePin, remove } = useAnnouncements();
   const [showForm, setShowForm] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [form, setForm] = useState({ title: "", message: "", audience: "All" as Audience });
   const [posting, setPosting] = useState(false);
+  const [postError, setPostError] = useState<string | null>(null);
 
   const pinned = items.filter((a) => a.pinned);
   const regular = items.filter((a) => !a.pinned);
@@ -104,8 +105,15 @@ function AnnouncementsPanel({ isAdmin }: { isAdmin: boolean }) {
   const post = async () => {
     if (!form.title.trim() || !form.message.trim()) return;
     setPosting(true);
-    await dbPost(form.title.trim(), form.message.trim(), form.audience);
+    setPostError(null);
+    const result = await dbPost(form.title.trim(), form.message.trim(), form.audience);
     setPosting(false);
+
+    if (result.error) {
+      setPostError(result.error.message ?? "Unable to post announcement.");
+      return;
+    }
+
     setForm({ title: "", message: "", audience: "All" });
     setShowForm(false);
   };
@@ -164,6 +172,12 @@ function AnnouncementsPanel({ isAdmin }: { isAdmin: boolean }) {
         </div>
       )}
 
+      {error && (
+        <div className="rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-xs text-destructive">
+          {error}
+        </div>
+      )}
+
       {/* Compose (admin/lecturer only) */}
       {isAdmin && (
         <div className="rounded-lg border border-border bg-card">
@@ -211,6 +225,7 @@ function AnnouncementsPanel({ isAdmin }: { isAdmin: boolean }) {
                   <Send size={11} /> {posting ? "Posting…" : "Post"}
                 </button>
               </div>
+              {postError && <p className="text-xs text-destructive">{postError}</p>}
             </div>
           )}
         </div>
