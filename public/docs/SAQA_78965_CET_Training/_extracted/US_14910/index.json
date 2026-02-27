@@ -1,0 +1,47 @@
+{
+  "total_files": 7,
+  "files": [
+    {
+      "source_path": "01_Core_UnitStandards/US 14910/14910 - Assessement guide.docx",
+      "unit_standard_id": "14910",
+      "word_count": 1641,
+      "paragraph_count": 344
+    },
+    {
+      "source_path": "01_Core_UnitStandards/US 14910/14910 - Facilitator Guide.docx",
+      "unit_standard_id": "14910",
+      "word_count": 4927,
+      "paragraph_count": 442
+    },
+    {
+      "source_path": "01_Core_UnitStandards/US 14910/14910 - Learner Guide.docx",
+      "unit_standard_id": "14910",
+      "word_count": 7700,
+      "paragraph_count": 573
+    },
+    {
+      "source_path": "01_Core_UnitStandards/US 14910/14910 - Learner Workbook.docx",
+      "unit_standard_id": "14910",
+      "word_count": 1470,
+      "paragraph_count": 364
+    },
+    {
+      "source_path": "01_Core_UnitStandards/US 14910/14910 - Practical Assesement.docx",
+      "unit_standard_id": "14910",
+      "word_count": 2564,
+      "paragraph_count": 378
+    },
+    {
+      "source_path": "01_Core_UnitStandards/US 14910/14910 - Summative Assessment.docx",
+      "unit_standard_id": "14910",
+      "word_count": 1494,
+      "paragraph_count": 248
+    },
+    {
+      "source_path": "01_Core_UnitStandards/US 14910/14910 - Summative memo.docx",
+      "unit_standard_id": "14910",
+      "word_count": 3587,
+      "paragraph_count": 329
+    }
+  ]
+}

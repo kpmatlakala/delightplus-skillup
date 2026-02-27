@@ -23,13 +23,13 @@ const iconStyles = {
 
 export default function StatCard({ label, value, icon, variant = "default" }: StatCardProps) {
   return (
-    <div className={`rounded-lg border p-5 stat-card-shadow ${variantStyles[variant]}`}>
+    <div className={`rounded-lg border px-4 py-3 stat-card-shadow ${variantStyles[variant]}`}>
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-muted-foreground">{label}</p>
-          <p className="text-2xl font-display font-bold mt-1">{value}</p>
+          <p className="text-xs text-muted-foreground">{label}</p>
+          <p className="text-xl font-display font-bold mt-0.5">{value}</p>
         </div>
-        <div className={`p-2.5 rounded-lg ${iconStyles[variant]}`}>
+        <div className={`p-2 rounded-lg ${iconStyles[variant]}`}>
           {icon}
         </div>
       </div>

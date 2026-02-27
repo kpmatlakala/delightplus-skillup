@@ -1,0 +1,366 @@
+{
+  "total_unit_folders": 10,
+  "total_files": 120,
+  "units": [
+    {
+      "unit_standard_id": "14908",
+      "folder": "US_14908",
+      "documents": [
+        {
+          "label": "Facilitator Guide",
+          "txt_file": "facilitator_guide.txt",
+          "json_file": "facilitator_guide.json"
+        },
+        {
+          "label": "Learner Guide",
+          "txt_file": "learner_guide.txt",
+          "json_file": "learner_guide.json"
+        },
+        {
+          "label": "Learner Workbook",
+          "txt_file": "learner_workbook.txt",
+          "json_file": "learner_workbook.json"
+        },
+        {
+          "label": "Summative Assessment",
+          "txt_file": "summative_assessment.txt",
+          "json_file": "summative_assessment.json"
+        },
+        {
+          "label": "Summative Memo",
+          "txt_file": "summative_memo.txt",
+          "json_file": "summative_memo.json"
+        },
+        {
+          "label": "Assessment Guide",
+          "txt_file": "assessment_guide.txt",
+          "json_file": "assessment_guide.json"
+        }
+      ]
+    },
+    {
+      "unit_standard_id": "14910",
+      "folder": "US_14910",
+      "documents": [
+        {
+          "label": "Facilitator Guide",
+          "txt_file": "facilitator_guide.txt",
+          "json_file": "facilitator_guide.json"
+        },
+        {
+          "label": "Learner Guide",
+          "txt_file": "learner_guide.txt",
+          "json_file": "learner_guide.json"
+        },
+        {
+          "label": "Learner Workbook",
+          "txt_file": "learner_workbook.txt",
+          "json_file": "learner_workbook.json"
+        },
+        {
+          "label": "Summative Assessment",
+          "txt_file": "summative_assessment.txt",
+          "json_file": "summative_assessment.json"
+        },
+        {
+          "label": "Summative Memo",
+          "txt_file": "summative_memo.txt",
+          "json_file": "summative_memo.json"
+        },
+        {
+          "label": "Assessment Guide",
+          "txt_file": "assessment_guide.txt",
+          "json_file": "assessment_guide.json"
+        }
+      ]
+    },
+    {
+      "unit_standard_id": "14915",
+      "folder": "US_14915",
+      "documents": [
+        {
+          "label": "Facilitator Guide",
+          "txt_file": "facilitator_guide.txt",
+          "json_file": "facilitator_guide.json"
+        },
+        {
+          "label": "Learner Guide",
+          "txt_file": "learner_guide.txt",
+          "json_file": "learner_guide.json"
+        },
+        {
+          "label": "Learner Workbook",
+          "txt_file": "learner_workbook.txt",
+          "json_file": "learner_workbook.json"
+        },
+        {
+          "label": "Summative Assessment",
+          "txt_file": "summative_assessment.txt",
+          "json_file": "summative_assessment.json"
+        },
+        {
+          "label": "Summative Memo",
+          "txt_file": "summative_memo.txt",
+          "json_file": "summative_memo.json"
+        },
+        {
+          "label": "Assessment Guide",
+          "txt_file": "assessment_guide.txt",
+          "json_file": "assessment_guide.json"
+        }
+      ]
+    },
+    {
+      "unit_standard_id": "14918",
+      "folder": "US_14918",
+      "documents": [
+        {
+          "label": "Facilitator Guide",
+          "txt_file": "facilitator_guide.txt",
+          "json_file": "facilitator_guide.json"
+        },
+        {
+          "label": "Learner Guide",
+          "txt_file": "learner_guide.txt",
+          "json_file": "learner_guide.json"
+        },
+        {
+          "label": "Learner Workbook",
+          "txt_file": "learner_workbook.txt",
+          "json_file": "learner_workbook.json"
+        },
+        {
+          "label": "Summative Assessment",
+          "txt_file": "summative_assessment.txt",
+          "json_file": "summative_assessment.json"
+        },
+        {
+          "label": "Summative Memo",
+          "txt_file": "summative_memo.txt",
+          "json_file": "summative_memo.json"
+        },
+        {
+          "label": "Assessment Guide",
+          "txt_file": "assessment_guide.txt",
+          "json_file": "assessment_guide.json"
+        }
+      ]
+    },
+    {
+      "unit_standard_id": "14919",
+      "folder": "US_14919",
+      "documents": [
+        {
+          "label": "Facilitator Guide",
+          "txt_file": "facilitator_guide.txt",
+          "json_file": "facilitator_guide.json"
+        },
+        {
+          "label": "Learner Guide",
+          "txt_file": "learner_guide.txt",
+          "json_file": "learner_guide.json"
+        },
+        {
+          "label": "Learner Workbook",
+          "txt_file": "learner_workbook.txt",
+          "json_file": "learner_workbook.json"
+        },
+        {
+          "label": "Summative Assessment",
+          "txt_file": "summative_assessment.txt",
+          "json_file": "summative_assessment.json"
+        },
+        {
+          "label": "Summative Memo",
+          "txt_file": "summative_memo.txt",
+          "json_file": "summative_memo.json"
+        },
+        {
+          "label": "Assessment Guide",
+          "txt_file": "assessment_guide.txt",
+          "json_file": "assessment_guide.json"
+        }
+      ]
+    },
+    {
+      "unit_standard_id": "14920",
+      "folder": "US_14920",
+      "documents": [
+        {
+          "label": "Facilitator Guide",
+          "txt_file": "facilitator_guide.txt",
+          "json_file": "facilitator_guide.json"
+        },
+        {
+          "label": "Learner Guide",
+          "txt_file": "learner_guide.txt",
+          "json_file": "learner_guide.json"
+        },
+        {
+          "label": "Learner Workbook",
+          "txt_file": "learner_workbook.txt",
+          "json_file": "learner_workbook.json"
+        },
+        {
+          "label": "Summative Assessment",
+          "txt_file": "summative_assessment.txt",
+          "json_file": "summative_assessment.json"
+        },
+        {
+          "label": "Summative Memo",
+          "txt_file": "summative_memo.txt",
+          "json_file": "summative_memo.json"
+        },
+        {
+          "label": "Assessment Guide",
+          "txt_file": "assessment_guide.txt",
+          "json_file": "assessment_guide.json"
+        }
+      ]
+    },
+    {
+      "unit_standard_id": "14924",
+      "folder": "US_14924",
+      "documents": [
+        {
+          "label": "Facilitator Guide",
+          "txt_file": "facilitator_guide.txt",
+          "json_file": "facilitator_guide.json"
+        },
+        {
+          "label": "Learner Guide",
+          "txt_file": "learner_guide.txt",
+          "json_file": "learner_guide.json"
+        },
+        {
+          "label": "Learner Workbook",
+          "txt_file": "learner_workbook.txt",
+          "json_file": "learner_workbook.json"
+        },
+        {
+          "label": "Summative Assessment",
+          "txt_file": "summative_assessment.txt",
+          "json_file": "summative_assessment.json"
+        },
+        {
+          "label": "Summative Memo",
+          "txt_file": "summative_memo.txt",
+          "json_file": "summative_memo.json"
+        },
+        {
+          "label": "Assessment Guide",
+          "txt_file": "assessment_guide.txt",
+          "json_file": "assessment_guide.json"
+        }
+      ]
+    },
+    {
+      "unit_standard_id": "14927",
+      "folder": "US_14927",
+      "documents": [
+        {
+          "label": "Facilitator Guide",
+          "txt_file": "facilitator_guide.txt",
+          "json_file": "facilitator_guide.json"
+        },
+        {
+          "label": "Learner Guide",
+          "txt_file": "learner_guide.txt",
+          "json_file": "learner_guide.json"
+        },
+        {
+          "label": "Learner Workbook",
+          "txt_file": "learner_workbook.txt",
+          "json_file": "learner_workbook.json"
+        },
+        {
+          "label": "Summative Assessment",
+          "txt_file": "summative_assessment.txt",
+          "json_file": "summative_assessment.json"
+        },
+        {
+          "label": "Summative Memo",
+          "txt_file": "summative_memo.txt",
+          "json_file": "summative_memo.json"
+        },
+        {
+          "label": "Assessment Guide",
+          "txt_file": "assessment_guide.txt",
+          "json_file": "assessment_guide.json"
+        }
+      ]
+    },
+    {
+      "unit_standard_id": "14933",
+      "folder": "US_14933",
+      "documents": [
+        {
+          "label": "Facilitator Guide (Ref 14930)",
+          "txt_file": "facilitator_guide_ref_14930.txt",
+          "json_file": "facilitator_guide_ref_14930.json"
+        },
+        {
+          "label": "Learner Guide (Ref 14930)",
+          "txt_file": "learner_guide_ref_14930.txt",
+          "json_file": "learner_guide_ref_14930.json"
+        },
+        {
+          "label": "Learner Workbook (Ref 14930)",
+          "txt_file": "learner_workbook_ref_14930.txt",
+          "json_file": "learner_workbook_ref_14930.json"
+        },
+        {
+          "label": "Summative Assessment (Ref 14930)",
+          "txt_file": "summative_assessment_ref_14930.txt",
+          "json_file": "summative_assessment_ref_14930.json"
+        },
+        {
+          "label": "Summative Memo (Ref 14930)",
+          "txt_file": "summative_memo_ref_14930.txt",
+          "json_file": "summative_memo_ref_14930.json"
+        },
+        {
+          "label": "Assessment Guide (Ref 14930)",
+          "txt_file": "assessment_guide_ref_14930.txt",
+          "json_file": "assessment_guide_ref_14930.json"
+        }
+      ]
+    },
+    {
+      "unit_standard_id": "120379",
+      "folder": "US_120379",
+      "documents": [
+        {
+          "label": "Facilitator Guide",
+          "txt_file": "facilitator_guide.txt",
+          "json_file": "facilitator_guide.json"
+        },
+        {
+          "label": "Learner Guide",
+          "txt_file": "learner_guide.txt",
+          "json_file": "learner_guide.json"
+        },
+        {
+          "label": "Learner Workbook",
+          "txt_file": "learner_workbook.txt",
+          "json_file": "learner_workbook.json"
+        },
+        {
+          "label": "Summative Assessment",
+          "txt_file": "summative_assessment.txt",
+          "json_file": "summative_assessment.json"
+        },
+        {
+          "label": "Summative Memo",
+          "txt_file": "summative_memo.txt",
+          "json_file": "summative_memo.json"
+        },
+        {
+          "label": "Assessment Guide",
+          "txt_file": "assessment_guide.txt",
+          "json_file": "assessment_guide.json"
+        }
+      ]
+    }
+  ]
+}

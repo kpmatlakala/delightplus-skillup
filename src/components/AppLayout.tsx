@@ -1,11 +1,14 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import AppSidebar from "./AppSidebar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Bell, Mail } from "lucide-react";
+import { useAnnouncements } from "@/hooks/useAnnouncements";
+import { useUnreadCount } from "@/hooks/useUnreadCount";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,8 +33,17 @@ interface AppLayoutProps {
 
 export default function AppLayout({ children, title, subtitle }: AppLayoutProps) {
   const { user, role, signOut } = useAuth();
+  const location = useLocation();
   const [profileDisplayName, setProfileDisplayName] = useState("");
   const [profileAvatarUrl, setProfileAvatarUrl] = useState("");
+  // Announcements count (learner-only — hook no-ops for other roles via its internal guard)
+  const { items: announcements } = useAnnouncements();
+  // Announcement count — learners see public items; admin sees all (incl. Admin Only)
+  const announcementCount = role === "learner"
+    ? announcements.filter((a) => a.audience !== "Admin Only").length
+    : announcements.length;
+  // Unread messages — live from DB
+  const unreadMessages = useUnreadCount(user?.id ?? null);
 
   useEffect(() => {
     const loadProfileSummary = async () => {
@@ -55,7 +67,7 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
 
   return (
     <div className="flex min-h-screen">
-      <AppSidebar />
+      {role !== "learner" && <AppSidebar />}
       <main className="flex-1 min-w-0">
         <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-sm border-b border-border px-6 py-4 md:px-8">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -66,6 +78,47 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
 
             <div className="flex items-center gap-2">
               {role && <Badge variant="outline" className="uppercase text-xs">{role}</Badge>}
+
+              {/* Comms shortcuts — visible for all roles */}
+              {role && (
+                <>
+                  {/* Announcements / Bell */}
+                  <Link
+                    to="/communications"
+                    className={`relative p-2 rounded-lg transition-colors ${
+                      location.pathname === "/communications" && !location.search.includes("messages")
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:bg-secondary/60 hover:text-foreground"
+                    }`}
+                    title="Updates & Announcements"
+                  >
+                    <Bell size={16} />
+                    {announcementCount > 0 && (
+                      <span className="absolute -top-0.5 -right-0.5 min-w-[14px] h-[14px] rounded-full bg-accent text-accent-foreground text-[9px] font-bold flex items-center justify-center px-0.5 leading-none">
+                        {announcementCount > 9 ? "9+" : announcementCount}
+                      </span>
+                    )}
+                  </Link>
+
+                  {/* Messages / Mail */}
+                  <Link
+                    to="/communications?tab=messages"
+                    className={`relative p-2 rounded-lg transition-colors ${
+                      location.pathname === "/communications" && location.search.includes("messages")
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:bg-secondary/60 hover:text-foreground"
+                    }`}
+                    title="Messages"
+                  >
+                    <Mail size={16} />
+                    {unreadMessages > 0 && (
+                      <span className="absolute -top-0.5 -right-0.5 min-w-[14px] h-[14px] rounded-full bg-destructive text-destructive-foreground text-[9px] font-bold flex items-center justify-center px-0.5 leading-none">
+                        {unreadMessages > 9 ? "9+" : unreadMessages}
+                      </span>
+                    )}
+                  </Link>
+                </>
+              )}
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

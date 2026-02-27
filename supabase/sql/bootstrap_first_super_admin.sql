@@ -3,7 +3,7 @@
 --
 -- Step 1 (Dashboard): Authentication -> Users -> Add user
 --   - Email: matlakalakabelo1@gmail.com
---   - Set password : 
+--   - Set password : <secure-password>
 --   - Mark email as confirmed (recommended)
 --
 -- Step 2 (SQL Editor): Run this script

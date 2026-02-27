@@ -1,0 +1,22 @@
+{
+  "source_path": "00_Admin/README_00_Admin.md",
+  "file_name": "README_00_Admin.md",
+  "unit_standard_id": null,
+  "paragraph_count": 23,
+  "word_count": 158,
+  "sections": [
+    {
+      "heading": "Document",
+      "text": "📁 00Admin — DSA WORKSPACE: CET LECTURERS TRAINING (SAQA ID 78965)\nPURPOSE:\nThis folder contains DSA's contextualised delivery materials for the\n15-day Systems Development training for CET lecturers (Venda, Mar-Apr 2026).\nAll materials align to SAQA ID 78965 via LCX-provided reference documents.\nSTRUCTURE:\n• 01SAQAQualificationPack78965/ ← Reference docs (read-only)\n• ModerationReadinessChecklistDSA.pdf ← QA checklist for assessments\n• POEStructureTemplateDSA.pdf ← Standardised PoE index + VACS tracker\n• FacilitatorCredentialTemplateDSA.docx ← CV/ID/registration checklist\n• ModerationWorkflowNotesDSA.pdf ← Questions for LCX alignment\n• SLADSAMuthwaksCET.pdf ← Scope summary (not legal contract)\n• TrainingSchedule3BlocksMarApr2026.pdf ← 15-day session plan\n• ContactListGTMikeThomas.xlsx ← Key stakeholders + roles\nUSAGE:\n• • Reference docs (01a–01d) are READ-ONLY — do not edit.\n• • DSA adaptations (this folder) are ACTIVE — update as needed.\n• • All learner-facing materials live in /01Core/, /02Elective/, etc.\nATTRIBUTION:\nSource qualification: SAQA ID 78965 (MICT SETA)\nContextualised by: LimpopoConnexion (LCX) + Data Science Academy (DSA)\nDelivery partner: DSA under LCX accredited provider status"
+    }
+  ],
+  "keyword_hits": {
+    "assessment": [
+      "STRUCTURE: • 01SAQAQualificationPack78965/ ← Reference docs (read-only) • ModerationReadinessChecklistDSA.pdf ← QA checklist for assessments • POEStructureTemplateDSA.pdf ← Standardised PoE index + VACS tracker • FacilitatorCredentialTemplateDSA.docx ← CV/ID/registration checklist"
+    ],
+    "session": [
+      "• ModerationWorkflowNotesDSA.pdf ← Questions for LCX alignment • SLADSAMuthwaksCET.pdf ← Scope summary (not legal contract) • TrainingSchedule3BlocksMarApr2026.pdf ← 15-day session plan • ContactListGTMikeThomas.xlsx ← Key stakeholders + roles USAGE:"
+    ]
+  },
+  "raw_text": "Document\n📁 00Admin — DSA WORKSPACE: CET LECTURERS TRAINING (SAQA ID 78965)\nPURPOSE:\nThis folder contains DSA's contextualised delivery materials for the\n15-day Systems Development training for CET lecturers (Venda, Mar-Apr 2026).\nAll materials align to SAQA ID 78965 via LCX-provided reference documents.\nSTRUCTURE:\n• 01SAQAQualificationPack78965/ ← Reference docs (read-only)\n• ModerationReadinessChecklistDSA.pdf ← QA checklist for assessments\n• POEStructureTemplateDSA.pdf ← Standardised PoE index + VACS tracker\n• FacilitatorCredentialTemplateDSA.docx ← CV/ID/registration checklist\n• ModerationWorkflowNotesDSA.pdf ← Questions for LCX alignment\n• SLADSAMuthwaksCET.pdf ← Scope summary (not legal contract)\n• TrainingSchedule3BlocksMarApr2026.pdf ← 15-day session plan\n• ContactListGTMikeThomas.xlsx ← Key stakeholders + roles\nUSAGE:\n• • Reference docs (01a–01d) are READ-ONLY — do not edit.\n• • DSA adaptations (this folder) are ACTIVE — update as needed.\n• • All learner-facing materials live in /01Core/, /02Elective/, etc.\nATTRIBUTION:\nSource qualification: SAQA ID 78965 (MICT SETA)\nContextualised by: LimpopoConnexion (LCX) + Data Science Academy (DSA)\nDelivery partner: DSA under LCX accredited provider status"
+}

@@ -1,11 +1,18 @@
 import AppLayout from "@/components/AppLayout";
 import ModuleCard from "@/components/ModuleCard";
 import { modules } from "@/data/courseData";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 export default function ModulesPage() {
   const [filter, setFilter] = useState<"All" | "Knowledge" | "Practical">("All");
   const [blockFilter, setBlockFilter] = useState<number | null>(null);
+
+  // Build a stable order-number map from the full sorted array
+  const orderMap = useMemo(() => {
+    const map = new Map<string, number>();
+    modules.forEach((m, i) => map.set(m.id, i + 1));
+    return map;
+  }, []);
 
   const filtered = modules.filter((m) => {
     if (filter !== "All" && m.type !== filter) return false;
@@ -48,7 +55,7 @@ export default function ModulesPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filtered.map((mod) => (
-          <ModuleCard key={mod.id} module={mod} />
+          <ModuleCard key={mod.id} module={mod} orderNumber={orderMap.get(mod.id)} />
         ))}
       </div>
     </AppLayout>

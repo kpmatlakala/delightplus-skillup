@@ -1,0 +1,510 @@
+﻿{
+    "total_files":  73,
+    "files":  [
+                  {
+                      "source_path":  "00_Admin/01_SAQA_QualificationPack_78965/01A_Curriculum Outline 78965.md",
+                      "unit_standard_id":  "78965",
+                      "word_count":  3606,
+                      "paragraph_count":  158
+                  },
+                  {
+                      "source_path":  "00_Admin/01_SAQA_QualificationPack_78965/01B_AccreditaionReport_SAQA78965.md",
+                      "unit_standard_id":  null,
+                      "word_count":  1628,
+                      "paragraph_count":  169
+                  },
+                  {
+                      "source_path":  "00_Admin/01_SAQA_QualificationPack_78965/01C_FISA 78965 - Information Technology - Systems Development - L4, C165 - Curriculum design document.md",
+                      "unit_standard_id":  "78965",
+                      "word_count":  2594,
+                      "paragraph_count":  228
+                  },
+                  {
+                      "source_path":  "00_Admin/01_SAQA_QualificationPack_78965/01D_ModeratorGuide_78965.md",
+                      "unit_standard_id":  null,
+                      "word_count":  3919,
+                      "paragraph_count":  431
+                  },
+                  {
+                      "source_path":  "00_Admin/README_00_Admin.md",
+                      "unit_standard_id":  null,
+                      "word_count":  158,
+                      "paragraph_count":  23
+                  },
+                  {
+                      "source_path":  "00_Admin/Systems_Development_Course_Design_SAQA78965.md",
+                      "unit_standard_id":  null,
+                      "word_count":  2182,
+                      "paragraph_count":  146
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14910/14910 - Assessement guide.md",
+                      "unit_standard_id":  "14910",
+                      "word_count":  1587,
+                      "paragraph_count":  192,
+                      "file_name":  "US_14910/14910 - Assessement guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14910/14910 - Facilitator Guide.md",
+                      "unit_standard_id":  "14910",
+                      "word_count":  5063,
+                      "paragraph_count":  319,
+                      "file_name":  "US_14910/14910 - Facilitator Guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14910/14910 - Learner Guide.md",
+                      "unit_standard_id":  "14910",
+                      "word_count":  7765,
+                      "paragraph_count":  443,
+                      "file_name":  "US_14910/14910 - Learner Guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14910/14910 - Learner Workbook.md",
+                      "unit_standard_id":  "14910",
+                      "word_count":  1347,
+                      "paragraph_count":  109,
+                      "file_name":  "US_14910/14910 - Learner Workbook.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14910/14910 - Practical Assesement.md",
+                      "unit_standard_id":  "14910",
+                      "word_count":  2671,
+                      "paragraph_count":  246,
+                      "file_name":  "US_14910/14910 - Practical Assesement.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14910/14910 - Summative Assessment.md",
+                      "unit_standard_id":  "14910",
+                      "word_count":  1527,
+                      "paragraph_count":  162,
+                      "file_name":  "US_14910/14910 - Summative Assessment.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14910/14910 - Summative memo.md",
+                      "unit_standard_id":  "14910",
+                      "word_count":  3658,
+                      "paragraph_count":  257,
+                      "file_name":  "US_14910/14910 - Summative memo.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14915/14915 - Assessement guide.md",
+                      "unit_standard_id":  "14915",
+                      "word_count":  1571,
+                      "paragraph_count":  190,
+                      "file_name":  "US_14915/14915 - Assessement guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14915/14915 - Facilitator Guide.md",
+                      "unit_standard_id":  "14915",
+                      "word_count":  3006,
+                      "paragraph_count":  162,
+                      "file_name":  "US_14915/14915 - Facilitator Guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14915/14915 - Learner Guide.md",
+                      "unit_standard_id":  "14915",
+                      "word_count":  7463,
+                      "paragraph_count":  272,
+                      "file_name":  "US_14915/14915 - Learner Guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14915/14915 - Learner Workbooka.md",
+                      "unit_standard_id":  "14915",
+                      "word_count":  1345,
+                      "paragraph_count":  107,
+                      "file_name":  "US_14915/14915 - Learner Workbooka.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14915/14915 - Practical Assesement.md",
+                      "unit_standard_id":  "14915",
+                      "word_count":  2704,
+                      "paragraph_count":  246,
+                      "file_name":  "US_14915/14915 - Practical Assesement.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14915/14915 - Summative Assessment.md",
+                      "unit_standard_id":  "14915",
+                      "word_count":  1472,
+                      "paragraph_count":  156,
+                      "file_name":  "US_14915/14915 - Summative Assessment.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14915/14915 - Summative memo.md",
+                      "unit_standard_id":  "14915",
+                      "word_count":  2711,
+                      "paragraph_count":  182,
+                      "file_name":  "US_14915/14915 - Summative memo.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14918/14918 - Assessement guide.md",
+                      "unit_standard_id":  "14918",
+                      "word_count":  1567,
+                      "paragraph_count":  190,
+                      "file_name":  "US_14918/14918 - Assessement guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14918/14918 - Facilitator Guide.md",
+                      "unit_standard_id":  "14918",
+                      "word_count":  6500,
+                      "paragraph_count":  364,
+                      "file_name":  "US_14918/14918 - Facilitator Guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14918/14918 - Learner Guide.md",
+                      "unit_standard_id":  "14918",
+                      "word_count":  13678,
+                      "paragraph_count":  568,
+                      "file_name":  "US_14918/14918 - Learner Guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14918/14918 - Learner Workbook.md",
+                      "unit_standard_id":  "14918",
+                      "word_count":  1352,
+                      "paragraph_count":  112,
+                      "file_name":  "US_14918/14918 - Learner Workbook.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14918/14918 - Practical Assesement.md",
+                      "unit_standard_id":  "14918",
+                      "word_count":  2691,
+                      "paragraph_count":  253,
+                      "file_name":  "US_14918/14918 - Practical Assesement.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14918/14918 - Summative Assessment.md",
+                      "unit_standard_id":  "14918",
+                      "word_count":  1488,
+                      "paragraph_count":  160,
+                      "file_name":  "US_14918/14918 - Summative Assessment.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14918/14918 - Summative memorandum.md",
+                      "unit_standard_id":  "14918",
+                      "word_count":  2411,
+                      "paragraph_count":  176,
+                      "file_name":  "US_14918/14918 - Summative memorandum.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14920/14920 - Assessment Guide.md",
+                      "unit_standard_id":  "14920",
+                      "word_count":  4537,
+                      "paragraph_count":  325,
+                      "file_name":  "US_14920/14920 - Assessment Guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14920/14920 - Facilitator Guide.md",
+                      "unit_standard_id":  "14920",
+                      "word_count":  3774,
+                      "paragraph_count":  216,
+                      "file_name":  "US_14920/14920 - Facilitator Guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14920/14920 - Learner Guide.md",
+                      "unit_standard_id":  "14920",
+                      "word_count":  6392,
+                      "paragraph_count":  270,
+                      "file_name":  "US_14920/14920 - Learner Guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14920/14920 - Learner Workbook.md",
+                      "unit_standard_id":  "14920",
+                      "word_count":  1518,
+                      "paragraph_count":  126,
+                      "file_name":  "US_14920/14920 - Learner Workbook.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14920/14920 - Summative Assessment.md",
+                      "unit_standard_id":  "14920",
+                      "word_count":  1495,
+                      "paragraph_count":  158,
+                      "file_name":  "US_14920/14920 - Summative Assessment.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14920/14920 - Summative memorandum.md",
+                      "unit_standard_id":  "14920",
+                      "word_count":  4064,
+                      "paragraph_count":  225,
+                      "file_name":  "US_14920/14920 - Summative memorandum.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14924/14924 - Assessement guide.md",
+                      "unit_standard_id":  "14924",
+                      "word_count":  1569,
+                      "paragraph_count":  190,
+                      "file_name":  "US_14924/14924 - Assessement guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14924/14924 - Facilitator Guide.md",
+                      "unit_standard_id":  "14924",
+                      "word_count":  2902,
+                      "paragraph_count":  182,
+                      "file_name":  "US_14924/14924 - Facilitator Guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14924/14924 - Learner Guide.md",
+                      "unit_standard_id":  "14924",
+                      "word_count":  5389,
+                      "paragraph_count":  305,
+                      "file_name":  "US_14924/14924 - Learner Guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14924/14924 - Learner Workbook.md",
+                      "unit_standard_id":  "14924",
+                      "word_count":  1095,
+                      "paragraph_count":  89,
+                      "file_name":  "US_14924/14924 - Learner Workbook.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14924/14924 - Practical Assesement.md",
+                      "unit_standard_id":  "14924",
+                      "word_count":  2628,
+                      "paragraph_count":  244,
+                      "file_name":  "US_14924/14924 - Practical Assesement.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14924/14924 - Summative Assessment.md",
+                      "unit_standard_id":  "14924",
+                      "word_count":  1439,
+                      "paragraph_count":  156,
+                      "file_name":  "US_14924/14924 - Summative Assessment.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14924/14924 - Summative memorandum.md",
+                      "unit_standard_id":  "14924",
+                      "word_count":  2237,
+                      "paragraph_count":  205,
+                      "file_name":  "US_14924/14924 - Summative memorandum.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14927/14927 - Assesement guide.md",
+                      "unit_standard_id":  "14927",
+                      "word_count":  4681,
+                      "paragraph_count":  381,
+                      "file_name":  "US_14927/14927 - Assesement guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14927/14927 - Facilitator Guide.md",
+                      "unit_standard_id":  "14927",
+                      "word_count":  2814,
+                      "paragraph_count":  230,
+                      "file_name":  "US_14927/14927 - Facilitator Guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14927/14927 - Learner Guide.md",
+                      "unit_standard_id":  "14927",
+                      "word_count":  3994,
+                      "paragraph_count":  304,
+                      "file_name":  "US_14927/14927 - Learner Guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14927/14927 - Learner Workbook.md",
+                      "unit_standard_id":  "14927",
+                      "word_count":  1159,
+                      "paragraph_count":  99,
+                      "file_name":  "US_14927/14927 - Learner Workbook.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14927/14927 - Summative Assessment.md",
+                      "unit_standard_id":  "14927",
+                      "word_count":  1465,
+                      "paragraph_count":  158,
+                      "file_name":  "US_14927/14927 - Summative Assessment.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14927/14927 - Summative memorandum.md",
+                      "unit_standard_id":  "14927",
+                      "word_count":  2443,
+                      "paragraph_count":  260,
+                      "file_name":  "US_14927/14927 - Summative memorandum.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14930/14930 - Assessement guide.md",
+                      "unit_standard_id":  "14930",
+                      "word_count":  1579,
+                      "paragraph_count":  190,
+                      "file_name":  "US_14930/14930 - Assessement guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14930/14930 - Facilitator Guide.md",
+                      "unit_standard_id":  "14930",
+                      "word_count":  5027,
+                      "paragraph_count":  211,
+                      "file_name":  "US_14930/14930 - Facilitator Guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14930/14930 - Learner Guide.md",
+                      "unit_standard_id":  "14930",
+                      "word_count":  9185,
+                      "paragraph_count":  263,
+                      "file_name":  "US_14930/14930 - Learner Guide.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14930/14930 - Learner Workbook.md",
+                      "unit_standard_id":  "14930",
+                      "word_count":  1284,
+                      "paragraph_count":  104,
+                      "file_name":  "US_14930/14930 - Learner Workbook.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14930/14930 - Practical Assesement.md",
+                      "unit_standard_id":  "14930",
+                      "word_count":  2690,
+                      "paragraph_count":  245,
+                      "file_name":  "US_14930/14930 - Practical Assesement.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14930/14930 - Summative Assessment.md",
+                      "unit_standard_id":  "14930",
+                      "word_count":  1473,
+                      "paragraph_count":  158,
+                      "file_name":  "US_14930/14930 - Summative Assessment.md.json"
+                  },
+                  {
+                      "source_path":  "01_Core_UnitStandards/US 14930/14930 - Summative memorandum.md",
+                      "unit_standard_id":  "14930",
+                      "word_count":  2606,
+                      "paragraph_count":  199,
+                      "file_name":  "US_14930/14930 - Summative memorandum.md.json"
+                  },
+                  {
+                      "source_path":  "02_Elective_UnitStandards/US 120379/120379 - Assessment guide.md",
+                      "unit_standard_id":  "120379",
+                      "word_count":  6833,
+                      "paragraph_count":  465,
+                      "file_name":  "US_120379/120379 - Assessment guide.md.json"
+                  },
+                  {
+                      "source_path":  "02_Elective_UnitStandards/US 120379/120379 - Facilitator Guide.md",
+                      "unit_standard_id":  "120379",
+                      "word_count":  2100,
+                      "paragraph_count":  136,
+                      "file_name":  "US_120379/120379 - Facilitator Guide.md.json"
+                  },
+                  {
+                      "source_path":  "02_Elective_UnitStandards/US 120379/120379 - Learner Guide.md",
+                      "unit_standard_id":  "120379",
+                      "word_count":  6270,
+                      "paragraph_count":  347,
+                      "file_name":  "US_120379/120379 - Learner Guide.md.json"
+                  },
+                  {
+                      "source_path":  "02_Elective_UnitStandards/US 120379/120379 - Learner Workbook.md",
+                      "unit_standard_id":  "120379",
+                      "word_count":  1141,
+                      "paragraph_count":  87,
+                      "file_name":  "US_120379/120379 - Learner Workbook.md.json"
+                  },
+                  {
+                      "source_path":  "02_Elective_UnitStandards/US 120379/120379 - Summative Assessment Memoranda.md",
+                      "unit_standard_id":  "120379",
+                      "word_count":  2018,
+                      "paragraph_count":  183,
+                      "file_name":  "US_120379/120379 - Summative Assessment Memoranda.md.json"
+                  },
+                  {
+                      "source_path":  "02_Elective_UnitStandards/US 120379/120379 - Summative Assessment.md",
+                      "unit_standard_id":  "120379",
+                      "word_count":  1693,
+                      "paragraph_count":  163,
+                      "file_name":  "US_120379/120379 - Summative Assessment.md.json"
+                  },
+                  {
+                      "source_path":  "02_Elective_UnitStandards/US 14908/14908 - Assessment guide.md",
+                      "unit_standard_id":  "14908",
+                      "word_count":  5073,
+                      "paragraph_count":  354,
+                      "file_name":  "US_14908/14908 - Assessment guide.md.json"
+                  },
+                  {
+                      "source_path":  "02_Elective_UnitStandards/US 14908/14908 - Facilitator guide.md",
+                      "unit_standard_id":  "14908",
+                      "word_count":  3006,
+                      "paragraph_count":  177,
+                      "file_name":  "US_14908/14908 - Facilitator guide.md.json"
+                  },
+                  {
+                      "source_path":  "02_Elective_UnitStandards/US 14908/14908 - Learner Guide.md",
+                      "unit_standard_id":  "14908",
+                      "word_count":  5914,
+                      "paragraph_count":  246,
+                      "file_name":  "US_14908/14908 - Learner Guide.md.json"
+                  },
+                  {
+                      "source_path":  "02_Elective_UnitStandards/US 14908/14908 - Learner Workbook.md",
+                      "unit_standard_id":  "14908",
+                      "word_count":  1568,
+                      "paragraph_count":  119,
+                      "file_name":  "US_14908/14908 - Learner Workbook.md.json"
+                  },
+                  {
+                      "source_path":  "02_Elective_UnitStandards/US 14908/14908 - Practical Assesement.md",
+                      "unit_standard_id":  "14908",
+                      "word_count":  2654,
+                      "paragraph_count":  246,
+                      "file_name":  "US_14908/14908 - Practical Assesement.md.json"
+                  },
+                  {
+                      "source_path":  "02_Elective_UnitStandards/US 14908/14908 - Summative Assessment Memorandum.md",
+                      "unit_standard_id":  "14908",
+                      "word_count":  4339,
+                      "paragraph_count":  245,
+                      "file_name":  "US_14908/14908 - Summative Assessment Memorandum.md.json"
+                  },
+                  {
+                      "source_path":  "02_Elective_UnitStandards/US 14908/14908 - Summative Assessment.md",
+                      "unit_standard_id":  "14908",
+                      "word_count":  1960,
+                      "paragraph_count":  183,
+                      "file_name":  "US_14908/14908 - Summative Assessment.md.json"
+                  },
+                  {
+                      "source_path":  "02_Elective_UnitStandards/US 14919/14919 - Assesement guide.md",
+                      "unit_standard_id":  "14919",
+                      "word_count":  5396,
+                      "paragraph_count":  447,
+                      "file_name":  "US_14919/14919 - Assesement guide.md.json"
+                  },
+                  {
+                      "source_path":  "02_Elective_UnitStandards/US 14919/14919 - Facilitator Guide.md",
+                      "unit_standard_id":  "14919",
+                      "word_count":  2942,
+                      "paragraph_count":  164,
+                      "file_name":  "US_14919/14919 - Facilitator Guide.md.json"
+                  },
+                  {
+                      "source_path":  "02_Elective_UnitStandards/US 14919/14919 - Leaner Guide.md",
+                      "unit_standard_id":  "14919",
+                      "word_count":  6331,
+                      "paragraph_count":  190,
+                      "file_name":  "US_14919/14919 - Leaner Guide.md.json"
+                  },
+                  {
+                      "source_path":  "02_Elective_UnitStandards/US 14919/14919 - Learner Workbook.md",
+                      "unit_standard_id":  "14919",
+                      "word_count":  1544,
+                      "paragraph_count":  131,
+                      "file_name":  "US_14919/14919 - Learner Workbook.md.json"
+                  },
+                  {
+                      "source_path":  "02_Elective_UnitStandards/US 14919/14919 - Practical Assesement.md",
+                      "unit_standard_id":  "14919",
+                      "word_count":  2625,
+                      "paragraph_count":  246,
+                      "file_name":  "US_14919/14919 - Practical Assesement.md.json"
+                  },
+                  {
+                      "source_path":  "02_Elective_UnitStandards/US 14919/14919 - Summative assessment memorundum.md",
+                      "unit_standard_id":  "14919",
+                      "word_count":  2584,
+                      "paragraph_count":  192,
+                      "file_name":  "US_14919/14919 - Summative assessment memorundum.md.json"
+                  },
+                  {
+                      "source_path":  "02_Elective_UnitStandards/US 14919/14919 - Summative Assessments.md",
+                      "unit_standard_id":  "14919",
+                      "word_count":  1644,
+                      "paragraph_count":  178,
+                      "file_name":  "US_14919/14919 - Summative Assessments.md.json"
+                  }
+              ]
+}

@@ -1,0 +1,83 @@
+{
+  "generatedAt": "2026-02-25",
+  "sourceRoot": "/docs/SAQA_78965_CET_Training",
+  "modules": [
+    {
+      "moduleId": "ITSD-14910",
+      "unitStandardId": 14910,
+      "type": "Core",
+      "folder": "/docs/SAQA_78965_CET_Training/01_Core_UnitStandards/US 14910",
+      "documentsFound": ["facilitator_guide", "learner_guide", "learner_workbook", "practical_assessment", "summative_assessment", "summative_memo", "assessment_guide"]
+    },
+    {
+      "moduleId": "ITSD-14915",
+      "unitStandardId": 14915,
+      "type": "Core",
+      "folder": "/docs/SAQA_78965_CET_Training/01_Core_UnitStandards/US 14915",
+      "documentsFound": ["facilitator_guide", "learner_guide", "learner_workbook", "practical_assessment", "summative_assessment", "summative_memo", "assessment_guide"]
+    },
+    {
+      "moduleId": "ITSD-14918",
+      "unitStandardId": 14918,
+      "type": "Core",
+      "folder": "/docs/SAQA_78965_CET_Training/01_Core_UnitStandards/US 14918",
+      "documentsFound": ["facilitator_guide", "learner_guide", "learner_workbook", "practical_assessment", "summative_assessment", "summative_memo", "assessment_guide"]
+    },
+    {
+      "moduleId": "ITSD-14920",
+      "unitStandardId": 14920,
+      "type": "Core",
+      "folder": "/docs/SAQA_78965_CET_Training/01_Core_UnitStandards/US 14920",
+      "documentsFound": ["facilitator_guide", "learner_guide", "learner_workbook", "summative_assessment", "summative_memo", "assessment_guide"]
+    },
+    {
+      "moduleId": "ITSD-14924",
+      "unitStandardId": 14924,
+      "type": "Core",
+      "folder": "/docs/SAQA_78965_CET_Training/01_Core_UnitStandards/US 14924",
+      "documentsFound": ["facilitator_guide", "learner_guide", "learner_workbook", "practical_assessment", "summative_assessment", "summative_memo", "assessment_guide"]
+    },
+    {
+      "moduleId": "ITSD-14927",
+      "unitStandardId": 14927,
+      "type": "Core",
+      "folder": "/docs/SAQA_78965_CET_Training/01_Core_UnitStandards/US 14927",
+      "documentsFound": ["facilitator_guide", "learner_guide", "learner_workbook", "summative_assessment", "summative_memo", "assessment_guide"]
+    },
+    {
+      "moduleId": "ITSD-14930",
+      "unitStandardId": 14930,
+      "type": "Core",
+      "folder": "/docs/SAQA_78965_CET_Training/01_Core_UnitStandards/US 14930",
+      "documentsFound": ["facilitator_guide", "learner_guide", "learner_workbook", "practical_assessment", "summative_assessment", "summative_memo", "assessment_guide"]
+    },
+    {
+      "moduleId": "ITSD-14908",
+      "unitStandardId": 14908,
+      "type": "Elective",
+      "folder": "/docs/SAQA_78965_CET_Training/02_Elective_UnitStandards/US 14908",
+      "documentsFound": ["facilitator_guide", "learner_guide", "learner_workbook", "practical_assessment", "summative_assessment", "summative_memo", "assessment_guide"]
+    },
+    {
+      "moduleId": "ITSD-14919",
+      "unitStandardId": 14919,
+      "type": "Elective",
+      "folder": "/docs/SAQA_78965_CET_Training/02_Elective_UnitStandards/US 14919",
+      "documentsFound": ["facilitator_guide", "learner_guide", "learner_workbook", "practical_assessment", "summative_assessment", "summative_memo", "assessment_guide"]
+    },
+    {
+      "moduleId": "ITSD-120379",
+      "unitStandardId": 120379,
+      "type": "Elective",
+      "folder": "/docs/SAQA_78965_CET_Training/02_Elective_UnitStandards/US 120379",
+      "documentsFound": ["facilitator_guide", "learner_guide", "learner_workbook", "summative_assessment", "summative_memo", "assessment_guide"]
+    },
+    {
+      "moduleId": "ITSD-14933",
+      "unitStandardId": 14933,
+      "type": "Core",
+      "status": "reference_pending",
+      "referenceModule": "ITSD-14930"
+    }
+  ]
+}

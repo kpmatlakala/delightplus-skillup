@@ -32,8 +32,11 @@ export default function ProfilePage() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [changingPassword, setChangingPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [securityError, setSecurityError] = useState<string | null>(null);
+  const [securitySuccess, setSecuritySuccess] = useState<string | null>(null);
 
   const [username, setUsername] = useState("");
   const [displayName, setDisplayName] = useState("");
@@ -42,6 +45,9 @@ export default function ProfilePage() {
   const [location, setLocation] = useState("");
   const [website, setWebsite] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const rpc = supabase as unknown as {
     rpc: (fn: string, params?: Record<string, unknown>) => Promise<{ data: any; error: { message: string } | null }>;
@@ -107,75 +113,189 @@ export default function ProfilePage() {
     setSuccess("Profile updated successfully.");
   };
 
+  const onChangePassword = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setSecurityError(null);
+    setSecuritySuccess(null);
+
+    if (!user?.email) {
+      setSecurityError("Unable to resolve your account email.");
+      return;
+    }
+
+    if (!currentPassword) {
+      setSecurityError("Enter your current password.");
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setSecurityError("New password must be at least 6 characters.");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setSecurityError("New password and confirmation do not match.");
+      return;
+    }
+
+    if (newPassword === currentPassword) {
+      setSecurityError("New password must be different from current password.");
+      return;
+    }
+
+    setChangingPassword(true);
+
+    const { error: reauthError } = await supabase.auth.signInWithPassword({
+      email: user.email,
+      password: currentPassword,
+    });
+
+    if (reauthError) {
+      setChangingPassword(false);
+      setSecurityError("Current password is incorrect.");
+      return;
+    }
+
+    const { error: updatePasswordError } = await supabase.auth.updateUser({
+      password: newPassword,
+    });
+
+    setChangingPassword(false);
+
+    if (updatePasswordError) {
+      setSecurityError(updatePasswordError.message);
+      return;
+    }
+
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+    setSecuritySuccess("Password changed successfully.");
+  };
+
   const resolvedDisplayName = displayName || (user?.user_metadata?.full_name as string | undefined) || "My Profile";
   const resolvedEmail = user?.email ?? "";
   const initials = getInitials(resolvedDisplayName, resolvedEmail);
 
   return (
-    <AppLayout title="My Profile" subtitle="Manage your account profile">
-      <div className="max-w-2xl rounded-lg border border-border bg-card p-6">
-        <div className="flex items-center gap-3 mb-6">
-          <Avatar className="h-12 w-12">
-            <AvatarImage src={avatarUrl} alt={resolvedDisplayName} />
-            <AvatarFallback>{initials}</AvatarFallback>
-          </Avatar>
-          <div>
-            <p className="font-medium text-foreground">{resolvedDisplayName}</p>
-            <p className="text-sm text-muted-foreground">{resolvedEmail}</p>
+    <AppLayout title="My Profile" subtitle="Manage your account profile and security">
+      <div className="max-w-2xl space-y-6">
+        <div className="rounded-lg border border-border bg-card p-6">
+          <div className="flex items-center gap-3 mb-6">
+            <Avatar className="h-12 w-12">
+              <AvatarImage src={avatarUrl} alt={resolvedDisplayName} />
+              <AvatarFallback>{initials}</AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="font-medium text-foreground">{resolvedDisplayName}</p>
+              <p className="text-sm text-muted-foreground">{resolvedEmail}</p>
+            </div>
           </div>
+
+          <form onSubmit={onSave} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" value={user?.email ?? ""} disabled />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="username">Username</Label>
+                <Input id="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="displayName">Display Name</Label>
+              <Input id="displayName" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="phoneNumber">Phone Number</Label>
+              <Input id="phoneNumber" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} autoComplete="tel" />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="bio">Bio</Label>
+              <Textarea id="bio" value={bio} onChange={(e) => setBio(e.target.value)} rows={4} />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="location">Location</Label>
+                <Input id="location" value={location} onChange={(e) => setLocation(e.target.value)} />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="website">Website</Label>
+                <Input id="website" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://..." />
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="avatarUrl">Avatar URL</Label>
+              <Input id="avatarUrl" value={avatarUrl} onChange={(e) => setAvatarUrl(e.target.value)} placeholder="https://..." />
+            </div>
+
+            {loading && <p className="text-sm text-muted-foreground">Loading profile...</p>}
+            {error && <p className="text-sm text-destructive">{error}</p>}
+            {success && <p className="text-sm text-success">{success}</p>}
+
+            <Button type="submit" disabled={loading || saving}>
+              {saving ? "Saving..." : "Save Profile"}
+            </Button>
+          </form>
         </div>
 
-        <form onSubmit={onSave} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="rounded-lg border border-border bg-card p-6">
+          <h2 className="font-display text-lg font-semibold text-foreground">Security</h2>
+          <p className="text-sm text-muted-foreground mt-1">Change your account password.</p>
+
+          <form onSubmit={onChangePassword} className="space-y-4 mt-4">
             <div className="space-y-1.5">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" value={user?.email ?? ""} disabled />
+              <Label htmlFor="currentPassword">Current Password</Label>
+              <Input
+                id="currentPassword"
+                type="password"
+                value={currentPassword}
+                onChange={(event) => setCurrentPassword(event.target.value)}
+                autoComplete="current-password"
+                required
+              />
             </div>
+
             <div className="space-y-1.5">
-              <Label htmlFor="username">Username</Label>
-              <Input id="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+              <Label htmlFor="newPassword">New Password</Label>
+              <Input
+                id="newPassword"
+                type="password"
+                value={newPassword}
+                onChange={(event) => setNewPassword(event.target.value)}
+                autoComplete="new-password"
+                minLength={6}
+                required
+              />
             </div>
-          </div>
 
-          <div className="space-y-1.5">
-            <Label htmlFor="displayName">Display Name</Label>
-            <Input id="displayName" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
-          </div>
-
-          <div className="space-y-1.5">
-            <Label htmlFor="phoneNumber">Phone Number</Label>
-            <Input id="phoneNumber" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} autoComplete="tel" />
-          </div>
-
-          <div className="space-y-1.5">
-            <Label htmlFor="bio">Bio</Label>
-            <Textarea id="bio" value={bio} onChange={(e) => setBio(e.target.value)} rows={4} />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label htmlFor="location">Location</Label>
-              <Input id="location" value={location} onChange={(e) => setLocation(e.target.value)} />
+              <Label htmlFor="confirmPassword">Confirm New Password</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
+                autoComplete="new-password"
+                minLength={6}
+                required
+              />
             </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="website">Website</Label>
-              <Input id="website" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://..." />
-            </div>
-          </div>
 
-          <div className="space-y-1.5">
-            <Label htmlFor="avatarUrl">Avatar URL</Label>
-            <Input id="avatarUrl" value={avatarUrl} onChange={(e) => setAvatarUrl(e.target.value)} placeholder="https://..." />
-          </div>
+            {securityError && <p className="text-sm text-destructive">{securityError}</p>}
+            {securitySuccess && <p className="text-sm text-success">{securitySuccess}</p>}
 
-          {loading && <p className="text-sm text-muted-foreground">Loading profile...</p>}
-          {error && <p className="text-sm text-destructive">{error}</p>}
-          {success && <p className="text-sm text-success">{success}</p>}
-
-          <Button type="submit" disabled={loading || saving}>
-            {saving ? "Saving..." : "Save Profile"}
-          </Button>
-        </form>
+            <Button type="submit" disabled={changingPassword}>
+              {changingPassword ? "Changing Password..." : "Change Password"}
+            </Button>
+          </form>
+        </div>
       </div>
     </AppLayout>
   );

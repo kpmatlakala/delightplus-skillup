@@ -7,10 +7,7 @@ import {
   BookOpen,
   ClipboardList,
   FileText,
-  CalendarCheck,
   MessageSquare,
-  Megaphone,
-  Mail,
   ShieldCheck,
   GraduationCap,
   ChevronDown,
@@ -28,7 +25,6 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: "Dashboard", icon: <LayoutDashboard size={18} />, href: "/" },
-  { label: "Attendance", icon: <CalendarCheck size={18} />, href: "/attendance" },
   {
     label: "Academics",
     icon: <GraduationCap size={18} />,
@@ -39,14 +35,7 @@ const navItems: NavItem[] = [
       { label: "Lesson Plans", href: "/lesson-plans", icon: <FileText size={16} /> },
     ],
   },
-  {
-    label: "Communication",
-    icon: <MessageSquare size={18} />,
-    children: [
-      { label: "Announcements", href: "/announcements", icon: <Megaphone size={16} /> },
-      { label: "Messages", href: "/messages", icon: <Mail size={16} /> },
-    ],
-  },
+  { label: "Communications", icon: <MessageSquare size={18} />, href: "/communications" },
   { label: "Assessments", icon: <ClipboardList size={18} />, href: "/assessments" },
   { label: "Compliance", icon: <ShieldCheck size={18} />, href: "/compliance" },
 ];

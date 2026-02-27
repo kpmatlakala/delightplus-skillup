@@ -10,13 +10,13 @@ import Index from "./pages/Index";
 import ModulesPage from "./pages/ModulesPage";
 import ModuleDetailPage from "./pages/ModuleDetailPage";
 import LearnersPage from "./pages/LearnersPage";
-import AttendancePage from "./pages/AttendancePage";
 import LessonPlansPage from "./pages/LessonPlansPage";
 import AssessmentsPage from "./pages/AssessmentsPage";
 import ProgramsPage from "./pages/ProgramsPage";
 import CompliancePage from "./pages/CompliancePage";
 import AnnouncementsPage from "./pages/AnnouncementsPage";
 import MessagesPage from "./pages/MessagesPage";
+import CommunicationsPage from "./pages/CommunicationsPage";
 import LearnerPortalPage from "./pages/LearnerPortalPage";
 import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/auth/LoginPage";
@@ -43,7 +43,6 @@ const App = () => (
               <Route path="/modules" element={<ModulesPage />} />
               <Route path="/modules/:id" element={<ModuleDetailPage />} />
               <Route path="/learners" element={<LearnersPage />} />
-              <Route path="/attendance" element={<AttendancePage />} />
               <Route path="/lesson-plans" element={<LessonPlansPage />} />
               <Route path="/assessments" element={<AssessmentsPage />} />
               <Route path="/programs" element={<ProgramsPage />} />
@@ -54,10 +53,12 @@ const App = () => (
 
             <Route element={<ProtectedRoute allowedRoles={["learner"]} />}>
               <Route path="/learner" element={<LearnerPortalPage />} />
+              <Route path="/learner/modules/:id" element={<ModuleDetailPage />} />
             </Route>
 
             <Route element={<ProtectedRoute />}>
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/communications" element={<CommunicationsPage />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />

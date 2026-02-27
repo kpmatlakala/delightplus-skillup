@@ -20,7 +20,65 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      cet_get_all_module_progress: {
+        Args: Record<PropertyKey, never>
+        Returns: Array<{
+          module_unit_standard_id: string
+          guide_completed: boolean
+          quiz_passed: boolean
+          assessment_unlocked: boolean
+          submission_path: string | null
+          submission_uploaded_at: string | null
+          assessment_submitted: boolean
+          assessment_submitted_at: string | null
+          updated_at: string
+        }>
+      }
+      cet_upsert_module_progress: {
+        Args: {
+          p_unit_std_id: string
+          p_guide_completed?: boolean | null
+          p_quiz_passed?: boolean | null
+          p_assessment_unlocked?: boolean | null
+          p_submission_path?: string | null
+          p_submission_uploaded_at?: string | null
+          p_assessment_submitted?: boolean | null
+          p_assessment_submitted_at?: string | null
+        }
+        Returns: undefined
+      }
+      cet_get_module_flow: {
+        Args: { p_unit_std_id: string }
+        Returns: Json
+      }
+      cet_upsert_module_flow: {
+        Args: { p_unit_std_id: string; p_flow: Json }
+        Returns: undefined
+      }
+      cet_get_announcements: {
+        Args: Record<PropertyKey, never>
+        Returns: Array<{
+          id: string
+          title: string
+          message: string
+          audience: string
+          pinned: boolean
+          author: string
+          created_at: string
+        }>
+      }
+      cet_post_announcement: {
+        Args: { p_title: string; p_message: string; p_audience?: string }
+        Returns: string
+      }
+      cet_pin_announcement: {
+        Args: { p_id: string; p_pinned: boolean }
+        Returns: undefined
+      }
+      cet_delete_announcement: {
+        Args: { p_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

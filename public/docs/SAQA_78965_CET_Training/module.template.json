@@ -1,0 +1,44 @@
+{
+  "moduleId": "ITSD-14924",
+  "unitStandardId": 14924,
+  "title": "Systems Analysis and Design",
+  "type": "Core",
+  "block": 1,
+  "documents": {
+    "facilitatorGuide": {
+      "sourcePath": "/docs/SAQA_78965_CET_Training/01_Core_UnitStandards/US 14924/14924 - Facilitator Guide.docx",
+      "targetName": "FG_14924_FacilitatorGuide_CET.pdf",
+      "status": "source_available"
+    },
+    "learnerWorkbook": {
+      "sourcePath": "/docs/SAQA_78965_CET_Training/01_Core_UnitStandards/US 14924/14924 - Learner Workbook.docx",
+      "targetName": "LW_14924_LearnerWorkbook_CET.pdf",
+      "status": "source_available"
+    },
+    "workbookMemo": {
+      "sourcePath": "/docs/SAQA_78965_CET_Training/01_Core_UnitStandards/US 14924/14924 - Assessement guide.docx",
+      "targetName": "LW_14924_Memo_CET.pdf",
+      "status": "source_available"
+    },
+    "summativeAssessment": {
+      "sourcePath": "/docs/SAQA_78965_CET_Training/01_Core_UnitStandards/US 14924/14924 - Summative Assessment.docx",
+      "targetName": "SA_14924_SummativeAssessment_CET.pdf",
+      "status": "source_available"
+    },
+    "assessmentMemo": {
+      "sourcePath": "/docs/SAQA_78965_CET_Training/01_Core_UnitStandards/US 14924/14924 - Summative memorandum.docx",
+      "targetName": "SA_14924_Memo_CET.pdf",
+      "status": "source_available"
+    },
+    "lessonPlan": {
+      "sourcePath": "/docs/SAQA_78965_CET_Training/Block-1 -LessonPlan.docx",
+      "targetNameDocx": "LP_14924_SystemsAnalysis_CET.docx",
+      "targetNamePdf": "LP_14924_SystemsAnalysis_CET.pdf",
+      "status": "source_available"
+    }
+  },
+  "notes": [
+    "Keep sourcePath immutable for traceability.",
+    "Use targetName fields for clean publish naming."
+  ]
+}

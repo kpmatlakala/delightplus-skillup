@@ -1,0 +1,19 @@
+{
+  "qualification": {
+    "title": "FET Certificate: Information Technology - Systems Development",
+    "saqaId": "78965",
+    "nqfLevel": 4,
+    "totalCredits": 131,
+    "provider": "Data Science Academy",
+    "code": "ITSD"
+  },
+  "delivery": {
+    "blocks": [1, 2, 3],
+    "coreUnitStandards": [14910, 14915, 14918, 14920, 14924, 14927, 14930],
+    "electiveUnitStandards": [14908, 14919, 120379],
+    "referenceOnly": [14933]
+  },
+  "sourceRoot": "/docs/SAQA_78965_CET_Training",
+  "catalogFile": "/docs/SAQA_78965_CET_Training/modules.catalog.json",
+  "lastUpdated": "2026-02-25"
+}
