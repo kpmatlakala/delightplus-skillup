@@ -12,7 +12,8 @@ import { useModuleProgress } from "@/hooks/useModuleProgress";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { ArrowLeft, Clock, Award, BookOpen, Target, FileText, Download, CheckCircle2, Circle, ChevronRight, DatabaseZap, RefreshCw } from "lucide-react";
+import { ArrowLeft, Clock, Award, BookOpen, Target, FileText, Download, CheckCircle2, Circle, ChevronRight, DatabaseZap, RefreshCw, Play } from "lucide-react";
+import { PresentationMode } from "@/components/PresentationMode";
 
 interface ContentLinks {
   modules?: Record<string, Array<{ label: string; href: string }>>;
@@ -343,6 +344,7 @@ export default function ModuleDetailPage() {
   const [guidePageIndex, setGuidePageIndex] = useState(0);
   const [guideMode, setGuideMode] = useState<"intro" | "sessions">("intro");
   const [adminDocCategory, setAdminDocCategory] = useState<"guide" | "workbook" | "facilitator" | "assessment">("guide");
+  const [isPresenting, setIsPresenting] = useState(false);
   const [sessionIndex, setSessionIndex] = useState(0);
   // Tracks the highest session index ever visited — never decrements when learner goes back
   const [highestSessionReached, setHighestSessionReached] = useState(-1);
@@ -716,9 +718,17 @@ export default function ModuleDetailPage() {
           </div>
           <div className="flex items-center gap-1.5 flex-shrink-0">
             {!isLearnerView && (
-              <Badge variant="outline" className="text-xs border-amber-400/50 text-amber-600 dark:text-amber-400">
-                {role === "admin" ? "Admin" : "Facilitator"}
-              </Badge>
+              <>
+                <button
+                  onClick={() => setIsPresenting(true)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-colors shadow-sm"
+                >
+                  <Play size={12} /> Present
+                </button>
+                <Badge variant="outline" className="text-xs border-amber-400/50 text-amber-600 dark:text-amber-400">
+                  {role === "admin" ? "Admin" : "Facilitator"}
+                </Badge>
+              </>
             )}
             <Badge variant={mod.type === "Knowledge" ? "secondary" : "default"} className={mod.type === "Practical" ? "bg-accent text-accent-foreground" : ""}>
               {mod.type}
@@ -1556,6 +1566,15 @@ export default function ModuleDetailPage() {
               )}
         </aside>
       </div>{/* end two-column grid */}
+
+      {/* ── Presentation mode ──────────────────────────────────────────────── */}
+      {isPresenting && (
+        <PresentationMode
+          module={mod}
+          isAdmin={role === "admin" || role === "moderator"}
+          onClose={() => setIsPresenting(false)}
+        />
+      )}
     </AppLayout>
   );
 }
