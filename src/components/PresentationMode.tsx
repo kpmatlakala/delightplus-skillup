@@ -920,7 +920,7 @@ export function PresentationMode({
   return (
     <div className="fixed inset-0 z-50 flex flex-col" style={{ background: "black" }}>
       {/* ── Top bar */}
-      <div className="flex items-center justify-between px-5 py-3 bg-black/60 backdrop-blur border-b border-white/10 z-10 flex-shrink-0">
+      <div className="flex items-center justify-between px-4 py-2 bg-black/60 backdrop-blur border-b border-white/10 z-10 flex-shrink-0">
         <div className="flex items-center gap-3 min-w-0">
           <Badge
             variant="outline"
@@ -1137,21 +1137,21 @@ export function PresentationMode({
         />
 
         <div
-          className={`relative flex-1 flex flex-col justify-center px-8 md:px-20 lg:px-32 py-8 transition-all duration-200 ease-in-out ${contentClass}`}
+          className={`relative flex-1 flex flex-col justify-center px-6 md:px-14 lg:px-24 py-3 transition-all duration-200 ease-in-out ${contentClass}`}
         >
           {slide.type === "title" && (
             /* ── Title slide layout */
             <div className="text-center max-w-3xl mx-auto">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-white/70 text-sm mb-8">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-white/70 text-sm mb-5">
                 {mode === "briefing" ? <GraduationCap size={14} /> : <Lightbulb size={14} />}
                 {mode === "briefing"
                   ? "Programme Orientation · SAQA 78965 · NQF Level 4"
                   : `SAQA ${mod?.id}  ·  NQF Level 4  ·  ${mod?.credits} Credits`}
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6 whitespace-pre-line">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-4 whitespace-pre-line">
                 {slide.title}
               </h1>
-              <p className="text-white/50 text-lg mb-10">{slide.subtitle}</p>
+              <p className="text-white/50 text-base mb-5">{slide.subtitle}</p>
               {mode === "module" && mod && (
                 <div className="flex flex-wrap gap-3 justify-center">
                   <span className="px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white/80 text-sm font-medium">
@@ -1165,20 +1165,35 @@ export function PresentationMode({
                   </span>
                 </div>
               )}
+              {/* Learner portal QR — shown on briefing title slide so learners can scan to register */}
+              {mode === "briefing" && (
+                <div className="mt-6 flex flex-col items-center gap-1.5">
+                  <div className="p-2 bg-white rounded-xl inline-block">
+                    <img
+                      src="https://api.qrserver.com/v1/create-qr-code/?size=110x110&data=https%3A%2F%2Fcetconnect.netlify.app%2Fauth%2Fsignup&margin=3&color=1e1b4b&bgcolor=ffffff"
+                      alt="Scan to join the learner portal"
+                      width={110}
+                      height={110}
+                      className="block rounded-lg"
+                    />
+                  </div>
+                  <p className="text-white/40 text-xs tracking-wide">cetconnect.netlify.app · Scan to register</p>
+                </div>
+              )}
             </div>
           )}
 
           {/* ── Quiz slide layout */}
           {slide.type === "quiz" && slide.quizQuestion && slide.quizOptions && (
             <div className="max-w-3xl w-full mx-auto">
-              <p className="text-xs uppercase tracking-widest font-semibold mb-3 text-purple-300">
+              <p className="text-xs uppercase tracking-widest font-semibold mb-2 text-purple-300">
                 {slide.subtitle}
               </p>
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-8 leading-snug">
+              <h2 className="text-xl md:text-2xl font-bold text-white mb-5 leading-snug">
                 {slide.quizQuestion}
               </h2>
 
-              <div className="space-y-3 mb-6">
+              <div className="space-y-2 mb-4">
                 {slide.quizOptions.map((opt, i) => {
                   const isSelected = qState.selected === i;
                   const isCorrect = slide.quizCorrect === i;
@@ -1231,16 +1246,16 @@ export function PresentationMode({
           {slide.type !== "title" && slide.type !== "quiz" && (
             <div className="max-w-4xl w-full mx-auto">
               {slide.subtitle && (
-                <p className={`text-xs uppercase tracking-widest font-semibold mb-3 ${config.accent.split(" ")[0]}`}>
+                <p className={`text-xs uppercase tracking-widest font-semibold mb-2 ${config.accent.split(" ")[0]}`}>
                   {slide.subtitle}
                 </p>
               )}
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 leading-snug">
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-5 leading-snug">
                 {slide.title}
               </h2>
 
               {slide.bullets && slide.bullets.length > 0 && (
-                <ul className="space-y-3 mb-7">
+                <ul className="space-y-2 mb-4">
                   {slide.bullets.map((item, i) => {
                     const isCheckmark = item.startsWith("✓");
                     const cleaned = item.replace(/^✓\s*/, "");
@@ -1274,7 +1289,7 @@ export function PresentationMode({
               )}
 
               {slide.body && (
-                <p className="text-white/70 text-base md:text-lg leading-relaxed mb-6">{slide.body}</p>
+                <p className="text-white/70 text-sm md:text-base leading-relaxed mb-4">{slide.body}</p>
               )}
 
               {slide.highlight && (
@@ -1290,7 +1305,7 @@ export function PresentationMode({
 
       {/* ── Speaker notes panel */}
       {isAdmin && notesOpen && slide.speakerNote && (
-        <div className="flex-shrink-0 bg-black/90 border-t border-white/10 px-6 md:px-16 py-4 max-h-48 overflow-y-auto">
+        <div className="flex-shrink-0 bg-black/90 border-t border-white/10 px-6 md:px-16 py-3 max-h-32 overflow-y-auto">
           <div className="flex items-center gap-2 mb-2">
             <Users size={13} className="text-yellow-400" />
             <span className="text-yellow-400 text-xs font-semibold uppercase tracking-widest">
@@ -1302,7 +1317,7 @@ export function PresentationMode({
       )}
 
       {/* ── Bottom navigation */}
-      <div className="flex-shrink-0 flex items-center justify-between px-5 py-3 bg-black/60 backdrop-blur border-t border-white/10 gap-3">
+      <div className="flex-shrink-0 flex items-center justify-between px-4 py-2 bg-black/60 backdrop-blur border-t border-white/10 gap-3">
         {/* Dot nav */}
         <div className="flex gap-1.5 overflow-x-auto max-w-[40%]">
           {slides.map((s, i) => {

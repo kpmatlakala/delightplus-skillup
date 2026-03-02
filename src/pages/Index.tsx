@@ -58,11 +58,39 @@ export default function Dashboard() {
       </div>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
         <StatCard label="Total Modules" value={totalModules} icon={<BookOpen size={16} />} variant="accent" />
         <StatCard label="Modules Ready" value={readyModules} icon={<CheckCircle size={16} />} variant="success" />
         <StatCard label="Total Credits" value={totalCredits} icon={<Award size={16} />} />
         <StatCard label="Enrolled Learners" value={enrolledCount} icon={<Users size={16} />} variant="warning" />
+      </div>
+
+      {/* Learner Portal QR Invite */}
+      <div className="rounded-lg border border-border bg-card px-4 py-3 mb-4 flex flex-col sm:flex-row sm:items-center gap-4">
+        <div className="shrink-0 p-1.5 bg-white rounded-xl">
+          <img
+            src="https://api.qrserver.com/v1/create-qr-code/?size=96x96&data=https%3A%2F%2Fcetconnect.netlify.app%2Fauth%2Fsignup&margin=3&color=1e1b4b&bgcolor=ffffff"
+            alt="Learner portal signup QR code"
+            width={96}
+            height={96}
+            className="block rounded-lg"
+          />
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-0.5">Learner Portal Access</p>
+          <p className="font-semibold text-sm text-foreground">Invite learners to register on CET Connect</p>
+          <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+            Learners scan this QR code — or open the link below — to create their account and access course content.
+          </p>
+          <a
+            href="https://cetconnect.netlify.app/auth/signup"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-block mt-1.5 text-xs text-accent hover:underline font-medium"
+          >
+            cetconnect.netlify.app/auth/signup
+          </a>
+        </div>
       </div>
 
       {/* Programme Introduction — facilitator briefing */}
