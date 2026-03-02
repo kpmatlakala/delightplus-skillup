@@ -22,6 +22,7 @@ import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/auth/LoginPage";
 import SignupPage from "./pages/auth/SignupPage";
 import NotFound from "./pages/NotFound";
+import PresentationRemotePage from "./pages/PresentationRemotePage";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +61,9 @@ const App = () => (
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/communications" element={<CommunicationsPage />} />
             </Route>
+
+            {/* Public — no auth, session code is the shared secret */}
+            <Route path="/present/remote/:code" element={<PresentationRemotePage />} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>

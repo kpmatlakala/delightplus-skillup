@@ -1,14 +1,19 @@
 import AppLayout from "@/components/AppLayout";
 import StatCard from "@/components/StatCard";
 import ModuleCard from "@/components/ModuleCard";
+import { PresentationMode } from "@/components/PresentationMode";
 import { modules, program, learners } from "@/data/courseData";
-import { BookOpen, Users, Award, CalendarCheck, CheckCircle } from "lucide-react";
+import { BookOpen, Users, Award, CheckCircle, GraduationCap, Play, CalendarCheck } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [enrolledCount, setEnrolledCount] = useState<number>(learners.length);
+  const [isPresentingBriefing, setIsPresentingBriefing] = useState(false);
   const totalModules = modules.length;
   const readyModules = modules.filter((m) => m.status === "Ready").length;
   const totalCredits = modules.reduce((sum, m) => sum + m.credits, 0);
@@ -39,7 +44,13 @@ export default function Dashboard() {
               NQF Level {program.nqfLevel} • {program.totalCredits} Total Credits • {program.provider}
             </p>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-3 shrink-0">
+            <button
+              onClick={() => setIsPresentingBriefing(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-accent text-accent-foreground hover:bg-accent/90 text-xs font-semibold transition-colors"
+            >
+              <Play size={11} className="fill-current" /> Present Briefing
+            </button>
             <span className="text-xs font-medium text-accent">{totalCredits}/{program.totalCredits} credits</span>
             <Progress value={(totalCredits / program.totalCredits) * 100} className="w-24 h-1.5" />
           </div>
@@ -53,6 +64,188 @@ export default function Dashboard() {
         <StatCard label="Total Credits" value={totalCredits} icon={<Award size={16} />} />
         <StatCard label="Enrolled Learners" value={enrolledCount} icon={<Users size={16} />} variant="warning" />
       </div>
+
+      {/* Programme Introduction — facilitator briefing */}
+      <Accordion type="single" collapsible className="mb-5">
+        <AccordionItem value="programme-intro" className="rounded-lg border border-border bg-card">
+          <AccordionTrigger className="px-4 py-3 text-sm font-semibold hover:no-underline">
+            <div className="flex items-center gap-2">
+              <GraduationCap size={15} className="text-accent shrink-0" />
+              <span>FETC: IT Systems Development — Programme Introduction &amp; Facilitator Briefing</span>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="px-4 pb-5 space-y-6 text-sm">
+
+            {/* Facilitator intro */}
+            <div className="rounded-lg border border-border bg-muted/30 p-4 flex items-start gap-4">
+              <div className="shrink-0 h-11 w-11 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold text-sm">
+                KM
+              </div>
+              <div className="min-w-0">
+                <p className="font-semibold text-foreground text-sm">Kabelo Matlakala — Your Facilitator</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Scrum Master &amp; Systems Development Facilitator · Data Science Academy · Starting March 2026</p>
+                <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+                  BSc Mathematical Sciences, University of Limpopo. Software Developer background (mLab CodeTribe Academy). Based in Limpopo Province.
+                  Kabelo delivers this qualification and is the primary point of contact for learner support across all 3 blocks.
+                </p>
+                <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-xs">
+                  <span className="text-muted-foreground">📧 <a href="mailto:matlakalakabelo1@gmail.com" className="text-accent hover:underline">matlakalakabelo1@gmail.com</a></span>
+                  <span className="text-muted-foreground">📱 <a href="tel:+27727138367" className="text-accent hover:underline">+27 72 713 8367</a></span>
+                </div>
+              </div>
+            </div>
+
+            {/* About the Programme */}
+            <div>
+              <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground mb-2">About the Programme</h4>
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs border rounded-md overflow-hidden">
+                  <tbody>
+                    {([
+                      ["Qualification title", "Further Education and Training Certificate: IT Systems Development"],
+                      ["SAQA ID", "78965"],
+                      ["NQF Level", "4"],
+                      ["Total credits", "165"],
+                      ["Programme duration", "15 delivery days across 3 blocks"],
+                      ["Credits covered", `${totalCredits} credits across 10 modules (${Math.round((totalCredits / program.totalCredits) * 100)}% of qualification)`],
+                      ["Provider", program.provider],
+                    ] as [string, string][]).map(([label, value]) => (
+                      <tr key={label} className="border-b last:border-0 odd:bg-muted/30">
+                        <td className="py-1.5 px-3 text-muted-foreground w-44 font-medium">{label}</td>
+                        <td className="py-1.5 px-3">{value}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* What is a System? */}
+            <div>
+              <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground mb-2">What is a System?</h4>
+              <p className="text-muted-foreground leading-relaxed">
+                A <strong>system</strong> is an organised set of interrelated components that work together to achieve a defined goal. An{" "}
+                <strong>information system</strong> specifically collects, processes, stores, and distributes information to support an organisation's
+                operations and decision-making. Examples learners already interact with: a student registration portal, an attendance capture tool,
+                a results management system — each takes in data, applies rules, stores records, and produces outputs (reports, certificates,
+                notifications) that people act on.
+              </p>
+              <p className="text-muted-foreground leading-relaxed mt-2">
+                This <strong>input → process → storage → output</strong> model is the structural DNA of every information system in the field.
+                Understanding it is the first step to building, analysing or improving one.
+              </p>
+            </div>
+
+            {/* Systems Development vs Software Development */}
+            <div>
+              <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground mb-2">Systems Development vs Software Development — Are They the Same?</h4>
+              <p className="text-muted-foreground leading-relaxed mb-3">
+                These terms are often used interchangeably but they describe different scopes. <strong>Software development</strong> is a{" "}
+                <em>subset</em> of systems development — it is the phase where code is written and tested. Clarifying this prevents the
+                common misconception that this qualification is purely about programming.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs border rounded-md overflow-hidden">
+                  <thead>
+                    <tr className="bg-muted/50">
+                      <th className="py-1.5 px-3 text-left font-semibold">Aspect</th>
+                      <th className="py-1.5 px-3 text-left font-semibold">Systems Development</th>
+                      <th className="py-1.5 px-3 text-left font-semibold">Software Development</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {([
+                      ["Scope", "End-to-end: people, process, data, technology", "Primarily code — design, write, test, deploy"],
+                      ["Starting point", "Business problem or organisational need", "Requirements spec handed to developers"],
+                      ["Who is involved", "Analysts, users, managers, developers, QA, trainers", "Developers, testers, DevOps engineers"],
+                      ["Key output", "A working solution that solves the business problem", "A software artefact — application, API, script"],
+                      ["SDLC position", "Spans all 6 phases — investigation to maintenance", "Primarily phases 4–5 (development & implementation)"],
+                      ["NQF framing", "Recognised SA qualification framing (SAQA 78965)", "Usually vendor-specific certifications"],
+                    ] as [string, string, string][]).map(([aspect, sd, sw]) => (
+                      <tr key={aspect} className="border-b last:border-0 odd:bg-muted/30">
+                        <td className="py-1.5 px-3 text-muted-foreground font-medium">{aspect}</td>
+                        <td className="py-1.5 px-3">{sd}</td>
+                        <td className="py-1.5 px-3">{sw}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-muted-foreground leading-relaxed mt-3">
+                <strong>How they connect:</strong> every piece of software exists inside a larger organisational system. The analyst's work —
+                understanding the problem, gathering requirements, modelling data flows, designing before coding — determines whether the software
+                that gets built actually solves the right problem. In this qualification, learners do both: they think like analysts <em>and</em> write
+                like developers.
+              </p>
+            </div>
+
+            {/* Why It Matters */}
+            <div>
+              <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground mb-2">Why Does This Matter?</h4>
+              <ul className="space-y-2 text-muted-foreground">
+                {([
+                  ["Organisations run on systems", "Every business function — payroll, HR, logistics, student records — depends on reliable information systems. Understanding how they are built is foundational to any IT role."],
+                  ["Poor analysis causes expensive failures", "Most IT project failures trace back not to bad code, but to misunderstood requirements. Teaching learners to analyse before they build prevents the most costly mistakes in the field."],
+                  ["NQF Level 4 opens careers", "Competence in systems development creates pathways into junior analyst, developer, business analyst support and project coordination roles — all in high demand across South African industry."],
+                  ["Modelling professional practice", "As CET lecturers, demonstrating structured thinking — breaking a problem down, gathering requirements, designing before coding — sets the standard your learners carry into the workplace."],
+                ] as [string, string][]).map(([title, detail]) => (
+                  <li key={title} className="flex gap-2">
+                    <span className="text-accent mt-0.5 shrink-0">›</span>
+                    <span><strong>{title}:</strong> {detail}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Module Roadmap */}
+            <div>
+              <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground mb-2">Module Roadmap — All 10 Units</h4>
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs border rounded-md overflow-hidden">
+                  <thead>
+                    <tr className="bg-muted/50">
+                      <th className="py-1.5 px-3 text-left font-semibold">#</th>
+                      <th className="py-1.5 px-3 text-left font-semibold">Code</th>
+                      <th className="py-1.5 px-3 text-left font-semibold">Title</th>
+                      <th className="py-1.5 px-3 text-left font-semibold whitespace-nowrap">Block</th>
+                      <th className="py-1.5 px-3 text-right font-semibold">Credits</th>
+                      <th className="py-1.5 px-3 text-left font-semibold">What learners will be able to do</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {([
+                      [1, "ITSD-14924", "Information Systems Analysis", "Block 1 · Day 1", 3, "Describe the SDLC, the analyst's role, information-gathering techniques, DFDs, decision tables and CASE tools"],
+                      [2, "ITSD-14920", "Team Collaboration & Problem Solving", "Block 1 · Day 2", 3, "Contribute effectively to team problem-solving using structured techniques and identify qualities of effective team members"],
+                      [3, "ITSD-14918", "Programming Principles Introduction", "Block 1 · Day 3", 5, "Explain data types, control structures and write pseudocode for simple problems"],
+                      [4, "ITSD-14927", "Apply Problem-Solving Strategies", "Block 1 · Day 4", 4, "Analyse workplace problems, evaluate solutions against criteria, and develop an implementation plan"],
+                      [5, "ITSD-14915", "Design a Computer Program to Specification", "Block 1 · Day 5", 8, "Design programs using structure diagrams, decision tables, pseudocode and desk-checking"],
+                      [6, "ITSD-14910", "Apply Programming Principles", "Block 2 · Days 6–7", 8, "Write, test and debug structured programs applying data types, functions, control structures and error handling"],
+                      [7, "ITSD-14933", "Web Scripting", "Block 2 · Days 8–9", 6, "Build interactive web pages using HTML5, CSS3 and JavaScript with DOM manipulation and responsive design"],
+                      [8, "ITSD-14908", "Testing IT Systems", "Block 3 · Day 11", 6, "Design test cases, execute test plans, log defects and apply quality assurance principles"],
+                      [9, "ITSD-14919", "Resolve User Problems", "Block 3 · Day 12", 5, "Diagnose and resolve common IT user problems using structured troubleshooting methodology"],
+                      [10, "ITSD-120379", "Work as Project Team Member", "Block 3 · Day 13", 8, "Participate effectively in a project team, manage deliverables and communicate with stakeholders"],
+                    ] as [number, string, string, string, number, string][]).map(([num, code, title, block, credits, purpose]) => (
+                      <tr key={code} className="border-b last:border-0 odd:bg-muted/30">
+                        <td className="py-1.5 px-3 text-muted-foreground">{num}</td>
+                        <td className="py-1.5 px-3 font-mono">{code}</td>
+                        <td className="py-1.5 px-3 font-medium">{title}</td>
+                        <td className="py-1.5 px-3 text-muted-foreground whitespace-nowrap">{block}</td>
+                        <td className="py-1.5 px-3 text-right tabular-nums">{credits}</td>
+                        <td className="py-1.5 px-3 text-muted-foreground">{purpose}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-muted-foreground mt-2 text-xs">
+                <strong>Note:</strong> Day 10 is a PoE consolidation day — no new content is delivered. Learners use this day to organise
+                evidence, complete outstanding activities, and prepare questions for Block 3.
+              </p>
+            </div>
+
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
 
       {/* Block overview */}
       {[1, 2, 3].map((block) => {
@@ -75,6 +268,16 @@ export default function Dashboard() {
           </div>
         );
       })}
+      {isPresentingBriefing && (
+        <PresentationMode
+          mode="briefing"
+          isAdmin={true}
+          onClose={() => setIsPresentingBriefing(false)}
+          nextUnitId={modules[0]?.id}
+          nextUnitTitle={modules[0]?.title}
+          routePrefix="/modules"
+        />
+      )}
     </AppLayout>
   );
 }

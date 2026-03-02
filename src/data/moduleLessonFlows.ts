@@ -416,6 +416,150 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
     assessmentPageBody: "Submit a Portfolio of Evidence demonstrating your understanding of information systems analysis concepts and techniques.",
     lessons: [
       {
+        id: "programme-intro",
+        label: "Before You Begin",
+        title: "What is Systems Development?",
+        summary: "A foundational orientation to the FETC: IT Systems Development qualification — what systems are, how systems development differs from software development, and why these skills matter. No assessed outcomes.",
+        body: "Before diving into the first unit standard, take some time to understand the landscape you are stepping into. This lesson has no assessed outcomes — it is here to orient you and warm up your thinking about what information systems are and why studying their development matters.",
+        sections: [
+          {
+            title: "A. What is a System?",
+            blocks: [
+              {
+                type: "callout" as const,
+                variant: "info" as const,
+                text: "Think of your college's student registration portal — it takes in learner data, processes it according to rules, stores records, and produces reports for the DoE. That is a real information system. Understanding how to build, analyse and improve systems like it is exactly what this qualification is about.",
+              },
+              {
+                type: "paragraph" as const,
+                text: "A system is an organised set of interrelated components that work together to achieve a defined goal. An information system specifically collects, processes, stores, and distributes information to support an organisation's day-to-day operations and decision-making.",
+              },
+              {
+                type: "heading" as const,
+                text: "Examples of Information Systems You Already Know",
+              },
+              {
+                type: "list" as const,
+                items: [
+                  "Student registration portal — captures enrolment data, checks eligibility, generates student numbers and timetables",
+                  "Attendance tracking tool — records daily sign-ins, flags patterns, produces reports for the Department of Education",
+                  "Results management system — stores marks, calculates averages, generates transcripts and certificates",
+                  "Leave management system — processes leave applications, checks available balances, notifies line managers",
+                  "Online banking portal — takes your transaction instruction, validates it, updates balances, sends a confirmation",
+                ],
+              },
+              {
+                type: "paragraph" as const,
+                text: "Notice the pattern: every one of these systems takes in data (inputs), applies rules or calculations (processing), retains records (storage), and produces something people act on — a report, a balance, a certificate (outputs). This input–process–storage–output model is the structural DNA of every information system you will ever build or analyse.",
+              },
+            ],
+          },
+          {
+            title: "B. What is Systems Development?",
+            blocks: [
+              {
+                type: "paragraph" as const,
+                text: "Systems development is the end-to-end discipline of planning, analysing, designing, building, testing and maintaining information systems. It is not only about writing code — it is about ensuring the right system gets built in the first place, that it works correctly, and that it keeps working reliably after it is deployed.",
+              },
+              {
+                type: "heading" as const,
+                text: "The Six Phases of the Systems Development Life Cycle",
+              },
+              {
+                type: "ordered-list" as const,
+                items: [
+                  "Investigation — Identify the business problem or opportunity; assess whether a new or improved system is justified before any money is committed",
+                  "Analysis — Establish in detail what the system must do: requirements, data flows, user needs, volume estimates, constraints",
+                  "Design — Specify how the system will work: architecture, data structures, user interfaces, program module structure",
+                  "Development (Coding) — Write and unit-test the program code based on the approved design documents",
+                  "Implementation — Deploy the system, convert existing data, train users, and manage the transition from the old system to the new one",
+                  "Maintenance — Monitor for defects, apply fixes and enhancements, and eventually plan the next iteration or replacement",
+                ],
+              },
+              {
+                type: "callout" as const,
+                variant: "tip" as const,
+                text: "Notice that coding (phase 4) only appears more than halfway through. The analysis and design work that precedes it determines whether what gets built is actually useful. A technically excellent system that solves the wrong problem is still a failure — and failures at this stage cost two to ten times more to fix than failures caught during analysis.",
+              },
+            ],
+          },
+          {
+            title: "C. Systems Development vs Software Development — Are They the Same?",
+            blocks: [
+              {
+                type: "paragraph" as const,
+                text: "These terms are used interchangeably in everyday conversation, but they describe different scopes. Software development is a subset of systems development — it is the phase where programs are written and tested. Systems development is the broader discipline that frames why the software needs to exist and ensures the solution works for the organisation as a whole.",
+              },
+              {
+                type: "table" as const,
+                headers: ["Aspect", "Systems Development", "Software Development"],
+                rows: [
+                  ["Scope", "End-to-end: people, process, data, technology and code", "Primarily code — design, write, test, deploy"],
+                  ["Starting point", "Business problem or organisational need", "Requirements specification handed to developers by an analyst"],
+                  ["Who is involved", "Analysts, business users, managers, developers, QA, trainers", "Developers, testers, DevOps engineers"],
+                  ["Key output", "A working solution that solves the business problem", "A software artefact — an application, API, script or service"],
+                  ["SDLC position", "Spans all 6 phases from investigation to maintenance", "Primarily phases 4–5: development and implementation"],
+                  ["SA NQF framing", "The recognised qualification framing (SAQA 78965, NQF Level 4)", "Usually vendor-specific certifications (e.g. AWS, Oracle, Microsoft)"],
+                ],
+              },
+              {
+                type: "paragraph" as const,
+                text: "How they connect: every piece of software exists inside a larger organisational system. The analyst's work — understanding the problem, gathering requirements, modelling data flows, designing before coding — determines whether the software that eventually gets written solves the right problem for the right people. In this qualification, you will learn to think like an analyst and write like a developer. Both skills are required to be fully effective in the IT workplace.",
+              },
+            ],
+          },
+          {
+            title: "D. Why Study Systems Development?",
+            blocks: [
+              {
+                type: "list" as const,
+                items: [
+                  "Organisations run on systems: every business function — payroll, HR, logistics, student records — depends on reliable information systems. Understanding how they are built is foundational to any IT role, from junior developer to project manager.",
+                  "Poor analysis causes expensive failures: the Standish Group CHAOS Report consistently finds that fewer than 30% of IT projects are completed on time, within budget and to specification. The leading root causes are poor requirements gathering and inadequate analysis — not programming errors. This qualification addresses those root causes directly.",
+                  "NQF Level 4 opens careers: competence in systems development creates pathways into junior analyst, developer, business analyst support and project coordination roles — all in high demand across South African government and private sector.",
+                  "Professional practice modelling: as a CET lecturer delivering vocational IT training, demonstrating structured thinking — breaking a problem down before touching a keyboard, gathering requirements from users, designing before coding — is the professional standard your learners will carry into the workplace.",
+                ],
+              },
+              {
+                type: "callout" as const,
+                variant: "info" as const,
+                text: "Reflection activity: Name one IT system you interact with at your college. Write down one thing it does well and one thing it does poorly. When you reach Session 1 of ITSD-14924, you will have the vocabulary and the analytical tools to describe exactly why that problem exists — and how you would fix it.",
+              },
+            ],
+          },
+          {
+            title: "E. Your Learning Roadmap",
+            blocks: [
+              {
+                type: "paragraph" as const,
+                text: "This qualification is delivered across 15 days in 3 blocks. The 10 unit standards below build on each other — Block 1 establishes the thinking frameworks, Block 2 applies them in working code, and Block 3 brings everything together in a professional practice context.",
+              },
+              {
+                type: "table" as const,
+                headers: ["#", "Code", "Title", "Block", "Credits", "What you will be able to do"],
+                rows: [
+                  ["1", "ITSD-14924", "Information Systems Analysis", "Block 1 · Day 1", "3", "Describe the SDLC, the analyst's role, information-gathering techniques, DFDs, decision tables and CASE tools"],
+                  ["2", "ITSD-14920", "Team Collaboration & Problem Solving", "Block 1 · Day 2", "3", "Contribute effectively to team problem-solving using structured techniques and identify qualities of effective team members"],
+                  ["3", "ITSD-14918", "Programming Principles Introduction", "Block 1 · Day 3", "5", "Explain data types, control structures and write pseudocode for simple problems"],
+                  ["4", "ITSD-14927", "Apply Problem-Solving Strategies", "Block 1 · Day 4", "4", "Analyse workplace problems, evaluate solutions against criteria, and develop an implementation plan"],
+                  ["5", "ITSD-14915", "Design a Computer Program to Specification", "Block 1 · Day 5", "8", "Design programs using structure diagrams, decision tables, pseudocode and desk-checking"],
+                  ["6", "ITSD-14910", "Apply Programming Principles", "Block 2 · Days 6–7", "8", "Write, test and debug structured programs applying data types, functions, control structures and error handling"],
+                  ["7", "ITSD-14933", "Web Scripting", "Block 2 · Days 8–9", "6", "Build interactive web pages using HTML5, CSS3 and JavaScript with DOM manipulation and responsive design"],
+                  ["8", "ITSD-14908", "Testing IT Systems", "Block 3 · Day 11", "6", "Design test cases, execute test plans, log defects and apply quality assurance principles"],
+                  ["9", "ITSD-14919", "Resolve User Problems", "Block 3 · Day 12", "5", "Diagnose and resolve common IT user problems using structured troubleshooting methodology"],
+                  ["10", "ITSD-120379", "Work as Project Team Member", "Block 3 · Day 13", "8", "Participate effectively in a project team, manage deliverables and communicate with stakeholders"],
+                ],
+              },
+              {
+                type: "callout" as const,
+                variant: "tip" as const,
+                text: "Day 10 is a PoE consolidation day — no new unit standard content is delivered. Use this day to organise your portfolio evidence, complete any outstanding workbook activities, and prepare questions for the Block 3 sessions. Your facilitator will be available to provide guidance.",
+              },
+            ],
+          },
+        ],
+      },
+      {
         id: "unit-1",
         label: "Block 1 · Day 1",
         title: "Systems Analysis Foundations: SDLC, Roles and Techniques",

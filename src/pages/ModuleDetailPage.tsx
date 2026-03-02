@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
@@ -330,6 +330,9 @@ export default function ModuleDetailPage() {
   const [seedStatus, setSeedStatus] = useState<string | null>(null);
   const [seeding, setSeeding] = useState(false);
   const mod = modules.find((m) => m.id === id);
+  const navigate = useNavigate();
+  const modIndex = modules.findIndex((m) => m.id === id);
+  const nextModule = modIndex >= 0 && modIndex < modules.length - 1 ? modules[modIndex + 1] : undefined;
   const [jsonLinksByModule, setJsonLinksByModule] = useState<ContentLinks["modules"]>({});
   const [studyDocs, setStudyDocs] = useState<Array<ExtractedDoc | MarkdownDoc>>([]);
   const [loadingStudyDocs, setLoadingStudyDocs] = useState(false);
@@ -1571,8 +1574,12 @@ export default function ModuleDetailPage() {
       {isPresenting && (
         <PresentationMode
           module={mod}
+          flow={moduleLessonFlow}
           isAdmin={role === "admin" || role === "moderator"}
           onClose={() => setIsPresenting(false)}
+          nextUnitId={nextModule?.id}
+          nextUnitTitle={nextModule?.title}
+          routePrefix={role === "user" ? "/learner/modules" : "/modules"}
         />
       )}
     </AppLayout>
