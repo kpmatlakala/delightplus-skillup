@@ -12,6 +12,8 @@ import {
   GraduationCap,
   ChevronDown,
   ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
   Menu,
   X,
 } from "lucide-react";
@@ -24,20 +26,20 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: "Dashboard", icon: <LayoutDashboard size={18} />, href: "/" },
+  { label: "Dashboard",      icon: <LayoutDashboard size={18} />, href: "/" },
   {
     label: "Academics",
     icon: <GraduationCap size={18} />,
     children: [
-      { label: "Learners", href: "/learners", icon: <Users size={16} /> },
-      { label: "Programs", href: "/programs", icon: <BookOpen size={16} /> },
-      { label: "Modules", href: "/modules", icon: <ClipboardList size={16} /> },
-      { label: "Lesson Plans", href: "/lesson-plans", icon: <FileText size={16} /> },
+      { label: "Learners",     href: "/learners",     icon: <Users         size={16} /> },
+      { label: "Programs",     href: "/programs",     icon: <BookOpen      size={16} /> },
+      { label: "Modules",      href: "/modules",      icon: <ClipboardList size={16} /> },
+      { label: "Lesson Plans", href: "/lesson-plans", icon: <FileText      size={16} /> },
     ],
   },
   { label: "Communications", icon: <MessageSquare size={18} />, href: "/communications" },
-  { label: "Assessments", icon: <ClipboardList size={18} />, href: "/assessments" },
-  { label: "Compliance", icon: <ShieldCheck size={18} />, href: "/compliance" },
+  { label: "Assessments",    icon: <ClipboardList size={18} />, href: "/assessments" },
+  { label: "Compliance",     icon: <ShieldCheck  size={18} />, href: "/compliance" },
 ];
 
 const learnerNavItems: NavItem[] = [
@@ -47,88 +49,145 @@ const learnerNavItems: NavItem[] = [
 export default function AppSidebar() {
   const { role } = useAuth();
   const location = useLocation();
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({ Academics: true });
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const items = role === "learner" ? learnerNavItems : navItems;
+  const [groupExpanded, setGroupExpanded] = useState<Record<string, boolean>>({ Academics: true });
+  const [mobileOpen, setMobileOpen]       = useState(false);
+  const [collapsed, setCollapsed]         = useState(false);
 
-  const toggleSection = (label: string) => {
-    setExpanded((prev) => ({ ...prev, [label]: !prev[label] }));
-  };
-
+  const items    = role === "user" ? learnerNavItems : navItems;
   const isActive = (href: string) => location.pathname === href;
 
+  const toggleGroup = (label: string) =>
+    setGroupExpanded((prev) => ({ ...prev, [label]: !prev[label] }));
+
+  /* ── reusable nav link ─────────────────────────────────────────── */
+  const NavLink = ({
+    href,
+    icon,
+    label,
+    isChild = false,
+  }: {
+    href: string;
+    icon: React.ReactNode;
+    label: string;
+    isChild?: boolean;
+  }) => {
+    const active = isActive(href);
+    return (
+      <Link
+        to={href}
+        title={collapsed ? label : undefined}
+        onClick={() => setMobileOpen(false)}
+        className={`flex items-center rounded-md transition-colors text-sm
+          ${collapsed
+            ? "justify-center py-2.5 mx-1 px-0"
+            : isChild
+              ? "gap-2.5 px-3 py-1.5"
+              : "gap-2.5 px-3 py-2"}
+          ${active
+            ? "bg-sidebar-primary text-sidebar-primary-foreground font-medium"
+            : "text-sidebar-foreground hover:bg-sidebar-accent"
+          }`}
+      >
+        <span className="shrink-0">{icon}</span>
+        {!collapsed && <span className="truncate">{label}</span>}
+      </Link>
+    );
+  };
+
+  /* ── sidebar body ──────────────────────────────────────────────── */
   const sidebarContent = (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full overflow-hidden">
+
       {/* Logo */}
-      <div className="px-5 py-5 border-b border-sidebar-border">
-        <h1 className="font-display text-lg font-bold text-sidebar-primary-foreground tracking-tight">
-          DSA<span className="text-sidebar-primary"> Tracker</span>
-        </h1>
-        <p className="text-xs text-sidebar-muted mt-0.5">
-          {role === "learner" ? "Learner Portal" : "Course Management System"}
-        </p>
+      <div
+        className={`border-b border-sidebar-border transition-all duration-200
+          ${collapsed ? "flex items-center justify-center py-5" : "px-5 py-5"}`}
+      >
+        {collapsed ? (
+          <span className="font-display text-lg font-bold text-sidebar-primary-foreground">
+            D<span className="text-sidebar-primary">S</span>
+          </span>
+        ) : (
+          <>
+            <h1 className="font-display text-lg font-bold text-sidebar-primary-foreground tracking-tight">
+              DSA<span className="text-sidebar-primary"> Tracker</span>
+            </h1>
+            <p className="text-xs text-sidebar-muted mt-0.5">
+              {role === "user" ? "Learner Portal" : "Course Management System"}
+            </p>
+          </>
+        )}
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+      <nav className="flex-1 py-3 space-y-0.5 overflow-y-auto overflow-x-hidden">
         {items.map((item) =>
           item.children ? (
             <div key={item.label}>
-              <button
-                onClick={() => toggleSection(item.label)}
-                className="flex items-center justify-between w-full px-3 py-2 text-sm text-sidebar-foreground rounded-md hover:bg-sidebar-accent transition-colors"
-              >
-                <span className="flex items-center gap-2.5">
-                  {item.icon}
-                  {item.label}
-                </span>
-                {expanded[item.label] ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-              </button>
-              {expanded[item.label] && (
-                <div className="ml-4 mt-0.5 space-y-0.5 border-l border-sidebar-border pl-3">
+              {collapsed ? (
+                /* icon-only mode: divider + child icons with tooltips */
+                <div className="py-1">
+                  <div title={item.label} className="flex justify-center py-1">
+                    <span className="h-px w-7 bg-sidebar-border" />
+                  </div>
                   {item.children.map((child) => (
-                    <Link
-                      key={child.href}
-                      to={child.href}
-                      onClick={() => setMobileOpen(false)}
-                      className={`flex items-center gap-2.5 px-3 py-1.5 text-sm rounded-md transition-colors ${
-                        isActive(child.href)
-                          ? "bg-sidebar-primary text-sidebar-primary-foreground font-medium"
-                          : "text-sidebar-foreground hover:bg-sidebar-accent"
-                      }`}
-                    >
-                      {child.icon}
-                      {child.label}
-                    </Link>
+                    <NavLink key={child.href} href={child.href} icon={child.icon} label={child.label} isChild />
                   ))}
+                </div>
+              ) : (
+                /* expanded mode: collapsible group */
+                <div>
+                  <button
+                    onClick={() => toggleGroup(item.label)}
+                    className="flex items-center justify-between w-full px-3 py-2 text-sm text-sidebar-foreground rounded-md hover:bg-sidebar-accent transition-colors"
+                  >
+                    <span className="flex items-center gap-2.5">
+                      {item.icon}
+                      {item.label}
+                    </span>
+                    {groupExpanded[item.label]
+                      ? <ChevronDown  size={14} />
+                      : <ChevronRight size={14} />}
+                  </button>
+                  {groupExpanded[item.label] && (
+                    <div className="ml-4 mt-0.5 space-y-0.5 border-l border-sidebar-border pl-3">
+                      {item.children.map((child) => (
+                        <NavLink key={child.href} href={child.href} icon={child.icon} label={child.label} isChild />
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
           ) : (
-            <Link
-              key={item.href}
-              to={item.href!}
-              onClick={() => setMobileOpen(false)}
-              className={`flex items-center gap-2.5 px-3 py-2 text-sm rounded-md transition-colors ${
-                isActive(item.href!)
-                  ? "bg-sidebar-primary text-sidebar-primary-foreground font-medium"
-                  : "text-sidebar-foreground hover:bg-sidebar-accent"
-              }`}
-            >
-              {item.icon}
-              {item.label}
-            </Link>
+            <NavLink key={item.href} href={item.href!} icon={item.icon} label={item.label} />
           )
         )}
       </nav>
 
-      {/* Footer */}
-      <div className="px-5 py-4 border-t border-sidebar-border">
-        <div className="text-xs text-sidebar-muted">
-          <p>SAQA 78965 • NQF Level 4</p>
-          <p className="mt-0.5">{role === "learner" ? "Learner Access" : "CET Venda • Block 1–3"}</p>
+      {/* Footer — only shown when expanded */}
+      {!collapsed && (
+        <div className="px-5 py-3 border-t border-sidebar-border">
+          <p className="text-xs text-sidebar-muted">SAQA 78965 · NQF Level 4</p>
+          <p className="text-xs text-sidebar-muted mt-0.5">
+            {role === "user" ? "Learner Access" : "CET Venda · Block 1–3"}
+          </p>
         </div>
-      </div>
+      )}
+
+      {/* Collapse / expand toggle */}
+      <button
+        onClick={() => setCollapsed((v) => !v)}
+        title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        className={`flex items-center border-t border-sidebar-border py-3 text-sidebar-muted
+          hover:text-sidebar-foreground hover:bg-sidebar-accent transition-colors text-xs font-medium
+          ${collapsed ? "justify-center" : "gap-2 px-5"}`}
+      >
+        {collapsed
+          ? <ChevronsRight size={16} />
+          : <><ChevronsLeft size={16} /><span>Collapse</span></>
+        }
+      </button>
     </div>
   );
 
@@ -150,11 +209,12 @@ export default function AppSidebar() {
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar — width animates between icon-only (60 px) and full (224 px) */}
       <aside
-        className={`fixed md:sticky top-0 left-0 z-40 h-screen w-64 sidebar-gradient transition-transform duration-200 ${
-          mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-        }`}
+        className={`fixed md:sticky top-0 left-0 z-40 h-screen sidebar-gradient flex-shrink-0
+          transition-all duration-200 ease-in-out
+          ${collapsed ? "w-[60px]" : "w-56"}
+          ${mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
       >
         {sidebarContent}
       </aside>
