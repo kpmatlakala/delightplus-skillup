@@ -233,35 +233,196 @@ const staticQuizByModule: Record<
     answer: string;
   }[]
 > = {
+  /* ── US 14924 — Information Systems Analysis ── */
+  "14924": [
+    {
+      id: 0,
+      question: "Which phase of the SDLC involves studying the existing system and identifying user requirements?",
+      options: [
+        "Analysis phase",
+        "Design phase",
+        "Development phase",
+      ],
+      answer: "Analysis phase",
+    },
+    {
+      id: 1,
+      question: "Which fact-finding technique involves watching users perform their tasks in their actual work environment?",
+      options: [
+        "Observation",
+        "Questionnaire",
+        "Document review",
+      ],
+      answer: "Observation",
+    },
+    {
+      id: 2,
+      question: "What is the primary role of a systems analyst compared to a software developer?",
+      options: [
+        "A systems analyst investigates problems and recommends solutions; a developer writes the code to implement them",
+        "A systems analyst writes code; a developer analyses requirements",
+        "They perform the same tasks at different stages of the project",
+      ],
+      answer: "A systems analyst investigates problems and recommends solutions; a developer writes the code to implement them",
+    },
+  ],
+  /* ── US 14920 — Team Collaboration and Problem Solving ── */
+  "14920": [
+    {
+      id: 0,
+      question: "What is the Nominal Group Technique (NGT)?",
+      options: [
+        "A structured approach where members independently generate ideas then the group discusses and ranks them",
+        "A method where the team leader decides all ideas alone",
+        "A technique for writing software requirements",
+      ],
+      answer: "A structured approach where members independently generate ideas then the group discusses and ranks them",
+    },
+    {
+      id: 1,
+      question: "In the Problem-Solving Process, what step comes directly after 'Define the Problem'?",
+      options: [
+        "Implement a Solution",
+        "Build the Team",
+        "Plan the process",
+      ],
+      answer: "Implement a Solution",
+    },
+    {
+      id: 2,
+      question: "Which behaviour is NOT a characteristic of an effective team member?",
+      options: [
+        "Keeping all information to themselves",
+        "Being flexible and adaptable",
+        "Taking initiative when needed",
+      ],
+      answer: "Keeping all information to themselves",
+    },
+  ],
+  /* ── US 14918 — Programming Principles Introduction ── */
+  "14918": [
+    {
+      id: 0,
+      question: "Which algorithm control structure repeats a block of code while a given condition remains true?",
+      options: [
+        "Iteration (loop)",
+        "Sequence",
+        "Selection (if/else)",
+      ],
+      answer: "Iteration (loop)",
+    },
+    {
+      id: 1,
+      question: "Which data type is most appropriate to store a student's mark as a whole number?",
+      options: [
+        "Integer",
+        "Real (float)",
+        "Boolean",
+      ],
+      answer: "Integer",
+    },
+    {
+      id: 2,
+      question: "What is the difference between validation and verification?",
+      options: [
+        "Validation checks that data meets defined rules (e.g. range); verification confirms data was entered correctly by comparing two inputs",
+        "Validation compiles the code; verification tests it",
+        "They mean exactly the same thing",
+      ],
+      answer: "Validation checks that data meets defined rules (e.g. range); verification confirms data was entered correctly by comparing two inputs",
+    },
+  ],
+  /* ── US 14927 — Apply Problem-Solving Strategies ── */
+  "14927": [
+    {
+      id: 0,
+      question: "In the Problem-Solving Cycle, what comes immediately after identifying the problem?",
+      options: [
+        "Analyse the problem",
+        "Implement the solution",
+        "Define success criteria",
+      ],
+      answer: "Analyse the problem",
+    },
+    {
+      id: 1,
+      question: "Which tool visually maps contributing factors to a workplace problem using categories like People, Process, Resources, and Environment?",
+      options: [
+        "Fishbone (Ishikawa) diagram",
+        "Decision table",
+        "Data Flow Diagram (DFD)",
+      ],
+      answer: "Fishbone (Ishikawa) diagram",
+    },
+    {
+      id: 2,
+      question: "What is the purpose of creating an implementation plan after choosing a solution?",
+      options: [
+        "To define the tasks, timelines, and resources required to carry out the solution",
+        "To document the original problem only",
+        "To select a different problem to solve",
+      ],
+      answer: "To define the tasks, timelines, and resources required to carry out the solution",
+    },
+  ],
+  /* ── US 14915 — Design a Computer Program to Specification ── */
+  "14915": [
+    {
+      id: 0,
+      question: "What is the purpose of desk-checking a program design?",
+      options: [
+        "To manually trace through the logic step-by-step to find errors before coding begins",
+        "To test the compiled and running program",
+        "To write the user manual",
+      ],
+      answer: "To manually trace through the logic step-by-step to find errors before coding begins",
+    },
+    {
+      id: 1,
+      question: "Which design diagram shows the hierarchical breakdown of a program into modules and sub-modules?",
+      options: [
+        "Structure diagram",
+        "Data Flow Diagram",
+        "Decision table",
+      ],
+      answer: "Structure diagram",
+    },
+    {
+      id: 2,
+      question: "What is a user-defined function in programming?",
+      options: [
+        "A reusable block of code created by the programmer to perform a specific task, called by name whenever needed",
+        "A built-in function provided by the programming language runtime",
+        "A function that only the end-user, not the programmer, can run",
+      ],
+      answer: "A reusable block of code created by the programmer to perform a specific task, called by name whenever needed",
+    },
+  ],
+  /* ── US 14910 — Apply Programming Principles ── */
   "14910": [
     {
       id: 0,
-      question:
-        "According to Learning Unit 1, what is the main purpose of Unit Standard 14910?",
+      question: "According to Learning Unit 1, what is the main purpose of Unit Standard 14910?",
       options: [
         "To apply the principles of computer programming in systems development",
         "To design and install computer hardware",
         "To manage financial accounting systems for a company",
       ],
-      answer:
-        "To apply the principles of computer programming in systems development",
+      answer: "To apply the principles of computer programming in systems development",
     },
     {
       id: 1,
-      question:
-        "Which prior learning is assumed before starting this unit standard?",
+      question: "Which prior learning is assumed before starting this unit standard?",
       options: [
         "Fundamental mathematics and English at least NQF Level 2 plus basic PC competency and knowledge of programming principles",
         "Advanced calculus and network engineering at university level",
         "No prior knowledge is required; this unit is fully introductory",
       ],
-      answer:
-        "Fundamental mathematics and English at least NQF Level 2 plus basic PC competency and knowledge of programming principles",
+      answer: "Fundamental mathematics and English at least NQF Level 2 plus basic PC competency and knowledge of programming principles",
     },
     {
       id: 2,
-      question:
-        "In the discussion of Boolean (logical) data, which of the following are mentioned as equivalent ways of showing TRUE and FALSE?",
+      question: "In the discussion of Boolean (logical) data, which of the following are mentioned as equivalent ways of showing TRUE and FALSE?",
       options: [
         "YES / NO",
         "ON / OFF",
@@ -269,6 +430,138 @@ const staticQuizByModule: Record<
         "All of the above",
       ],
       answer: "All of the above",
+    },
+  ],
+  /* ── US 14933 — Web Scripting ── */
+  "14933": [
+    {
+      id: 0,
+      question: "Which language is responsible for the visual layout and styling of a web page?",
+      options: [
+        "CSS (Cascading Style Sheets)",
+        "HTML",
+        "JavaScript",
+      ],
+      answer: "CSS (Cascading Style Sheets)",
+    },
+    {
+      id: 1,
+      question: "What does the Document Object Model (DOM) allow JavaScript to do?",
+      options: [
+        "Dynamically access and manipulate the content, structure, and style of a web page",
+        "Compile web scripts into machine code",
+        "Connect the web page directly to a database",
+      ],
+      answer: "Dynamically access and manipulate the content, structure, and style of a web page",
+    },
+    {
+      id: 2,
+      question: "What is the core principle of responsive web design?",
+      options: [
+        "The page layout adapts automatically to different screen sizes and devices",
+        "A website that loads and responds quickly to user clicks",
+        "A design that requires no CSS styling",
+      ],
+      answer: "The page layout adapts automatically to different screen sizes and devices",
+    },
+  ],
+  /* ── US 14908 — Testing IT Systems ── */
+  "14908": [
+    {
+      id: 0,
+      question: "What is the key difference between black-box and white-box testing?",
+      options: [
+        "Black-box tests functionality without knowledge of internal code; white-box testing examines the internal logic and structure",
+        "Black-box testing is done by clients; white-box testing is done after deployment",
+        "They are the same testing method with different names",
+      ],
+      answer: "Black-box tests functionality without knowledge of internal code; white-box testing examines the internal logic and structure",
+    },
+    {
+      id: 1,
+      question: "A test case must specify:",
+      options: [
+        "The input data, expected output, and steps to execute a specific test scenario",
+        "Only the programming language used to build the system",
+        "The hardware specifications of the server",
+      ],
+      answer: "The input data, expected output, and steps to execute a specific test scenario",
+    },
+    {
+      id: 2,
+      question: "Which type of testing verifies that the complete integrated system meets its specified requirements?",
+      options: [
+        "System (acceptance) testing",
+        "Unit testing",
+        "Regression testing",
+      ],
+      answer: "System (acceptance) testing",
+    },
+  ],
+  /* ── US 14919 — Resolve User Problems ── */
+  "14919": [
+    {
+      id: 0,
+      question: "According to the troubleshooting methodology, what should you do FIRST when a user reports a problem?",
+      options: [
+        "Gather information and define the problem clearly",
+        "Immediately reinstall the software",
+        "Escalate directly to senior support",
+      ],
+      answer: "Gather information and define the problem clearly",
+    },
+    {
+      id: 1,
+      question: "Why is documenting a resolved IT problem important?",
+      options: [
+        "It creates a knowledge base that helps resolve similar issues faster in the future",
+        "Documentation is only required for hardware problems",
+        "It is optional if the user confirms they are satisfied",
+      ],
+      answer: "It creates a knowledge base that helps resolve similar issues faster in the future",
+    },
+    {
+      id: 2,
+      question: "Which communication principle is most important when dealing with a frustrated user?",
+      options: [
+        "Listen actively and empathise with the user before proposing a solution",
+        "Use as much technical jargon as possible to sound credible",
+        "Fix the technical issue first and explain it only if asked",
+      ],
+      answer: "Listen actively and empathise with the user before proposing a solution",
+    },
+  ],
+  /* ── US 120379 — Work as Project Team Member ── */
+  "120379": [
+    {
+      id: 0,
+      question: "What is the primary responsibility of a project manager in a team?",
+      options: [
+        "To plan, coordinate, monitor progress, and ensure the project meets its objectives within scope, time, and budget",
+        "To write all the code for the project",
+        "To approve the project budget only",
+      ],
+      answer: "To plan, coordinate, monitor progress, and ensure the project meets its objectives within scope, time, and budget",
+    },
+    {
+      id: 1,
+      question: "In agile project management, what does a sprint backlog contain?",
+      options: [
+        "The specific tasks the team commits to completing during the current sprint",
+        "A record of the entire project history",
+        "Only the defects found during testing",
+      ],
+      answer: "The specific tasks the team commits to completing during the current sprint",
+    },
+    {
+      id: 2,
+      question: "What does 'delivering within constraints' mean in a project context?",
+      options: [
+        "Completing the project within the agreed scope, time, and budget limitations",
+        "Ignoring deadlines in order to guarantee quality",
+        "Working without a project plan",
+      ],
+      answer: "Completing the project within the agreed scope, time, and budget limitations",
     },
   ],
 };
@@ -403,7 +696,7 @@ export default function ModuleDetailPage() {
         const learnerVisibleDownloads = allModuleDownloads.filter((download) => {
           if (isRestrictedForLearner(download.label)) return false;
           if (isLearnerGuideLabel(download.label)) return true;
-          if (guideCompleted && isWorkbookLabel(download.label)) return true;
+          // Workbook hidden from learner view — guide + quiz + summative assessment only
           return assessmentUnlocked && isAssessmentTaskLabel(download.label);
         });
 
@@ -1148,6 +1441,18 @@ export default function ModuleDetailPage() {
                             );
                           })}
                         </div>
+                        {/* Per-question feedback shown after submit */}
+                        {isLearnerView && quizSubmitted && quizAnswers[item.id] !== undefined && (
+                          <p className={`text-xs mt-2.5 font-medium ${
+                            quizAnswers[item.id] === item.answer
+                              ? "text-green-600 dark:text-green-400"
+                              : "text-red-500 dark:text-red-400"
+                          }`}>
+                            {quizAnswers[item.id] === item.answer
+                              ? "✓ Correct!"
+                              : `✗ Incorrect — the correct answer is: "${item.answer}"`}
+                          </p>
+                        )}
                       </div>
                     ))}
                   </div>

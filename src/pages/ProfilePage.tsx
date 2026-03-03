@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -176,9 +177,16 @@ export default function ProfilePage() {
   const resolvedDisplayName = displayName || (user?.user_metadata?.full_name as string | undefined) || "My Profile";
   const resolvedEmail = user?.email ?? "";
   const initials = getInitials(resolvedDisplayName, resolvedEmail);
+  const navigate = useNavigate();
 
   return (
     <AppLayout title="My Profile" subtitle="Manage your account profile and security">
+      <button
+        onClick={() => navigate(-1)}
+        className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground mb-4 transition-colors"
+      >
+        ← Back
+      </button>
       <div className="max-w-2xl space-y-6">
         <div className="rounded-lg border border-border bg-card p-6">
           <div className="flex items-center gap-3 mb-6">
