@@ -912,14 +912,26 @@ export function PresentationMode({
       if (e.key === "ArrowRight" || e.key === "ArrowDown") go("next");
       if (e.key === "ArrowLeft" || e.key === "ArrowUp") go("prev");
       if (e.key === "Escape") {
+        // Only dismiss sub-panels via Escape; exit requires the close buttons
         if (sessionPickerOpen) setSessionPickerOpen(false);
-        else onClose();
+        if (notesOpen) setNotesOpen(false);
       }
       if (e.key.toLowerCase() === "n" && isAdmin) setNotesOpen((v) => !v);
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [go, onClose, isAdmin]);
+  }, [go, isAdmin, sessionPickerOpen, notesOpen]);
+
+  /* ── Block browser back-button while presentation is open */
+  useEffect(() => {
+    window.history.pushState(null, "", window.location.href);
+    const handler = () => {
+      // Re-push so back button never actually leaves the page
+      window.history.pushState(null, "", window.location.href);
+    };
+    window.addEventListener("popstate", handler);
+    return () => window.removeEventListener("popstate", handler);
+  }, []);
 
   /* ── Scroll wheel (throttled) — up = next, down = prev */
   useEffect(() => {
@@ -1389,7 +1401,7 @@ export function PresentationMode({
 
       {/* Keyboard / interaction hint */}
       <div className="absolute bottom-12 right-5 text-white/20 text-xs pointer-events-none select-none">
-        click · scroll · ← → · Esc exit{isAdmin ? " · N notes" : ""}
+        click · scroll · ← →{isAdmin ? " · N notes" : ""}
       </div>
     </div>
   );
