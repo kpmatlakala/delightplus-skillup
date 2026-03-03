@@ -921,6 +921,21 @@ export function PresentationMode({
     return () => window.removeEventListener("keydown", handler);
   }, [go, onClose, isAdmin]);
 
+  /* ── Scroll wheel (throttled) — up = next, down = prev */
+  useEffect(() => {
+    let lastAt = 0;
+    const handler = (e: WheelEvent) => {
+      e.preventDefault();
+      const now = Date.now();
+      if (now - lastAt < 450) return; // throttle rapid scrolls
+      lastAt = now;
+      if (e.deltaY < 0) go("next"); // scroll up → advance
+      else go("prev");              // scroll down → go back
+    };
+    window.addEventListener("wheel", handler, { passive: false });
+    return () => window.removeEventListener("wheel", handler);
+  }, [go]);
+
   /* ── Slide content animation class */
   const contentClass =
     animating === "out"
@@ -1374,7 +1389,7 @@ export function PresentationMode({
 
       {/* Keyboard / interaction hint */}
       <div className="absolute bottom-12 right-5 text-white/20 text-xs pointer-events-none select-none">
-        click left / right · ← → · Esc exit{isAdmin ? " · N notes" : ""}
+        click · scroll · ← → · Esc exit{isAdmin ? " · N notes" : ""}
       </div>
     </div>
   );
