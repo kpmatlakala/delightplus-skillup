@@ -2,8 +2,6 @@ import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   X,
-  ChevronLeft,
-  ChevronRight,
   MessageSquare,
   Target,
   BookOpen,
@@ -489,33 +487,12 @@ export function buildBriefingSlides(): Slide[] {
         "Block 1 · Days 1–5 · Foundations (23 credits): Systems Analysis, Team Collaboration, Programming Principles, Problem Solving, Design",
         "Block 2 · Days 6–9 · Applied Programming (14 credits): Apply Programming Principles, Web Scripting",
         "Block 3 · Days 11–13 · Systems in Practice (19 credits): Testing IT Systems, Resolve User Problems, Work as Project Team Member",
-        "Day 10 is a PoE consolidation day — no new content; organise evidence and prepare for Block 3",
         "Each unit ends with a formative quiz (self-check) and an assessment task for your Portfolio of Evidence",
       ],
       highlight:
         "56 credits are delivered across these 15 days. The remaining credits toward the full 165-credit qualification are achieved through workplace evidence in your PoE.",
       speakerNote:
         "Distribute the printed module roadmap now if available. Run through the colour-coded block overview briefly — this helps learners see the sequencing logic.",
-    },
-    {
-      type: "content",
-      title: "How the SA&D Course Unfolds",
-      subtitle: "Every lecture builds on the analytical foundations of Day 1",
-      bullets: [
-        "L1 Today — Introduction to IS: analyst roles, SDLC, IS components, information-gathering techniques",
-        "L2 — Systems Project Management: scoping, WBS, scheduling — begins where your feasibility study ends",
-        "L3 — Requirements Modelling: JAD, RAD, Agile — deepening the fact-finding plan from Session 1",
-        "L4 — Data & Process Modelling: levelled DFDs and physical design from today's context diagrams",
-        "L5 & L6 — Object Modelling: full UML from today's OO analysis foundations",
-        "L7 — Data Design: ERDs and normalisation from today's data identification work",
-        "L8 — Development Strategies: build-vs-buy decision from today's analyst recommendation",
-        "L9 — UI Design: screens, forms and validation rules from today's requirements specification",
-        "L10 — System Support & Security: maintenance and audits from today's documentation",
-      ],
-      highlight:
-        "Day 1 is the trunk of the tree. Every lecture that follows is a branch growing from the analytical roots established in Session 1.",
-      speakerNote:
-        "Show this slide AFTER the module roadmap. It answers the question learners always have: 'why does analysis come first?' This slide makes the dependency chain visible. Refer back to it at the start of each subsequent lecture.",
     },
     {
       type: "summary",
@@ -526,7 +503,7 @@ export function buildBriefingSlides(): Slide[] {
         "✓  You understand what an information system is and how it works",
         "✓  You can describe the 6 phases of the Systems Development Life Cycle",
         "✓  You can distinguish systems development from software development",
-        "✓  You know your 10-module roadmap and how each SA&D lecture connects to Day 1",
+        "✓  You know your 10-module roadmap across 3 blocks",
         "✓  You know how to reach your facilitator for support",
       ],
       highlight:
@@ -1163,7 +1140,7 @@ export function PresentationMode({
 
       {/* ── Slide area */}
       <div
-        className={`flex-1 bg-gradient-to-br ${config.bg} flex flex-col overflow-hidden`}
+        className={`relative flex-1 bg-gradient-to-br ${config.bg} flex flex-col overflow-hidden`}
       >
         {/* Decorative grid overlay */}
         <div
@@ -1175,8 +1152,20 @@ export function PresentationMode({
           }}
         />
 
+        {/* Left / right click-to-navigate zones — sit below interactive content (z-[1] vs z-10) */}
         <div
-          className={`relative flex-1 flex flex-col justify-center px-6 md:px-14 lg:px-24 py-3 transition-all duration-200 ease-in-out ${contentClass}`}
+          className="absolute inset-y-0 left-0 w-1/2 z-[1]"
+          style={{ cursor: current === 0 ? "default" : "w-resize" }}
+          onClick={() => go("prev")}
+        />
+        <div
+          className="absolute inset-y-0 right-0 w-1/2 z-[1]"
+          style={{ cursor: (isLastSlide || nextBlocked) ? "default" : "e-resize" }}
+          onClick={() => { if (!nextBlocked && !isLastSlide) go("next"); }}
+        />
+
+        <div
+          className={`relative z-10 flex-1 flex flex-col justify-center px-6 md:px-14 lg:px-24 py-3 transition-all duration-200 ease-in-out ${contentClass}`}
         >
           {slide.type === "title" && (
             /* ── Title slide layout */
@@ -1355,81 +1344,37 @@ export function PresentationMode({
         </div>
       )}
 
-      {/* ── Bottom navigation */}
-      <div className="flex-shrink-0 flex items-center justify-between px-4 py-2 bg-black/60 backdrop-blur border-t border-white/10 gap-3">
-        {/* Dot nav */}
-        <div className="flex gap-1.5 overflow-x-auto max-w-[40%]">
-          {slides.map((s, i) => {
-            const isCurrent = i === current;
-            const isCurrentSess = s.sessionLabel && s.sessionLabel === currentSessionLabel;
-            return (
-              <button
-                key={i}
-                onClick={() => jumpTo(i)}
-                className={`shrink-0 rounded-full transition-all duration-200 ${
-                  isCurrent
-                    ? "w-6 h-2 bg-white"
-                    : s.isSessionStart
-                    ? "w-2.5 h-2.5 bg-white/40 hover:bg-white/70"
-                    : isCurrentSess
-                    ? "w-2 h-2 bg-white/45 hover:bg-white/65"
-                    : "w-2 h-2 bg-white/18 hover:bg-white/40"
-                }`}
-                title={s.isSessionStart ? `▶ ${s.title ?? s.sessionLabel}` : s.title}
-              />
-            );
-          })}
-        </div>
-
-        {/* Action buttons */}
-        <div className="flex items-center gap-2 flex-wrap justify-end">
-          <button
-            onClick={() => go("prev")}
-            disabled={current === 0}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed text-white text-sm font-medium transition-colors border border-white/15"
-          >
-            <ChevronLeft size={16} /> Prev
-          </button>
-
-          {isLastSlide ? (
-            <>
-              <button
-                onClick={onClose}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-colors border border-white/20"
-              >
-                <X size={15} /> End Presentation
-              </button>
-              <button
-                onClick={onClose}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 text-sm font-medium transition-colors border border-amber-500/30"
-              >
-                <Coffee size={15} /> Take a Break
-              </button>
-              {nextUnitId && (
-                <button
-                  onClick={handleNavigateToUnit}
-                  className="flex items-center gap-1.5 px-5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black text-sm font-semibold transition-colors"
-                >
-                  {nextLabel} <ArrowRight size={15} />
-                </button>
-              )}
-            </>
-          ) : (
+      {/* ── Bottom bar — transparent; only shows last-slide action buttons */}
+      <div className="flex-shrink-0 flex items-center justify-end px-4 py-2 gap-3">
+        {isLastSlide && (
+          <>
             <button
-              onClick={() => go("next")}
-              disabled={nextBlocked}
-              title={nextBlocked ? "Answer the question to continue" : undefined}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white text-black hover:bg-white/90 disabled:opacity-40 disabled:cursor-not-allowed text-sm font-medium transition-colors"
+              onClick={onClose}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-colors border border-white/20"
             >
-              {nextBlocked ? "Answer to continue" : "Next"} <ChevronRight size={16} />
+              <X size={15} /> End Presentation
             </button>
-          )}
-        </div>
+            <button
+              onClick={onClose}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 text-sm font-medium transition-colors border border-amber-500/30"
+            >
+              <Coffee size={15} /> Take a Break
+            </button>
+            {nextUnitId && (
+              <button
+                onClick={handleNavigateToUnit}
+                className="flex items-center gap-1.5 px-5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black text-sm font-semibold transition-colors"
+              >
+                {nextLabel} <ArrowRight size={15} />
+              </button>
+            )}
+          </>
+        )}
       </div>
 
-      {/* Keyboard hint */}
-      <div className="absolute bottom-16 right-5 text-white/20 text-xs pointer-events-none select-none">
-        ← → navigate · Esc exit{isAdmin ? " · N notes" : ""}
+      {/* Keyboard / interaction hint */}
+      <div className="absolute bottom-12 right-5 text-white/20 text-xs pointer-events-none select-none">
+        click left / right · ← → · Esc exit{isAdmin ? " · N notes" : ""}
       </div>
     </div>
   );
