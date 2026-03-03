@@ -259,11 +259,11 @@ export default function LearnerPortalPage() {
                   KM
                 </div>
                 <div className="min-w-0">
-                  <p className="font-semibold text-foreground text-sm">Kabelo Matlakala</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">Scrum Master &amp; Systems Development Facilitator · Data Science Academy</p>
+                  <p className="font-semibold text-foreground text-sm">Kabelo Matlakala — Your Facilitator</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">Scrum Master &amp; Systems Development Facilitator · Data Science Academy · Starting March 2026</p>
                   <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
-                    BSc Mathematical Sciences (University of Limpopo) · Software Developer background · Based in Limpopo, South Africa.
-                    Kabelo will guide you through all 3 blocks of this qualification.
+                    BSc Mathematical Sciences, University of Limpopo. Software Developer background (mLab CodeTribe Academy). Based in Limpopo Province.
+                    Kabelo delivers this qualification and is the primary point of contact for learner support across all 3 blocks.
                   </p>
                   <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-xs">
                     <span className="text-muted-foreground">📧 <a href="mailto:matlakalakabelo1@gmail.com" className="text-accent hover:underline">matlakalakabelo1@gmail.com</a></span>
@@ -297,6 +297,33 @@ export default function LearnerPortalPage() {
                 </div>
               </section>
 
+              {/* What is IT */}
+              <section>
+                <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground mb-3">What is Information Technology?</h4>
+                <p className="text-muted-foreground leading-relaxed">
+                  <strong className="text-foreground">Information Technology (IT)</strong> is the combination of hardware and software products and services
+                  that organisations use to manage, access, communicate, and share information. IT is not just computers — it is the invisible
+                  infrastructure that underpins every business function, from student records and payroll to logistics and customer service.
+                </p>
+                <p className="text-xs font-semibold text-foreground mt-3 mb-1.5">Three Forces Shaping the Future of IT</p>
+                <ul className="space-y-1.5 text-xs text-muted-foreground">
+                  {([
+                    "Changes in the world — globalisation, remote work, digital transformation, and the demand for real-time information access across every sector",
+                    "Changes in technology — faster processors, cloud computing, artificial intelligence, mobile platforms, and exponential data growth (Moore's Law: processing power roughly doubles every two years)",
+                    "Changes in client demand — organisations and end users expect systems that are faster, more intuitive, more accessible, and more secure than ever before",
+                  ]).map((item) => (
+                    <li key={item} className="flex gap-2">
+                      <span className="text-accent shrink-0 mt-0.5">›</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-3 rounded-md border border-accent/30 bg-accent/5 px-3 py-2 text-xs text-muted-foreground">
+                  As a systems developer, you will design, build and maintain the IT infrastructure that organisations depend on.
+                  Understanding <em>what IT is</em> — and why it must be carefully planned — is the foundation on which every other unit in this qualification rests.
+                </div>
+              </section>
+
               {/* What is a System? */}
               <section>
                 <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground mb-3">What is a System?</h4>
@@ -305,13 +332,53 @@ export default function LearnerPortalPage() {
                   An <strong className="text-foreground">information system</strong> specifically collects, processes, stores, and distributes information to support
                   an organisation's operations and decision-making.
                 </p>
-                <p className="text-muted-foreground leading-relaxed mt-2">
-                  Examples you already interact with: a student registration portal, an attendance capture tool, a results management system —
-                  each takes in data, applies rules, stores records, and produces outputs (reports, certificates, notifications) that people act on.
-                </p>
+                <p className="text-xs font-semibold text-foreground mt-3 mb-1.5">Information Systems You Already Interact With</p>
+                <ul className="space-y-1 text-xs text-muted-foreground">
+                  {([
+                    "Student registration portal — captures enrolment data, checks eligibility, generates student numbers and timetables",
+                    "Attendance tracking tool — records daily sign-ins, flags patterns, produces reports for the Department of Education",
+                    "Results management system — stores marks, calculates averages, generates transcripts and certificates",
+                    "Online banking portal — takes your transaction instruction, validates it, updates balances, sends a confirmation",
+                  ]).map((item) => (
+                    <li key={item} className="flex gap-2">
+                      <span className="text-accent shrink-0 mt-0.5">›</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
                 <div className="mt-3 rounded-md border border-accent/30 bg-accent/5 px-3 py-2 text-xs text-muted-foreground">
-                  <strong className="text-foreground">Input → Process → Storage → Output</strong> — this is the structural DNA of every information
-                  system you will ever build or analyse. Understanding it is the first step to building, analysing or improving one.
+                  <strong className="text-foreground">Input → Process → Storage → Output</strong> — every system takes in data, applies rules,
+                  retains records, and produces something people act on. This is the structural DNA of every information system you will ever build or analyse.
+                </div>
+              </section>
+
+              {/* What is Systems Development */}
+              <section>
+                <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground mb-3">What is Systems Development?</h4>
+                <p className="text-muted-foreground leading-relaxed">
+                  Systems development is the end-to-end discipline of planning, analysing, designing, building, testing and maintaining information systems.
+                  It is not only about writing code — it is about ensuring the right system gets built in the first place, that it works correctly,
+                  and that it keeps working reliably after it is deployed.
+                </p>
+                <p className="text-xs font-semibold text-foreground mt-3 mb-1.5">The Six Phases of the Systems Development Life Cycle</p>
+                <ol className="space-y-1 text-xs text-muted-foreground list-none">
+                  {([
+                    ["1. Investigation", "Identify the business problem or opportunity; assess whether a new or improved system is justified before any money is committed"],
+                    ["2. Analysis", "Establish in detail what the system must do: requirements, data flows, user needs, volume estimates, constraints"],
+                    ["3. Design", "Specify how the system will work: architecture, data structures, user interfaces, program module structure"],
+                    ["4. Development", "Write and unit-test the program code based on the approved design documents"],
+                    ["5. Implementation", "Deploy the system, convert existing data, train users, and manage the transition from old to new"],
+                    ["6. Maintenance", "Monitor for defects, apply fixes and enhancements, and eventually plan the next iteration or replacement"],
+                  ] as [string, string][]).map(([phase, desc]) => (
+                    <li key={phase} className="flex gap-2">
+                      <span className="text-accent shrink-0 mt-0.5 font-medium w-28">{phase}</span>
+                      <span>{desc}</span>
+                    </li>
+                  ))}
+                </ol>
+                <div className="mt-3 rounded-md border border-accent/30 bg-accent/5 px-3 py-2 text-xs text-muted-foreground">
+                  Notice that coding (phase 4) only appears more than halfway through. The analysis and design work that precedes it determines
+                  whether what gets built is actually useful. A technically excellent system that solves the wrong problem is still a failure.
                 </div>
               </section>
 
@@ -418,7 +485,50 @@ export default function LearnerPortalPage() {
                 </div>
                 <p className="text-muted-foreground mt-2 text-xs">
                   <strong className="text-foreground">Note:</strong> Day 10 is a PoE consolidation day — no new content is delivered.
-                  Use this day to organise your portfolio evidence and prepare questions for Block 3.
+                  Use this day to organise your portfolio evidence, complete outstanding workbook activities, and prepare questions for Block 3.
+                </p>
+              </section>
+
+              {/* How the SA&D Course Unfolds */}
+              <section>
+                <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground mb-3">How the SA&amp;D Course Unfolds — Lecture to SDLC Mapping</h4>
+                <p className="text-muted-foreground leading-relaxed mb-3 text-xs">
+                  The ten lectures in ITSD-14924 map directly onto the SDLC. Every lecture builds on the analytical foundations established in Session 1.
+                </p>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs border rounded-md overflow-hidden">
+                    <thead>
+                      <tr className="bg-muted/50">
+                        <th className="py-1.5 px-2 text-left font-semibold whitespace-nowrap">Lecture</th>
+                        <th className="py-1.5 px-2 text-left font-semibold">Topic</th>
+                        <th className="py-1.5 px-2 text-left font-semibold whitespace-nowrap">SDLC Phase</th>
+                        <th className="py-1.5 px-2 text-left font-semibold">Builds on Day 1 by…</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {([
+                        ["L1 — Today", "Introduction to Information Systems", "Analysis", "Establishing analyst roles, the SDLC, IS components, and information-gathering techniques"],
+                        ["L2", "Systems Project Management", "All phases", "Scoping and planning the project your feasibility study defines"],
+                        ["L3", "Requirements Modelling", "Analysis", "Deepening requirements gathering with JAD, RAD, and Agile iteration"],
+                        ["L4", "Data & Process Modelling", "Analysis → Design", "Expanding DFD foundations into levelled diagrams and physical design"],
+                        ["L5 & L6", "Object Modelling", "Analysis → Design", "Developing OO concepts into full UML class diagrams, use cases, sequence diagrams"],
+                        ["L7", "Data Design", "Design", "Converting data analysis outputs into ERDs, normalised tables, and referential integrity rules"],
+                        ["L8", "Development Strategies & Implementation", "Design → Implementation", "Using analyst recommendation to drive acquisition and changeover strategy"],
+                        ["L9", "User Interface Design", "Design", "Translating requirements into screens, forms, reports, and validation rules"],
+                        ["L10", "System Support & Security", "Maintenance", "Enabling maintenance and security audits using documentation produced during analysis"],
+                      ] as [string, string, string, string][]).map(([lecture, topic, phase, builds]) => (
+                        <tr key={lecture} className="border-b last:border-0 odd:bg-muted/30">
+                          <td className="py-1.5 px-2 font-mono whitespace-nowrap">{lecture}</td>
+                          <td className="py-1.5 px-2 font-medium">{topic}</td>
+                          <td className="py-1.5 px-2 text-muted-foreground whitespace-nowrap">{phase}</td>
+                          <td className="py-1.5 px-2 text-muted-foreground">{builds}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <p className="text-muted-foreground mt-2 text-xs italic">
+                  Day 1 is the trunk of the tree — every lecture that follows is a branch growing from the analytical roots you establish in Session 1.
                 </p>
               </section>
 
