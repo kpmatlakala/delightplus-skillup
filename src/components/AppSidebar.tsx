@@ -10,6 +10,7 @@ import {
   MessageSquare,
   ShieldCheck,
   GraduationCap,
+  FolderOpen,
   ChevronDown,
   ChevronRight,
   ChevronsLeft,
@@ -38,12 +39,14 @@ const navItems: NavItem[] = [
     ],
   },
   { label: "Communications", icon: <MessageSquare size={18} />, href: "/communications" },
+  { label: "Portfolio (PoE)", icon: <FolderOpen    size={18} />, href: "/poe" },
   { label: "Assessments",    icon: <ClipboardList size={18} />, href: "/assessments" },
   { label: "Compliance",     icon: <ShieldCheck  size={18} />, href: "/compliance" },
 ];
 
 const learnerNavItems: NavItem[] = [
-  { label: "Learner Portal", icon: <LayoutDashboard size={18} />, href: "/learner" },
+  { label: "Learner Portal",  icon: <LayoutDashboard size={18} />, href: "/learner" },
+  { label: "Portfolio (PoE)", icon: <FolderOpen      size={18} />, href: "/poe" },
 ];
 
 export default function AppSidebar() {

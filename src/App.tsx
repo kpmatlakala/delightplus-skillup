@@ -23,6 +23,7 @@ import LoginPage from "./pages/auth/LoginPage";
 import SignupPage from "./pages/auth/SignupPage";
 import NotFound from "./pages/NotFound";
 import PresentationRemotePage from "./pages/PresentationRemotePage";
+import PoEPage from "./pages/PoEPage";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +61,7 @@ const App = () => (
             <Route element={<ProtectedRoute />}>
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/communications" element={<CommunicationsPage />} />
+              <Route path="/poe" element={<PoEPage />} />
             </Route>
 
             {/* Public — no auth, session code is the shared secret */}

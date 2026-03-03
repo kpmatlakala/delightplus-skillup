@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio of Evidence — FETC: IT Systems Development (SAQA 78965)</title>
+  <style>
+    /* ── Base */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 11pt;
+      color: #1a1a1a;
+      background: #fff;
+    }
+
+    /* ── Print */
+    @media print {
+      .no-print { display: none !important; }
+      .page-break { page-break-before: always; }
+      body { font-size: 10.5pt; }
+    }
+
+    /* ── Layout helpers */
+    .page { max-width: 210mm; margin: 0 auto; padding: 20mm 18mm; }
+
+    /* ── Header band */
+    .cover-band {
+      background: #1e3a5f;
+      color: #fff;
+      padding: 32px 36px;
+      border-radius: 4px 4px 0 0;
+      margin-bottom: 0;
+    }
+    .cover-band h1 { font-size: 18pt; font-weight: 700; margin-bottom: 6px; }
+    .cover-band .sub { font-size: 11pt; opacity: .85; }
+    .cover-meta {
+      background: #f0f4f9;
+      border: 1px solid #c5d4e8;
+      border-top: none;
+      padding: 24px 36px;
+      margin-bottom: 28px;
+    }
+    .cover-meta table { width: 100%; border-collapse: collapse; }
+    .cover-meta td { padding: 5px 8px; vertical-align: top; }
+    .cover-meta td:first-child { font-weight: 600; width: 38%; color: #1e3a5f; }
+    .cover-meta .underline { border-bottom: 1px solid #666; min-width: 180px; display: inline-block; width: 100%; }
+
+    /* ── Sections */
+    h2 {
+      font-size: 13pt;
+      font-weight: 700;
+      color: #1e3a5f;
+      border-bottom: 2px solid #1e3a5f;
+      padding-bottom: 4px;
+      margin: 28px 0 14px;
+    }
+    h3 {
+      font-size: 11pt;
+      font-weight: 700;
+      color: #1e3a5f;
+      margin: 18px 0 8px;
+    }
+    p { margin-bottom: 8px; line-height: 1.55; }
+
+    /* ── Module card */
+    .module-card {
+      border: 1px solid #c5d4e8;
+      border-radius: 4px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .module-header {
+      background: #1e3a5f;
+      color: #fff;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .module-header .title { font-weight: 700; font-size: 11.5pt; }
+    .module-header .meta { font-size: 9pt; opacity: .8; text-align: right; }
+    .module-body { padding: 14px 16px; }
+
+    /* ── Evidence checklist */
+    .checklist { width: 100%; border-collapse: collapse; margin: 8px 0 14px; }
+    .checklist th {
+      background: #e8edf5;
+      padding: 6px 10px;
+      text-align: left;
+      font-size: 9.5pt;
+      font-weight: 600;
+      border: 1px solid #c5d4e8;
+    }
+    .checklist td {
+      padding: 6px 10px;
+      border: 1px solid #c5d4e8;
+      vertical-align: top;
+      font-size: 9.5pt;
+    }
+    .checklist td.check { text-align: center; width: 32px; }
+    .checklist td.date-col { width: 90px; }
+    .check-box {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 1.5px solid #555;
+      border-radius: 2px;
+    }
+
+    /* ── Signature block */
+    .sig-block {
+      display: flex;
+      gap: 24px;
+      margin-top: 12px;
+    }
+    .sig-item {
+      flex: 1;
+      border-top: 1px solid #444;
+      padding-top: 4px;
+      font-size: 9pt;
+      color: #444;
+    }
+    .sig-item span { font-weight: 600; color: #1e3a5f; }
+
+    /* ── Assessment decision */
+    .decision-box {
+      border: 2px solid #1e3a5f;
+      border-radius: 4px;
+      padding: 10px 14px;
+      margin: 12px 0;
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+    .decision-box .label { font-weight: 700; color: #1e3a5f; font-size: 10pt; }
+    .decision-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10pt;
+    }
+    .decision-circle {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid #555;
+      border-radius: 50%;
+    }
+
+    /* ── Writelines */
+    .writelines { margin: 6px 0 14px; }
+    .writeline {
+      border-bottom: 1px solid #bbb;
+      margin-bottom: 10px;
+      height: 18px;
+    }
+
+    /* ── Table of contents */
+    .toc-table { width: 100%; border-collapse: collapse; }
+    .toc-table td { padding: 5px 8px; border-bottom: 1px dotted #ccc; font-size: 10pt; }
+    .toc-table td:last-child { text-align: right; color: #888; }
+
+    /* ── Declaration */
+    .declaration-box {
+      border: 1px solid #c5d4e8;
+      background: #f8fafd;
+      border-radius: 4px;
+      padding: 18px 20px;
+      margin: 14px 0 20px;
+      font-size: 10pt;
+      line-height: 1.7;
+    }
+
+    /* ── Attendance summary */
+    .att-table { width: 100%; border-collapse: collapse; }
+    .att-table th {
+      background: #1e3a5f;
+      color: #fff;
+      padding: 7px 10px;
+      font-size: 9.5pt;
+      text-align: left;
+      border: 1px solid #c5d4e8;
+    }
+    .att-table td {
+      padding: 6px 10px;
+      border: 1px solid #c5d4e8;
+      font-size: 9.5pt;
+    }
+    .att-table tr:nth-child(even) td { background: #f5f8ff; }
+
+    /* ── Moderator section */
+    .mod-box {
+      border: 2px dashed #1e3a5f;
+      border-radius: 4px;
+      padding: 18px 20px;
+      margin: 14px 0;
+    }
+    .mod-box h3 { margin-top: 0; }
+
+    /* ── Print button */
+    .print-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1e3a5f;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 22px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,.25);
+      z-index: 999;
+    }
+    .print-btn:hover { background: #2a4f80; }
+
+    /* ── Utility */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 8.5pt;
+      font-weight: 600;
+    }
+    .badge-knowledge { background: #dbeafe; color: #1d4ed8; }
+    .badge-practical  { background: #dcfce7; color: #166534; }
+    .text-muted { color: #666; font-size: 9.5pt; }
+    .mt-4 { margin-top: 16px; }
+    .mb-2 { margin-bottom: 8px; }
+    .flex { display: flex; gap: 10px; }
+    strong { font-weight: 700; }
+  </style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">🖨 Print / Save as PDF</button>
+
+<div class="page">
+
+  <!-- ══════════════════════════════════════════════
+       COVER PAGE
+  ═══════════════════════════════════════════════ -->
+  <div class="cover-band">
+    <h1>Portfolio of Evidence</h1>
+    <div class="sub">Further Education and Training Certificate: Information Technology: Systems Development</div>
+    <div class="sub" style="margin-top:4px; opacity:.7;">SAQA ID 78965 &nbsp;|&nbsp; NQF Level 4 &nbsp;|&nbsp; 165 Credits</div>
+  </div>
+
+  <div class="cover-meta">
+    <table>
+      <tr>
+        <td>Learner Full Name:</td>
+        <td><span class="underline">&nbsp;</span></td>
+      </tr>
+      <tr>
+        <td>Learner ID / Code:</td>
+        <td><span class="underline">&nbsp;</span></td>
+      </tr>
+      <tr>
+        <td>ID Number:</td>
+        <td><span class="underline">&nbsp;</span></td>
+      </tr>
+      <tr>
+        <td>Contact Number:</td>
+        <td><span class="underline">&nbsp;</span></td>
+      </tr>
+      <tr>
+        <td>Email Address:</td>
+        <td><span class="underline">&nbsp;</span></td>
+      </tr>
+      <tr>
+        <td>Training Provider:</td>
+        <td>Data Science Academy</td>
+      </tr>
+      <tr>
+        <td>Facilitator:</td>
+        <td><span class="underline">&nbsp;</span></td>
+      </tr>
+      <tr>
+        <td>Programme Start Date:</td>
+        <td><span class="underline">&nbsp;</span></td>
+      </tr>
+      <tr>
+        <td>Programme End Date:</td>
+        <td><span class="underline">&nbsp;</span></td>
+      </tr>
+      <tr>
+        <td>Submission Date:</td>
+        <td><span class="underline">&nbsp;</span></td>
+      </tr>
+      <tr>
+        <td>SETA / ETQA:</td>
+        <td>MICT SETA</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       TABLE OF CONTENTS
+  ═══════════════════════════════════════════════ -->
+  <h2>Contents</h2>
+  <table class="toc-table">
+    <tr><td>1. Declaration of Authenticity</td><td>p. 2</td></tr>
+    <tr><td>2. Programme Overview</td><td>p. 2</td></tr>
+    <tr><td>3. Unit Standard Evidence — Module 1: Information Systems Analysis (US 14924)</td><td>p. 3</td></tr>
+    <tr><td>4. Unit Standard Evidence — Module 2: Team Collaboration and Problem Solving (US 14920)</td><td>p. 4</td></tr>
+    <tr><td>5. Unit Standard Evidence — Module 3: Programming Principles Introduction (US 14918)</td><td>p. 5</td></tr>
+    <tr><td>6. Unit Standard Evidence — Module 4: Apply Problem-Solving Strategies (US 14927)</td><td>p. 6</td></tr>
+    <tr><td>7. Unit Standard Evidence — Module 5: Design a Computer Program to Specification (US 14915)</td><td>p. 7</td></tr>
+    <tr><td>8. Unit Standard Evidence — Module 6: Apply Programming Principles (US 14910)</td><td>p. 8</td></tr>
+    <tr><td>9. Unit Standard Evidence — Module 7: Web Scripting (US 14933)</td><td>p. 9</td></tr>
+    <tr><td>10. Unit Standard Evidence — Module 8: Testing IT Systems (US 14908)</td><td>p. 10</td></tr>
+    <tr><td>11. Unit Standard Evidence — Module 9: Resolve User Problems (US 14919)</td><td>p. 11</td></tr>
+    <tr><td>12. Unit Standard Evidence — Module 10: Work as Project Team Member (US 120379)</td><td>p. 12</td></tr>
+    <tr><td>13. Attendance Register Summary</td><td>p. 13</td></tr>
+    <tr><td>14. Moderator Review</td><td>p. 14</td></tr>
+  </table>
+
+  <!-- ══════════════════════════════════════════════
+       DECLARATION
+  ═══════════════════════════════════════════════ -->
+  <div class="page-break"></div>
+  <h2>1. Declaration of Authenticity</h2>
+  <div class="declaration-box">
+    I, <span class="underline" style="display:inline-block; min-width:200px;">&nbsp;</span>, hereby declare that:
+    <ul style="margin: 10px 0 0 18px;">
+      <li>All evidence contained in this Portfolio of Evidence is my own original work.</li>
+      <li>I have not plagiarised or copied anyone else's work and have properly acknowledged all sources where applicable.</li>
+      <li>I understand that any dishonesty or plagiarism may result in disqualification from this qualification.</li>
+      <li>I consent to this portfolio being used for moderation purposes by the SETA / ETQA.</li>
+    </ul>
+  </div>
+  <div class="sig-block">
+    <div class="sig-item"><span>Learner Signature:</span><br/><br/></div>
+    <div class="sig-item"><span>Date:</span><br/><br/></div>
+    <div class="sig-item"><span>Learner Code:</span><br/><br/></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       PROGRAMME OVERVIEW
+  ═══════════════════════════════════════════════ -->
+  <h2 class="mt-4">2. Programme Overview</h2>
+  <table class="checklist" style="margin-bottom:0;">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Unit Standard</th>
+        <th>Title</th>
+        <th>Type</th>
+        <th>Credits</th>
+        <th>Block</th>
+        <th>Day(s)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>14924</td><td>Information Systems Analysis</td><td>Knowledge</td><td>3</td><td>1</td><td>1</td></tr>
+      <tr><td>2</td><td>14920</td><td>Team Collaboration and Problem Solving</td><td>Practical</td><td>3</td><td>1</td><td>2</td></tr>
+      <tr><td>3</td><td>14918</td><td>Programming Principles Introduction</td><td>Knowledge</td><td>5</td><td>1</td><td>3</td></tr>
+      <tr><td>4</td><td>14927</td><td>Apply Problem-Solving Strategies</td><td>Practical</td><td>4</td><td>1</td><td>4</td></tr>
+      <tr><td>5</td><td>14915</td><td>Design a Computer Program to Specification</td><td>Practical</td><td>8</td><td>1</td><td>5</td></tr>
+      <tr><td>6</td><td>14910</td><td>Apply Programming Principles</td><td>Practical</td><td>8</td><td>2</td><td>6–7</td></tr>
+      <tr><td>7</td><td>14933</td><td>Web Scripting</td><td>Practical</td><td>6</td><td>2</td><td>8–9</td></tr>
+      <tr><td>8</td><td>14908</td><td>Testing IT Systems</td><td>Knowledge</td><td>6</td><td>3</td><td>11</td></tr>
+      <tr><td>9</td><td>14919</td><td>Resolve User Problems</td><td>Practical</td><td>5</td><td>3</td><td>12</td></tr>
+      <tr><td>10</td><td>120379</td><td>Work as Project Team Member</td><td>Practical</td><td>8</td><td>3</td><td>13</td></tr>
+      <tr style="font-weight:700; background:#e8edf5;">
+        <td colspan="4" style="text-align:right;">Total Credits Covered:</td>
+        <td>56</td><td colspan="2"></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ══════════════════════════════════════════════
+       MODULE 1 — US 14924
+  ═══════════════════════════════════════════════ -->
+  <div class="page-break"></div>
+  <h2>3. Module 1 — Information Systems Analysis</h2>
+
+  <div class="module-card">
+    <div class="module-header">
+      <div class="title">Unit Standard 14924 &nbsp;|&nbsp; Information Systems Analysis</div>
+      <div class="meta">NQF Level 4 &nbsp;|&nbsp; 3 Credits &nbsp;|&nbsp; <span style="background:#3b82f6;padding:1px 6px;border-radius:8px;font-size:8pt;">Knowledge</span></div>
+    </div>
+    <div class="module-body">
+      <h3>Specific Outcomes</h3>
+      <ul style="margin-left:18px; margin-bottom:12px;">
+        <li>Explain the role of information systems analysis within the Software Development Life Cycle.</li>
+        <li>Describe the key responsibilities of an information systems analyst.</li>
+        <li>Identify and explain common information-gathering techniques.</li>
+        <li>Describe industry-standard systems analysis techniques.</li>
+      </ul>
+
+      <h3>Evidence Checklist</h3>
+      <table class="checklist">
+        <thead>
+          <tr>
+            <th class="check">✓</th>
+            <th>Evidence Item / Activity</th>
+            <th>Marks</th>
+            <th class="date-col">Date Submitted</th>
+            <th>Facilitator Initial</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 1: Differentiate between Systems Analysis and Requirements Analysis</td><td>5</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 2: Describe the functions of an Information Systems Analyst</td><td>9</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 3: Explain information-gathering techniques</td><td>12</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 4: Describe systems analysis techniques (DFDs, Decision Tables, CASE)</td><td>15</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Group Task: Stakeholder map for a CET lab booking system</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>In-portal quiz completed (CET Connect)</td><td>—</td><td></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <h3>Learner Reflection (What I Learned)</h3>
+      <div class="writelines">
+        <div class="writeline"></div><div class="writeline"></div><div class="writeline"></div>
+      </div>
+
+      <div class="decision-box">
+        <div class="label">Assessment Decision:</div>
+        <div class="decision-option"><span class="decision-circle"></span> Competent (C)</div>
+        <div class="decision-option"><span class="decision-circle"></span> Not Yet Competent (NYC)</div>
+      </div>
+
+      <div class="sig-block">
+        <div class="sig-item"><span>Assessor Signature:</span><br/><br/></div>
+        <div class="sig-item"><span>Date:</span><br/><br/></div>
+        <div class="sig-item"><span>Learner Signature:</span><br/><br/></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       MODULE 2 — US 14920
+  ═══════════════════════════════════════════════ -->
+  <div class="page-break"></div>
+  <h2>4. Module 2 — Team Collaboration and Problem Solving</h2>
+
+  <div class="module-card">
+    <div class="module-header">
+      <div class="title">Unit Standard 14920 &nbsp;|&nbsp; Team Collaboration and Problem Solving</div>
+      <div class="meta">NQF Level 4 &nbsp;|&nbsp; 3 Credits &nbsp;|&nbsp; <span style="background:#22c55e;padding:1px 6px;border-radius:8px;color:#000;font-size:8pt;">Practical</span></div>
+    </div>
+    <div class="module-body">
+      <h3>Specific Outcomes</h3>
+      <ul style="margin-left:18px; margin-bottom:12px;">
+        <li>Identify common challenges faced by teams.</li>
+        <li>Explain how individuals can contribute effectively to team problem-solving.</li>
+        <li>Describe the benefits of teamwork.</li>
+        <li>Propose strategies to build a collaborative team environment.</li>
+      </ul>
+
+      <h3>Evidence Checklist</h3>
+      <table class="checklist">
+        <thead>
+          <tr><th class="check">✓</th><th>Evidence Item / Activity</th><th>Marks</th><th class="date-col">Date Submitted</th><th>Facilitator Initial</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 1: Identify common challenges faced by teams</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 2: Explain individual contributions to team problem-solving</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 3: Assess NGT suitability for a given scenario</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 4: Describe the benefits of teamwork</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 5: Identify qualities of an effective team member</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 6: Propose strategies to build a collaborative team environment</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Group Task: Team Charter with assigned roles (presented)</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>In-portal quiz completed (CET Connect)</td><td>—</td><td></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <h3>Learner Reflection</h3>
+      <div class="writelines"><div class="writeline"></div><div class="writeline"></div><div class="writeline"></div></div>
+
+      <div class="decision-box">
+        <div class="label">Assessment Decision:</div>
+        <div class="decision-option"><span class="decision-circle"></span> Competent (C)</div>
+        <div class="decision-option"><span class="decision-circle"></span> Not Yet Competent (NYC)</div>
+      </div>
+      <div class="sig-block">
+        <div class="sig-item"><span>Assessor Signature:</span><br/><br/></div>
+        <div class="sig-item"><span>Date:</span><br/><br/></div>
+        <div class="sig-item"><span>Learner Signature:</span><br/><br/></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       MODULE 3 — US 14918
+  ═══════════════════════════════════════════════ -->
+  <div class="page-break"></div>
+  <h2>5. Module 3 — Programming Principles Introduction</h2>
+
+  <div class="module-card">
+    <div class="module-header">
+      <div class="title">Unit Standard 14918 &nbsp;|&nbsp; Programming Principles Introduction</div>
+      <div class="meta">NQF Level 4 &nbsp;|&nbsp; 5 Credits &nbsp;|&nbsp; <span style="background:#3b82f6;padding:1px 6px;border-radius:8px;font-size:8pt;">Knowledge</span></div>
+    </div>
+    <div class="module-body">
+      <h3>Specific Outcomes</h3>
+      <ul style="margin-left:18px; margin-bottom:12px;">
+        <li>Describe problem analysis and program design techniques.</li>
+        <li>Identify common data types (integer, real, string, boolean).</li>
+        <li>Explain algorithm structures (sequence, selection, iteration) using pseudocode.</li>
+        <li>Apply documentation and quality assurance principles to simple programs.</li>
+      </ul>
+
+      <h3>Evidence Checklist</h3>
+      <table class="checklist">
+        <thead>
+          <tr><th class="check">✓</th><th>Evidence Item / Activity</th><th>Marks</th><th class="date-col">Date Submitted</th><th>Facilitator Initial</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 1: List and explain the steps in the program maintenance cycle</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 2: Write pseudocode for a given simple problem</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 3: Identify and distinguish between at least three data types</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 4: Explain and apply arithmetic and logical operators</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 5: Describe the three algorithmic control structures with examples</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 6: Identify at least three program documentation and QA principles</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 7: Distinguish between validation and verification with examples</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>In-portal quiz completed (CET Connect)</td><td>—</td><td></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <h3>Learner Reflection</h3>
+      <div class="writelines"><div class="writeline"></div><div class="writeline"></div><div class="writeline"></div></div>
+
+      <div class="decision-box">
+        <div class="label">Assessment Decision:</div>
+        <div class="decision-option"><span class="decision-circle"></span> Competent (C)</div>
+        <div class="decision-option"><span class="decision-circle"></span> Not Yet Competent (NYC)</div>
+      </div>
+      <div class="sig-block">
+        <div class="sig-item"><span>Assessor Signature:</span><br/><br/></div>
+        <div class="sig-item"><span>Date:</span><br/><br/></div>
+        <div class="sig-item"><span>Learner Signature:</span><br/><br/></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       MODULE 4 — US 14927
+  ═══════════════════════════════════════════════ -->
+  <div class="page-break"></div>
+  <h2>6. Module 4 — Apply Problem-Solving Strategies</h2>
+
+  <div class="module-card">
+    <div class="module-header">
+      <div class="title">Unit Standard 14927 &nbsp;|&nbsp; Apply Problem-Solving Strategies</div>
+      <div class="meta">NQF Level 4 &nbsp;|&nbsp; 4 Credits &nbsp;|&nbsp; <span style="background:#22c55e;padding:1px 6px;border-radius:8px;color:#000;font-size:8pt;">Practical</span></div>
+    </div>
+    <div class="module-body">
+      <h3>Specific Outcomes</h3>
+      <ul style="margin-left:18px; margin-bottom:12px;">
+        <li>Define and analyse workplace problems.</li>
+        <li>Evaluate possible solutions against set criteria.</li>
+        <li>Implement and monitor solutions effectively.</li>
+      </ul>
+
+      <h3>Evidence Checklist</h3>
+      <table class="checklist">
+        <thead>
+          <tr><th class="check">✓</th><th>Evidence Item / Activity</th><th>Marks</th><th class="date-col">Date Submitted</th><th>Facilitator Initial</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 1: Identify and explain root causes of a given workplace problem</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 2: Create a process map for a CET administrative scenario</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 3: Identify contributing factors using a fishbone diagram</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 4: Evaluate two alternative solutions against the SFF matrix</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 5: Develop two alternative solutions for a given problem</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 6: Create an implementation plan with timeline and resources</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Group Task: Problem Analysis and Implementation Plan (CET lab issue)</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>In-portal quiz completed (CET Connect)</td><td>—</td><td></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <h3>Learner Reflection</h3>
+      <div class="writelines"><div class="writeline"></div><div class="writeline"></div><div class="writeline"></div></div>
+
+      <div class="decision-box">
+        <div class="label">Assessment Decision:</div>
+        <div class="decision-option"><span class="decision-circle"></span> Competent (C)</div>
+        <div class="decision-option"><span class="decision-circle"></span> Not Yet Competent (NYC)</div>
+      </div>
+      <div class="sig-block">
+        <div class="sig-item"><span>Assessor Signature:</span><br/><br/></div>
+        <div class="sig-item"><span>Date:</span><br/><br/></div>
+        <div class="sig-item"><span>Learner Signature:</span><br/><br/></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       MODULE 5 — US 14915
+  ═══════════════════════════════════════════════ -->
+  <div class="page-break"></div>
+  <h2>7. Module 5 — Design a Computer Program to Specification</h2>
+
+  <div class="module-card">
+    <div class="module-header">
+      <div class="title">Unit Standard 14915 &nbsp;|&nbsp; Design a Computer Program to Specification</div>
+      <div class="meta">NQF Level 4 &nbsp;|&nbsp; 8 Credits &nbsp;|&nbsp; <span style="background:#22c55e;padding:1px 6px;border-radius:8px;color:#000;font-size:8pt;">Practical</span></div>
+    </div>
+    <div class="module-body">
+      <h3>Specific Outcomes</h3>
+      <ul style="margin-left:18px; margin-bottom:12px;">
+        <li>Apply structured program design techniques.</li>
+        <li>Demonstrate understanding of procedural programming features.</li>
+        <li>Document program designs using appropriate development tools.</li>
+        <li>Apply maintenance and logical flow principles.</li>
+      </ul>
+
+      <h3>Evidence Checklist</h3>
+      <table class="checklist">
+        <thead>
+          <tr><th class="check">✓</th><th>Evidence Item / Activity</th><th>Marks</th><th class="date-col">Date Submitted</th><th>Facilitator Initial</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 1: Key architecture considerations for a given application type</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 2: Decision tree for a given business rule scenario</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 3: Sequence diagram for a simple interaction</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 4: Batch vs online processing suitability for two scenarios</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 5: Identify syntax errors in a code snippet using a syntax checker</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 6: Write a user-defined function in pseudocode</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 7: List and explain the stages of the program maintenance cycle</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 8: Desk-check a given design output and document errors found</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Activity 9: Explain the difference between desk-checking and compiling</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Group Task: Program Design Document for a CET Lab Booking Tool</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>In-portal quiz completed (CET Connect)</td><td>—</td><td></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <h3>Learner Reflection</h3>
+      <div class="writelines"><div class="writeline"></div><div class="writeline"></div><div class="writeline"></div></div>
+
+      <div class="decision-box">
+        <div class="label">Assessment Decision:</div>
+        <div class="decision-option"><span class="decision-circle"></span> Competent (C)</div>
+        <div class="decision-option"><span class="decision-circle"></span> Not Yet Competent (NYC)</div>
+      </div>
+      <div class="sig-block">
+        <div class="sig-item"><span>Assessor Signature:</span><br/><br/></div>
+        <div class="sig-item"><span>Date:</span><br/><br/></div>
+        <div class="sig-item"><span>Learner Signature:</span><br/><br/></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       MODULE 6 — US 14910
+  ═══════════════════════════════════════════════ -->
+  <div class="page-break"></div>
+  <h2>8. Module 6 — Apply Programming Principles</h2>
+
+  <div class="module-card">
+    <div class="module-header">
+      <div class="title">Unit Standard 14910 &nbsp;|&nbsp; Apply Programming Principles</div>
+      <div class="meta">NQF Level 4 &nbsp;|&nbsp; 8 Credits &nbsp;|&nbsp; <span style="background:#22c55e;padding:1px 6px;border-radius:8px;color:#000;font-size:8pt;">Practical</span></div>
+    </div>
+    <div class="module-body">
+      <h3>Specific Outcomes</h3>
+      <ul style="margin-left:18px; margin-bottom:12px;">
+        <li>Write structured programs in Python/JavaScript.</li>
+        <li>Implement control structures and functions.</li>
+        <li>Test and debug code systematically.</li>
+      </ul>
+
+      <h3>Evidence Checklist</h3>
+      <table class="checklist">
+        <thead>
+          <tr><th class="check">✓</th><th>Evidence Item / Activity</th><th>Marks</th><th class="date-col">Date Submitted</th><th>Facilitator Initial</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="check"><span class="check-box"></span></td><td>Guided coding sessions (Days 6–7 workbook exercises)</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Mini-project development (source code + documentation)</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Code review workshop participation</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>In-portal quiz completed (CET Connect)</td><td>—</td><td></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <h3>Learner Reflection</h3>
+      <div class="writelines"><div class="writeline"></div><div class="writeline"></div><div class="writeline"></div></div>
+
+      <div class="decision-box">
+        <div class="label">Assessment Decision:</div>
+        <div class="decision-option"><span class="decision-circle"></span> Competent (C)</div>
+        <div class="decision-option"><span class="decision-circle"></span> Not Yet Competent (NYC)</div>
+      </div>
+      <div class="sig-block">
+        <div class="sig-item"><span>Assessor Signature:</span><br/><br/></div>
+        <div class="sig-item"><span>Date:</span><br/><br/></div>
+        <div class="sig-item"><span>Learner Signature:</span><br/><br/></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       MODULE 7 — US 14933
+  ═══════════════════════════════════════════════ -->
+  <div class="page-break"></div>
+  <h2>9. Module 7 — Web Scripting</h2>
+
+  <div class="module-card">
+    <div class="module-header">
+      <div class="title">Unit Standard 14933 &nbsp;|&nbsp; Web Scripting</div>
+      <div class="meta">NQF Level 4 &nbsp;|&nbsp; 6 Credits &nbsp;|&nbsp; <span style="background:#22c55e;padding:1px 6px;border-radius:8px;color:#000;font-size:8pt;">Practical</span></div>
+    </div>
+    <div class="module-body">
+      <h3>Specific Outcomes</h3>
+      <ul style="margin-left:18px; margin-bottom:12px;">
+        <li>Create interactive web pages using HTML/CSS/JS.</li>
+        <li>Apply DOM manipulation techniques.</li>
+        <li>Implement responsive web design.</li>
+      </ul>
+
+      <h3>Evidence Checklist</h3>
+      <table class="checklist">
+        <thead>
+          <tr><th class="check">✓</th><th>Evidence Item / Activity</th><th>Marks</th><th class="date-col">Date Submitted</th><th>Facilitator Initial</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="check"><span class="check-box"></span></td><td>Portfolio web page (HTML/CSS/JS source files)</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Interactive form validation exercise (JavaScript)</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Responsive design challenge submission</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>In-portal quiz completed (CET Connect)</td><td>—</td><td></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <h3>Learner Reflection</h3>
+      <div class="writelines"><div class="writeline"></div><div class="writeline"></div><div class="writeline"></div></div>
+
+      <div class="decision-box">
+        <div class="label">Assessment Decision:</div>
+        <div class="decision-option"><span class="decision-circle"></span> Competent (C)</div>
+        <div class="decision-option"><span class="decision-circle"></span> Not Yet Competent (NYC)</div>
+      </div>
+      <div class="sig-block">
+        <div class="sig-item"><span>Assessor Signature:</span><br/><br/></div>
+        <div class="sig-item"><span>Date:</span><br/><br/></div>
+        <div class="sig-item"><span>Learner Signature:</span><br/><br/></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       MODULE 8 — US 14908
+  ═══════════════════════════════════════════════ -->
+  <div class="page-break"></div>
+  <h2>10. Module 8 — Testing IT Systems</h2>
+
+  <div class="module-card">
+    <div class="module-header">
+      <div class="title">Unit Standard 14908 &nbsp;|&nbsp; Testing IT Systems</div>
+      <div class="meta">NQF Level 4 &nbsp;|&nbsp; 6 Credits &nbsp;|&nbsp; <span style="background:#3b82f6;padding:1px 6px;border-radius:8px;font-size:8pt;">Knowledge</span></div>
+    </div>
+    <div class="module-body">
+      <h3>Specific Outcomes</h3>
+      <ul style="margin-left:18px; margin-bottom:12px;">
+        <li>Explain software testing methodologies.</li>
+        <li>Design test cases and test plans.</li>
+        <li>Apply quality assurance principles.</li>
+      </ul>
+
+      <h3>Evidence Checklist</h3>
+      <table class="checklist">
+        <thead>
+          <tr><th class="check">✓</th><th>Evidence Item / Activity</th><th>Marks</th><th class="date-col">Date Submitted</th><th>Facilitator Initial</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="check"><span class="check-box"></span></td><td>Test case writing workshop (completed test cases document)</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Bug hunting exercise (defect log)</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>QA checklist creation</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>In-portal quiz completed (CET Connect)</td><td>—</td><td></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <h3>Learner Reflection</h3>
+      <div class="writelines"><div class="writeline"></div><div class="writeline"></div><div class="writeline"></div></div>
+
+      <div class="decision-box">
+        <div class="label">Assessment Decision:</div>
+        <div class="decision-option"><span class="decision-circle"></span> Competent (C)</div>
+        <div class="decision-option"><span class="decision-circle"></span> Not Yet Competent (NYC)</div>
+      </div>
+      <div class="sig-block">
+        <div class="sig-item"><span>Assessor Signature:</span><br/><br/></div>
+        <div class="sig-item"><span>Date:</span><br/><br/></div>
+        <div class="sig-item"><span>Learner Signature:</span><br/><br/></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       MODULE 9 — US 14919
+  ═══════════════════════════════════════════════ -->
+  <div class="page-break"></div>
+  <h2>11. Module 9 — Resolve User Problems</h2>
+
+  <div class="module-card">
+    <div class="module-header">
+      <div class="title">Unit Standard 14919 &nbsp;|&nbsp; Resolve User Problems</div>
+      <div class="meta">NQF Level 4 &nbsp;|&nbsp; 5 Credits &nbsp;|&nbsp; <span style="background:#22c55e;padding:1px 6px;border-radius:8px;color:#000;font-size:8pt;">Practical</span></div>
+    </div>
+    <div class="module-body">
+      <h3>Specific Outcomes</h3>
+      <ul style="margin-left:18px; margin-bottom:12px;">
+        <li>Diagnose and resolve common IT user problems.</li>
+        <li>Apply troubleshooting methodologies.</li>
+        <li>Communicate solutions effectively to users.</li>
+      </ul>
+
+      <h3>Evidence Checklist</h3>
+      <table class="checklist">
+        <thead>
+          <tr><th class="check">✓</th><th>Evidence Item / Activity</th><th>Marks</th><th class="date-col">Date Submitted</th><th>Facilitator Initial</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="check"><span class="check-box"></span></td><td>Troubleshooting simulation (documented steps)</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Role-play user support (peer/facilitator assessment)</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Solution documentation (written report)</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>In-portal quiz completed (CET Connect)</td><td>—</td><td></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <h3>Learner Reflection</h3>
+      <div class="writelines"><div class="writeline"></div><div class="writeline"></div><div class="writeline"></div></div>
+
+      <div class="decision-box">
+        <div class="label">Assessment Decision:</div>
+        <div class="decision-option"><span class="decision-circle"></span> Competent (C)</div>
+        <div class="decision-option"><span class="decision-circle"></span> Not Yet Competent (NYC)</div>
+      </div>
+      <div class="sig-block">
+        <div class="sig-item"><span>Assessor Signature:</span><br/><br/></div>
+        <div class="sig-item"><span>Date:</span><br/><br/></div>
+        <div class="sig-item"><span>Learner Signature:</span><br/><br/></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       MODULE 10 — US 120379
+  ═══════════════════════════════════════════════ -->
+  <div class="page-break"></div>
+  <h2>12. Module 10 — Work as Project Team Member</h2>
+
+  <div class="module-card">
+    <div class="module-header">
+      <div class="title">Unit Standard 120379 &nbsp;|&nbsp; Work as a Project Team Member</div>
+      <div class="meta">NQF Level 4 &nbsp;|&nbsp; 8 Credits &nbsp;|&nbsp; <span style="background:#22c55e;padding:1px 6px;border-radius:8px;color:#000;font-size:8pt;">Practical</span></div>
+    </div>
+    <div class="module-body">
+      <h3>Specific Outcomes</h3>
+      <ul style="margin-left:18px; margin-bottom:12px;">
+        <li>Participate effectively in project teams.</li>
+        <li>Apply project management fundamentals.</li>
+        <li>Deliver project outputs within constraints.</li>
+      </ul>
+
+      <h3>Evidence Checklist</h3>
+      <table class="checklist">
+        <thead>
+          <tr><th class="check">✓</th><th>Evidence Item / Activity</th><th>Marks</th><th class="date-col">Date Submitted</th><th>Facilitator Initial</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="check"><span class="check-box"></span></td><td>Capstone project kickoff documentation (roles, plan)</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Sprint planning exercise (sprint backlog / task board)</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>Project presentation (slides + peer feedback sheet)</td><td>—</td><td></td><td></td></tr>
+          <tr><td class="check"><span class="check-box"></span></td><td>In-portal quiz completed (CET Connect)</td><td>—</td><td></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <h3>Learner Reflection</h3>
+      <div class="writelines"><div class="writeline"></div><div class="writeline"></div><div class="writeline"></div></div>
+
+      <div class="decision-box">
+        <div class="label">Assessment Decision:</div>
+        <div class="decision-option"><span class="decision-circle"></span> Competent (C)</div>
+        <div class="decision-option"><span class="decision-circle"></span> Not Yet Competent (NYC)</div>
+      </div>
+      <div class="sig-block">
+        <div class="sig-item"><span>Assessor Signature:</span><br/><br/></div>
+        <div class="sig-item"><span>Date:</span><br/><br/></div>
+        <div class="sig-item"><span>Learner Signature:</span><br/><br/></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       ATTENDANCE SUMMARY
+  ═══════════════════════════════════════════════ -->
+  <div class="page-break"></div>
+  <h2>13. Attendance Register Summary</h2>
+  <p class="text-muted">Complete this table from the official attendance register. Attach signed register pages as supporting evidence.</p>
+
+  <table class="att-table" style="margin-top:12px;">
+    <thead>
+      <tr>
+        <th>Day</th>
+        <th>Date</th>
+        <th>Module / Unit Standard</th>
+        <th>Sign In</th>
+        <th>Sign Out</th>
+        <th>Hours</th>
+        <th>Facilitator Initial</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Day 1</td><td></td><td>US 14924 — Information Systems Analysis</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Day 2</td><td></td><td>US 14920 — Team Collaboration</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Day 3</td><td></td><td>US 14918 — Programming Principles</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Day 4</td><td></td><td>US 14927 — Problem-Solving Strategies</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Day 5</td><td></td><td>US 14915 — Design a Computer Program</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Day 6</td><td></td><td>US 14910 — Apply Programming Principles (1 of 2)</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Day 7</td><td></td><td>US 14910 — Apply Programming Principles (2 of 2)</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Day 8</td><td></td><td>US 14933 — Web Scripting (1 of 2)</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Day 9</td><td></td><td>US 14933 — Web Scripting (2 of 2)</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Day 10</td><td></td><td>PoE Consolidation Day</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Day 11</td><td></td><td>US 14908 — Testing IT Systems</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Day 12</td><td></td><td>US 14919 — Resolve User Problems</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Day 13</td><td></td><td>US 120379 — Work as Project Team Member</td><td></td><td></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:18px;">
+    <table style="width:100%; border-collapse:collapse;">
+      <tr>
+        <td style="width:33%; padding:6px;"><strong>Total Days Attended:</strong> <span style="display:inline-block; border-bottom:1px solid #666; width:60px;">&nbsp;</span> / 13</td>
+        <td style="width:33%; padding:6px;"><strong>Total Hours:</strong> <span style="display:inline-block; border-bottom:1px solid #666; width:60px;">&nbsp;</span></td>
+        <td style="width:33%; padding:6px;"><strong>Attendance %:</strong> <span style="display:inline-block; border-bottom:1px solid #666; width:60px;">&nbsp;</span>%</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="sig-block" style="margin-top:18px;">
+    <div class="sig-item"><span>Facilitator Signature:</span><br/><br/></div>
+    <div class="sig-item"><span>Date:</span><br/><br/></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       MODERATOR REVIEW
+  ═══════════════════════════════════════════════ -->
+  <div class="page-break"></div>
+  <h2>14. Moderator Review</h2>
+  <p class="text-muted">This section is completed by the PoE Moderator only. Learners and facilitators do not write here.</p>
+
+  <div class="mod-box">
+    <h3>Moderation Summary</h3>
+    <table class="checklist" style="margin-top:8px;">
+      <thead>
+        <tr>
+          <th>Module</th>
+          <th>Assessor Decision</th>
+          <th>Moderator Confirms</th>
+          <th>Action Required</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>US 14924 — Information Systems Analysis</td><td>C / NYC</td><td>Yes / No</td><td></td></tr>
+        <tr><td>US 14920 — Team Collaboration</td><td>C / NYC</td><td>Yes / No</td><td></td></tr>
+        <tr><td>US 14918 — Programming Principles</td><td>C / NYC</td><td>Yes / No</td><td></td></tr>
+        <tr><td>US 14927 — Problem-Solving Strategies</td><td>C / NYC</td><td>Yes / No</td><td></td></tr>
+        <tr><td>US 14915 — Design a Computer Program</td><td>C / NYC</td><td>Yes / No</td><td></td></tr>
+        <tr><td>US 14910 — Apply Programming Principles</td><td>C / NYC</td><td>Yes / No</td><td></td></tr>
+        <tr><td>US 14933 — Web Scripting</td><td>C / NYC</td><td>Yes / No</td><td></td></tr>
+        <tr><td>US 14908 — Testing IT Systems</td><td>C / NYC</td><td>Yes / No</td><td></td></tr>
+        <tr><td>US 14919 — Resolve User Problems</td><td>C / NYC</td><td>Yes / No</td><td></td></tr>
+        <tr><td>US 120379 — Work as Project Team Member</td><td>C / NYC</td><td>Yes / No</td><td></td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top:16px;">Overall Moderation Outcome</h3>
+    <div class="decision-box">
+      <div class="label">Portfolio is:</div>
+      <div class="decision-option"><span class="decision-circle"></span> Accepted — all assessments confirmed</div>
+      <div class="decision-option"><span class="decision-circle"></span> Referred — see actions above</div>
+    </div>
+
+    <h3>Moderator Comments</h3>
+    <div class="writelines">
+      <div class="writeline"></div><div class="writeline"></div><div class="writeline"></div><div class="writeline"></div>
+    </div>
+
+    <div class="sig-block" style="margin-top:16px;">
+      <div class="sig-item"><span>Moderator Name:</span><br/><br/></div>
+      <div class="sig-item"><span>Moderator Signature:</span><br/><br/></div>
+      <div class="sig-item"><span>Date:</span><br/><br/></div>
+    </div>
+  </div>
+
+  <p style="margin-top:32px; font-size:8.5pt; color:#999; text-align:center;">
+    Generated by CET Connect Portal &nbsp;·&nbsp; SAQA 78965 NQF Level 4 &nbsp;·&nbsp; Data Science Academy &nbsp;·&nbsp; MICT SETA
+  </p>
+
+</div><!-- /page -->
+</body>
+</html>
