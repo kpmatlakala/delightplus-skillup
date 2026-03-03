@@ -12,6 +12,16 @@ import { useModuleProgress } from "@/hooks/useModuleProgress";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { ArrowLeft, Clock, Award, BookOpen, Target, FileText, Download, CheckCircle2, Circle, ChevronRight, DatabaseZap, RefreshCw, Play } from "lucide-react";
 import { PresentationMode } from "@/components/PresentationMode";
 
@@ -650,6 +660,10 @@ export default function ModuleDetailPage() {
   const [isUploadingSubmission, setIsUploadingSubmission] = useState(false);
   const [isSubmittingAssessment, setIsSubmittingAssessment] = useState(false);
   const [assessmentSubmitMessage, setAssessmentSubmitMessage] = useState<string>("");
+  const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
+  const [assessmentChecklist, setAssessmentChecklist] = useState({ read: false, criteria: false, own: false });
+  const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
+  const [assessmentChecklist, setAssessmentChecklist] = useState({ read: false, criteria: false, own: false });
 
   useEffect(() => {
     const loadContentLinks = async () => {
@@ -1570,77 +1584,160 @@ export default function ModuleDetailPage() {
                       )}
 
                       {isLearnerView && (
-                      <div className="rounded-lg border border-border p-4 space-y-3">
-                        <p className="text-sm font-medium text-foreground">Submit Your Work</p>
-                        <input
-                          type="file"
-                          onChange={(event) => {
-                            const selected = event.target.files?.[0] ?? null;
-                            setSubmissionFile(selected);
-                            setAssessmentSubmitMessage(selected ? "" : assessmentSubmitMessage);
-                          }}
-                          className="block w-full text-xs text-muted-foreground file:mr-3 file:rounded-md file:border file:border-border file:bg-background file:px-2.5 file:py-1.5 file:text-xs file:text-foreground"
-                        />
+                      <>
+                        {/* ── Success state ── */}
+                        {assessmentSubmitMessage.includes("successfully") ? (
+                          <div className="rounded-lg border border-green-500/40 bg-green-50/40 dark:bg-green-900/10 p-5 flex items-start gap-4">
+                            <CheckCircle2 size={28} className="shrink-0 text-green-500 mt-0.5" />
+                            <div className="space-y-1">
+                              <p className="text-sm font-semibold text-green-700 dark:text-green-400">Assessment Submitted</p>
+                              <p className="text-xs text-muted-foreground">Your work has been submitted to your facilitator for review. Well done for completing this unit!</p>
+                              {submissionUploadedAt && (
+                                <p className="text-xs text-muted-foreground">Submitted: <span className="font-medium text-foreground">{new Date(submissionUploadedAt).toLocaleString()}</span></p>
+                              )}
+                              {submissionPath && (
+                                <p className="text-xs text-muted-foreground break-all">File: <span className="font-medium text-foreground">{submissionPath.split("/").pop()}</span></p>
+                              )}
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="space-y-4">
+                            {/* ── Step instructions + download ── */}
+                            <div className="rounded-lg border border-border bg-muted/20 p-4">
+                              <p className="text-xs font-semibold text-foreground uppercase tracking-wide mb-3">How to Submit</p>
+                              <ol className="space-y-2">
+                                {[
+                                  { n: 1, text: "Download the assessment task using the button below." },
+                                  { n: 2, text: "Read all instructions carefully and complete every required task." },
+                                  { n: 3, text: "Save your completed work as a PDF or Word document." },
+                                  { n: 4, text: "Upload your file, tick all three confirmation boxes, then click Submit." },
+                                ].map(({ n, text }) => (
+                                  <li key={n} className="flex items-start gap-2.5 text-xs text-muted-foreground">
+                                    <span className="shrink-0 flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-[10px]">{n}</span>
+                                    {text}
+                                  </li>
+                                ))}
+                              </ol>
+                              {assessmentDownloadHref && (
+                                <a
+                                  href={assessmentDownloadHref}
+                                  download
+                                  className="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-border text-xs text-foreground font-medium px-3.5 py-2 hover:bg-secondary/50 transition-colors"
+                                >
+                                  <Download size={13} /> Download Assessment Task
+                                </a>
+                              )}
+                            </div>
 
-                        <div className="flex flex-wrap items-center gap-2">
-                          <button
-                            onClick={async () => {
-                              if (!submissionFile || !id || !user?.id) { setAssessmentSubmitMessage("Choose a file first."); return; }
-                              setIsUploadingSubmission(true);
-                              setAssessmentSubmitMessage("");
-                              const safeName = `${Date.now()}-${toSafeFileName(submissionFile.name)}`;
-                              const path = `learner-${user.id}/module-${id}/${safeName}`;
-                              const { error } = await supabase.storage.from("assessment-submissions").upload(path, submissionFile, { upsert: true });
-                              setIsUploadingSubmission(false);
-                              if (error) { setAssessmentSubmitMessage(`Upload failed: ${error.message}`); return; }
-                              const uploadedAt = new Date().toISOString();
-                              setSubmissionPath(path);
-                              setSubmissionUploadedAt(uploadedAt);
-                              void recordSubmission(id, path, uploadedAt);
-                              setAssessmentSubmitMessage("File uploaded. Click Submit to finalize.");
-                            }}
-                            disabled={isUploadingSubmission}
-                            className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-xs font-medium hover:bg-primary/90 disabled:opacity-60"
-                          >
-                            {isUploadingSubmission ? "Uploading…" : "Upload File"}
-                          </button>
+                            {/* ── File upload ── */}
+                            <div className="rounded-lg border border-border bg-background/50 p-4 space-y-3">
+                              <p className="text-xs font-semibold text-foreground uppercase tracking-wide">Upload Your Completed Work</p>
+                              <input
+                                type="file"
+                                onChange={(event) => {
+                                  const selected = event.target.files?.[0] ?? null;
+                                  setSubmissionFile(selected);
+                                  setAssessmentSubmitMessage(selected ? "" : assessmentSubmitMessage);
+                                }}
+                                className="block w-full text-xs text-muted-foreground file:mr-3 file:rounded-md file:border file:border-border file:bg-background file:px-2.5 file:py-1.5 file:text-xs file:text-foreground"
+                              />
+                              <button
+                                onClick={async () => {
+                                  if (!submissionFile || !id || !user?.id) { setAssessmentSubmitMessage("Choose a file first."); return; }
+                                  setIsUploadingSubmission(true);
+                                  setAssessmentSubmitMessage("");
+                                  const safeName = `${Date.now()}-${toSafeFileName(submissionFile.name)}`;
+                                  const path = `learner-${user.id}/module-${id}/${safeName}`;
+                                  const { error } = await supabase.storage.from("assessment-submissions").upload(path, submissionFile, { upsert: true });
+                                  setIsUploadingSubmission(false);
+                                  if (error) { setAssessmentSubmitMessage(`Upload failed: ${error.message}`); return; }
+                                  const uploadedAt = new Date().toISOString();
+                                  setSubmissionPath(path);
+                                  setSubmissionUploadedAt(uploadedAt);
+                                  void recordSubmission(id, path, uploadedAt);
+                                  setAssessmentSubmitMessage("File ready. Complete the checklist below, then click Submit.");
+                                }}
+                                disabled={isUploadingSubmission}
+                                className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-xs font-medium hover:bg-primary/90 disabled:opacity-60 transition-colors"
+                              >
+                                {isUploadingSubmission ? "Uploading…" : "Upload File"}
+                              </button>
+                              {submissionPath && (
+                                <p className="text-xs text-green-600 dark:text-green-400 font-medium">
+                                  ✓ File ready: <span className="font-normal text-muted-foreground">{submissionPath.split("/").pop()}</span>
+                                </p>
+                              )}
+                              {assessmentSubmitMessage && !assessmentSubmitMessage.includes("successfully") && (
+                                <p className="text-xs text-muted-foreground">{assessmentSubmitMessage}</p>
+                              )}
+                            </div>
 
-                          <button
-                            onClick={async () => {
-                              if (!id || !submissionPath) { setAssessmentSubmitMessage("Upload your file before submitting."); return; }
-                              setIsSubmittingAssessment(true);
-                              const submittedAt = new Date().toISOString();
-                              await markAssessmentSubmitted(id, submittedAt);
-                              setIsSubmittingAssessment(false);
-                              setAssessmentSubmitMessage("Assessment submitted successfully.");
-                            }}
-                            disabled={!submissionPath || isSubmittingAssessment}
-                            className="inline-flex items-center gap-1.5 rounded-lg border border-border text-muted-foreground px-4 py-2 text-xs font-medium hover:bg-secondary/50 disabled:opacity-60"
-                          >
-                            {isSubmittingAssessment ? "Submitting…" : "Submit"}
-                          </button>
+                            {/* ── Confirmation checklist ── */}
+                            <div className="rounded-lg border border-border bg-background/50 p-4 space-y-3">
+                              <p className="text-xs font-semibold text-foreground uppercase tracking-wide">Before You Submit</p>
+                              {([
+                                { key: "read" as const, label: "I have read and understood the full assessment task." },
+                                { key: "criteria" as const, label: "My submission addresses all the required criteria." },
+                                { key: "own" as const, label: "I confirm this is my own unaided work." },
+                              ] as const).map(({ key, label }) => (
+                                <label key={key} className="flex items-start gap-2.5 cursor-pointer group">
+                                  <input
+                                    type="checkbox"
+                                    checked={assessmentChecklist[key]}
+                                    onChange={(e) => setAssessmentChecklist((prev) => ({ ...prev, [key]: e.target.checked }))}
+                                    className="mt-0.5 h-3.5 w-3.5 shrink-0 accent-primary cursor-pointer"
+                                  />
+                                  <span className="text-xs text-muted-foreground group-hover:text-foreground transition-colors select-none">{label}</span>
+                                </label>
+                              ))}
+                            </div>
 
-                          {assessmentDownloadHref && (
-                            <a
-                              href={assessmentDownloadHref}
-                              download
-                              className="inline-flex items-center gap-1.5 rounded-lg border border-border text-muted-foreground px-4 py-2 text-xs font-medium hover:bg-secondary/50"
+                            {/* ── Submit button ── */}
+                            <button
+                              onClick={() => {
+                                if (!submissionPath) { setAssessmentSubmitMessage("Upload your file before submitting."); return; }
+                                if (!assessmentChecklist.read || !assessmentChecklist.criteria || !assessmentChecklist.own) {
+                                  setAssessmentSubmitMessage("Please tick all three confirmation boxes before submitting.");
+                                  return;
+                                }
+                                setShowSubmitConfirm(true);
+                              }}
+                              disabled={isSubmittingAssessment}
+                              className="w-full inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary text-primary-foreground px-4 py-2.5 text-sm font-medium hover:bg-primary/90 disabled:opacity-60 transition-colors"
                             >
-                              <Download size={13} /> Download
-                            </a>
-                          )}
-                        </div>
+                              {isSubmittingAssessment ? "Submitting…" : "Submit Assessment"}
+                            </button>
+                          </div>
+                        )}
 
-                        {submissionPath && (
-                          <p className="text-xs text-muted-foreground break-all">File: <span className="font-medium text-foreground">{submissionPath}</span></p>
-                        )}
-                        {submissionUploadedAt && (
-                          <p className="text-xs text-muted-foreground">Uploaded: <span className="font-medium text-foreground">{new Date(submissionUploadedAt).toLocaleString()}</span></p>
-                        )}
-                        {assessmentSubmitMessage && (
-                          <p className={`text-xs font-medium ${assessmentSubmitMessage.includes("successfully") ? "text-green-600 dark:text-green-400" : "text-muted-foreground"}`}>{assessmentSubmitMessage}</p>
-                        )}
-                      </div>
+                        {/* ── Confirm dialog ── */}
+                        <AlertDialog open={showSubmitConfirm} onOpenChange={setShowSubmitConfirm}>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Confirm Submission</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Once submitted, your facilitator will be notified to review your assessment. You can still re-upload a revised file before the deadline if needed.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Go Back</AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={async () => {
+                                  if (!id || !submissionPath) return;
+                                  setIsSubmittingAssessment(true);
+                                  const submittedAt = new Date().toISOString();
+                                  await markAssessmentSubmitted(id, submittedAt);
+                                  setSubmissionUploadedAt(submittedAt);
+                                  setIsSubmittingAssessment(false);
+                                  setAssessmentSubmitMessage("Assessment submitted successfully.");
+                                }}
+                              >
+                                Confirm &amp; Submit
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </>
                       )}{/* end isLearnerView submit wrapper */}
                     </div>
                   )}
