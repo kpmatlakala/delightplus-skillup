@@ -662,8 +662,6 @@ export default function ModuleDetailPage() {
   const [assessmentSubmitMessage, setAssessmentSubmitMessage] = useState<string>("");
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
   const [assessmentChecklist, setAssessmentChecklist] = useState({ read: false, criteria: false, own: false });
-  const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
-  const [assessmentChecklist, setAssessmentChecklist] = useState({ read: false, criteria: false, own: false });
 
   useEffect(() => {
     const loadContentLinks = async () => {
