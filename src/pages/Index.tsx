@@ -271,6 +271,49 @@ export default function Dashboard() {
               </p>
             </div>
 
+            {/* How the SA&D Course Unfolds */}
+            <div>
+              <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground mb-2">How the SA&amp;D Course Unfolds — Lecture to SDLC Mapping</h4>
+              <p className="text-muted-foreground leading-relaxed mb-3 text-xs">
+                The ten lectures in the Systems Analysis &amp; Design unit standard (ITSD-14924) map directly onto the SDLC. Every lecture from Day 1 onward builds on the analytical foundations established in Session 1.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs border rounded-md overflow-hidden">
+                  <thead>
+                    <tr className="bg-muted/50">
+                      <th className="py-1.5 px-3 text-left font-semibold whitespace-nowrap">Lecture</th>
+                      <th className="py-1.5 px-3 text-left font-semibold">Topic</th>
+                      <th className="py-1.5 px-3 text-left font-semibold whitespace-nowrap">SDLC Phase</th>
+                      <th className="py-1.5 px-3 text-left font-semibold">Builds on Day 1 by…</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {([
+                      ["L1 — Today", "Introduction to Information Systems", "Analysis", "Establishing analyst roles, the SDLC, IS components, and information-gathering techniques"],
+                      ["L2", "Systems Project Management", "All phases", "Scoping and planning the project your feasibility study defines"],
+                      ["L3", "Requirements Modelling", "Analysis", "Deepening requirements gathering with JAD, RAD, and Agile iteration"],
+                      ["L4", "Data & Process Modelling", "Analysis → Design", "Expanding DFD foundations into levelled diagrams and physical design"],
+                      ["L5 & L6", "Object Modelling", "Analysis → Design", "Developing OO concepts into full UML: class diagrams, use cases, sequence diagrams"],
+                      ["L7", "Data Design", "Design", "Converting data analysis outputs into ERDs, normalised tables, and referential integrity rules"],
+                      ["L8", "Development Strategies & Implementation", "Design → Implementation", "Using analyst recommendation to drive acquisition and changeover strategy"],
+                      ["L9", "User Interface Design", "Design", "Translating requirements into screens, forms, reports, and validation rules"],
+                      ["L10", "System Support & Security", "Maintenance", "Enabling maintenance and security audits using documentation produced during analysis"],
+                    ] as [string, string, string, string][]).map(([lecture, topic, phase, builds]) => (
+                      <tr key={lecture} className="border-b last:border-0 odd:bg-muted/30">
+                        <td className="py-1.5 px-3 font-mono whitespace-nowrap">{lecture}</td>
+                        <td className="py-1.5 px-3 font-medium">{topic}</td>
+                        <td className="py-1.5 px-3 text-muted-foreground whitespace-nowrap">{phase}</td>
+                        <td className="py-1.5 px-3 text-muted-foreground">{builds}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-muted-foreground mt-2 text-xs italic">
+                Day 1 is the trunk of the tree — every lecture that follows is a branch growing from the analytical roots established in Session 1.
+              </p>
+            </div>
+
           </AccordionContent>
         </AccordionItem>
       </Accordion>
