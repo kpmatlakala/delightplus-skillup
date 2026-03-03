@@ -402,16 +402,34 @@ export function buildBriefingSlides(): Slide[] {
     },
     {
       type: "content",
+      title: "What is Information Technology?",
+      subtitle: "The invisible infrastructure every organisation depends on",
+      bullets: [
+        "IT is the combination of hardware and software products and services organisations use to manage, access, communicate, and share information",
+        "IT is not just computers — it underpins every business function: student records, payroll, logistics, customer service",
+        "Force 1 — Changes in the world: globalisation, remote work, digital transformation, real-time information demand",
+        "Force 2 — Changes in technology: cloud computing, AI, mobile platforms, exponential data growth (Moore's Law)",
+        "Force 3 — Changes in client demand: systems must be faster, more intuitive, more accessible, and more secure than ever before",
+      ],
+      highlight:
+        "As systems developers, learners will design, build and maintain the IT infrastructure organisations depend on. Understanding what IT is — and why it must be planned — is the foundation of every unit in this qualification.",
+      speakerNote:
+        "Ask: 'Name one IT system your organisation runs on that would cause serious disruption if it went down.' Use the answer to anchor the three forces. Stress that IT planning is not a technical problem — it is a business problem.",
+    },
+    {
+      type: "content",
       title: "What is a System?",
       subtitle: "The foundation of everything we build",
       bullets: [
         "A system is an organised set of interrelated components working together toward a defined goal",
         "An information system collects, processes, stores and distributes data to support operations and decisions",
-        "Examples: student registration portal, attendance tracker, results management, payroll, banking app",
+        "Student registration portal — captures enrolment data, checks eligibility, generates student numbers and timetables",
+        "Attendance tracking tool — records sign-ins, flags patterns, produces DoE compliance reports",
+        "Results management system — stores marks, calculates averages, generates transcripts and certificates",
         "Every information system follows one structural pattern: Input → Process → Storage → Output",
       ],
       highlight:
-        "Think of one IT system you interact with at your college every day. What does it take in? What does it produce? What happens to your data in between?",
+        "Think of one IT system you interact with at your college every day. What does it take in? What does it produce? What happens to the data in between?",
       speakerNote:
         "Ask learners: 'Name one IT system you use at CET. What problem does it solve?' Collect 3–4 answers. Use their examples throughout the session — it grounds the theory in something they already know.",
     },
@@ -480,14 +498,35 @@ export function buildBriefingSlides(): Slide[] {
         "Distribute the printed module roadmap now if available. Run through the colour-coded block overview briefly — this helps learners see the sequencing logic.",
     },
     {
+      type: "content",
+      title: "How the SA&D Course Unfolds",
+      subtitle: "Every lecture builds on the analytical foundations of Day 1",
+      bullets: [
+        "L1 Today — Introduction to IS: analyst roles, SDLC, IS components, information-gathering techniques",
+        "L2 — Systems Project Management: scoping, WBS, scheduling — begins where your feasibility study ends",
+        "L3 — Requirements Modelling: JAD, RAD, Agile — deepening the fact-finding plan from Session 1",
+        "L4 — Data & Process Modelling: levelled DFDs and physical design from today's context diagrams",
+        "L5 & L6 — Object Modelling: full UML from today's OO analysis foundations",
+        "L7 — Data Design: ERDs and normalisation from today's data identification work",
+        "L8 — Development Strategies: build-vs-buy decision from today's analyst recommendation",
+        "L9 — UI Design: screens, forms and validation rules from today's requirements specification",
+        "L10 — System Support & Security: maintenance and audits from today's documentation",
+      ],
+      highlight:
+        "Day 1 is the trunk of the tree. Every lecture that follows is a branch growing from the analytical roots established in Session 1.",
+      speakerNote:
+        "Show this slide AFTER the module roadmap. It answers the question learners always have: 'why does analysis come first?' This slide makes the dependency chain visible. Refer back to it at the start of each subsequent lecture.",
+    },
+    {
       type: "summary",
       title: "Ready to Begin",
       subtitle: "Orientation complete — Unit 1 awaits",
       bullets: [
+        "✓  You understand what Information Technology is and the three forces shaping it",
         "✓  You understand what an information system is and how it works",
         "✓  You can describe the 6 phases of the Systems Development Life Cycle",
         "✓  You can distinguish systems development from software development",
-        "✓  You know your 10-module roadmap across 3 blocks",
+        "✓  You know your 10-module roadmap and how each SA&D lecture connects to Day 1",
         "✓  You know how to reach your facilitator for support",
       ],
       highlight:

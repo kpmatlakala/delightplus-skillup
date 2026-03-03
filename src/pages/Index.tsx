@@ -148,20 +148,101 @@ export default function Dashboard() {
               </div>
             </div>
 
+            {/* What is IT? */}
+            <div>
+              <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground mb-2">What is Information Technology?</h4>
+              <p className="text-muted-foreground leading-relaxed">
+                <strong>Information Technology (IT)</strong> is the combination of hardware and software products and services that organisations use to
+                manage, access, communicate, and share information. IT is not just computers — it is the invisible infrastructure that underpins every
+                business function, from student records and payroll to logistics and customer service.
+              </p>
+              <p className="text-xs font-semibold text-foreground mt-3 mb-1.5">Three Forces Shaping the Future of IT</p>
+              <ul className="space-y-1.5 text-xs text-muted-foreground">
+                {([
+                  "Changes in the world — globalisation, remote work, digital transformation, and the demand for real-time information access across every sector",
+                  "Changes in technology — faster processors, cloud computing, artificial intelligence, mobile platforms, and exponential data growth (Moore's Law: processing power roughly doubles every two years)",
+                  "Changes in client demand — organisations and end users expect systems that are faster, more intuitive, more accessible, and more secure than ever before",
+                ] as string[]).map((item) => (
+                  <li key={item} className="flex gap-2">
+                    <span className="text-accent shrink-0 mt-0.5">›</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-3 rounded-md border border-accent/30 bg-accent/5 px-3 py-2 text-xs text-muted-foreground">
+                As systems developers, learners will design, build and maintain the IT infrastructure that organisations depend on.
+                Understanding <em>what IT is</em> — and why it must be carefully planned — is the foundation on which every other unit in this qualification rests.
+              </div>
+            </div>
+
             {/* What is a System? */}
             <div>
               <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground mb-2">What is a System?</h4>
               <p className="text-muted-foreground leading-relaxed">
                 A <strong>system</strong> is an organised set of interrelated components that work together to achieve a defined goal. An{" "}
                 <strong>information system</strong> specifically collects, processes, stores, and distributes information to support an organisation's
-                operations and decision-making. Examples learners already interact with: a student registration portal, an attendance capture tool,
-                a results management system — each takes in data, applies rules, stores records, and produces outputs (reports, certificates,
-                notifications) that people act on.
+                operations and decision-making.
               </p>
-              <p className="text-muted-foreground leading-relaxed mt-2">
-                This <strong>input → process → storage → output</strong> model is the structural DNA of every information system in the field.
-                Understanding it is the first step to building, analysing or improving one.
+              <p className="text-xs font-semibold text-foreground mt-3 mb-1.5">Information Systems Learners Already Interact With</p>
+              <ul className="space-y-1 text-xs text-muted-foreground">
+                {([
+                  "Student registration portal — captures enrolment data, checks eligibility, generates student numbers and timetables",
+                  "Attendance tracking tool — records daily sign-ins, flags patterns, produces reports for the Department of Education",
+                  "Results management system — stores marks, calculates averages, generates transcripts and certificates",
+                  "Online banking portal — takes a transaction instruction, validates it, updates balances, sends a confirmation",
+                ] as string[]).map((item) => (
+                  <li key={item} className="flex gap-2">
+                    <span className="text-accent shrink-0 mt-0.5">›</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-3 rounded-md border border-accent/30 bg-accent/5 px-3 py-2 text-xs text-muted-foreground">
+                <strong>Input → Process → Storage → Output</strong> — every system takes in data, applies rules, retains records, and produces something
+                people act on. This is the structural DNA of every information system in the field.
+              </div>
+            </div>
+
+            {/* What is Systems Development? */}
+            <div>
+              <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground mb-2">What is Systems Development?</h4>
+              <p className="text-muted-foreground leading-relaxed">
+                Systems development is the end-to-end discipline of planning, analysing, designing, building, testing and maintaining information systems.
+                It is not only about writing code — it is about ensuring the right system gets built in the first place, that it works correctly,
+                and that it keeps working reliably after it is deployed.
               </p>
+              <p className="text-xs font-semibold text-foreground mt-3 mb-1.5">The Six Phases of the Systems Development Life Cycle</p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs border rounded-md overflow-hidden">
+                  <thead>
+                    <tr className="bg-muted/50">
+                      <th className="py-1.5 px-3 text-left font-semibold whitespace-nowrap">Phase</th>
+                      <th className="py-1.5 px-3 text-left font-semibold">Description</th>
+                      <th className="py-1.5 px-3 text-left font-semibold">Key Deliverable</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {([
+                      ["1. Investigation", "Identify the business problem or opportunity; assess whether a system project is justified before committing resources", "Feasibility recommendation"],
+                      ["2. Analysis", "Establish in detail WHAT the system must do: requirements, data flows, user needs, volume estimates, constraints", "Requirements specification"],
+                      ["3. Design", "Specify HOW the system will work: architecture, data structures, module structure, user interfaces", "Logical and physical design documents"],
+                      ["4. Development", "Write and unit-test the program code based on the approved design documents", "Tested, accepted system"],
+                      ["5. Implementation", "Deploy the system, convert existing data, train users, manage transition from old to new", "Live operational system"],
+                      ["6. Maintenance", "Monitor for defects, apply fixes and enhancements, plan future iterations or replacement", "Updated, supported system"],
+                    ] as [string, string, string][]).map(([phase, desc, deliverable]) => (
+                      <tr key={phase} className="border-b last:border-0 odd:bg-muted/30">
+                        <td className="py-1.5 px-3 font-medium whitespace-nowrap">{phase}</td>
+                        <td className="py-1.5 px-3 text-muted-foreground">{desc}</td>
+                        <td className="py-1.5 px-3 text-muted-foreground">{deliverable}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="mt-3 rounded-md border border-accent/30 bg-accent/5 px-3 py-2 text-xs text-muted-foreground">
+                Notice that coding (phase 4) only appears more than halfway through. The Standish CHAOS Report consistently finds fewer than 30% of
+                IT projects complete on time, on budget, to spec — the leading root cause is inadequate analysis, not bad code.
+              </div>
             </div>
 
             {/* Systems Development vs Software Development */}
