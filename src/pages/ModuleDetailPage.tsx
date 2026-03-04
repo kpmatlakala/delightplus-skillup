@@ -855,9 +855,12 @@ export default function ModuleDetailPage() {
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:Arial,sans-serif;font-size:11.5px;color:#111;padding:40px 48px}
-    .hdr{background:#111;color:#fff;padding:14px 20px;text-align:center;margin-bottom:20px}
-    .hdr h1{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
-    .hdr p{font-size:10px;margin-top:3px;opacity:.8}
+    .hdr{background:#111;color:#fff;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .hdr-logos{display:flex;align-items:center}
+    .hdr-logos img{height:40px;width:auto;object-fit:contain;filter:brightness(0) invert(1)}
+    .hdr-text{flex:1;text-align:center}
+    .hdr-text h1{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+    .hdr-text p{font-size:10px;margin-top:3px;opacity:.8}
     pre{white-space:pre-wrap;word-break:break-word;line-height:1.75;font-family:Arial,sans-serif;font-size:11.5px}
     .actions{display:flex;gap:10px;margin-bottom:20px}
     button{padding:7px 20px;background:#111;color:#fff;border:none;cursor:pointer;font-size:11px;border-radius:4px}
@@ -868,8 +871,12 @@ export default function ModuleDetailPage() {
 </head>
 <body>
   <div class="hdr">
-    <h1>Further Education and Training Certificate: IT Systems Development</h1>
-    <p>SAQA ID: 78965 &nbsp;·&nbsp; NQF Level 4 &nbsp;·&nbsp; 165 Credits</p>
+    <div class="hdr-logos"><img src="/logos/lcx-logo.png" alt="LCX"/></div>
+    <div class="hdr-text">
+      <h1>Further Education and Training Certificate: IT Systems Development</h1>
+      <p>SAQA ID: 78965 &nbsp;·&nbsp; NQF Level 4 &nbsp;·&nbsp; 165 Credits</p>
+    </div>
+    <div class="hdr-logos"><img src="/logos/dsa-logo.png" alt="DSA"/></div>
   </div>
   <div class="actions">
     <button onclick="window.print()">🖨&nbsp; Print / Save as PDF</button>
@@ -1196,6 +1203,10 @@ export default function ModuleDetailPage() {
                         <div>
                           {/* ── intro / about ─ */}
                           <div className="border-b border-border bg-muted/30 px-5 py-4">
+                            <div className="flex items-center justify-between gap-3 mb-3">
+                              <img src="/logos/lcx-logo.png" alt="LCX" className="h-9 w-auto object-contain shrink-0" />
+                              <img src="/logos/dsa-logo.png" alt="DSA" className="h-9 w-auto object-contain shrink-0" />
+                            </div>
                             <p className="text-[10px] font-semibold tracking-widest uppercase text-muted-foreground mb-1">Learner Guide Introduction</p>
                             <h2 className="text-base font-display font-semibold text-foreground mb-2">{moduleLessonFlow!.introTitle}</h2>
                             <p className="text-sm text-muted-foreground leading-relaxed">{moduleLessonFlow!.aboutGuide}</p>

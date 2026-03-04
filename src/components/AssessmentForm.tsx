@@ -246,10 +246,16 @@ export function AssessmentForm({
       <div className="space-y-5">
         {/* Header */}
         <div className="rounded-lg border-2 border-foreground/20 bg-card overflow-hidden">
-          <div className="bg-foreground text-background px-5 py-4 text-center space-y-1">
-            <p className="text-xs font-bold uppercase tracking-widest">Further Education and Training Certificate</p>
-            <p className="text-sm font-bold uppercase tracking-wide">Information Technology: Systems Development</p>
-            <p className="text-xs font-medium">ID 78965 · Level 4 · Credits 165</p>
+          <div className="bg-foreground text-background px-5 py-4">
+            <div className="flex items-center justify-between gap-4">
+              <img src="/logos/lcx-logo.png" alt="LCX" className="h-10 w-auto object-contain shrink-0" />
+              <div className="text-center space-y-1 flex-1">
+                <p className="text-xs font-bold uppercase tracking-widest">Further Education and Training Certificate</p>
+                <p className="text-sm font-bold uppercase tracking-wide">Information Technology: Systems Development</p>
+                <p className="text-xs font-medium">ID 78965 · Level 4 · Credits 165</p>
+              </div>
+              <img src="/logos/dsa-logo.png" alt="DSA" className="h-10 w-auto object-contain shrink-0" />
+            </div>
           </div>
           <div className="border-t-2 border-foreground/20 bg-primary/5 px-5 py-4 text-center space-y-1">
             <p className="text-xs font-bold uppercase tracking-widest text-primary">Summative Assessment</p>
