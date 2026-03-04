@@ -28,31 +28,33 @@ export function useModuleProgress() {
   const [loading, setLoading] = useState(false);
   const fetchedForUser = useRef<string | null>(null);
 
-  // Load all progress rows for the authenticated learner
+  // ------------------------------------------------------------------
+  // fetchAllProgress — callable from anywhere in this hook
+  // ------------------------------------------------------------------
+  const fetchAllProgress = useCallback(async () => {
+    if (!user?.id || role !== "learner") return;
+    setLoading(true);
+    const { data, error } = await supabase.rpc("cet_get_all_module_progress");
+    setLoading(false);
+    if (error || !data) return;
+    const map: ProgressMap = {};
+    for (const row of data) {
+      map[row.module_unit_standard_id] = row as ModuleProgressRow;
+    }
+    setProgressMap(map);
+  }, [user?.id, role]);
+
+  // Load all progress rows for the authenticated learner (once per login)
   useEffect(() => {
     if (!user?.id || role !== "learner") {
       setProgressMap({});
       fetchedForUser.current = null;
       return;
     }
-
-    // Avoid re-fetching on every render for the same user
     if (fetchedForUser.current === user.id) return;
     fetchedForUser.current = user.id;
-
-    setLoading(true);
-    supabase
-      .rpc("cet_get_all_module_progress")
-      .then(({ data, error }) => {
-        setLoading(false);
-        if (error || !data) return;
-        const map: ProgressMap = {};
-        for (const row of data) {
-          map[row.module_unit_standard_id] = row as ModuleProgressRow;
-        }
-        setProgressMap(map);
-      });
-  }, [user?.id, role]);
+    fetchAllProgress();
+  }, [user?.id, role, fetchAllProgress]);
 
   // ------------------------------------------------------------------
   // getProgress — read a single module's row (null if not started)
@@ -163,7 +165,10 @@ export function useModuleProgress() {
         return next;
       });
 
-      // Also clear sessionStorage OTP gate so assessment re-locks
+      // Clear guide-position localStorage key so the module restarts from scratch
+      localStorage.removeItem(`cet_sess_${user.id}_${moduleId}`);
+
+      // Clear sessionStorage OTP gate so the assessment re-locks
       sessionStorage.removeItem(`assessment_otp_${moduleId}`);
 
       const rpc = supabase as unknown as {
@@ -171,10 +176,11 @@ export function useModuleProgress() {
       };
       await rpc.rpc("cet_clear_my_module_progress", { p_module_id: moduleId });
 
-      // Reset the fetch guard so a page-level refresh will pull fresh data
+      // Pull fresh data from DB so progressMap reflects truth
       fetchedForUser.current = null;
+      await fetchAllProgress();
     },
-    [user?.id]
+    [user?.id, fetchAllProgress]
   );
 
   return {
@@ -187,5 +193,6 @@ export function useModuleProgress() {
     recordSubmission,
     markAssessmentSubmitted,
     clearMyModuleProgress,
+    refreshProgress: fetchAllProgress,
   };
 }
