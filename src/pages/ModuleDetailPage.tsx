@@ -971,11 +971,9 @@ export default function ModuleDetailPage() {
 
   const downloads = id ? jsonLinksByModule?.[id] ?? moduleDownloadsById[id] ?? [] : [];
   const learnerGuideDownloads = downloads.filter((doc) => isLearnerGuideLabel(doc.label));
-  const learnerWorkbookDownloads = downloads.filter((doc) => isWorkbookLabel(doc.label));
   const learnerAssessmentDownloads = downloads.filter((doc) => isAssessmentTaskLabel(doc.label));
   const learnerVisibleDownloads = [
     ...learnerGuideDownloads,
-    ...(guideCompleted ? learnerWorkbookDownloads : []),
     ...(assessmentUnlocked ? learnerAssessmentDownloads : []),
   ];
   const isLearnerView = role === "learner";
@@ -998,12 +996,6 @@ export default function ModuleDetailPage() {
       label: "Recon",
       detail: "Read learner guide in Study Content",
       completed: hasDocForCategory(downloads, "guide"),
-    },
-    {
-      key: "workbook",
-      label: "Practice",
-      detail: "Work through activities and workbook",
-      completed: hasDocForCategory(downloads, "workbook"),
     },
     {
       key: "assessment",
@@ -1900,9 +1892,6 @@ export default function ModuleDetailPage() {
                     <p className="text-[10px] text-muted-foreground pt-1">
                       Admin view — all documents visible.
                     </p>
-                  )}
-                  {isLearnerView && !guideCompleted && learnerWorkbookDownloads.length > 0 && (
-                    <p className="text-[10px] text-muted-foreground pt-1">Complete the guide to unlock the workbook.</p>
                   )}
                   {isLearnerView && !assessmentUnlocked && learnerAssessmentDownloads.length > 0 && (
                     <p className="text-[10px] text-muted-foreground">Pass the quiz to unlock the assessment.</p>
