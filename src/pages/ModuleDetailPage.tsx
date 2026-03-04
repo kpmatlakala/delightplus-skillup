@@ -665,6 +665,7 @@ export default function ModuleDetailPage() {
   const [assessmentChecklist, setAssessmentChecklist] = useState({ read: false, criteria: false, own: false });
   const [onlineAnswers, setOnlineAnswers] = useState<Record<number, string>>({});
   const [pendingSubmissionText, setPendingSubmissionText] = useState("");
+  const [submittedText, setSubmittedText] = useState("");
 
   useEffect(() => {
     const loadContentLinks = async () => {
@@ -838,8 +839,89 @@ export default function ModuleDetailPage() {
     setOnlineAnswers({});
     setAssessmentChecklist({ read: false, criteria: false, own: false });
     setPendingSubmissionText("");
+    setSubmittedText("");
     setAdminDocCategory("guide");
   }, [id]);
+
+  // ── Print submission ──────────────────────────────────────────────────────
+  const openPrintWindow = (text: string) => {
+    const mod = modules.find((m) => m.id === id);
+    const escaped = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Assessment — ${mod?.title ?? id}</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:Arial,sans-serif;font-size:11.5px;color:#111;padding:40px 48px}
+    .hdr{background:#111;color:#fff;padding:14px 20px;text-align:center;margin-bottom:20px}
+    .hdr h1{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+    .hdr p{font-size:10px;margin-top:3px;opacity:.8}
+    pre{white-space:pre-wrap;word-break:break-word;line-height:1.75;font-family:Arial,sans-serif;font-size:11.5px}
+    .actions{display:flex;gap:10px;margin-bottom:20px}
+    button{padding:7px 20px;background:#111;color:#fff;border:none;cursor:pointer;font-size:11px;border-radius:4px}
+    button:hover{background:#333}
+    .note{font-size:10px;color:#666;margin-bottom:16px}
+    @media print{.actions{display:none!important}body{padding:20px}}
+  </style>
+</head>
+<body>
+  <div class="hdr">
+    <h1>Further Education and Training Certificate: IT Systems Development</h1>
+    <p>SAQA ID: 78965 &nbsp;·&nbsp; NQF Level 4 &nbsp;·&nbsp; 165 Credits</p>
+  </div>
+  <div class="actions">
+    <button onclick="window.print()">🖨&nbsp; Print / Save as PDF</button>
+    <button onclick="window.close()">✕&nbsp; Close</button>
+  </div>
+  <p class="note">Tip: In the print dialog choose <strong>Save as PDF</strong> to generate a PDF copy for your portfolio.</p>
+  <pre>${escaped}</pre>
+</body>
+</html>`;
+    const win = window.open("", "_blank", "width=900,height=700,scrollbars=yes");
+    if (win) { win.document.write(html); win.document.close(); }
+  };
+
+  // ── Email submission ──────────────────────────────────────────────────────
+  const [isBuildingEmail, setIsBuildingEmail] = useState(false);
+  const handleEmailSubmission = async () => {
+    if (!submissionPath || !id) return;
+    setIsBuildingEmail(true);
+    const { data: signedData } = await supabase.storage
+      .from("assessment-submissions")
+      .createSignedUrl(submissionPath, 60 * 60 * 24 * 30); // 30-day link
+    setIsBuildingEmail(false);
+    const mod = modules.find((m) => m.id === id);
+    const learnerName =
+      user?.user_metadata?.display_name ??
+      user?.user_metadata?.full_name ??
+      user?.email ?? "Learner";
+    const subject = encodeURIComponent(
+      `Assessment Submission — SAQA ${id}: ${mod?.title ?? ""}`
+    );
+    const bodyLines = [
+      `Dear Facilitator,`,
+      ``,
+      `Please find below the assessment submission details for:`,
+      ``,
+      `  Module : ${mod?.title ?? id}`,
+      `  SAQA   : ${id}`,
+      `  Learner: ${learnerName}`,
+      `  Email  : ${user?.email ?? ""}`,
+      `  Submitted: ${submissionUploadedAt ? new Date(submissionUploadedAt).toLocaleString("en-ZA") : ""}`,
+      ``,
+      signedData?.signedUrl
+        ? `Download the full submission (valid 30 days):\n  ${signedData.signedUrl}`
+        : `(Submission file is available in the assessment-submissions storage bucket)`,
+      ``,
+      `This submission was completed via the CET Connect Portal.`,
+    ];
+    const body = encodeURIComponent(bodyLines.join("\n"));
+    const learnerEmail = encodeURIComponent(user?.email ?? "");
+    // Opens the device's default mail client; learner is To:, facilitator can be added as CC
+    window.location.href = `mailto:${learnerEmail}?subject=${subject}&body=${body}`;
+  };
 
   // Restore learner to their furthest-reached step after the reset above fires.
   // Declared AFTER the reset effect so it always runs second and wins.
@@ -1592,15 +1674,37 @@ export default function ModuleDetailPage() {
                       <>
                         {/* ── Success state ── */}
                         {assessmentSubmitMessage.includes("successfully") ? (
-                          <div className="rounded-lg border border-green-500/40 bg-green-50/40 dark:bg-green-900/10 p-5 flex items-start gap-4">
-                            <CheckCircle2 size={28} className="shrink-0 text-green-500 mt-0.5" />
-                            <div className="space-y-1">
-                              <p className="text-sm font-semibold text-green-700 dark:text-green-400">Assessment Submitted</p>
-                              <p className="text-xs text-muted-foreground">Your responses have been saved and submitted to your facilitator. Well done for completing this unit!</p>
-                              {submissionUploadedAt && (
-                                <p className="text-xs text-muted-foreground">Submitted: <span className="font-medium text-foreground">{new Date(submissionUploadedAt).toLocaleString()}</span></p>
-                              )}
+                          <div className="space-y-4">
+                            <div className="rounded-lg border border-green-500/40 bg-green-50/40 dark:bg-green-900/10 p-5 flex items-start gap-4">
+                              <CheckCircle2 size={28} className="shrink-0 text-green-500 mt-0.5" />
+                              <div className="space-y-1">
+                                <p className="text-sm font-semibold text-green-700 dark:text-green-400">Assessment Submitted</p>
+                                <p className="text-xs text-muted-foreground">Your responses have been saved and submitted to your facilitator. Well done for completing this unit!</p>
+                                {submissionUploadedAt && (
+                                  <p className="text-xs text-muted-foreground">Submitted: <span className="font-medium text-foreground">{new Date(submissionUploadedAt).toLocaleString()}</span></p>
+                                )}
+                              </div>
                             </div>
+                            {/* Print & Email actions */}
+                            <div className="flex flex-col sm:flex-row gap-2">
+                              <button
+                                onClick={() => openPrintWindow(submittedText)}
+                                disabled={!submittedText}
+                                className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background text-sm font-medium text-foreground px-4 py-2.5 hover:bg-secondary/50 disabled:opacity-40 transition-colors"
+                              >
+                                <span>🖨</span> Print / Save as PDF
+                              </button>
+                              <button
+                                onClick={handleEmailSubmission}
+                                disabled={!submissionPath || isBuildingEmail}
+                                className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium px-4 py-2.5 hover:bg-primary/90 disabled:opacity-40 transition-colors"
+                              >
+                                <span>✉</span> {isBuildingEmail ? "Generating link…" : "Email Submission"}
+                              </button>
+                            </div>
+                            <p className="text-[10px] text-muted-foreground text-center">
+                              Email opens your mail client pre-filled with a 30-day download link to your submission.
+                            </p>
                           </div>
                         ) : (
                           <AssessmentForm
@@ -1654,6 +1758,7 @@ export default function ModuleDetailPage() {
                                   const submittedAt = new Date().toISOString();
                                   setSubmissionPath(path);
                                   setSubmissionUploadedAt(submittedAt);
+                                  setSubmittedText(pendingSubmissionText);
                                   void recordSubmission(id, path, submittedAt);
                                   await markAssessmentSubmitted(id, submittedAt);
                                   setIsSubmittingAssessment(false);

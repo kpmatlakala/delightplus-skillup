@@ -33,6 +33,7 @@
 -- ║    013  Announcements + realtime     (2026-02-27)                       ║
 -- ║    014  Learner directory RPC        (2026-02-27)  superseded by 015    ║
 -- ║    015  Direct messaging + realtime  (2026-02-27)                       ║
+-- ║    016  Assessment submissions storage bucket + RLS (2026-03-04)        ║
 -- ╚══════════════════════════════════════════════════════════════════════════╝
 
 -- ── 0. Extensions ────────────────────────────────────────────────────────────
@@ -981,5 +982,58 @@ insert into cet.announcements (title, message, audience, pinned, author) values
    'Updated Facilitator Guides and Lesson Plan packs for Block 1 are available under each module''s Facilitator Guide tab. Please review session notes before Day 1.',
    'Admin Only', false, 'Admin')
 on conflict do nothing;
+
+-- ── 19. Assessment submissions storage (migration 016) ───────────────────────
+
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'assessment-submissions',
+  'assessment-submissions',
+  false,
+  10485760,
+  array['text/plain', 'application/octet-stream']
+)
+on conflict (id) do nothing;
+
+drop policy if exists "Learner can upload own submission"   on storage.objects;
+drop policy if exists "Learner can read own submission"     on storage.objects;
+drop policy if exists "Learner can delete own submission"   on storage.objects;
+drop policy if exists "Admin can read all submissions"      on storage.objects;
+
+create policy "Learner can upload own submission"
+on storage.objects for insert
+to authenticated
+with check (
+  bucket_id = 'assessment-submissions'
+  and (storage.foldername(name))[1] = 'learner-' || auth.uid()::text
+);
+
+create policy "Learner can read own submission"
+on storage.objects for select
+to authenticated
+using (
+  bucket_id = 'assessment-submissions'
+  and (storage.foldername(name))[1] = 'learner-' || auth.uid()::text
+);
+
+create policy "Learner can delete own submission"
+on storage.objects for delete
+to authenticated
+using (
+  bucket_id = 'assessment-submissions'
+  and (storage.foldername(name))[1] = 'learner-' || auth.uid()::text
+);
+
+create policy "Admin can read all submissions"
+on storage.objects for select
+to authenticated
+using (
+  bucket_id = 'assessment-submissions'
+  and (
+    (auth.jwt() -> 'user_metadata' ->> 'role') in ('admin', 'moderator')
+    or
+    (auth.jwt() -> 'app_metadata' ->> 'role') in ('admin', 'moderator')
+  )
+);
 
 -- ── End of unified schema ────────────────────────────────────────────────────
