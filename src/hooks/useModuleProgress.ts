@@ -147,6 +147,36 @@ export function useModuleProgress() {
     [upsert]
   );
 
+  // ------------------------------------------------------------------
+  // clearMyModuleProgress — dev/retest helper
+  // Removes the calling user's progress row for a single module,
+  // both locally (optimistic) and in Supabase via cet_clear_my_module_progress.
+  // ------------------------------------------------------------------
+  const clearMyModuleProgress = useCallback(
+    async (moduleId: string): Promise<void> => {
+      if (!user?.id) return;
+
+      // Optimistic: drop the entry from local map immediately
+      setProgressMap((prev) => {
+        const next = { ...prev };
+        delete next[moduleId];
+        return next;
+      });
+
+      // Also clear sessionStorage OTP gate so assessment re-locks
+      sessionStorage.removeItem(`assessment_otp_${moduleId}`);
+
+      const rpc = supabase as unknown as {
+        rpc: (fn: string, params?: Record<string, unknown>) => PromiseLike<{ data: unknown; error: unknown }>;
+      };
+      await rpc.rpc("cet_clear_my_module_progress", { p_module_id: moduleId });
+
+      // Reset the fetch guard so a page-level refresh will pull fresh data
+      fetchedForUser.current = null;
+    },
+    [user?.id]
+  );
+
   return {
     progressMap,
     loading,
@@ -156,5 +186,6 @@ export function useModuleProgress() {
     markAssessmentUnlocked,
     recordSubmission,
     markAssessmentSubmitted,
+    clearMyModuleProgress,
   };
 }

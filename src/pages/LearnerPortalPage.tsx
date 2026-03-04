@@ -8,12 +8,13 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { BookOpen, MessageSquare, Bell, Clock3, PlayCircle, Lock, ChevronRight, RefreshCw, GraduationCap, Sparkles, ArrowRight } from "lucide-react";
+import { BookOpen, MessageSquare, Bell, Clock3, PlayCircle, Lock, ChevronRight, RefreshCw, GraduationCap, Sparkles, ArrowRight, RotateCcw } from "lucide-react";
 import { useModuleProgress } from "@/hooks/useModuleProgress";
 import { useAnnouncements } from "@/hooks/useAnnouncements";
 
 export default function LearnerPortalPage() {
-  const { progressMap } = useModuleProgress();
+  const { progressMap, clearMyModuleProgress } = useModuleProgress();
+  const [clearingModuleId, setClearingModuleId] = useState<string | null>(null);
   const modulePath = modules;
 
   // Derive progress from DB data
@@ -115,18 +116,23 @@ export default function LearnerPortalPage() {
               const isCompleted = !!progressMap[mod.id]?.guide_completed;
               const isCurrent = index === currentModuleIndex;
               const isLocked = index > currentModuleIndex && !isCompleted;
+              const hasProgress = !!progressMap[mod.id];
+              const isClearing = clearingModuleId === mod.id;
 
               return (
-                <Link
+                <div
                   key={mod.id}
-                  to={`/learner/modules/${mod.id}`}
-                  className={`flex items-center justify-between gap-3 rounded-md border px-3 py-2 transition-colors ${
+                  className={`group flex items-center justify-between gap-3 rounded-md border px-3 py-2 transition-colors ${
                     isCurrent
                       ? "border-primary bg-primary/10"
                       : "border-border hover:bg-secondary/40"
                   }`}
                 >
-                  <div className="min-w-0 flex items-center gap-2.5">
+                  {/* Clickable area navigates to module */}
+                  <Link
+                    to={`/learner/modules/${mod.id}`}
+                    className="min-w-0 flex items-center gap-2.5 flex-1"
+                  >
                     <Avatar className="h-7 w-7 shrink-0">
                       <AvatarFallback className="text-[11px] font-bold bg-primary/10 text-primary">
                         {index + 1}
@@ -141,10 +147,28 @@ export default function LearnerPortalPage() {
                       </div>
                       <p className="text-xs text-muted-foreground mt-0.5">{mod.code} • Block {mod.block} • {mod.credits} credits</p>
                     </div>
-                  </div>
+                  </Link>
 
-                  {isLocked ? <Lock size={14} className="text-muted-foreground shrink-0" /> : <ChevronRight size={14} className="text-muted-foreground shrink-0" />}
-                </Link>
+                  {/* Right side: clear button (shown when module has progress) or lock icon */}
+                  {hasProgress ? (
+                    <button
+                      title="Clear progress (retest)"
+                      disabled={isClearing}
+                      onClick={async () => {
+                        setClearingModuleId(mod.id);
+                        await clearMyModuleProgress(mod.id);
+                        setClearingModuleId(null);
+                      }}
+                      className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive disabled:opacity-50"
+                    >
+                      <RotateCcw size={13} className={isClearing ? "animate-spin" : ""} />
+                    </button>
+                  ) : isLocked ? (
+                    <Lock size={14} className="text-muted-foreground shrink-0" />
+                  ) : (
+                    <ChevronRight size={14} className="text-muted-foreground shrink-0" />
+                  )}
+                </div>
               );
             })}
           </div>
