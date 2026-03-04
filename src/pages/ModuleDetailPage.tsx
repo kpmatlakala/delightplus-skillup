@@ -930,7 +930,14 @@ export default function ModuleDetailPage() {
     const prog = progressMap[id];
     if (!prog) return; // no saved progress yet — reset defaults are fine
 
-    if (prog.assessment_unlocked || prog.quiz_passed) {
+    if (prog.assessment_submitted) {
+      // Already submitted — restore the submitted state so the success screen shows
+      setWorkspaceView("assessment");
+      setHighestSessionReached(999);
+      setAssessmentSubmitMessage("Assessment submitted successfully.");
+      setSubmissionUploadedAt(prog.assessment_submitted_at ?? "");
+      setSubmissionPath(prog.submission_path ?? "");
+    } else if (prog.assessment_unlocked || prog.quiz_passed) {
       // Furthest confirmed step: assessment — mark all guide sessions as visited
       setWorkspaceView("assessment");
       setHighestSessionReached(999);
@@ -959,6 +966,19 @@ export default function ModuleDetailPage() {
     if (!id || role !== "learner" || guideMode !== "sessions") return;
     setHighestSessionReached((prev) => Math.max(prev, sessionIndex));
   }, [id, role, guideMode, sessionIndex]);
+
+  // Hydrate submittedText from storage when revisiting a completed assessment.
+  // submittedText is session-only; submissionPath persists in the DB.
+  useEffect(() => {
+    if (!submissionPath || submittedText) return;
+    supabase.storage
+      .from("assessment-submissions")
+      .download(submissionPath)
+      .then(({ data, error }) => {
+        if (error || !data) return;
+        data.text().then((t) => setSubmittedText(t));
+      });
+  }, [submissionPath, submittedText]);
 
   // Persist current guide position so the learner can resume within the guide.
   // Only written while the guide is in progress (not after guide_completed).
