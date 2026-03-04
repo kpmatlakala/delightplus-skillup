@@ -923,11 +923,7 @@ export default function ModuleDetailPage() {
 
   const downloads = id ? jsonLinksByModule?.[id] ?? moduleDownloadsById[id] ?? [] : [];
   const learnerGuideDownloads = downloads.filter((doc) => isLearnerGuideLabel(doc.label));
-  const learnerAssessmentDownloads = downloads.filter((doc) => isAssessmentTaskLabel(doc.label));
-  const learnerVisibleDownloads = [
-    ...learnerGuideDownloads,
-    ...(assessmentUnlocked ? learnerAssessmentDownloads : []),
-  ];
+  const learnerVisibleDownloads = [...learnerGuideDownloads];
   const isLearnerView = role === "learner";
   const backHref = isLearnerView ? "/learner" : "/modules";
   const backLabel = isLearnerView ? "Back to Learner Portal" : "Back to Modules";
@@ -937,7 +933,6 @@ export default function ModuleDetailPage() {
   const assessmentDoc = studyDocs.find((doc) => isAssessmentTaskLabel(getDisplayDocName(doc.file_name))) ?? null;
   const workbookDoc = studyDocs.find((doc) => isWorkbookLabel(getDisplayDocName(doc.file_name))) ?? null;
   const facilitatorDoc = studyDocs.find((doc) => isFacilitatorLabel(getDisplayDocName(doc.file_name))) ?? null;
-  const assessmentDownloadHref = learnerAssessmentDownloads[0]?.href ?? assessmentDoc?.download_href;
   const quizItems = mod
     ? (id && staticQuizByModule[id]) || buildModuleQuiz(mod.title, mod.objectives, mod.activities)
     : [];
@@ -1637,9 +1632,6 @@ export default function ModuleDetailPage() {
                     <p className="text-[10px] text-muted-foreground pt-1">
                       Admin view — all documents visible.
                     </p>
-                  )}
-                  {isLearnerView && !assessmentUnlocked && learnerAssessmentDownloads.length > 0 && (
-                    <p className="text-[10px] text-muted-foreground">Pass the quiz to unlock the assessment.</p>
                   )}
                 </div>
               )}
