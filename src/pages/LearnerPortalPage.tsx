@@ -98,9 +98,9 @@ export default function LearnerPortalPage() {
                   Before you begin your 10-module journey — understand what a system is, what systems development means,
                   and how this qualification connects to your IT career.
                 </p>
-                <p className="text-xs text-accent font-medium mt-1.5 group-hover:underline">
+                <span className="mt-2.5 inline-flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-xs font-semibold text-accent-foreground shadow-sm group-hover:bg-accent/90 transition-colors">
                   Open Programme Orientation →
-                </p>
+                </span>
               </div>
             </button>
 
