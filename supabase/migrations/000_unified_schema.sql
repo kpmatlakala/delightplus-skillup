@@ -34,6 +34,7 @@
 -- ║    014  Learner directory RPC        (2026-02-27)  superseded by 015    ║
 -- ║    015  Direct messaging + realtime  (2026-02-27)                       ║
 -- ║    016  Assessment submissions storage bucket + RLS (2026-03-04)        ║
+-- ║    017  Assessment OTP + learner status panel RPC   (2026-03-04)        ║
 -- ╚══════════════════════════════════════════════════════════════════════════╝
 
 -- ── 0. Extensions ────────────────────────────────────────────────────────────
@@ -1035,5 +1036,84 @@ using (
     (auth.jwt() -> 'app_metadata' ->> 'role') in ('admin', 'moderator')
   )
 );
+
+-- ── Migration 017 — Assessment OTP + Learner Status Panel ──────────────────────
+
+CREATE TABLE IF NOT EXISTS cet.assessment_otp (
+  id          uuid        PRIMARY KEY DEFAULT gen_random_uuid(),
+  module_id   text        NOT NULL,
+  otp_code    text        NOT NULL,
+  created_by  uuid        REFERENCES auth.users(id) ON DELETE SET NULL,
+  created_at  timestamptz NOT NULL DEFAULT now(),
+  expires_at  timestamptz NOT NULL,
+  is_active   boolean     NOT NULL DEFAULT true
+);
+
+ALTER TABLE cet.assessment_otp ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Admin manages otps"  ON cet.assessment_otp;
+CREATE POLICY "Admin manages otps"
+  ON cet.assessment_otp FOR ALL
+  USING (
+    (auth.jwt() -> 'user_metadata' ->> 'role') IN ('admin', 'moderator')
+  );
+
+CREATE OR REPLACE FUNCTION public.cet_generate_assessment_otp(p_module_id text)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, cet AS $$
+DECLARE v_otp text; v_record jsonb;
+BEGIN
+  IF (auth.jwt() -> 'user_metadata' ->> 'role') NOT IN ('admin', 'moderator') THEN RAISE EXCEPTION 'Unauthorized'; END IF;
+  UPDATE cet.assessment_otp SET is_active = false WHERE module_id = p_module_id AND is_active = true;
+  v_otp := lpad(floor(random() * 1000000)::text, 6, '0');
+  INSERT INTO cet.assessment_otp (module_id, otp_code, created_by, expires_at)
+  VALUES (p_module_id, v_otp, auth.uid(), now() + interval '8 hours')
+  RETURNING jsonb_build_object('id',id,'otp_code',otp_code,'module_id',module_id,'created_at',created_at,'expires_at',expires_at,'is_active',is_active) INTO v_record;
+  RETURN v_record;
+END; $$;
+
+CREATE OR REPLACE FUNCTION public.cet_get_active_otp(p_module_id text)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, cet AS $$
+DECLARE v_record jsonb;
+BEGIN
+  IF (auth.jwt() -> 'user_metadata' ->> 'role') NOT IN ('admin', 'moderator') THEN RAISE EXCEPTION 'Unauthorized'; END IF;
+  SELECT jsonb_build_object('id',id,'otp_code',otp_code,'module_id',module_id,'created_at',created_at,'expires_at',expires_at,'is_active',is_active)
+  INTO v_record FROM cet.assessment_otp
+  WHERE module_id = p_module_id AND is_active = true AND expires_at > now()
+  ORDER BY created_at DESC LIMIT 1;
+  RETURN v_record;
+END; $$;
+
+CREATE OR REPLACE FUNCTION public.cet_revoke_assessment_otp(p_module_id text)
+RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, cet AS $$
+BEGIN
+  IF (auth.jwt() -> 'user_metadata' ->> 'role') NOT IN ('admin', 'moderator') THEN RAISE EXCEPTION 'Unauthorized'; END IF;
+  UPDATE cet.assessment_otp SET is_active = false WHERE module_id = p_module_id AND is_active = true;
+END; $$;
+
+CREATE OR REPLACE FUNCTION public.cet_validate_assessment_otp(p_module_id text, p_otp text)
+RETURNS boolean LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, cet AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM cet.assessment_otp
+    WHERE module_id = p_module_id AND otp_code = p_otp AND is_active = true AND expires_at > now()
+  );
+END; $$;
+
+CREATE OR REPLACE FUNCTION public.cet_get_module_assessment_status(p_module_id text)
+RETURNS TABLE (
+  learner_id uuid, full_name text, learner_code text, email text,
+  assessment_submitted boolean, assessment_submitted_at timestamptz, submission_path text
+)
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, cet AS $$
+BEGIN
+  IF (auth.jwt() -> 'user_metadata' ->> 'role') NOT IN ('admin', 'moderator') THEN RAISE EXCEPTION 'Unauthorized'; END IF;
+  RETURN QUERY
+  SELECT l.user_id, l.full_name, l.learner_code, l.email,
+    COALESCE(lp.assessment_submitted, false),
+    lp.assessment_submitted_at, lp.submission_path
+  FROM cet.learners l
+  LEFT JOIN cet.learner_progress lp ON lp.user_id = l.user_id AND lp.module_unit_standard_id = p_module_id
+  ORDER BY l.full_name;
+END; $$;
 
 -- ── End of unified schema ────────────────────────────────────────────────────

@@ -22,9 +22,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { ArrowLeft, Clock, Award, BookOpen, Target, FileText, Download, CheckCircle2, Circle, ChevronRight, DatabaseZap, RefreshCw, Play } from "lucide-react";
+import { ArrowLeft, Clock, Award, BookOpen, Target, FileText, Download, CheckCircle2, Circle, ChevronRight, DatabaseZap, RefreshCw, Play, ShieldCheck, KeyRound, Users, Copy, Trash2 } from "lucide-react";
 import { PresentationMode } from "@/components/PresentationMode";
 import { AssessmentForm, type AssessmentPayload } from "@/components/AssessmentForm";
+import { useAssessmentControl } from "@/hooks/useAssessmentControl";
 
 interface ContentLinks {
   modules?: Record<string, Array<{ label: string; href: string }>>;
@@ -631,6 +632,17 @@ export default function ModuleDetailPage() {
     upsertFlow,
     seedAllFlows,
   } = useModuleFlow(id);
+  const {
+    otp: assessmentOtp,
+    learnerStatuses,
+    generating: generatingOtp,
+    revoking: revokingOtp,
+    loadingStatuses,
+    generateOtp,
+    revokeOtp,
+    validateOtp,
+    refreshStatuses,
+  } = useAssessmentControl(id, role);
   const [seedStatus, setSeedStatus] = useState<string | null>(null);
   const [seeding, setSeeding] = useState(false);
   const mod = modules.find((m) => m.id === id);
@@ -666,6 +678,14 @@ export default function ModuleDetailPage() {
   const [onlineAnswers, setOnlineAnswers] = useState<Record<number, string>>({});
   const [pendingSubmissionText, setPendingSubmissionText] = useState("");
   const [submittedText, setSubmittedText] = useState("");
+
+  // OTP gate (learner) — validated state lives in sessionStorage so it resets per browser session
+  const [otpValidated, setOtpValidated] = useState<boolean>(
+    () => sessionStorage.getItem(`assessment_otp_${id}`) === "true"
+  );
+  const [otpInput, setOtpInput] = useState("");
+  const [otpValidating, setOtpValidating] = useState(false);
+  const [otpError, setOtpError] = useState("");
 
   useEffect(() => {
     const loadContentLinks = async () => {
@@ -1653,6 +1673,130 @@ export default function ModuleDetailPage() {
                         </div>
                       )}
 
+                      {/* ── Admin Assessment Control Panel ─────────────────────────── */}
+                      {!isLearnerView && (
+                        <div className="space-y-4">
+
+                          {/* OTP generator card */}
+                          <div className="rounded-xl border border-border bg-card p-5 space-y-4">
+                            <div className="flex items-center justify-between gap-2">
+                              <p className="text-xs font-bold uppercase tracking-widest text-foreground flex items-center gap-1.5">
+                                <ShieldCheck size={14} className="text-primary" /> Assessment Access OTP
+                              </p>
+                              <button
+                                onClick={refreshStatuses}
+                                className="text-muted-foreground hover:text-foreground transition-colors"
+                                title="Refresh statuses"
+                              >
+                                <RefreshCw size={12} />
+                              </button>
+                            </div>
+
+                            <p className="text-xs text-muted-foreground leading-relaxed">
+                              Generate a one-time password for today&apos;s assessment session. Learners must enter it before they can access the assessment form. The OTP expires after 8 hours.
+                            </p>
+
+                            {assessmentOtp ? (
+                              <div className="space-y-3">
+                                <div className="flex items-center gap-3">
+                                  <div className="flex-1 rounded-lg border-2 border-primary/40 bg-primary/5 px-4 py-3 text-center">
+                                    <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground mb-0.5">Today&apos;s OTP</p>
+                                    <p className="text-3xl font-mono font-bold text-primary tracking-[0.4em]">{assessmentOtp.otp_code}</p>
+                                  </div>
+                                  <button
+                                    onClick={() => navigator.clipboard.writeText(assessmentOtp.otp_code)}
+                                    className="shrink-0 flex flex-col items-center gap-1 rounded-lg border border-border p-3 text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors"
+                                    title="Copy OTP"
+                                  >
+                                    <Copy size={15} />
+                                    <span className="text-[9px] font-medium">Copy</span>
+                                  </button>
+                                </div>
+                                <p className="text-[10px] text-muted-foreground text-center">
+                                  Expires: {new Date(assessmentOtp.expires_at).toLocaleString("en-ZA")}
+                                </p>
+                                <div className="flex gap-2">
+                                  <button
+                                    onClick={generateOtp}
+                                    disabled={generatingOtp}
+                                    className="flex-1 rounded-lg bg-primary text-primary-foreground text-xs font-medium px-3 py-2 hover:bg-primary/90 disabled:opacity-50 transition-colors"
+                                  >
+                                    {generatingOtp ? "Generating…" : "Regenerate OTP"}
+                                  </button>
+                                  <button
+                                    onClick={revokeOtp}
+                                    disabled={revokingOtp}
+                                    className="flex-1 rounded-lg border border-destructive/40 text-destructive text-xs font-medium px-3 py-2 hover:bg-destructive/10 disabled:opacity-50 transition-colors flex items-center justify-center gap-1.5"
+                                  >
+                                    <Trash2 size={12} /> {revokingOtp ? "Revoking…" : "Revoke OTP"}
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="space-y-3">
+                                <div className="rounded-lg border border-dashed border-border bg-muted/20 py-6 text-center">
+                                  <KeyRound size={22} className="mx-auto text-muted-foreground mb-2" />
+                                  <p className="text-xs text-muted-foreground">No active OTP for this module.</p>
+                                  <p className="text-[10px] text-muted-foreground mt-0.5">Generate one before the assessment session begins.</p>
+                                </div>
+                                <button
+                                  onClick={generateOtp}
+                                  disabled={generatingOtp}
+                                  className="w-full rounded-lg bg-primary text-primary-foreground text-xs font-medium px-4 py-2.5 hover:bg-primary/90 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+                                >
+                                  <KeyRound size={13} /> {generatingOtp ? "Generating…" : "Generate OTP for Assessment Day"}
+                                </button>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Learner submission status table */}
+                          <div className="rounded-xl border border-border bg-card p-5 space-y-3">
+                            <div className="flex items-center justify-between gap-2">
+                              <p className="text-xs font-bold uppercase tracking-widest text-foreground flex items-center gap-1.5">
+                                <Users size={14} className="text-primary" /> Learner Submission Status
+                              </p>
+                              {!loadingStatuses && (
+                                <span className="text-[10px] text-muted-foreground">
+                                  {learnerStatuses.filter((s) => s.assessment_submitted).length} / {learnerStatuses.length} submitted
+                                </span>
+                              )}
+                            </div>
+
+                            {loadingStatuses ? (
+                              <p className="text-xs text-muted-foreground">Loading…</p>
+                            ) : learnerStatuses.length === 0 ? (
+                              <p className="text-xs text-muted-foreground">No learners enrolled.</p>
+                            ) : (
+                              <div className="divide-y divide-border rounded-lg border border-border overflow-hidden">
+                                {learnerStatuses.map((s) => (
+                                  <div key={s.learner_id} className="flex items-center justify-between gap-3 px-3 py-2.5 bg-background">
+                                    <div className="min-w-0">
+                                      <p className="text-xs font-medium text-foreground truncate">{s.full_name}</p>
+                                      <p className="text-[10px] text-muted-foreground truncate">{s.learner_code} · {s.email}</p>
+                                    </div>
+                                    <div className="shrink-0 flex items-center gap-1.5">
+                                      {s.assessment_submitted ? (
+                                        <>
+                                          <CheckCircle2 size={14} className="text-green-500" />
+                                          <span className="text-[10px] font-medium text-green-600 dark:text-green-400">Submitted</span>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <Circle size={14} className="text-muted-foreground" />
+                                          <span className="text-[10px] text-muted-foreground">Pending</span>
+                                        </>
+                                      )}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+
+                        </div> /* end admin control panel */
+                      )}
+
                       {isLearnerView && (
                       <>
                         {/* ── Success state ── */}
@@ -1680,6 +1824,50 @@ export default function ModuleDetailPage() {
                             </div>
                           </div>
                         ) : (
+                          !otpValidated ? (
+                            <div className="rounded-xl border border-border bg-card p-6 space-y-5">
+                              <div className="text-center space-y-2">
+                                <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                                  <KeyRound size={22} className="text-primary" />
+                                </div>
+                                <p className="text-sm font-semibold text-foreground">Assessment Access Required</p>
+                                <p className="text-xs text-muted-foreground leading-relaxed">
+                                  Your facilitator will provide a 6-digit OTP at the start of the assessment session. Enter it below to unlock the assessment.
+                                </p>
+                              </div>
+                              <div className="space-y-3">
+                                <input
+                                  type="text"
+                                  inputMode="numeric"
+                                  maxLength={6}
+                                  placeholder="Enter 6-digit OTP"
+                                  value={otpInput}
+                                  onChange={(e) => { setOtpInput(e.target.value.replace(/\D/g, "")); setOtpError(""); }}
+                                  className="w-full rounded-lg border border-border bg-background px-4 py-3 text-center text-2xl font-mono font-bold tracking-[0.5em] text-foreground placeholder:text-muted-foreground/40 placeholder:text-sm placeholder:tracking-normal focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+                                />
+                                {otpError && (
+                                  <p className="text-xs text-red-500 text-center">{otpError}</p>
+                                )}
+                                <button
+                                  disabled={otpInput.length !== 6 || otpValidating}
+                                  onClick={async () => {
+                                    setOtpValidating(true);
+                                    const valid = await validateOtp(otpInput);
+                                    setOtpValidating(false);
+                                    if (valid) {
+                                      sessionStorage.setItem(`assessment_otp_${id}`, "true");
+                                      setOtpValidated(true);
+                                    } else {
+                                      setOtpError("Invalid or expired OTP. Please check with your facilitator.");
+                                    }
+                                  }}
+                                  className="w-full rounded-lg bg-primary text-primary-foreground text-sm font-medium px-4 py-2.5 hover:bg-primary/90 disabled:opacity-50 transition-colors"
+                                >
+                                  {otpValidating ? "Verifying…" : "Unlock Assessment"}
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
                           <AssessmentForm
                             moduleId={id ?? ""}
                             answers={onlineAnswers}
@@ -1702,6 +1890,7 @@ export default function ModuleDetailPage() {
                                 : undefined
                             }
                           />
+                          )
                         )}
 
                         {/* ── Confirm dialog ── */}
