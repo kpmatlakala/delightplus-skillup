@@ -638,9 +638,11 @@ export default function ModuleDetailPage() {
     generating: generatingOtp,
     revoking: revokingOtp,
     loadingStatuses,
+    clearingLearnerId,
     generateOtp,
     revokeOtp,
     validateOtp,
+    clearLearnerProgress,
     refreshStatuses,
   } = useAssessmentControl(id, role);
   const [seedStatus, setSeedStatus] = useState<string | null>(null);
@@ -1775,7 +1777,7 @@ export default function ModuleDetailPage() {
                                       <p className="text-xs font-medium text-foreground truncate">{s.full_name}</p>
                                       <p className="text-[10px] text-muted-foreground truncate">{s.learner_code} · {s.email}</p>
                                     </div>
-                                    <div className="shrink-0 flex items-center gap-1.5">
+                                    <div className="shrink-0 flex items-center gap-2">
                                       {s.assessment_submitted ? (
                                         <>
                                           <CheckCircle2 size={14} className="text-green-500" />
@@ -1787,6 +1789,17 @@ export default function ModuleDetailPage() {
                                           <span className="text-[10px] text-muted-foreground">Pending</span>
                                         </>
                                       )}
+                                      <button
+                                        disabled={clearingLearnerId === s.learner_id}
+                                        onClick={async () => {
+                                          await clearLearnerProgress(s.learner_id, id);
+                                          await refreshStatuses();
+                                        }}
+                                        className="ml-1 rounded px-2 py-1 text-[10px] font-medium border border-destructive/40 text-destructive hover:bg-destructive/10 disabled:opacity-40 transition-colors"
+                                        title="Clear this learner's progress for this module"
+                                      >
+                                        {clearingLearnerId === s.learner_id ? "Clearing…" : "Clear"}
+                                      </button>
                                     </div>
                                   </div>
                                 ))}

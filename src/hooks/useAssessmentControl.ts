@@ -52,6 +52,7 @@ export function useAssessmentControl(
   const [revoking, setRevoking] = useState(false);
   const [loadingStatuses, setLoadingStatuses] = useState(false);
   const [loadingOtp, setLoadingOtp] = useState(false);
+  const [clearingLearnerId, setClearingLearnerId] = useState<string | null>(null);
 
   // ── Fetch active OTP (admin) ───────────────────────────────────────────────
   const fetchOtp = useCallback(async () => {
@@ -112,7 +113,18 @@ export function useAssessmentControl(
     },
     [moduleId]
   );
-
+  // ── Admin: clear a learner's progress (module-specific or all) ─────────────
+  const clearLearnerProgress = useCallback(
+    async (learnerId: string, targetModuleId?: string) => {
+      setClearingLearnerId(learnerId);
+      await rpc.rpc("cet_admin_clear_learner_progress", {
+        p_user_id: learnerId,
+        p_module_id: targetModuleId ?? null,
+      });
+      setClearingLearnerId(null);
+    },
+    []
+  );
   return {
     otp,
     learnerStatuses,
@@ -120,9 +132,11 @@ export function useAssessmentControl(
     revoking,
     loadingStatuses,
     loadingOtp,
+    clearingLearnerId,
     generateOtp,
     revokeOtp,
     validateOtp,
+    clearLearnerProgress,
     refreshStatuses: fetchStatuses,
     refreshOtp: fetchOtp,
   };

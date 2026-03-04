@@ -185,3 +185,32 @@ BEGIN
   ORDER BY l.full_name;
 END;
 $$;
+
+-- ── RPC: cet_admin_clear_learner_progress ────────────────────────────────
+-- Admin only. Clears a learner's progress for a specific module (if p_module_id
+-- is provided) or ALL modules (if p_module_id is NULL). Does NOT touch the
+-- learner's auth profile or enrollment records.
+
+CREATE OR REPLACE FUNCTION public.cet_admin_clear_learner_progress(
+  p_user_id   uuid,
+  p_module_id text DEFAULT NULL
+)
+RETURNS void
+LANGUAGE plpgsql SECURITY DEFINER
+SET search_path = public, cet
+AS $$
+BEGIN
+  IF (auth.jwt() -> 'user_metadata' ->> 'role') NOT IN ('admin', 'moderator') THEN
+    RAISE EXCEPTION 'Unauthorized';
+  END IF;
+
+  IF p_module_id IS NOT NULL THEN
+    DELETE FROM cet.learner_progress
+    WHERE user_id = p_user_id
+      AND module_unit_standard_id = p_module_id;
+  ELSE
+    DELETE FROM cet.learner_progress
+    WHERE user_id = p_user_id;
+  END IF;
+END;
+$$;
