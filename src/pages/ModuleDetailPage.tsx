@@ -883,46 +883,6 @@ export default function ModuleDetailPage() {
     if (win) { win.document.write(html); win.document.close(); }
   };
 
-  // ── Email submission ──────────────────────────────────────────────────────
-  const [isBuildingEmail, setIsBuildingEmail] = useState(false);
-  const handleEmailSubmission = async () => {
-    if (!submissionPath || !id) return;
-    setIsBuildingEmail(true);
-    const { data: signedData } = await supabase.storage
-      .from("assessment-submissions")
-      .createSignedUrl(submissionPath, 60 * 60 * 24 * 30); // 30-day link
-    setIsBuildingEmail(false);
-    const mod = modules.find((m) => m.id === id);
-    const learnerName =
-      user?.user_metadata?.display_name ??
-      user?.user_metadata?.full_name ??
-      user?.email ?? "Learner";
-    const subject = encodeURIComponent(
-      `Assessment Submission — SAQA ${id}: ${mod?.title ?? ""}`
-    );
-    const bodyLines = [
-      `Dear Facilitator,`,
-      ``,
-      `Please find below the assessment submission details for:`,
-      ``,
-      `  Module : ${mod?.title ?? id}`,
-      `  SAQA   : ${id}`,
-      `  Learner: ${learnerName}`,
-      `  Email  : ${user?.email ?? ""}`,
-      `  Submitted: ${submissionUploadedAt ? new Date(submissionUploadedAt).toLocaleString("en-ZA") : ""}`,
-      ``,
-      signedData?.signedUrl
-        ? `Download the full submission (valid 30 days):\n  ${signedData.signedUrl}`
-        : `(Submission file is available in the assessment-submissions storage bucket)`,
-      ``,
-      `This submission was completed via the CET Connect Portal.`,
-    ];
-    const body = encodeURIComponent(bodyLines.join("\n"));
-    const learnerEmail = encodeURIComponent(user?.email ?? "");
-    // Opens the device's default mail client; learner is To:, facilitator can be added as CC
-    window.location.href = `mailto:${learnerEmail}?subject=${subject}&body=${body}`;
-  };
-
   // Restore learner to their furthest-reached step after the reset above fires.
   // Declared AFTER the reset effect so it always runs second and wins.
   useEffect(() => {
@@ -1714,17 +1674,7 @@ export default function ModuleDetailPage() {
                               >
                                 <span>🖨</span> Print / Save as PDF
                               </button>
-                              <button
-                                onClick={handleEmailSubmission}
-                                disabled={!submissionPath || isBuildingEmail}
-                                className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium px-4 py-2.5 hover:bg-primary/90 disabled:opacity-40 transition-colors"
-                              >
-                                <span>✉</span> {isBuildingEmail ? "Generating link…" : "Email Submission"}
-                              </button>
                             </div>
-                            <p className="text-[10px] text-muted-foreground text-center">
-                              Email opens your mail client pre-filled with a 30-day download link to your submission.
-                            </p>
                           </div>
                         ) : (
                           <AssessmentForm
