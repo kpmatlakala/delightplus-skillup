@@ -40,8 +40,9 @@ const navItems: NavItem[] = [
   },
   { label: "Communications", icon: <MessageSquare size={18} />, href: "/communications" },
   { label: "Portfolio (PoE)", icon: <FolderOpen    size={18} />, href: "/poe" },
-  { label: "Assessments",    icon: <ClipboardList size={18} />, href: "/assessments" },
-  { label: "Compliance",     icon: <ShieldCheck  size={18} />, href: "/compliance" },
+  { label: "Assessments",        icon: <ClipboardList size={18} />, href: "/assessments" },
+  { label: "Block Assessments", icon: <ShieldCheck   size={18} />, href: "/assessments/blocks" },
+  { label: "Compliance",        icon: <ShieldCheck   size={18} />, href: "/compliance" },
 ];
 
 const learnerNavItems: NavItem[] = [

@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { BookOpen, MessageSquare, Bell, Clock3, PlayCircle, Lock, ChevronRight, RefreshCw, GraduationCap, Sparkles, ArrowRight, RotateCcw } from "lucide-react";
+import { BookOpen, MessageSquare, Bell, Clock3, PlayCircle, Lock, ChevronRight, RefreshCw, GraduationCap, Sparkles, ArrowRight, RotateCcw, ShieldCheck, CheckCircle2, Circle, KeyRound } from "lucide-react";
 import { useModuleProgress } from "@/hooks/useModuleProgress";
 import { useAnnouncements } from "@/hooks/useAnnouncements";
 
@@ -255,6 +255,56 @@ export default function LearnerPortalPage() {
           </Link>
         ))}
       </div>
+
+      {/* ── Block Assessments ──────────────────────────────────────────── */}
+      <div className="rounded-lg border border-border bg-card p-4 mb-4 mt-4">
+        <h3 className="font-display font-semibold flex items-center gap-2 mb-1">
+          <ShieldCheck size={16} className="text-accent" /> Summative Block Assessments
+        </h3>
+        <p className="text-xs text-muted-foreground mb-3">
+          Each block has a combined summative assessment covering all units in that block.
+          Your facilitator will issue an OTP at the start of the session to unlock your assessment.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {([
+            { num: "1", label: "Block 1", sub: "Foundations of Systems Development", date: "06 April 2026 (AM)", units: 5 },
+            { num: "2", label: "Block 2", sub: "Applied Programming and Systems Design", date: "04 May 2026 (AM)",   units: 2 },
+            { num: "3", label: "Block 3", sub: "Testing, Support and Integrated Assessment", date: "07/08 May 2026 (AM)", units: 3 },
+          ] as const).map(({ num, label, sub, date, units }) => {
+            const submitted = !!progressMap[`block-${num}`]?.assessment_submitted;
+            return (
+              <Link
+                key={num}
+                to={`/learner/assessment/block/${num}`}
+                className="rounded-lg border border-border bg-background p-4 hover:bg-secondary/40 transition-colors space-y-2 block"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-widest text-primary">{label}</p>
+                    <p className="text-sm font-semibold text-foreground leading-snug mt-0.5">{sub}</p>
+                  </div>
+                  {submitted
+                    ? <CheckCircle2 size={18} className="shrink-0 text-green-500 mt-0.5" />
+                    : <Circle       size={18} className="shrink-0 text-muted-foreground/40 mt-0.5" />}
+                </div>
+                <p className="text-[11px] text-muted-foreground">{units} unit{units > 1 ? "s" : ""} · {date}</p>
+                <div className="flex items-center gap-1.5">
+                  {submitted ? (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-green-500/10 border border-green-500/30 px-2 py-0.5 text-[10px] font-semibold text-green-600 dark:text-green-400">
+                      <CheckCircle2 size={9} /> Submitted
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-muted border border-border px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">
+                      <KeyRound size={9} /> Requires OTP
+                    </span>
+                  )}
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Programme Orientation Modal */}
       <Dialog open={orientationOpen} onOpenChange={setOrientationOpen}>
         <DialogContent className="max-w-3xl w-full p-0 gap-0 overflow-hidden">

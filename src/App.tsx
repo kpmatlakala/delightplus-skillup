@@ -24,6 +24,8 @@ import SignupPage from "./pages/auth/SignupPage";
 import NotFound from "./pages/NotFound";
 import PresentationRemotePage from "./pages/PresentationRemotePage";
 import PoEPage from "./pages/PoEPage";
+import BlockAssessmentPage from "./pages/BlockAssessmentPage";
+import BlockAssessmentAdminPage from "./pages/BlockAssessmentAdminPage";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +49,7 @@ const App = () => (
               <Route path="/learners" element={<LearnersPage />} />
               <Route path="/lesson-plans" element={<LessonPlansPage />} />
               <Route path="/assessments" element={<AssessmentsPage />} />
+              <Route path="/assessments/blocks" element={<BlockAssessmentAdminPage />} />
               <Route path="/programs" element={<ProgramsPage />} />
               <Route path="/compliance" element={<CompliancePage />} />
               <Route path="/announcements" element={<AnnouncementsPage />} />
@@ -56,6 +59,7 @@ const App = () => (
             <Route element={<ProtectedRoute allowedRoles={["learner"]} />}>
               <Route path="/learner" element={<LearnerPortalPage />} />
               <Route path="/learner/modules/:id" element={<ModuleDetailPage />} />
+              <Route path="/learner/assessment/block/:blockNum" element={<BlockAssessmentPage />} />
             </Route>
 
             <Route element={<ProtectedRoute />}>

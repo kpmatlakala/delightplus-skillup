@@ -22,10 +22,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { ArrowLeft, Clock, Award, BookOpen, Target, FileText, Download, CheckCircle2, Circle, ChevronRight, DatabaseZap, RefreshCw, Play, ShieldCheck, KeyRound, Users, Copy, Trash2 } from "lucide-react";
+import { ArrowLeft, Clock, Award, BookOpen, Target, FileText, Download, CheckCircle2, Circle, ChevronRight, DatabaseZap, RefreshCw, Play } from "lucide-react";
 import { PresentationMode } from "@/components/PresentationMode";
-import { AssessmentForm, type AssessmentPayload } from "@/components/AssessmentForm";
-import { useAssessmentControl } from "@/hooks/useAssessmentControl";
 
 interface ContentLinks {
   modules?: Record<string, Array<{ label: string; href: string }>>;
@@ -622,8 +620,6 @@ export default function ModuleDetailPage() {
     progressMap,
     markGuideCompleted,
     markQuizPassed,
-    recordSubmission,
-    markAssessmentSubmitted,
   } = useModuleProgress();
   const {
     flow: moduleLessonFlow,
@@ -632,19 +628,6 @@ export default function ModuleDetailPage() {
     upsertFlow,
     seedAllFlows,
   } = useModuleFlow(id);
-  const {
-    otp: assessmentOtp,
-    learnerStatuses,
-    generating: generatingOtp,
-    revoking: revokingOtp,
-    loadingStatuses,
-    clearingLearnerId,
-    generateOtp,
-    revokeOtp,
-    validateOtp,
-    clearLearnerProgress,
-    refreshStatuses,
-  } = useAssessmentControl(id, role);
   const [seedStatus, setSeedStatus] = useState<string | null>(null);
   const [seeding, setSeeding] = useState(false);
   const mod = modules.find((m) => m.id === id);
@@ -657,7 +640,7 @@ export default function ModuleDetailPage() {
   const [activeDocName, setActiveDocName] = useState<string>("");
   const [assessmentUnlocked, setAssessmentUnlocked] = useState(false);
   const [guideCompleted, setGuideCompleted] = useState(false);
-  const [workspaceView, setWorkspaceView] = useState<"guide" | "quiz" | "assessment">("guide");
+  const [workspaceView, setWorkspaceView] = useState<"guide" | "quiz">("guide");
   const [quizAnswers, setQuizAnswers] = useState<Record<number, string>>({});
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [quizScore, setQuizScore] = useState<number | null>(null);
@@ -669,25 +652,6 @@ export default function ModuleDetailPage() {
   const [sessionIndex, setSessionIndex] = useState(0);
   // Tracks the highest session index ever visited — never decrements when learner goes back
   const [highestSessionReached, setHighestSessionReached] = useState(-1);
-  const [submissionFile, setSubmissionFile] = useState<File | null>(null);
-  const [submissionPath, setSubmissionPath] = useState<string>("");
-  const [submissionUploadedAt, setSubmissionUploadedAt] = useState<string>("");
-  const [isUploadingSubmission, setIsUploadingSubmission] = useState(false);
-  const [isSubmittingAssessment, setIsSubmittingAssessment] = useState(false);
-  const [assessmentSubmitMessage, setAssessmentSubmitMessage] = useState<string>("");
-  const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
-  const [assessmentChecklist, setAssessmentChecklist] = useState({ read: false, criteria: false, own: false });
-  const [onlineAnswers, setOnlineAnswers] = useState<Record<number, string>>({});
-  const [pendingSubmissionText, setPendingSubmissionText] = useState("");
-  const [submittedText, setSubmittedText] = useState("");
-
-  // OTP gate (learner) — validated state lives in sessionStorage so it resets per browser session
-  const [otpValidated, setOtpValidated] = useState<boolean>(
-    () => sessionStorage.getItem(`assessment_otp_${id}`) === "true"
-  );
-  const [otpInput, setOtpInput] = useState("");
-  const [otpValidating, setOtpValidating] = useState(false);
-  const [otpError, setOtpError] = useState("");
 
   useEffect(() => {
     const loadContentLinks = async () => {
@@ -854,14 +818,6 @@ export default function ModuleDetailPage() {
     setGuideMode("intro");
     setSessionIndex(0);
     setHighestSessionReached(-1);
-    setSubmissionFile(null);
-    setSubmissionPath("");
-    setSubmissionUploadedAt("");
-    setAssessmentSubmitMessage("");
-    setOnlineAnswers({});
-    setAssessmentChecklist({ read: false, criteria: false, own: false });
-    setPendingSubmissionText("");
-    setSubmittedText("");
     setAdminDocCategory("guide");
   }, [id]);
 
@@ -919,16 +875,9 @@ export default function ModuleDetailPage() {
     const prog = progressMap[id];
     if (!prog) return; // no saved progress yet — reset defaults are fine
 
-    if (prog.assessment_submitted) {
-      // Already submitted — restore the submitted state so the success screen shows
-      setWorkspaceView("assessment");
-      setHighestSessionReached(999);
-      setAssessmentSubmitMessage("Assessment submitted successfully.");
-      setSubmissionUploadedAt(prog.assessment_submitted_at ?? "");
-      setSubmissionPath(prog.submission_path ?? "");
-    } else if (prog.assessment_unlocked || prog.quiz_passed) {
-      // Furthest confirmed step: assessment — mark all guide sessions as visited
-      setWorkspaceView("assessment");
+    if (prog.assessment_submitted || prog.assessment_unlocked || prog.quiz_passed) {
+      // Furthest confirmed step: quiz passed / assessment done — show quiz view
+      setWorkspaceView("quiz");
       setHighestSessionReached(999);
     } else if (prog.guide_completed) {
       // Guide done, quiz not yet passed — mark all guide sessions as visited
@@ -956,19 +905,6 @@ export default function ModuleDetailPage() {
     setHighestSessionReached((prev) => Math.max(prev, sessionIndex));
   }, [id, role, guideMode, sessionIndex]);
 
-  // Hydrate submittedText from storage when revisiting a completed assessment.
-  // submittedText is session-only; submissionPath persists in the DB.
-  useEffect(() => {
-    if (!submissionPath || submittedText) return;
-    supabase.storage
-      .from("assessment-submissions")
-      .download(submissionPath)
-      .then(({ data, error }) => {
-        if (error || !data) return;
-        data.text().then((t) => setSubmittedText(t));
-      });
-  }, [submissionPath, submittedText]);
-
   // Persist current guide position so the learner can resume within the guide.
   // Only written while the guide is in progress (not after guide_completed).
   useEffect(() => {
@@ -984,19 +920,6 @@ export default function ModuleDetailPage() {
   useEffect(() => {
     setActiveDocName((prev) => prev || (studyDocs[0]?.file_name ?? ""));
   }, [studyDocs]);
-
-  useEffect(() => {
-    if (!id || role !== "learner") return;
-
-    const prog = progressMap[id];
-    if (!prog?.submission_path) return;
-
-    setSubmissionPath(prog.submission_path);
-    if (prog.submission_uploaded_at) setSubmissionUploadedAt(prog.submission_uploaded_at);
-    if (prog.assessment_submitted) {
-      setAssessmentSubmitMessage("Assessment already submitted for this module.");
-    }
-  }, [id, role, progressMap]);
 
   const downloads = id ? jsonLinksByModule?.[id] ?? moduleDownloadsById[id] ?? [] : [];
   const learnerGuideDownloads = downloads.filter((doc) => isLearnerGuideLabel(doc.label));
@@ -1026,18 +949,11 @@ export default function ModuleDetailPage() {
       detail: "Read learner guide in Study Content",
       completed: hasDocForCategory(downloads, "guide"),
     },
-    {
-      key: "assessment",
-      label: "Validate",
-      detail: "Prepare assessment and memo review",
-      completed: isLearnerView ? assessmentUnlocked : hasDocForCategory(downloads, "assessment"),
-    },
   ];
   const missionCompleted = missionSteps.filter((step) => step.completed).length;
   const missionPercent = Math.round((missionCompleted / missionSteps.length) * 100);
   const quizPassed = quizScore !== null ? quizScore >= 2 : assessmentUnlocked;
   const quizStepAvailable = !isLearnerView || guideCompleted;
-  const assessmentStepAvailable = !isLearnerView || (guideCompleted && assessmentUnlocked);
   const guidePages = moduleLessonFlow
     ? [
         {
@@ -1068,16 +984,10 @@ export default function ModuleDetailPage() {
 
   useEffect(() => {
     if (!isLearnerView) return;
-
     if (workspaceView === "quiz" && !guideCompleted) {
       setWorkspaceView("guide");
-      return;
     }
-
-    if (workspaceView === "assessment" && !assessmentStepAvailable) {
-      setWorkspaceView(guideCompleted ? "quiz" : "guide");
-    }
-  }, [isLearnerView, workspaceView, guideCompleted, assessmentStepAvailable]);
+  }, [isLearnerView, workspaceView, guideCompleted]);
 
   if (!mod) {
     return (
@@ -1594,367 +1504,10 @@ export default function ModuleDetailPage() {
                           <p className={`text-xs font-semibold ${quizScore !== null && quizScore >= 2 ? "text-green-600 dark:text-green-400" : "text-red-500"}`}>
                             Score: {quizScore}/{quizItems.length} — {quizScore !== null && quizScore >= 2 ? "Passed ✓" : "Try again"}
                           </p>
-                          {quizPassed && (
-                            <button
-                              onClick={() => setWorkspaceView("assessment")}
-                              className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-xs font-medium hover:bg-primary/90"
-                            >
-                              Assessment <ChevronRight size={13} />
-                            </button>
-                          )}
                         </div>
                       )}
                     </div>
-                  ) : (
-                    <div className="flex justify-end pt-2 border-t border-border">
-                      <button
-                        onClick={() => setWorkspaceView("assessment")}
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-xs font-medium hover:bg-primary/90"
-                      >
-                        Continue to Assessment <ChevronRight size={13} />
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* ===== ASSESSMENT VIEW ===== */}
-              {workspaceView === "assessment" && (
-                <div className="rounded-xl border border-border bg-card p-6 space-y-5" id="assessment-view">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Final Step</p>
-                      <h2 className="text-base font-semibold text-foreground">
-                        {moduleLessonFlow?.assessmentPageTitle ?? "Assessment"}
-                      </h2>
-                    </div>
-                    <Badge variant={assessmentUnlocked ? "default" : "outline"} className="text-xs">
-                      {assessmentUnlocked ? "Unlocked" : "Locked"}
-                    </Badge>
-                  </div>
-
-                  {isLearnerView && !assessmentUnlocked ? (
-                    <div className="rounded-lg border border-border bg-muted/30 p-5 text-center space-y-2">
-                      <p className="text-sm font-medium text-foreground">Assessment Locked</p>
-                      <p className="text-xs text-muted-foreground">Complete and pass the quiz to unlock this assessment.</p>
-                      <button
-                        onClick={() => setWorkspaceView("quiz")}
-                        className="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-primary bg-primary/10 text-foreground px-4 py-2 text-xs font-medium hover:bg-primary/20"
-                      >
-                        Go to Quiz
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {moduleLessonFlow?.assessmentPageBody && (
-                        <p className="text-sm text-muted-foreground leading-relaxed">{moduleLessonFlow.assessmentPageBody}</p>
-                      )}
-
-                      {/* Assessment preview — admin only; learner gets the inline form below */}
-                      {assessmentDoc && !isLearnerView && (
-                        <details className="rounded-lg border border-border bg-background/40 p-4">
-                          <summary className="cursor-pointer text-sm font-medium text-foreground">Assessment Preview</summary>
-                          <div className="max-h-72 overflow-auto pr-1 mt-3">
-                            <article className={markdownArticleClass}>
-                              <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
-                                {toMarkdownBody(assessmentDoc)}
-                              </ReactMarkdown>
-                            </article>
-                          </div>
-                        </details>
-                      )}
-
-                      {!isLearnerView && lecturerNotes.length > 0 && (
-                        <div className="rounded-lg border border-amber-400/30 bg-amber-50/30 dark:bg-amber-900/10 p-4">
-                          <p className="text-sm font-medium text-foreground mb-2">Facilitator Notes</p>
-                          <ul className="space-y-1">
-                            {lecturerNotes.map((note) => (
-                              <li key={note} className="text-xs text-muted-foreground">• {note}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-
-                      {/* ── Admin Assessment Control Panel ─────────────────────────── */}
-                      {!isLearnerView && (
-                        <div className="space-y-4">
-
-                          {/* OTP generator card */}
-                          <div className="rounded-xl border border-border bg-card p-5 space-y-4">
-                            <div className="flex items-center justify-between gap-2">
-                              <p className="text-xs font-bold uppercase tracking-widest text-foreground flex items-center gap-1.5">
-                                <ShieldCheck size={14} className="text-primary" /> Assessment Access OTP
-                              </p>
-                              <button
-                                onClick={refreshStatuses}
-                                className="text-muted-foreground hover:text-foreground transition-colors"
-                                title="Refresh statuses"
-                              >
-                                <RefreshCw size={12} />
-                              </button>
-                            </div>
-
-                            <p className="text-xs text-muted-foreground leading-relaxed">
-                              Generate a one-time password for today&apos;s assessment session. Learners must enter it before they can access the assessment form. The OTP expires after 8 hours.
-                            </p>
-
-                            {assessmentOtp ? (
-                              <div className="space-y-3">
-                                <div className="flex items-center gap-3">
-                                  <div className="flex-1 rounded-lg border-2 border-primary/40 bg-primary/5 px-4 py-3 text-center">
-                                    <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground mb-0.5">Today&apos;s OTP</p>
-                                    <p className="text-3xl font-mono font-bold text-primary tracking-[0.4em]">{assessmentOtp.otp_code}</p>
-                                  </div>
-                                  <button
-                                    onClick={() => navigator.clipboard.writeText(assessmentOtp.otp_code)}
-                                    className="shrink-0 flex flex-col items-center gap-1 rounded-lg border border-border p-3 text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors"
-                                    title="Copy OTP"
-                                  >
-                                    <Copy size={15} />
-                                    <span className="text-[9px] font-medium">Copy</span>
-                                  </button>
-                                </div>
-                                <p className="text-[10px] text-muted-foreground text-center">
-                                  Expires: {new Date(assessmentOtp.expires_at).toLocaleString("en-ZA")}
-                                </p>
-                                <div className="flex gap-2">
-                                  <button
-                                    onClick={generateOtp}
-                                    disabled={generatingOtp}
-                                    className="flex-1 rounded-lg bg-primary text-primary-foreground text-xs font-medium px-3 py-2 hover:bg-primary/90 disabled:opacity-50 transition-colors"
-                                  >
-                                    {generatingOtp ? "Generating…" : "Regenerate OTP"}
-                                  </button>
-                                  <button
-                                    onClick={revokeOtp}
-                                    disabled={revokingOtp}
-                                    className="flex-1 rounded-lg border border-destructive/40 text-destructive text-xs font-medium px-3 py-2 hover:bg-destructive/10 disabled:opacity-50 transition-colors flex items-center justify-center gap-1.5"
-                                  >
-                                    <Trash2 size={12} /> {revokingOtp ? "Revoking…" : "Revoke OTP"}
-                                  </button>
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="space-y-3">
-                                <div className="rounded-lg border border-dashed border-border bg-muted/20 py-6 text-center">
-                                  <KeyRound size={22} className="mx-auto text-muted-foreground mb-2" />
-                                  <p className="text-xs text-muted-foreground">No active OTP for this module.</p>
-                                  <p className="text-[10px] text-muted-foreground mt-0.5">Generate one before the assessment session begins.</p>
-                                </div>
-                                <button
-                                  onClick={generateOtp}
-                                  disabled={generatingOtp}
-                                  className="w-full rounded-lg bg-primary text-primary-foreground text-xs font-medium px-4 py-2.5 hover:bg-primary/90 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
-                                >
-                                  <KeyRound size={13} /> {generatingOtp ? "Generating…" : "Generate OTP for Assessment Day"}
-                                </button>
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Learner submission status table */}
-                          <div className="rounded-xl border border-border bg-card p-5 space-y-3">
-                            <div className="flex items-center justify-between gap-2">
-                              <p className="text-xs font-bold uppercase tracking-widest text-foreground flex items-center gap-1.5">
-                                <Users size={14} className="text-primary" /> Learner Submission Status
-                              </p>
-                              {!loadingStatuses && (
-                                <span className="text-[10px] text-muted-foreground">
-                                  {learnerStatuses.filter((s) => s.assessment_submitted).length} / {learnerStatuses.length} submitted
-                                </span>
-                              )}
-                            </div>
-
-                            {loadingStatuses ? (
-                              <p className="text-xs text-muted-foreground">Loading…</p>
-                            ) : learnerStatuses.length === 0 ? (
-                              <p className="text-xs text-muted-foreground">No learners enrolled.</p>
-                            ) : (
-                              <div className="divide-y divide-border rounded-lg border border-border overflow-hidden">
-                                {learnerStatuses.map((s) => (
-                                  <div key={s.learner_id} className="flex items-center justify-between gap-3 px-3 py-2.5 bg-background">
-                                    <div className="min-w-0">
-                                      <p className="text-xs font-medium text-foreground truncate">{s.full_name}</p>
-                                      <p className="text-[10px] text-muted-foreground truncate">{s.learner_code} · {s.email}</p>
-                                    </div>
-                                    <div className="shrink-0 flex items-center gap-2">
-                                      {s.assessment_submitted ? (
-                                        <>
-                                          <CheckCircle2 size={14} className="text-green-500" />
-                                          <span className="text-[10px] font-medium text-green-600 dark:text-green-400">Submitted</span>
-                                        </>
-                                      ) : (
-                                        <>
-                                          <Circle size={14} className="text-muted-foreground" />
-                                          <span className="text-[10px] text-muted-foreground">Pending</span>
-                                        </>
-                                      )}
-                                      <button
-                                        disabled={clearingLearnerId === s.learner_id}
-                                        onClick={async () => {
-                                          await clearLearnerProgress(s.learner_id, id);
-                                          await refreshStatuses();
-                                        }}
-                                        className="ml-1 rounded px-2 py-1 text-[10px] font-medium border border-destructive/40 text-destructive hover:bg-destructive/10 disabled:opacity-40 transition-colors"
-                                        title="Clear this learner's progress for this module"
-                                      >
-                                        {clearingLearnerId === s.learner_id ? "Clearing…" : "Clear"}
-                                      </button>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-
-                        </div> /* end admin control panel */
-                      )}
-
-                      {isLearnerView && (
-                      <>
-                        {/* ── Success state ── */}
-                        {(progressMap[id ?? ""]?.assessment_submitted || assessmentSubmitMessage.includes("successfully")) ? (
-                          <div className="space-y-4">
-                            <div className="rounded-lg border border-green-500/40 bg-green-50/40 dark:bg-green-900/10 p-5 flex items-start gap-4">
-                              <CheckCircle2 size={28} className="shrink-0 text-green-500 mt-0.5" />
-                              <div className="space-y-1">
-                                <p className="text-sm font-semibold text-green-700 dark:text-green-400">Assessment Submitted</p>
-                                <p className="text-xs text-muted-foreground">Your responses have been saved and submitted to your facilitator. Well done for completing this unit!</p>
-                                {submissionUploadedAt && (
-                                  <p className="text-xs text-muted-foreground">Submitted: <span className="font-medium text-foreground">{new Date(submissionUploadedAt).toLocaleString()}</span></p>
-                                )}
-                              </div>
-                            </div>
-                            {/* Print & Email actions */}
-                            <div className="flex flex-col sm:flex-row gap-2">
-                              <button
-                                onClick={() => openPrintWindow(submittedText)}
-                                disabled={!submittedText}
-                                className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background text-sm font-medium text-foreground px-4 py-2.5 hover:bg-secondary/50 disabled:opacity-40 transition-colors"
-                              >
-                                <span>🖨</span> Print / Save as PDF
-                              </button>
-                            </div>
-                          </div>
-                        ) : (
-                          !otpValidated ? (
-                            <div className="rounded-xl border border-border bg-card p-6 space-y-5">
-                              <div className="text-center space-y-2">
-                                <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                                  <KeyRound size={22} className="text-primary" />
-                                </div>
-                                <p className="text-sm font-semibold text-foreground">Assessment Access Required</p>
-                                <p className="text-xs text-muted-foreground leading-relaxed">
-                                  Your facilitator will provide a 6-digit OTP at the start of the assessment session. Enter it below to unlock the assessment.
-                                </p>
-                              </div>
-                              <div className="space-y-3">
-                                <input
-                                  type="text"
-                                  inputMode="numeric"
-                                  maxLength={6}
-                                  placeholder="Enter 6-digit OTP"
-                                  value={otpInput}
-                                  onChange={(e) => { setOtpInput(e.target.value.replace(/\D/g, "")); setOtpError(""); }}
-                                  className="w-full rounded-lg border border-border bg-background px-4 py-3 text-center text-2xl font-mono font-bold tracking-[0.5em] text-foreground placeholder:text-muted-foreground/40 placeholder:text-sm placeholder:tracking-normal focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
-                                />
-                                {otpError && (
-                                  <p className="text-xs text-red-500 text-center">{otpError}</p>
-                                )}
-                                <button
-                                  disabled={otpInput.length !== 6 || otpValidating}
-                                  onClick={async () => {
-                                    setOtpValidating(true);
-                                    const valid = await validateOtp(otpInput);
-                                    setOtpValidating(false);
-                                    if (valid) {
-                                      sessionStorage.setItem(`assessment_otp_${id}`, "true");
-                                      setOtpValidated(true);
-                                    } else {
-                                      setOtpError("Invalid or expired OTP. Please check with your facilitator.");
-                                    }
-                                  }}
-                                  className="w-full rounded-lg bg-primary text-primary-foreground text-sm font-medium px-4 py-2.5 hover:bg-primary/90 disabled:opacity-50 transition-colors"
-                                >
-                                  {otpValidating ? "Verifying…" : "Unlock Assessment"}
-                                </button>
-                              </div>
-                            </div>
-                          ) : (
-                          <AssessmentForm
-                            moduleId={id ?? ""}
-                            answers={onlineAnswers}
-                            onAnswerChange={(idx, val) => setOnlineAnswers((prev) => ({ ...prev, [idx]: val }))}
-                            downloadHref={assessmentDownloadHref}
-                            learnerName={
-                              user?.user_metadata?.display_name ??
-                              user?.user_metadata?.full_name ??
-                              user?.email ??
-                              ""
-                            }
-                            onRequestSubmit={(payload: AssessmentPayload) => {
-                              setPendingSubmissionText(payload.submissionText);
-                              setShowSubmitConfirm(true);
-                            }}
-                            isSubmitting={isSubmittingAssessment}
-                            submitError={
-                              assessmentSubmitMessage && !assessmentSubmitMessage.includes("successfully")
-                                ? assessmentSubmitMessage
-                                : undefined
-                            }
-                          />
-                          )
-                        )}
-
-                        {/* ── Confirm dialog ── */}
-                        <AlertDialog open={showSubmitConfirm} onOpenChange={setShowSubmitConfirm}>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Confirm Submission</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Your answers will be saved and submitted to your facilitator for review. Make sure you have answered all required activities before confirming.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Go Back</AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={async () => {
-                                  if (!id || !user?.id) return;
-                                  // Guard: never submit twice
-                                  if (progressMap[id]?.assessment_submitted) {
-                                    setShowSubmitConfirm(false);
-                                    setAssessmentSubmitMessage("Assessment submitted successfully.");
-                                    return;
-                                  }
-                                  setIsSubmittingAssessment(true);
-                                  const blob = new Blob([pendingSubmissionText], { type: "text/plain" });
-                                  const safeName = `${Date.now()}-online-assessment.txt`;
-                                  const path = `learner-${user.id}/module-${id}/${safeName}`;
-                                  const { error } = await supabase.storage.from("assessment-submissions").upload(path, blob, { upsert: true });
-                                  if (error) {
-                                    setAssessmentSubmitMessage(`Submission failed: ${error.message}`);
-                                    setIsSubmittingAssessment(false);
-                                    return;
-                                  }
-                                  const submittedAt = new Date().toISOString();
-                                  setSubmissionPath(path);
-                                  setSubmissionUploadedAt(submittedAt);
-                                  setSubmittedText(pendingSubmissionText);
-                                  void recordSubmission(id, path, submittedAt);
-                                  await markAssessmentSubmitted(id, submittedAt);
-                                  setIsSubmittingAssessment(false);
-                                  setAssessmentSubmitMessage("Assessment submitted successfully.");
-                                }}
-                              >
-                                Confirm &amp; Submit
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </>
-                      )}{/* end isLearnerView submit wrapper */}
-                    </div>
-                  )}
+                  ) : null}
                 </div>
               )}
               </>)}
@@ -1976,15 +1529,13 @@ export default function ModuleDetailPage() {
                     <span>
                       {workspaceView === "guide"
                         ? guideMode === "intro" ? "Introduction" : `Session ${sessionIndex + 1}`
-                        : workspaceView === "quiz" ? "Quiz" : "Assessment"}
+                        : "Quiz"}
                     </span>
                     <span>
                       {workspaceView === "guide"
                         ? guideMode === "intro" ? 1 : sessionIndex + 2
-                        : workspaceView === "quiz"
-                          ? (hasStructuredFlow ? sessionLessons.length + 2 : 2)
-                          : (hasStructuredFlow ? sessionLessons.length + 3 : 3)}
-                      /{hasStructuredFlow ? sessionLessons.length + 3 : 3}
+                        : (hasStructuredFlow ? sessionLessons.length + 2 : 2)}
+                      /{hasStructuredFlow ? sessionLessons.length + 2 : 2}
                     </span>
                   </div>
                   <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
@@ -1993,8 +1544,7 @@ export default function ModuleDetailPage() {
                       style={{
                         width: `${
                           workspaceView === "guide"
-                            ? guideMode === "intro" ? 5 : Math.round(((sessionIndex + 1) / (hasStructuredFlow ? sessionLessons.length + 1 : 1)) * 75)
-                            : workspaceView === "quiz" ? 82
+                            ? guideMode === "intro" ? 5 : Math.round(((sessionIndex + 1) / (hasStructuredFlow ? sessionLessons.length + 1 : 1)) * 90)
                             : 100
                         }%`
                       }}
@@ -2061,24 +1611,6 @@ export default function ModuleDetailPage() {
                       {assessmentUnlocked ? "✓" : ""}
                     </span>
                     Quiz
-                  </button>
-
-                  {/* Assessment step */}
-                  <button
-                    onClick={() => (!isLearnerView || assessmentUnlocked) && setWorkspaceView("assessment")}
-                    disabled={isLearnerView && !assessmentUnlocked}
-                    className={`w-full flex items-center gap-2 rounded-lg px-3 py-2 text-xs text-left transition-colors ${
-                      workspaceView === "assessment" ? "bg-primary/10 text-primary font-medium" : "text-muted-foreground hover:bg-secondary/50"
-                    } disabled:opacity-40 disabled:cursor-not-allowed`}
-                  >
-                    <span className={`shrink-0 w-4 h-4 rounded-full border flex items-center justify-center text-[9px] font-bold ${
-                      progressMap[id ?? ""]?.assessment_submitted
-                        ? "bg-primary text-primary-foreground border-primary"
-                        : "border-border"
-                    }`}>
-                      {progressMap[id ?? ""]?.assessment_submitted ? "✓" : ""}
-                    </span>
-                    Assessment
                   </button>
                 </div>
               </div>
