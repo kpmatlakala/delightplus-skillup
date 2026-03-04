@@ -1693,7 +1693,7 @@ export default function ModuleDetailPage() {
                       {isLearnerView && (
                       <>
                         {/* ── Success state ── */}
-                        {assessmentSubmitMessage.includes("successfully") ? (
+                        {(progressMap[id ?? ""]?.assessment_submitted || assessmentSubmitMessage.includes("successfully")) ? (
                           <div className="space-y-4">
                             <div className="rounded-lg border border-green-500/40 bg-green-50/40 dark:bg-green-900/10 p-5 flex items-start gap-4">
                               <CheckCircle2 size={28} className="shrink-0 text-green-500 mt-0.5" />
@@ -1765,6 +1765,12 @@ export default function ModuleDetailPage() {
                               <AlertDialogAction
                                 onClick={async () => {
                                   if (!id || !user?.id) return;
+                                  // Guard: never submit twice
+                                  if (progressMap[id]?.assessment_submitted) {
+                                    setShowSubmitConfirm(false);
+                                    setAssessmentSubmitMessage("Assessment submitted successfully.");
+                                    return;
+                                  }
                                   setIsSubmittingAssessment(true);
                                   const blob = new Blob([pendingSubmissionText], { type: "text/plain" });
                                   const safeName = `${Date.now()}-online-assessment.txt`;
