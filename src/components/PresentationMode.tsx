@@ -232,7 +232,7 @@ interface ModuleSpeakerNotes {
   summary: string;
 }
 
-const gooMODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes> = {
+const MODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes> = {
   /* ── Block 1 ── */
   "14924": {
     title:
