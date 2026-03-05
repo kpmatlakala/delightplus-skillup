@@ -237,23 +237,17 @@ const MODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes> = {
   "14924": {
     title:
       "Welcome to Information Systems Analysis — today we learn to think like analysts before coding like developers.\n\n" +
-      "Start with this simple definition (say it slowly): 'Information Systems Analysis is the structured process of understanding a business problem, identifying user needs, and defining WHAT a system must do before deciding HOW to build it.'\n\n" +
-      "Opening hook (3 minutes): Ask, 'Think of one system you used this week (registration, banking, WhatsApp, LMS). What happens if it fails?' Capture 3 answers under People / Process / Data on the board.\n\n" +
+      "Opening hook (3 minutes): Ask, 'I'd like you to Think of one system you used this week (registration, banking, WhatsApp, LMS). What happens if it fails?' Capture 3 answers under People / Process / Data on the board.\n\n" +
       "Bridge statement: 'Everything we do today prevents expensive failure later. Good analysis saves money, time, and reputation.'",
-    objectives:
-      "Use this explanation arc through the day:\n" +
-      "1) Define the system context (why this system exists)\n" +
-      "2) Define the problem (what is broken/missing)\n" +
-      "3) Define requirements (what must be true when solved)\n" +
-      "4) Model flow and logic (DFD, decision tools)\n" +
-      "5) Recommend approach (structured/Agile/JAD/RAD/OO)\n\n" +
-      "Outcome coaching cues:\n" +
-      "• Outcome 1 (SDLC): Emphasise that analysis and design happen before coding for a reason.\n" +
-      "• Outcome 2 (analyst role): Analyst = translator between business reality and technical implementation.\n" +
-      "• Outcome 3 (fact-finding): Use Who/What/Where/When/How/Why as your questioning spine.\n" +
-      "• Outcome 4 (techniques): DFDs and decision models are communication tools, not just diagrams.\n\n" +
-      "Visual learner cue: keep one evolving board map all day (Problem → Requirements → Models → Recommendation).",
-    activityIndividual:
+    objectives:      
+      "Our Learning Outcome for these unit will revolve around:\n" +
+      "• (SDLC): Emphasise that analysis and design happen before coding for a reason.\n" +
+      "• (analyst role): Analyst = translator between business reality and technical implementation.\n" +
+      "• (fact-finding): Use Who/What/Where/When/How/Why as your questioning spine.\n" +
+      "• (techniques): DFDs and decision models are communication tools, not just diagrams.\n\n" +
+      "",
+    
+      activityIndividual:
       "Run activities with the E-D-C cycle: Explain briefly → Demonstrate one example → Check learner attempt.\n\n" +
       "• Systems vs Requirements Analysis: Use the phrase 'WHAT first, HOW later.' Ask learners to rewrite one vague request into a measurable requirement.\n" +
       "• Feasibility and cost-benefit: Have learners classify examples into tangible vs intangible and defend one decision.\n" +
@@ -261,7 +255,8 @@ const MODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes> = {
       "• DFD practice: Live-draw Context Diagram first, then Diagram 0. Enforce naming rules (noun for entity/data store, verb phrase for process).\n" +
       "• Decision tools: Compare one decision tree and one decision table for the same rule so learners see when each is clearer.\n\n" +
       "Facilitator move: if learners are stuck, ask probing questions; do not supply final answers immediately.",
-    activityGroup:
+    
+      activityGroup:
       "Integrated group challenge (25 minutes): 'Analyse the CET Attendance System redesign.'\n\n" +
       "Deliverables per group:\n" +
       "1. Problem statement (1 sentence)\n" +
@@ -802,6 +797,33 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
       mn?.objectives ??
       `Walk through the unit purpose and each learning outcome clearly. Ask: "Which of these topics do you already know something about?" This activates prior knowledge and shows where to pace more carefully.`,
   });
+
+  /* 2.5 — Unit 1 core concept bridge (before session/activity content) */
+  if (flow.moduleId === "14924") {
+    slides.push({
+      type: "content",
+      title: "Core Concept: Information Systems Analysis",
+      subtitle: "Start here before SDLC deep-dive",
+      bullets: [
+        "System context: why this system exists and who it serves",
+        "Problem definition: what is broken, missing, delayed, or risky",
+        "Requirements: what must be true for success (measurable)",
+        "Models: represent flow and logic clearly (DFD, decision tools)",
+        "Recommendation: select the best-fit approach (Structured/Agile/JAD/RAD/OO)",
+      ],
+      highlight:
+        "Simple definition: Information Systems Analysis is the structured process of understanding a business problem, identifying user needs, and defining WHAT a system must do before deciding HOW to build it.",
+      speakerNote:
+        "Start with this simple definition (say it slowly): 'Information Systems Analysis is the structured process of understanding a business problem, identifying user needs, and defining WHAT a system must do before deciding HOW to build it.'\n\n" +
+        "Use this explanation arc through the day:\n" +
+        "1) Define the system context (why this system exists)\n" +
+        "2) Define the problem (what is broken/missing)\n" +
+        "3) Define requirements (what must be true when solved)\n" +
+        "4) Model flow and logic (DFD, decision tools)\n" +
+        "5) Recommend approach (structured/Agile/JAD/RAD/OO)\n\n" +
+        "Transition line to SDLC: 'Now that we know the analysis arc, SDLC gives us the disciplined process to execute it stage by stage.'",
+    });
+  }
 
   /* 3 — Sessions */
   const sessions = flow.lessons.filter((l) => /^session-\d/.test(l.id));
