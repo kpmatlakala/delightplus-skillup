@@ -20,13 +20,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
-import {
-  generateSessionCode,
-  EV_LAUNCH,
-  LAUNCHER_CHANNEL,
-  type LaunchPayload,
-} from "@/lib/presentationSync";
+import { generateSessionCode } from "@/lib/presentationSync";
 import { modules as allModules } from "@/data/courseData";
 import {
   GraduationCap,
@@ -35,6 +29,7 @@ import {
   Loader2,
   Cast,
   Lock,
+  MonitorPlay,
 } from "lucide-react";
 
 export default function PresentationLaunchPage() {
@@ -46,29 +41,19 @@ export default function PresentationLaunchPage() {
   const block2 = allModules.filter((m) => m.block === 2);
   const block3 = allModules.filter((m) => m.block === 3);
 
-  /* ── Broadcast EV_LAUNCH then navigate to the remote page ── */
+  /* ── Open desktop tab + navigate phone to remote — no broadcast needed ── */
   const handleLaunch = (moduleId: string) => {
     if (launching) return;
     setLaunching(moduleId);
 
-    const sessionCode = generateSessionCode();
-    const payload: LaunchPayload = { moduleId, sessionCode };
+    const code = generateSessionCode();
+    const desktopUrl = `${window.location.origin}/present/desktop/${code}/${moduleId}`;
 
-    const ch = supabase.channel(LAUNCHER_CHANNEL, {
-      config: { broadcast: { ack: false } },
-    } as Parameters<typeof supabase.channel>[1]);
+    // Open the projector/desktop view in a new tab (inherits Supabase localStorage session)
+    window.open(desktopUrl, "_blank", "noopener");
 
-    ch.subscribe((status) => {
-      if (status !== "SUBSCRIBED") return;
-      ch.send({ type: "broadcast", event: EV_LAUNCH, payload }).then(() => {
-        supabase.removeChannel(ch);
-        // Phone becomes the remote — remote page already handles "Waiting for desktop"
-        navigate(`/present/remote/${sessionCode}`);
-      }).catch(() => {
-        setLaunching(null);
-        supabase.removeChannel(ch);
-      });
-    });
+    // Phone immediately becomes the remote controller
+    navigate(`/present/remote/${code}`);
   };
 
   /* ── Guard ── */
@@ -131,7 +116,7 @@ export default function PresentationLaunchPage() {
         <Cast size={18} className="text-indigo-400 shrink-0" />
         <div className="flex-1 min-w-0">
           <p className="text-white font-semibold text-sm leading-tight">Launch Presentation</p>
-          <p className="text-white/40 text-xs">Select a module — desktop opens automatically</p>
+          <p className="text-white/40 text-xs">Tap a module → desktop opens instantly, phone becomes remote</p>
         </div>
       </header>
 
@@ -201,17 +186,17 @@ export default function PresentationLaunchPage() {
 
         {/* How it works note ── */}
         <div className="rounded-xl bg-white/3 border border-white/8 px-4 py-4 mt-2">
-          <p className="text-white/45 text-xs font-semibold uppercase tracking-widest mb-2">
-            How it works
+          <p className="text-white/45 text-xs font-semibold uppercase tracking-widest mb-2 flex items-center gap-2">
+            <MonitorPlay size={12} className="text-white/30" /> How it works
           </p>
           <ol className="text-white/40 text-xs space-y-1.5 list-decimal list-inside leading-relaxed">
             <li>Tap any module above on your phone</li>
-            <li>The desktop browser opens the presentation automatically</li>
-            <li>Your phone becomes the wireless remote — Prev / Next from here</li>
-            <li>Speaker notes display on your phone only</li>
+            <li>A new browser tab opens the presentation on the projector screen</li>
+            <li>Your phone instantly becomes the wireless remote — Prev / Next from here</li>
+            <li>Speaker notes and "Up next" preview display on your phone only</li>
           </ol>
           <p className="text-white/20 text-xs mt-3 leading-relaxed">
-            ⚠ The desktop must be open and logged in to receive the launch signal.
+            ⚠ Allow pop-ups for this site in your browser so the desktop tab opens correctly.
           </p>
         </div>
 

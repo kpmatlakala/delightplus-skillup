@@ -24,6 +24,7 @@ import SignupPage from "./pages/auth/SignupPage";
 import NotFound from "./pages/NotFound";
 import PresentationRemotePage from "./pages/PresentationRemotePage";
 import PresentationLaunchPage from "./pages/PresentationLaunchPage";
+import PresentationDesktopPage from "./pages/PresentationDesktopPage";
 import PoEPage from "./pages/PoEPage";
 import BlockAssessmentPage from "./pages/BlockAssessmentPage";
 import BlockAssessmentAdminPage from "./pages/BlockAssessmentAdminPage";
@@ -72,9 +73,10 @@ const App = () => (
             {/* Public — no auth, session code is the shared secret */}
             <Route path="/present/remote/:code" element={<PresentationRemotePage />} />
 
-            {/* Remote launch page — authenticated, admin/lecturer only */}
+            {/* Remote launch + desktop projection — authenticated, admin/lecturer only */}
             <Route element={<ProtectedRoute allowedRoles={["admin", "lecturer"]} />}>
               <Route path="/present/launch" element={<PresentationLaunchPage />} />
+              <Route path="/present/desktop/:code/:moduleId" element={<PresentationDesktopPage />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />
