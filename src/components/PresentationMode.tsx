@@ -1135,6 +1135,13 @@ interface PresentationModeProps {
   nextUnitTitle?: string;
   /** Route prefix: /modules (admin) or /learner/modules (learner) */
   routePrefix?: string;
+  /**
+   * When the presentation is launched remotely from the facilitator's phone,
+   * the phone pre-generates the session code and sends it via EV_LAUNCH so
+   * both sides use the same channel without extra coordination.
+   * If omitted, a random code is generated as usual.
+   */
+  initialSessionCode?: string;
 }
 
 export function PresentationMode({
@@ -1146,6 +1153,7 @@ export function PresentationMode({
   nextUnitId,
   nextUnitTitle,
   routePrefix = "/modules",
+  initialSessionCode,
 }: PresentationModeProps) {
   const navigate = useNavigate();
   const slides = useMemo(
@@ -1166,8 +1174,9 @@ export function PresentationMode({
   const [sessionPickerOpen, setSessionPickerOpen] = useState(false);
 
   /* ── Remote-control state */
+  // If launched remotely the phone sends a pre-agreed code so both sides join the same channel
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const sessionCode = useMemo(() => generateSessionCode(), []);
+  const sessionCode = useMemo(() => initialSessionCode ?? generateSessionCode(), []);
   const remoteUrl =
     typeof window !== "undefined"
       ? `${window.location.origin}/present/remote/${sessionCode}`

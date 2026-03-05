@@ -17,6 +17,7 @@ import {
   ChevronsRight,
   Menu,
   X,
+  Cast,
 } from "lucide-react";
 
 interface NavItem {
@@ -43,6 +44,7 @@ const navItems: NavItem[] = [
   { label: "Assessments",        icon: <ClipboardList size={18} />, href: "/assessments" },
   { label: "Block Assessments", icon: <ShieldCheck   size={18} />, href: "/assessments/blocks" },
   { label: "Compliance",        icon: <ShieldCheck   size={18} />, href: "/compliance" },
+  { label: "Remote Launch",     icon: <Cast          size={18} />, href: "/present/launch" },
 ];
 
 const learnerNavItems: NavItem[] = [

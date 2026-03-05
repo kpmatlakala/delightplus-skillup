@@ -17,6 +17,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { PresentationMode } from "./PresentationMode";
+import { modules as allModules } from "@/data/courseData";
+import type { Module } from "@/types/course";
+import {
+  EV_LAUNCH,
+  LAUNCHER_CHANNEL,
+  type LaunchPayload,
+} from "@/lib/presentationSync";
 
 const getInitials = (displayName: string, email: string) => {
   const source = displayName || email;
@@ -29,6 +37,13 @@ interface AppLayoutProps {
   children: ReactNode;
   title: string;
   subtitle?: string;
+}
+
+interface RemoteLaunch {
+  moduleId: string;
+  sessionCode: string;
+  module: Module | undefined;
+  mode: "briefing" | "module";
 }
 
 export default function AppLayout({ children, title, subtitle }: AppLayoutProps) {
@@ -44,6 +59,33 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
     : announcements.length;
   // Unread messages — live from DB
   const unreadMessages = useUnreadCount(user?.id ?? null);
+
+  /* ── Remote launch state — set when the facilitator's phone broadcasts EV_LAUNCH */
+  const [remoteLaunch, setRemoteLaunch] = useState<RemoteLaunch | null>(null);
+
+  /* ── Subscribe to the global launcher channel (admin/lecturer only) */
+  useEffect(() => {
+    if (role !== "admin" && role !== "lecturer") return;
+
+    const ch = supabase.channel(LAUNCHER_CHANNEL, {
+      config: { broadcast: { ack: false } },
+    } as Parameters<typeof supabase.channel>[1]);
+
+    ch
+      .on("broadcast", { event: EV_LAUNCH }, ({ payload }: { payload: LaunchPayload }) => {
+        const { moduleId, sessionCode } = payload;
+        const isBriefing = moduleId === "briefing";
+        setRemoteLaunch({
+          moduleId,
+          sessionCode,
+          module: isBriefing ? undefined : allModules.find((m) => m.id === moduleId),
+          mode: isBriefing ? "briefing" : "module",
+        });
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(ch); };
+  }, [role]);
 
   useEffect(() => {
     const loadProfileSummary = async () => {
@@ -152,6 +194,17 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
         </header>
         <div className="p-6 md:p-8 animate-fade-in">{children}</div>
       </main>
+
+      {/* ── Remote-launched presentation overlay ──────────────────────────── */}
+      {remoteLaunch && (
+        <PresentationMode
+          module={remoteLaunch.module}
+          mode={remoteLaunch.mode}
+          isAdmin={true}
+          initialSessionCode={remoteLaunch.sessionCode}
+          onClose={() => setRemoteLaunch(null)}
+        />
+      )}
     </div>
   );
 }

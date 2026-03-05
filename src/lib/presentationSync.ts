@@ -26,13 +26,35 @@ export function generateSessionCode(): string {
 
 /* ─── Shared event names ─────────────────────────────────────────────────── */
 
-export const EV_SLIDE_STATE = "slide-state";  // desktop → mobile
-export const EV_CMD         = "cmd";          // mobile  → desktop
-export const EV_PING        = "ping";         // mobile  → desktop (keepalive + sync request)
-export const EV_REQUEST_SYNC = "request-sync"; // mobile  → desktop on first connect
+export const EV_SLIDE_STATE  = "slide-state";   // desktop → mobile
+export const EV_CMD          = "cmd";           // mobile  → desktop
+export const EV_PING         = "ping";          // mobile  → desktop (keepalive + sync request)
+export const EV_REQUEST_SYNC = "request-sync";  // mobile  → desktop on first connect
+
+/**
+ * EV_LAUNCH — sent from the facilitator's phone on the global launch channel.
+ * The desktop (AppLayout listener) receives this and opens PresentationMode
+ * using the pre-agreed session code so the phone can connect as remote immediately.
+ */
+export const EV_LAUNCH = "launch";
+
+/**
+ * Fixed Supabase broadcast channel that every authenticated desktop
+ * listens on. The facilitator's phone broadcasts EV_LAUNCH here.
+ * No session code in the channel name — it is carried in the payload.
+ */
+export const LAUNCHER_CHANNEL = "cet:presentation-launcher";
 
 export function channelName(code: string): string {
   return `presentation:${code}`;
+}
+
+/** Payload carried by EV_LAUNCH */
+export interface LaunchPayload {
+  /** Module unit-standard id ('14924', '14918', …) or 'briefing' for the programme briefing */
+  moduleId: string;
+  /** Pre-agreed 4-char session code — desktop adopts this code so the phone can connect as remote */
+  sessionCode: string;
 }
 
 /* ─── Payload types ─────────────────────────────────────────────────────── */
