@@ -232,38 +232,61 @@ interface ModuleSpeakerNotes {
   summary: string;
 }
 
-const MODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes> = {
+const gooMODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes> = {
   /* ── Block 1 ── */
   "14924": {
     title:
-      "Welcome to Information Systems Analysis — the analytical backbone of everything we build.\n\n" +
-      "Before anything else: make sure the attendance register is signed and workbooks are distributed.\n\n" +
-      "Opening hook → Ask the group: \"Has anyone here been affected by an IT system that went down or gave wrong results? What was disrupted?\" Take 2–3 answers. Use those examples throughout the day to anchor the theory.",
+      "Welcome to Information Systems Analysis — today we learn to think like analysts before coding like developers.\n\n" +
+      "Start with this simple definition (say it slowly): 'Information Systems Analysis is the structured process of understanding a business problem, identifying user needs, and defining WHAT a system must do before deciding HOW to build it.'\n\n" +
+      "Opening hook (3 minutes): Ask, 'Think of one system you used this week (registration, banking, WhatsApp, LMS). What happens if it fails?' Capture 3 answers under People / Process / Data on the board.\n\n" +
+      "Bridge statement: 'Everything we do today prevents expensive failure later. Good analysis saves money, time, and reputation.'",
     objectives:
-      "Walk through each outcome clearly — these are what learners will be assessed on in the Block assessment.\n\n" +
-      "• Outcome 1 (SDLC roles): Ask — 'What does an analyst actually do on a team?' Most learners have never met one — build the picture.\n" +
-      "• Outcome 3 (information gathering): Ask — 'If you needed to understand a business problem you'd never seen before, what's the first thing you'd do?'\n" +
-      "• Outcome 4 (DFDs): Warn learners this is the hardest topic today — we'll spend extra time on it.\n\n" +
-      "Gauge the room's baseline: 'Who has heard of a Data Flow Diagram before?' Adjust pacing accordingly.",
+      "Use this explanation arc through the day:\n" +
+      "1) Define the system context (why this system exists)\n" +
+      "2) Define the problem (what is broken/missing)\n" +
+      "3) Define requirements (what must be true when solved)\n" +
+      "4) Model flow and logic (DFD, decision tools)\n" +
+      "5) Recommend approach (structured/Agile/JAD/RAD/OO)\n\n" +
+      "Outcome coaching cues:\n" +
+      "• Outcome 1 (SDLC): Emphasise that analysis and design happen before coding for a reason.\n" +
+      "• Outcome 2 (analyst role): Analyst = translator between business reality and technical implementation.\n" +
+      "• Outcome 3 (fact-finding): Use Who/What/Where/When/How/Why as your questioning spine.\n" +
+      "• Outcome 4 (techniques): DFDs and decision models are communication tools, not just diagrams.\n\n" +
+      "Visual learner cue: keep one evolving board map all day (Problem → Requirements → Models → Recommendation).",
     activityIndividual:
-      "Allow 5–10 minutes per activity. Circulate the room — do NOT give answers, ask leading questions instead.\n\n" +
-      "• Activity 1 (Systems vs Requirements Analysis): Common trap — learners say they're the same. Prompt: 'Systems Analysis asks WHAT, Requirements Analysis asks HOW SPECIFICALLY.'\n" +
-      "• Activity 3 (information gathering): Ask learners which technique they would use if the client is 3 hours away — this surfaces the practical trade-offs.\n" +
-      "• Activity 4 (DFDs): Draw a live example on the whiteboard before learners attempt this. Start with: External Entity → arrow → Process → arrow → Data Store. Use the CET attendance system as your DFD subject.",
+      "Run activities with the E-D-C cycle: Explain briefly → Demonstrate one example → Check learner attempt.\n\n" +
+      "• Systems vs Requirements Analysis: Use the phrase 'WHAT first, HOW later.' Ask learners to rewrite one vague request into a measurable requirement.\n" +
+      "• Feasibility and cost-benefit: Have learners classify examples into tangible vs intangible and defend one decision.\n" +
+      "• Fact-finding techniques: Give one scenario (remote site, sensitive users, many respondents) and ask which method best fits and why.\n" +
+      "• DFD practice: Live-draw Context Diagram first, then Diagram 0. Enforce naming rules (noun for entity/data store, verb phrase for process).\n" +
+      "• Decision tools: Compare one decision tree and one decision table for the same rule so learners see when each is clearer.\n\n" +
+      "Facilitator move: if learners are stuck, ask probing questions; do not supply final answers immediately.",
     activityGroup:
-      "Stakeholder mapping group task — allow 20 minutes.\n\n" +
-      "Each group maps stakeholders for the CET lab booking system. Roles: Scribe, Presenter, Timekeeper, Devil's Advocate.\n\n" +
-      "What to look for: Do they identify both internal (admin, lecturers, IT) and external (learners, parents) stakeholders? Do they show communication lines?\n\n" +
-      "Debrief: One group presents, others challenge. Ask: 'Who did they miss? Why does that matter?'",
+      "Integrated group challenge (25 minutes): 'Analyse the CET Attendance System redesign.'\n\n" +
+      "Deliverables per group:\n" +
+      "1. Problem statement (1 sentence)\n" +
+      "2. Stakeholder list (internal + external)\n" +
+      "3. Fact-finding plan (at least 3 methods with reasons)\n" +
+      "4. Mini Context DFD (entities + main process + flows)\n" +
+      "5. One recommendation: structured vs Agile (with justification)\n\n" +
+      "Roles: Facilitator, Scribe, Modeler, Presenter, Timekeeper.\n\n" +
+      "Debrief prompts:\n" +
+      "• 'Which requirement is most risky if misunderstood?'\n" +
+      "• 'What data flow is missing from your model?'\n" +
+      "• 'How would your recommendation change if requirements were unstable?'",
     summary:
-      "Verbal recall round — call on 3 learners by name:\n" +
-      "1. 'Name two phases of the SDLC and what happens in each.'\n" +
-      "2. 'What is one information-gathering technique and when would you use it?'\n" +
-      "3. 'What does a DFD show that a flowchart doesn't?'\n\n" +
-      "Remind learners:\n" +
-      "• Workbook activities must be completed before Block assessment\n" +
-      "• Next session: Participate in Groups/Teams (Day 2)\n" +
-      "• Ensure attendance sign-out is done.",
+      "Use this close-out script (5–7 minutes):\n\n" +
+      "'Today we moved from intuition to structured analysis. You can now define a system problem, gather facts, model data movement, and justify an approach before coding starts.'\n\n" +
+      "Rapid recall (cold call 4 learners):\n" +
+      "1) 'Explain SDLC in one sentence.'\n" +
+      "2) 'Give one fact-finding technique and best-use case.'\n" +
+      "3) 'What is the difference between context diagram and Diagram 0?'\n" +
+      "4) 'When would Agile be better than strict sequential SDLC?'\n\n" +
+      "Visual consolidation: return to the board map (Problem → Requirements → Models → Recommendation) and ask learners to place one concept under each.\n\n" +
+      "Preparation reminders:\n" +
+      "• Complete workbook activities and keep DFD practice pages for PoE\n" +
+      "• Bring one real workplace system issue for tomorrow's discussion\n" +
+      "• Ensure attendance sign-out before leaving.",
   },
 
   "14920": {
