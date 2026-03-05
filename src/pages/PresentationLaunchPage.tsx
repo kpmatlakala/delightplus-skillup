@@ -20,7 +20,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { generateSessionCode } from "@/lib/presentationSync";
+import { supabase } from "@/integrations/supabase/client";
+import {
+  generateSessionCode,
+  EV_LAUNCH,
+  LAUNCHER_CHANNEL,
+  type LaunchPayload,
+} from "@/lib/presentationSync";
 import { modules as allModules } from "@/data/courseData";
 import {
   GraduationCap,
@@ -41,19 +47,31 @@ export default function PresentationLaunchPage() {
   const block2 = allModules.filter((m) => m.block === 2);
   const block3 = allModules.filter((m) => m.block === 3);
 
-  /* ── Open desktop tab + navigate phone to remote — no broadcast needed ── */
+  /* ── Broadcast EV_LAUNCH → PC AppLayout receives → opens PresentationMode ── */
   const handleLaunch = (moduleId: string) => {
     if (launching) return;
     setLaunching(moduleId);
 
-    const code = generateSessionCode();
-    const desktopUrl = `${window.location.origin}/present/desktop/${code}/${moduleId}`;
+    const sessionCode = generateSessionCode();
+    const payload: LaunchPayload = { moduleId, sessionCode };
 
-    // Open the projector/desktop view in a new tab (inherits Supabase localStorage session)
-    window.open(desktopUrl, "_blank", "noopener");
+    const ch = supabase.channel(LAUNCHER_CHANNEL, {
+      config: { broadcast: { ack: false } },
+    } as Parameters<typeof supabase.channel>[1]);
 
-    // Phone immediately becomes the remote controller
-    navigate(`/present/remote/${code}`);
+    ch.subscribe((status) => {
+      if (status !== "SUBSCRIBED") return;
+      ch.send({ type: "broadcast", event: EV_LAUNCH, payload })
+        .then(() => {
+          supabase.removeChannel(ch);
+          // Phone becomes the wireless remote controller
+          navigate(`/present/remote/${sessionCode}`);
+        })
+        .catch(() => {
+          setLaunching(null);
+          supabase.removeChannel(ch);
+        });
+    });
   };
 
   /* ── Guard ── */
@@ -116,7 +134,7 @@ export default function PresentationLaunchPage() {
         <Cast size={18} className="text-indigo-400 shrink-0" />
         <div className="flex-1 min-w-0">
           <p className="text-white font-semibold text-sm leading-tight">Launch Presentation</p>
-          <p className="text-white/40 text-xs">Tap a module → desktop opens instantly, phone becomes remote</p>
+          <p className="text-white/40 text-xs">Tap a module → PC triggers presentation, phone becomes remote</p>
         </div>
       </header>
 
@@ -190,13 +208,14 @@ export default function PresentationLaunchPage() {
             <MonitorPlay size={12} className="text-white/30" /> How it works
           </p>
           <ol className="text-white/40 text-xs space-y-1.5 list-decimal list-inside leading-relaxed">
+            <li>Log in on both your phone and the PC/projector</li>
             <li>Tap any module above on your phone</li>
-            <li>A new browser tab opens the presentation on the projector screen</li>
-            <li>Your phone instantly becomes the wireless remote — Prev / Next from here</li>
-            <li>Speaker notes and "Up next" preview display on your phone only</li>
+            <li>The presentation opens instantly on the PC — full screen</li>
+            <li>Your phone becomes the wireless remote — Prev / Next from here</li>
+            <li>Speaker notes display on your phone only</li>
           </ol>
           <p className="text-white/20 text-xs mt-3 leading-relaxed">
-            ⚠ Allow pop-ups for this site in your browser so the desktop tab opens correctly.
+            ⚠ The PC must have the admin portal open and logged in to receive the signal.
           </p>
         </div>
 
