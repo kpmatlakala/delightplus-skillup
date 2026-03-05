@@ -108,6 +108,22 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
     loadProfileSummary();
   }, [user?.id]);
 
+  /* ── Swap to a new unit's presentation inline (remote stays connected) */
+  const handleLaunchUnit = (unitId: string) => {
+    const newMod = allModules.find((m) => m.id === unitId);
+    if (!newMod || !remoteLaunch) return;
+    const newIndex = allModules.findIndex((m) => m.id === unitId);
+    const nextMod = allModules[newIndex + 1];
+    setRemoteLaunch({
+      moduleId: unitId,
+      sessionCode: remoteLaunch.sessionCode, // keep same code — remote stays connected
+      module: newMod,
+      mode: "module",
+      nextUnitId: nextMod?.id,
+      nextUnitTitle: nextMod?.title,
+    });
+  };
+
   const displayName = profileDisplayName || ((user?.user_metadata?.full_name as string | undefined) ?? "");
   const avatarUrl = profileAvatarUrl || ((user?.user_metadata?.avatar_url as string | undefined) ?? "");
   const email = user?.email ?? "";
@@ -210,6 +226,7 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
           initialSessionCode={remoteLaunch.sessionCode}
           nextUnitId={remoteLaunch.nextUnitId}
           nextUnitTitle={remoteLaunch.nextUnitTitle}
+          onLaunchUnit={handleLaunchUnit}
           onClose={() => setRemoteLaunch(null)}
         />
       )}

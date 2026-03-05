@@ -1133,6 +1133,12 @@ interface PresentationModeProps {
   onClose: () => void;
   nextUnitId?: string;
   nextUnitTitle?: string;
+  /**
+   * When provided, tapping "Begin next unit" calls this instead of navigating.
+   * Use from AppLayout to swap the presentation inline so the remote
+   * connection stays alive (same session code, new module slides).
+   */
+  onLaunchUnit?: (unitId: string) => void;
   /** Route prefix: /modules (admin) or /learner/modules (learner) */
   routePrefix?: string;
   /**
@@ -1152,6 +1158,7 @@ export function PresentationMode({
   onClose,
   nextUnitId,
   nextUnitTitle,
+  onLaunchUnit,
   routePrefix = "/modules",
   initialSessionCode,
 }: PresentationModeProps) {
@@ -1350,12 +1357,17 @@ export function PresentationMode({
 
   const handleNavigateToUnit = () => {
     if (!nextUnitId) return;
-    onClose();
-    navigate(`${routePrefix}/${nextUnitId}`);
+    if (onLaunchUnit) {
+      // Stay in presentation mode — caller swaps the module inline
+      onLaunchUnit(nextUnitId);
+    } else {
+      onClose();
+      navigate(`${routePrefix}/${nextUnitId}`);
+    }
   };
   // Keep launchUnitRef fresh so the channel handler can call it
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { launchUnitRef.current = handleNavigateToUnit; }, [nextUnitId]);
+  useEffect(() => { launchUnitRef.current = handleNavigateToUnit; }, [nextUnitId, onLaunchUnit]);
 
   const nextLabel = nextUnitTitle
     ? `Begin: ${nextUnitTitle}`
