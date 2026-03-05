@@ -612,7 +612,8 @@ function sectionToSlides(
   section: LessonSection,
   sessionLabel: string,
   sessionShortTitle: string,
-  moduleId?: string
+  moduleId?: string,
+  sessionOutcomes?: string[]
 ): Slide[] {
   const bullets: string[] = [];
   let body = "";
@@ -670,18 +671,52 @@ function sectionToSlides(
     "loop": "Ask: 'Without a loop, how would you write code to add up 100 numbers?' (100 lines.) 'With a loop? 3 lines.' That is why loops exist.",
   };
 
+  const topicVisualPrompts: Record<string, string> = {
+    "sdlc": "Visual: draw the 6 SDLC phases as a looped timeline and place one real task under each phase.",
+    "analysis": "Visual: sketch an AS-IS vs TO-BE comparison with two columns on the board.",
+    "requirements": "Visual: create a simple user story map (actor → need → value) with sticky notes.",
+    "data flow": "Visual: draw a mini DFD live (external entity → process → data store → output).",
+    "team": "Visual: map team roles in a responsibility matrix (who decides / who executes / who approves).",
+    "problem": "Visual: use a fishbone diagram to break causes into People / Process / Tech / Environment.",
+    "pseudocode": "Visual: run a line-by-line trace table (step, variable values, expected output).",
+    "algorithm": "Visual: draw input → process → output blocks, then animate one example through the flow.",
+    "data type": "Visual: build a quick table: field name | data type | reason | validation rule.",
+    "validation": "Visual: compare validation vs verification in a two-column board chart.",
+    "design": "Visual: present one good and one bad design artefact and ask learners to critique both.",
+    "testing": "Visual: draw a test pyramid (unit, integration, system, acceptance) and place examples.",
+    "function": "Visual: box a large program into smaller functions and label each function responsibility.",
+    "project": "Visual: draw a simple Gantt strip for planning, execution, review.",
+    "web": "Visual: split the screen into HTML (structure), CSS (style), JS (behaviour) and map each change.",
+    "loop": "Visual: trace 3 loop iterations in a table so learners can see state changes clearly.",
+  };
+
   /* Match section title keywords to a contextual prompt (case-insensitive) */
   const titleLower = section.title.toLowerCase();
   const matchedPrompt = Object.entries(topicDiscussionPrompts).find(([key]) =>
     titleLower.includes(key)
   )?.[1];
+  const matchedVisual = Object.entries(topicVisualPrompts).find(([key]) =>
+    titleLower.includes(key)
+  )?.[1];
+
+  const outcomeAnchor = sessionOutcomes?.[0]
+    ? `Outcome focus: ${sessionOutcomes[0]}`
+    : "Outcome focus: connect this concept directly to the session outcomes before moving on.";
 
   const moduleName = moduleId ? `(Module ${moduleId}) ` : "";
   const subTopicNote = speakerExtras.length > 0 ? `Sub-topics covered: ${speakerExtras.join(" | ")}.\n\n` : "";
   const baseNote =
-    `${subTopicNote}TOPIC: ${section.title}. ${moduleName}` +
-    "Use the Learner Guide to expand on each bullet. Ask learners to annotate their workbooks as you present.\n\n" +
-    (matchedPrompt ?? `Ask: 'Can someone give a real-world example of "${section.title}" from their own workplace or study?'`);
+    `${subTopicNote}TOPIC: ${section.title}. ${moduleName}\n\n` +
+    `${outcomeAnchor}\n\n` +
+    "Facilitation flow:\n" +
+    "1) Explain the concept in plain language (no jargon first).\n" +
+    "2) Demonstrate one concrete example step-by-step.\n" +
+    "3) Check understanding with one short learner response.\n\n" +
+    "Teaching pointers:\n" +
+    `• ${matchedPrompt ?? `Ask: 'Can someone give a real-world example of "${section.title}" from their own workplace or study?'`}\n` +
+    `• ${matchedVisual ?? "Visual: sketch the concept structure on the board before discussing bullets (diagram, mini-table, or flow)."}\n` +
+    "• Ask learners to annotate their workbooks as you present and highlight one key term they must remember.\n" +
+    "• End by restating the practical workplace implication of this concept.";
 
   if (bullets.length === 0) {
     return [{
@@ -749,6 +784,8 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
   const sessions = flow.lessons.filter((l) => /^session-\d/.test(l.id));
 
   for (const session of sessions) {
+    const sessionShortTitle = session.title.replace(/^Session\s*\d+\s*:\s*/i, "").trim();
+
     /* Session header slide */
     slides.push({
       type: "objectives",
@@ -761,13 +798,27 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
       speakerNote:
         `📍 ${session.label}: ${session.title}\n\n` +
         (session.summary ? `${session.summary}\n\n` : "") +
-        "Walk through the session outcomes before diving into content. " +
-        `Ask: "What do you already know about ${session.title}?"`,
+        "Session opening script:\n" +
+        "• Set context: what this session solves in the workplace.\n" +
+        "• Walk through outcomes and define success criteria clearly.\n" +
+        "• Prime participation: ask 2 learners to share prior experience.\n\n" +
+        `Ask: "What do you already know about ${sessionShortTitle || session.title}?"\n` +
+        "Visual-first strategy:\n" +
+        "• Start with a board map (concept map or process flow) before text-heavy explanation.\n" +
+        "• Keep referring back to the map so visual learners can anchor each new point.",
     });
 
     /* Sections → content slides */
     for (const section of session.sections ?? []) {
-      slides.push(...sectionToSlides(section, session.label, session.label, flow.moduleId));
+      slides.push(
+        ...sectionToSlides(
+          section,
+          session.label,
+          sessionShortTitle || session.label,
+          flow.moduleId,
+          session.outcomes
+        )
+      );
     }
   }
 
