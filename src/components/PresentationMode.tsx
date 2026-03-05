@@ -1180,6 +1180,14 @@ export function PresentationMode({
   const [direction, setDirection] = useState<"next" | "prev">("next");
   const [sessionPickerOpen, setSessionPickerOpen] = useState(false);
 
+  /* Reset to slide 1 whenever the module/mode changes (e.g. inline unit swap) */
+  useEffect(() => {
+    setCurrent(0);
+    setQuizStates({});
+    setAnimating(null);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode, flow?.moduleId, mod?.id]);
+
   /* ── Remote-control state */
   // If launched remotely the phone sends a pre-agreed code so both sides join the same channel
   // eslint-disable-next-line react-hooks/exhaustive-deps
