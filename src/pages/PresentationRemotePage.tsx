@@ -119,10 +119,17 @@ export default function PresentationRemotePage() {
 
     channelRef.current = ch;
 
-    /* Heartbeat ping every 5 s — desktop responds with current slide state */
+    /* Retry sync every 1.5 s until we get a slide-state response,
+       then switch to a 5 s keepalive ping so the desktop tracks presence. */
     pingTimer.current = setInterval(() => {
-      ch.send({ type: "broadcast", event: EV_PING, payload: {} });
-    }, 5_000);
+      if (!stateRef.current) {
+        // Still waiting — ask desktop to send its current state
+        ch.send({ type: "broadcast", event: EV_REQUEST_SYNC, payload: {} });
+      } else {
+        // Connected — just heartbeat
+        ch.send({ type: "broadcast", event: EV_PING, payload: {} });
+      }
+    }, 1_500);
 
     return () => {
       if (pingTimer.current) clearInterval(pingTimer.current);

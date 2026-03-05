@@ -1242,7 +1242,11 @@ export function PresentationMode({
         else if (payload?.action === "prev") goRef.current("prev");
         else if (payload?.action === "goto") jumpToRef.current(payload.index);
       })
-      .subscribe();
+      .subscribe((subStatus) => {
+        // Broadcast current state immediately so a waiting remote gets it
+        // as soon as this desktop channel becomes active.
+        if (subStatus === "SUBSCRIBED") sendState();
+      });
 
     channelRef.current = ch;
 
