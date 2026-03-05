@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { PresentationMode } from "./PresentationMode";
 import { modules as allModules } from "@/data/courseData";
+import { useModuleFlow } from "@/hooks/useModuleFlow";
 import type { Module } from "@/types/course";
 import {
   EV_LAUNCH,
@@ -64,6 +65,8 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
 
   /* ── Remote launch state — set when the facilitator's phone broadcasts EV_LAUNCH */
   const [remoteLaunch, setRemoteLaunch] = useState<RemoteLaunch | null>(null);
+  const remoteModuleId = remoteLaunch?.mode === "module" ? remoteLaunch.moduleId : undefined;
+  const { flow: remoteFlow } = useModuleFlow(remoteModuleId);
 
   /* ── Subscribe to the global launcher channel (admin/lecturer only) */
   useEffect(() => {
@@ -221,6 +224,7 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
       {remoteLaunch && (
         <PresentationMode
           module={remoteLaunch.module}
+          flow={remoteFlow}
           mode={remoteLaunch.mode}
           isAdmin={true}
           initialSessionCode={remoteLaunch.sessionCode}
