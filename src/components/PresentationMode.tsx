@@ -236,49 +236,49 @@ const MODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes> = {
   /* ── Block 1 ── */
   "14924": {
     title:
-      "Welcome to Information Systems Analysis — today we learn to think like analysts before coding like developers.\n\n" +
-      "Opening hook (3 minutes): Ask, 'I'd like you to Think of one system you used this week (registration, banking, WhatsApp, LMS). What happens if it fails?' Capture 3 answers under People / Process / Data on the board.\n\n" +
-      "Bridge statement: 'Everything we do today prevents expensive failure later. Good analysis saves money, time, and reputation.'",
-    objectives:      
-      "Our Learning Outcome for these unit will revolve around:\n" +
-      "• (SDLC): Emphasise that analysis and design happen before coding for a reason.\n" +
-      "• (analyst role): Analyst = translator between business reality and technical implementation.\n" +
-      "• (fact-finding): Use Who/What/Where/When/How/Why as your questioning spine.\n" +
-      "• (techniques): DFDs and decision models are communication tools, not just diagrams.\n\n" +
-      "",
-    
+      "Welcome to Information Systems Analysis. Today I will guide us to think like analysts before coding like developers.\n\n" +
+      "My opening hook (3 minutes): I will ask, 'Think of one system you used this week (registration, banking, WhatsApp, LMS). What happens if it fails?' I will capture 3 answers under People / Process / Data on the board.\n\n" +
+      "My bridge statement: 'Everything we do today prevents expensive failure later. Good analysis saves money, time, and reputation.'",
+    objectives:
+      "Today I will anchor our learning outcomes around four core ideas:\n" +
+      "• SDLC: I will emphasise that analysis and design happen before coding for a reason.\n" +
+      "• Analyst role: I will explain that the analyst is the translator between business reality and technical implementation.\n" +
+      "• Fact-finding: I will use Who / What / Where / When / How / Why as my questioning spine.\n" +
+      "• Techniques: I will show that DFDs and decision models are communication tools, not just diagrams.\n\n" +
+      "As we move through the day, I will keep linking each concept back to the same hook scenario from the first slide.",
+
       activityIndividual:
-      "Run activities with the E-D-C cycle: Explain briefly → Demonstrate one example → Check learner attempt.\n\n" +
-      "• Systems vs Requirements Analysis: Use the phrase 'WHAT first, HOW later.' Ask learners to rewrite one vague request into a measurable requirement.\n" +
-      "• Feasibility and cost-benefit: Have learners classify examples into tangible vs intangible and defend one decision.\n" +
-      "• Fact-finding techniques: Give one scenario (remote site, sensitive users, many respondents) and ask which method best fits and why.\n" +
-      "• DFD practice: Live-draw Context Diagram first, then Diagram 0. Enforce naming rules (noun for entity/data store, verb phrase for process).\n" +
-      "• Decision tools: Compare one decision tree and one decision table for the same rule so learners see when each is clearer.\n\n" +
-      "Facilitator move: if learners are stuck, ask probing questions; do not supply final answers immediately.",
-    
+      "For individual activities, I will use the E-D-C cycle: Explain briefly -> Demonstrate one example -> Check learner attempt.\n\n" +
+      "• Systems vs Requirements Analysis: I will use the phrase 'WHAT first, HOW later' and ask learners to rewrite one vague request into a measurable requirement.\n" +
+      "• Feasibility and cost-benefit: I will ask learners to classify examples into tangible vs intangible and defend one decision.\n" +
+      "• Fact-finding techniques: I will give one scenario (remote site, sensitive users, many respondents) and ask which method best fits and why.\n" +
+      "• DFD practice: I will live-draw Context Diagram first, then Diagram 0, and enforce naming rules (noun for entity/data store, verb phrase for process).\n" +
+      "• Decision tools: I will compare one decision tree and one decision table for the same rule so learners can see when each is clearer.\n\n" +
+      "When learners are stuck, I will ask probing questions first and avoid giving final answers too early.",
+
       activityGroup:
-      "Integrated group challenge (25 minutes): 'Analyse the CET Attendance System redesign.'\n\n" +
-      "Deliverables per group:\n" +
+      "For the group task (25 minutes), I will run an integrated challenge: 'Analyse the CET Attendance System redesign.'\n\n" +
+      "I will require these deliverables per group:\n" +
       "1. Problem statement (1 sentence)\n" +
       "2. Stakeholder list (internal + external)\n" +
       "3. Fact-finding plan (at least 3 methods with reasons)\n" +
       "4. Mini Context DFD (entities + main process + flows)\n" +
       "5. One recommendation: structured vs Agile (with justification)\n\n" +
-      "Roles: Facilitator, Scribe, Modeler, Presenter, Timekeeper.\n\n" +
-      "Debrief prompts:\n" +
+      "I will assign roles: Facilitator, Scribe, Modeler, Presenter, Timekeeper.\n\n" +
+      "During debrief, I will ask:\n" +
       "• 'Which requirement is most risky if misunderstood?'\n" +
       "• 'What data flow is missing from your model?'\n" +
       "• 'How would your recommendation change if requirements were unstable?'",
     summary:
-      "Use this close-out script (5–7 minutes):\n\n" +
+      "For my close-out (5-7 minutes), I will say:\n\n" +
       "'Today we moved from intuition to structured analysis. You can now define a system problem, gather facts, model data movement, and justify an approach before coding starts.'\n\n" +
-      "Rapid recall (cold call 4 learners):\n" +
+      "I will run a rapid recall with four learners:\n" +
       "1) 'Explain SDLC in one sentence.'\n" +
       "2) 'Give one fact-finding technique and best-use case.'\n" +
       "3) 'What is the difference between context diagram and Diagram 0?'\n" +
       "4) 'When would Agile be better than strict sequential SDLC?'\n\n" +
-      "Visual consolidation: return to the board map (Problem → Requirements → Models → Recommendation) and ask learners to place one concept under each.\n\n" +
-      "Preparation reminders:\n" +
+      "I will end with visual consolidation: I will return to the board map (Problem -> Requirements -> Models -> Recommendation) and ask learners to place one concept under each.\n\n" +
+      "My reminders before dismissal:\n" +
       "• Complete workbook activities and keep DFD practice pages for PoE\n" +
       "• Bring one real workplace system issue for tomorrow's discussion\n" +
       "• Ensure attendance sign-out before leaving.",
