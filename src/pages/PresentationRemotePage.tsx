@@ -17,6 +17,7 @@ import { useParams } from "react-router-dom";
 import {
   ChevronLeft,
   ChevronRight,
+  ArrowRight,
   BookOpen,
   Target,
   Zap,
@@ -288,6 +289,23 @@ export default function PresentationRemotePage() {
               <div className="bg-white/3 border border-white/8 rounded-xl px-4 py-3 mb-2">
                 <p className="text-white/30 text-xs uppercase tracking-widest mb-0.5">Up next</p>
                 <p className="text-white/55 text-sm leading-snug">{state.nextTitle}</p>
+              </div>
+            )}
+
+            {/* Launch next unit — appears on the final slide when a next unit exists */}
+            {state.isLastSlide && state.nextUnitId && (
+              <div className="mt-4 mb-2">
+                <p className="text-white/30 text-xs uppercase tracking-widest mb-2">Ready to continue?</p>
+                <button
+                  onClick={() => send({ action: "launch-unit", unitId: state.nextUnitId! })}
+                  className="w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-black font-bold text-sm transition-all"
+                >
+                  {state.nextUnitLabel ?? "Open next unit"}
+                  <ArrowRight size={16} />
+                </button>
+                <p className="text-white/20 text-xs text-center mt-1.5">
+                  Triggers on the presentation screen too
+                </p>
               </div>
             )}
 

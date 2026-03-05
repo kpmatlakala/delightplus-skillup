@@ -44,6 +44,8 @@ interface RemoteLaunch {
   sessionCode: string;
   module: Module | undefined;
   mode: "briefing" | "module";
+  nextUnitId?: string;
+  nextUnitTitle?: string;
 }
 
 export default function AppLayout({ children, title, subtitle }: AppLayoutProps) {
@@ -75,11 +77,15 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
       .on("broadcast", { event: EV_LAUNCH }, ({ payload }: { payload: LaunchPayload }) => {
         const { moduleId, sessionCode } = payload;
         const isBriefing = moduleId === "briefing";
+        const modIndex = isBriefing ? -1 : allModules.findIndex((m) => m.id === moduleId);
+        const nextMod = allModules[modIndex + 1]; // undefined if last module
         setRemoteLaunch({
           moduleId,
           sessionCode,
           module: isBriefing ? undefined : allModules.find((m) => m.id === moduleId),
           mode: isBriefing ? "briefing" : "module",
+          nextUnitId: nextMod?.id,
+          nextUnitTitle: nextMod?.title,
         });
       })
       .subscribe();
@@ -202,6 +208,8 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
           mode={remoteLaunch.mode}
           isAdmin={true}
           initialSessionCode={remoteLaunch.sessionCode}
+          nextUnitId={remoteLaunch.nextUnitId}
+          nextUnitTitle={remoteLaunch.nextUnitTitle}
           onClose={() => setRemoteLaunch(null)}
         />
       )}

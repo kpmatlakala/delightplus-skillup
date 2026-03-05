@@ -1193,15 +1193,21 @@ export function PresentationMode({
   // Initialised with typed no-ops; updated via useEffect once go/jumpTo are defined below
   const goRef = useRef<(dir: "next" | "prev") => void>(() => {});
   const jumpToRef = useRef<(i: number) => void>(() => {});
+  const launchUnitRef = useRef<() => void>(() => {});
+  const nextUnitIdRef = useRef(nextUnitId);
+  const nextUnitTitleRef = useRef(nextUnitTitle);
 
   useEffect(() => { currentRef.current = current; }, [current]);
   useEffect(() => { slidesRef.current = slides; }, [slides]);
-  // goRef and jumpToRef are synced after go/jumpTo are declared below
+  useEffect(() => { nextUnitIdRef.current = nextUnitId; nextUnitTitleRef.current = nextUnitTitle; }, [nextUnitId, nextUnitTitle]);
+  // goRef, jumpToRef, and launchUnitRef are synced after their functions are declared below
 
   const buildPayload = useCallback((): SlideStatePayload => {
     const ss = slidesRef.current;
     const i = currentRef.current;
     const s = ss[i];
+    const uid = nextUnitIdRef.current;
+    const utitle = nextUnitTitleRef.current;
     return {
       index: i,
       total: ss.length,
@@ -1214,8 +1220,13 @@ export function PresentationMode({
       nextTitle: ss[i + 1]?.title,
       prevTitle: i > 0 ? ss[i - 1]?.title : undefined,
       isQuiz: s?.type === "quiz",
+      isLastSlide: i === ss.length - 1,
+      nextUnitId: uid,
+      nextUnitLabel: uid
+        ? (utitle ? `Begin: ${utitle}` : "Open next unit")
+        : undefined,
     };
-  }, []);
+  }, [])
 
   /* ── Supabase broadcast channel (set up once per session code) */
   useEffect(() => {
@@ -1241,6 +1252,7 @@ export function PresentationMode({
         if (payload?.action === "next") goRef.current("next");
         else if (payload?.action === "prev") goRef.current("prev");
         else if (payload?.action === "goto") jumpToRef.current(payload.index);
+        else if (payload?.action === "launch-unit") launchUnitRef.current();
       })
       .subscribe((subStatus) => {
         // Broadcast current state immediately so a waiting remote gets it
@@ -1341,6 +1353,9 @@ export function PresentationMode({
     onClose();
     navigate(`${routePrefix}/${nextUnitId}`);
   };
+  // Keep launchUnitRef fresh so the channel handler can call it
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { launchUnitRef.current = handleNavigateToUnit; }, [nextUnitId]);
 
   const nextLabel = nextUnitTitle
     ? `Begin: ${nextUnitTitle}`

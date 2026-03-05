@@ -75,10 +75,16 @@ export interface SlideStatePayload {
   prevTitle?: string;
   /** Whether the current slide is a quiz slide (disables remote Next until answered) */
   isQuiz?: boolean;
+  /** Whether this is the final slide of the deck */
+  isLastSlide?: boolean;
+  /** If set, the remote shows a "Launch [unit]" button that fires launch-unit cmd */
+  nextUnitId?: string;
+  nextUnitLabel?: string;
 }
 
 /** Command sent from mobile → desktop. */
 export type RemoteCommand =
   | { action: "next" }
   | { action: "prev" }
-  | { action: "goto"; index: number };
+  | { action: "goto"; index: number }
+  | { action: "launch-unit"; unitId: string };
