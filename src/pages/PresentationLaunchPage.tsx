@@ -63,9 +63,11 @@ export default function PresentationLaunchPage() {
       if (status !== "SUBSCRIBED") return;
       ch.send({ type: "broadcast", event: EV_LAUNCH, payload })
         .then(() => {
-          supabase.removeChannel(ch);
-          // Phone becomes the wireless remote controller
+          // Navigate first — removing the channel before navigating can briefly
+          // drop the Supabase WebSocket, causing CHANNEL_ERROR on the remote page.
           navigate(`/present/remote/${sessionCode}`);
+          // Clean up after a short delay so the socket stays alive during navigation.
+          setTimeout(() => supabase.removeChannel(ch), 2000);
         })
         .catch(() => {
           setLaunching(null);

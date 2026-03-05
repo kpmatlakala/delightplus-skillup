@@ -86,6 +86,8 @@ export default function PresentationRemotePage() {
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
   const stateRef   = useRef<SlideStatePayload | null>(null);
   const pingTimer  = useRef<ReturnType<typeof setInterval> | null>(null);
+  const reconnectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const reconnectCount = useRef(0);
 
   useEffect(() => { stateRef.current = state; }, [state]);
 
@@ -94,26 +96,38 @@ export default function PresentationRemotePage() {
     channelRef.current?.send({ type: "broadcast", event: EV_CMD, payload: cmd });
   };
 
-  /* ── Channel lifecycle */
-  useEffect(() => {
-    if (!upperCode) return;
+  /* ── Channel setup — extracted so we can call it again on reconnect */
+  const connectChannel = (code: string) => {
+    // Clean up any existing channel first
+    if (channelRef.current) {
+      supabase.removeChannel(channelRef.current);
+      channelRef.current = null;
+    }
+    if (pingTimer.current) { clearInterval(pingTimer.current); pingTimer.current = null; }
 
-    const ch = supabase.channel(channelName(upperCode), {
+    const ch = supabase.channel(channelName(code), {
       config: { broadcast: { ack: false } },
     } as Parameters<typeof supabase.channel>[1]);
 
     ch
       .on("broadcast", { event: EV_SLIDE_STATE }, ({ payload }: { payload: SlideStatePayload }) => {
+        reconnectCount.current = 0; // successful connection — reset backoff
         setState(payload);
         setStatus("connected");
       })
-      .subscribe((status) => {
-        if (status === "SUBSCRIBED") {
+      .subscribe((subStatus) => {
+        if (subStatus === "SUBSCRIBED") {
           setStatus("waiting");
-          // Ask the desktop for the latest state immediately
           ch.send({ type: "broadcast", event: EV_REQUEST_SYNC, payload: {} });
-        } else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+        } else if (subStatus === "CHANNEL_ERROR" || subStatus === "TIMED_OUT") {
           setStatus("disconnected");
+          // Auto-reconnect with exponential backoff (max 8 s)
+          const delay = Math.min(1000 * 2 ** reconnectCount.current, 8000);
+          reconnectCount.current += 1;
+          reconnectTimer.current = setTimeout(() => {
+            setStatus("connecting");
+            connectChannel(code);
+          }, delay);
         }
       });
 
@@ -123,18 +137,23 @@ export default function PresentationRemotePage() {
        then switch to a 5 s keepalive ping so the desktop tracks presence. */
     pingTimer.current = setInterval(() => {
       if (!stateRef.current) {
-        // Still waiting — ask desktop to send its current state
         ch.send({ type: "broadcast", event: EV_REQUEST_SYNC, payload: {} });
       } else {
-        // Connected — just heartbeat
         ch.send({ type: "broadcast", event: EV_PING, payload: {} });
       }
     }, 1_500);
+  };
 
+  /* ── Channel lifecycle */
+  useEffect(() => {
+    if (!upperCode) return;
+    connectChannel(upperCode);
     return () => {
       if (pingTimer.current) clearInterval(pingTimer.current);
-      supabase.removeChannel(ch);
+      if (reconnectTimer.current) clearTimeout(reconnectTimer.current);
+      if (channelRef.current) supabase.removeChannel(channelRef.current);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [upperCode]);
 
   /* ─────────────────── Render ────────────────────────────────────────────── */
