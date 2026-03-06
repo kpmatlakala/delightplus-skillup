@@ -655,6 +655,35 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
                 ["Conversion", "Installed operational system"],
                 ["Post-implementation Review", "Recommendations for enhancement and organisational adjustment"],
               ]},
+              { type: "heading", text: "Applied SDLC Scenario: Adam's Online Home Decor Store" },
+              { type: "paragraph", text: "Adam wants an online store where customers can browse and buy home decor products. The SDLC helps the team move from business idea to a stable, secure, maintainable online system." },
+              { type: "table", headers: ["Phase", "How It Applies to Adam's Store", "Main Output"], rows: [
+                ["Planning", "Define business goals, budget, timeline, and success criteria.", "Project scope and plan"],
+                ["Requirements Analysis", "Capture required features: product catalogue, cart, checkout, account management, admin dashboard, payment integration.", "SRS (Software Requirements Specification)"],
+                ["Design", "Define architecture, database structure, page flow, security model, and user interface approach.", "DDS (Design Document Specification)"],
+                ["Implementation", "Develop frontend, backend, APIs, database queries, and integrations according to DDS.", "Working software build"],
+                ["Testing", "Run QA across functional, usability, security, and performance checks; fix defects.", "Test reports + bug fixes"],
+                ["Deployment & Maintenance", "Release to users, monitor incidents, patch bugs, improve features over time.", "Live system + updates"],
+              ]},
+              { type: "callout", variant: "tip", text: "Teaching takeaway: the phase names may vary by model, but the core logic stays the same — plan, define, design, build, validate, release, improve." },
+            ],
+          },
+          {
+            title: "1.1A SDLC Models in Practice: Waterfall, Agile, and DevOps",
+            blocks: [
+              { type: "paragraph", text: "SDLC is the backbone. Methodologies define HOW teams move through those phases. Different projects need different execution styles." },
+              { type: "table", headers: ["Model", "Execution Pattern", "Best Fit", "Risk/Trade-off"], rows: [
+                ["Waterfall", "Sequential phase-by-phase progression", "Stable requirements, regulated projects", "Low flexibility when requirements change late"],
+                ["Agile", "Iterative sprints with frequent stakeholder feedback", "Evolving requirements and fast delivery needs", "Requires disciplined backlog and stakeholder participation"],
+                ["DevOps", "Continuous integration, testing, deployment, and operations feedback", "High-frequency release environments", "Requires automation maturity and shared ownership culture"],
+              ]},
+              { type: "heading", text: "Online Store Lens" },
+              { type: "list", items: [
+                "Waterfall works when Adam's requirements are fixed and approved upfront.",
+                "Agile works when product categories, promotions, and user journeys evolve rapidly.",
+                "DevOps is valuable after go-live, where frequent updates and quick fixes are expected.",
+              ]},
+              { type: "callout", variant: "info", text: "CI/CD in DevOps means code can be integrated, tested, and safely released many times per day, reducing deployment risk while improving response speed to user feedback." },
             ],
           },
           {
@@ -898,6 +927,14 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
                 "At regular intervals, the team reflects on how to become more effective and adjusts accordingly",
               ]},
               { type: "callout", variant: "info", text: "Scrum (an Agile framework): begin with a high-level plan that can be changed as the project proceeds. Work is done in fixed-length sprints (time boxes). The team's collective success is more important than individual contribution. Extreme Programming (XP) is another Agile method emphasising pair programming, test-driven development, and continuous integration." },
+              { type: "heading", text: "DevOps and Continuous Delivery" },
+              { type: "paragraph", text: "DevOps extends Agile by integrating development and operations into one continuous lifecycle. The goal is fast, reliable release cycles supported by automation and monitoring." },
+              { type: "table", headers: ["Practice", "Purpose", "Example in Adam's Store"], rows: [
+                ["Continuous Integration (CI)", "Merge code frequently and run automated checks early", "Every change to checkout logic triggers automated tests"],
+                ["Continuous Delivery/Deployment (CD)", "Keep software releasable (or auto-release) at all times", "Release catalog updates and bug fixes safely without long delays"],
+                ["Monitoring & Feedback", "Observe real usage and system health to drive improvement", "Track payment failures and improve checkout reliability"],
+              ]},
+              { type: "callout", variant: "tip", text: "Modern teams often use a hybrid approach: SDLC structure for governance, Agile for delivery cadence, and DevOps for release reliability." },
               { type: "heading", text: "Other Development Methods" },
               { type: "table", headers: ["Method", "Brief Description"], rows: [
                 ["Rational Unified Process (RUP)", "An iterative software development framework developed by IBM Rational. Organises the development life cycle into four phases (Inception, Elaboration, Construction, Transition) with defined workflows. Suited to large, complex enterprise projects."],

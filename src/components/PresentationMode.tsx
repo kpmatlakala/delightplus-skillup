@@ -49,6 +49,7 @@ interface Slide {
   title: string;
   subtitle?: string;
   bullets?: string[];
+  diagram?: string;
   body?: string;
   highlight?: string;
   speakerNote?: string;
@@ -822,6 +823,55 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
         "4) Model flow and logic (DFD, decision tools)\n" +
         "5) Recommend approach (structured/Agile/JAD/RAD/OO)\n\n" +
         "Transition line to SDLC: 'Now that we know the analysis arc, SDLC gives us the disciplined process to execute it stage by stage.'",
+    });
+
+    slides.push({
+      type: "content",
+      title: "SDLC Diagram: Adam's Online Store",
+      subtitle: "From idea to stable online business system",
+      diagram:
+        "[Planning] -> [Requirements Analysis] -> [Design] -> [Implementation] -> [Testing] -> [Deployment & Maintenance]\n" +
+        "      |                |                     |                 |                |                     |\n" +
+        "      v                v                     v                 v                v                     v\n" +
+        "  Business goal     SRS document          DDS architecture   Working code      QA bug reports      Live store + updates",
+      bullets: [
+        "Planning: define Adam's business goal, scope, budget, timeline, stakeholders",
+        "Requirements Analysis: finalise SRS (products, cart, checkout, customer accounts, admin panel)",
+        "Design: create DDS (architecture, DB schema, UI wireframes, security model)",
+        "Implementation + Testing: build features, run QA cycles, fix defects until stable",
+        "Deployment & Maintenance: launch store, monitor issues, release improvements continuously",
+      ],
+      highlight:
+        "This is the full lifecycle I will keep referring to whenever we ask: What are we building, why are we building it, and how do we know it works?",
+      speakerNote:
+        "Let's walk this diagram left to right with Adam's store context. I will point at each phase and ask one question: 'What is the key output of this phase?'\n\n" +
+        "I will reinforce deliverables: SRS after requirements, DDS after design, tested build before deployment.\n\n" +
+        "Key line: 'If we skip analysis or design, we do not save time; we postpone expensive failure.'",
+    });
+
+    slides.push({
+      type: "content",
+      title: "How Models Execute the Same SDLC",
+      subtitle: "Waterfall vs Agile vs DevOps (same phases, different flow)",
+      diagram:
+        "Waterfall:\n" +
+        "Plan -> Analyze -> Design -> Build -> Test -> Deploy -> Maintain\n\n" +
+        "Agile (Sprint loop):\n" +
+        "Plan -> Design -> Build -> Test -> Review -> Repeat\n\n" +
+        "DevOps (continuous loop):\n" +
+        "Plan -> Code -> Build -> Test -> Release -> Deploy -> Operate -> Monitor -> Feedback -> Plan",
+      bullets: [
+        "Waterfall: strong phase gates; best when requirements are stable and compliance is strict",
+        "Agile: iterative sprints; best when requirements evolve and feedback must be fast",
+        "DevOps: automates build/test/deploy with continuous monitoring and feedback",
+        "All three still rely on the same SDLC logic: plan, design, build, test, release, maintain",
+      ],
+      highlight:
+        "For Adam's store: start with clear requirements, iterate UI and features in sprints, and use CI/CD-style updates after launch.",
+      speakerNote:
+        "I'll explain that methodologies are different operating styles on top of the same SDLC backbone.\n\n" +
+        "Let's ask: 'If Adam keeps changing product categories weekly, which model helps us adapt fastest?' (Agile/DevOps).\n\n" +
+        "Then I'll close with: 'Model choice changes speed and feedback loops, not the need for analysis discipline.'",
     });
   }
 
@@ -1914,6 +1964,14 @@ export function PresentationMode({
                     );
                   })}
                 </ul>
+              )}
+
+              {slide.diagram && (
+                <div className="mb-4 p-4 rounded-xl border border-white/20 bg-black/30 overflow-x-auto">
+                  <pre className="text-xs md:text-sm text-white/90 leading-relaxed whitespace-pre font-mono">
+                    {slide.diagram}
+                  </pre>
+                </div>
               )}
 
               {slide.body && (
