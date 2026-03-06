@@ -1618,12 +1618,10 @@ export function PresentationMode({
   const formatPresenterNote = (s: Slide | undefined, index: number, totalSlides: number): string | undefined => {
     if (!s) return undefined;
     const header = `Slide ${index + 1} of ${totalSlides}\nTitle: ${s.title}`;
-    const summary = buildOnScreenSummary(s);
     const facilitatorScript = s.speakerNote?.trim();
 
     return [
       header,
-      summary ? `\nWhat learners see:\n${summary}` : "",
       facilitatorScript ? `\nFacilitator notes:\n${facilitatorScript}` : "",
     ]
       .filter(Boolean)

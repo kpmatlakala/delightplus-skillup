@@ -16,10 +16,7 @@ export type Module14924PresentationSlide = {
 };
 
 export const module14924SpeakerNotes: Module14924SpeakerNotes = {
-  title:
-    "Welcome to Information Systems Analysis. Today we'll think like analysts before coding like developers.\n\n" +
-    "Let's start with a quick hook (3 minutes): I'll ask, 'Think of one system you used this week (registration, banking, WhatsApp, LMS). What happens if it fails?' We'll capture 3 answers under People / Process / Data on the board.\n\n" +
-    "Bridge statement: 'Everything we do today prevents expensive failure later. Good analysis saves money, time, and reputation.'",
+  title: "Welcome to Information Systems Analysis. Today we'll think like analysts before coding like developers.",
   objectives:
     "Let's anchor our learning outcomes around four core ideas:\n" +
     "- SDLC: I'll emphasise why analysis and design must happen before coding.\n" +
@@ -138,8 +135,7 @@ export const module14924SlideList: Module14924SlideListItem[] = [
     "\\n" +
     "Facilitator notes:\\n" +
     "Welcome to Information Systems Analysis. Today we'll think like analysts before coding like developers.\\n" +
-    "\\n" +
-    "'",
+    "\\n",
     source: "Auto-generated from buildFlowSlides[0]"
   },
   {
@@ -171,7 +167,7 @@ export const module14924SlideList: Module14924SlideListItem[] = [
     "\\n" +
     "Let's start with a quick hook (3 minutes): I'll ask, 'Think of one system you used this week (registration, banking, WhatsApp, LMS). What happens if it fails?' We'll capture 3 answers under People / Process / Data on the board.\\n" +
     "\\n" +
-    "Bridge statement: 'Everything we do today prevents expensive failure later. Good analysis saves money, time, and reputation.",
+    "Bridge statement: 'Everything we do today prevents expensive failure later. Good analysis saves money, time, and reputation.'",
     source: "Auto-generated from buildFlowSlides[1]"
   },
   {
