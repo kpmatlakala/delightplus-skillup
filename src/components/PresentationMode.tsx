@@ -1036,7 +1036,8 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
       if (
         flow.moduleId === "14924" &&
         session.id === "session-1" &&
-        /systems development life cycle|sdlc/i.test(section.title)
+        /systems development life cycle\s*\(sdlc\)/i.test(section.title) &&
+        !/models in practice/i.test(section.title)
       ) {
         const flowSlide = module14924PresentationFlow.session1Insertions.afterSdlc;
         slides.push({
