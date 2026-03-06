@@ -5,7 +5,7 @@
       "title": "Welcome to Information Technology:\nSystems Development",
       "subtitle": "FETC · SAQA 78965 · NQF Level 4 · 165 Credits · 15 Days · 3 Blocks",
       "body": "Programme Briefing",
-      "speakerNote": "Welcome everyone to this programme. Before we open any unit standard content, we'll spend a few minutes orienting ourselves — what this qualification is, what you'll be able to do by the end, and why it matters. Ensure attendance registers are signed and PoE folders are distributed."
+      "speakerNote": "Welcome everyone. Before we open any unit content, we spend a few minutes orienting: what this qualification is, what you will be able to do by the end, and why it matters for your learners and your professional practice.\n\nEnsure attendance registers are signed and PoE folders are distributed now — this session is short and we want full attention once we begin.\n\nTone to set: energetic and forward-looking. This is not a compliance exercise — it is the opening of a 15-day journey that changes how these lecturers teach systems thinking."
     },
     {
       "type": "content",
@@ -18,107 +18,105 @@
         "Based in Limpopo Province, South Africa",
         "Email: matlakalakabelo1@gmail.com  ·  Mobile: +27 72 713 8367"
       ],
-      "highlight": "Kabelo will deliver all 3 blocks of this qualification. Reach out directly for support between sessions.",
-      "speakerNote": "Briefly introduce yourself. Mention your background in both software development and systems analysis. This builds credibility — learners need to see that systems development knowledge is grounded in real professional practice."
+      "highlight": "Kabelo delivers all 3 blocks. Reach out directly between sessions for support.",
+      "speakerNote": "Keep this brief — 2 minutes maximum. Mention your background in both software development and systems analysis. The credibility point matters: learners need to see that this content is grounded in real professional practice, not just academic theory.\n\nOptional: share one real project you have worked on that required both analysis and development skills. One sentence is enough. It anchors your authority early."
     },
     {
       "type": "content",
       "title": "What is Information Technology?",
       "subtitle": "The invisible infrastructure every organisation depends on",
       "bullets": [
-        "IT is the combination of hardware and software products and services organisations use to manage, access, communicate, and share information",
-        "IT is not just computers — it underpins every business function: student records, payroll, logistics, customer service",
+        "IT is the combination of hardware and software products and services that organisations use to manage, access, communicate, and share information",
+        "IT is not just computers — it underpins every business function: student records, payroll, logistics, service delivery",
         "Force 1 — Changes in the world: globalisation, remote work, digital transformation, real-time information demand",
         "Force 2 — Changes in technology: cloud computing, AI, mobile platforms, exponential data growth (Moore's Law)",
         "Force 3 — Changes in client demand: systems must be faster, more intuitive, more accessible, and more secure than ever before"
       ],
-      "highlight": "As systems developers, learners will design, build and maintain the IT infrastructure organisations depend on. Understanding what IT is — and why it must be planned — is the foundation of every unit in this qualification.",
-      "speakerNote": "Ask: 'Name one IT system your organisation runs on that would cause serious disruption if it went down.' Use the answer to anchor the three forces. Stress that IT planning is not a technical problem — it is a business problem."
+      "highlight": "As systems developers, learners will design, build and maintain the IT infrastructure organisations depend on. Understanding WHAT IT is — and WHY it must be planned — is the foundation of every unit in this qualification.",
+      "speakerNote": "Ask: 'Name one IT system your institution runs on that would cause serious disruption if it went down for a full day.' Use the answer to anchor the three forces — the system they named exists because of Force 1, runs on technology shaped by Force 2, and must meet expectations driven by Force 3.\n\nStress that IT planning is not a technical problem — it is a business problem. The three forces create the pressure. Systems development is the discipline that responds to that pressure in a controlled, professional way.\n\nKeep this to 4 minutes. Do not go into technical depth on any of the three forces — that is Unit content. This slide creates motivation and context, not instruction."
     },
     {
       "type": "content",
       "title": "What is a System?",
-      "subtitle": "The foundation of everything we build",
+      "subtitle": "A vocabulary frame — we will apply this properly in Unit 1",
       "bullets": [
         "A system is an organised set of interrelated components working together toward a defined goal",
         "An information system collects, processes, stores and distributes data to support operations and decisions",
-        "Student registration portal — captures enrolment data, checks eligibility, generates student numbers and timetables",
-        "Attendance tracking tool — records sign-ins, flags patterns, produces DoE compliance reports",
-        "Results management system — stores marks, calculates averages, generates transcripts and certificates",
-        "Every information system follows one structural pattern: Input → Process → Storage → Output"
+        "Every information system follows one structural pattern: Input → Process → Storage → Output",
+        "Example: a student registration portal captures enrolment data, checks eligibility, generates student numbers, and updates timetables"
       ],
-      "highlight": "Think of one IT system you interact with at your college every day. What does it take in? What does it produce? What happens to the data in between?",
-      "speakerNote": "Ask learners: 'Name one IT system you use at CET. What problem does it solve?' Collect 3–4 answers. Use their examples throughout the session — it grounds the theory in something they already know."
+      "highlight": "Four words to carry into Unit 1: Components · Input/Output · Processes · Feedback. These are your analytical vocabulary — not content to memorise here, but a framework you will apply all day in Session 1.",
+      "speakerNote": "This slide introduces vocabulary — it does NOT teach system analysis. That is Unit 1's job.\n\nSay explicitly: 'I am not going deep on this now. I want you to have four words in your head before we open Unit 1. We will apply them properly once we are in the unit.'\n\nAsk one quick question only: 'Name one IT system you interact with at CET every day. What does it take in? What does it produce?' Take two answers maximum. Do not analyse them — just acknowledge and move on.\n\nForward pointer — say this clearly: 'In about 20 minutes, when we open Unit 1: Information Systems Analysis, we will go deep on what systems analysis actually means as a professional discipline. What you are doing now is getting the vocabulary ready so that depth lands faster.'\n\nDo NOT explain the four dimensions (Components, Input/Output, Processes, Feedback) in detail here. Briefing-level is: name them, give one example sentence each. The full analytical treatment belongs in Unit 1 Slide 6 and the pre-session slides."
     },
     {
       "type": "content",
       "title": "What is Systems Development?",
       "subtitle": "6 phases — coding is only phase 4",
       "bullets": [
-        "Investigation — Identify the business problem; establish whether a system project is justified before spending money",
+        "Investigation — Identify and confirm the business problem worth solving",
         "Analysis — Establish exactly WHAT the system must do: requirements, data flows, user needs, constraints",
         "Design — Specify HOW it will work: architecture, data structures, module structure, user interfaces",
         "Development — Write and unit-test the code based on the approved design documents",
-        "Implementation — Deploy, convert existing data, train users, manage the transition to live",
+        "Implementation — Deploy, convert existing data, train users, manage the transition to live operation",
         "Maintenance — Monitor for defects, apply fixes and enhancements, plan future iterations"
       ],
-      "highlight": "Coding (phase 4) only appears more than halfway through. The analysis and design work before it determines whether what gets built is actually useful. A technically perfect system that solves the wrong problem is still a failure.",
-      "speakerNote": "Emphasise: most expensive IT failures happen in phases 1–2. The CHAOS Report consistently finds fewer than 30% of IT projects complete on time, on budget, to spec — the leading root cause is inadequate analysis, not bad code."
+      "highlight": "Coding (phase 4) only appears more than halfway through. Analysis and design before it determine whether what gets built is actually useful. A technically perfect system that solves the wrong problem is still a failure.",
+      "speakerNote": "Read the phase list left to right — one sentence each. Keep it fast. The point is NOT to teach the SDLC here — it is to show learners that development is a structured discipline with phases, not just 'write code until it works'.\n\nThe punchline is the highlight: phase 4 (code) comes after analysis and design. Most people think systems development IS coding. Correct that misconception now, gently.\n\nForward pointer — say explicitly: 'Unit 1 opens with this lifecycle in detail. By the time you finish Session 1 today, you will be able to describe each phase, name its deliverable, and explain what happens when it is skipped. Right now I just need you to see the shape.'\n\nDo NOT teach feasibility, requirements analysis, or the SDLC in depth here. This slide creates the overview. Unit 1 delivers the substance."
     },
     {
       "type": "content",
       "title": "Systems Development vs Software Development",
       "subtitle": "Different scopes — deeply connected",
       "bullets": [
-        "Software Development — the coding subset: design, write, test, deploy software artefacts",
+        "Software Development — the coding subset: design, write, test, and deploy software artefacts",
         "Systems Development — end-to-end: people, process, data, technology AND code",
         "Software development is a SUBSET that sits inside systems development",
         "The analyst determines WHAT to build and WHY · The developer determines HOW to build it",
         "In this qualification: you will think like an analyst AND write like a developer — both skills are required"
       ],
-      "highlight": "SAQA 78965 is the recognised SA pathway to analyst, developer, business analyst support and project coordination roles across SA government and industry.",
-      "speakerNote": "Clear up this misconception early. Some learners arrive expecting a pure coding course. Frame the expectation: approximately 40% is analysis and design thinking; 60% is implementation. Both halves make you a complete professional."
+      "highlight": "SAQA 78965 is the recognised SA pathway to analyst, developer, BA support, and project coordination roles across government and industry.",
+      "speakerNote": "Clear up the most common misconception before learners carry it into the unit content: this is NOT a pure coding course.\n\nFrame the expectation plainly: 'Roughly 40% of this programme is analysis and design thinking. 60% is implementation. Both halves make you a complete professional. If you only know how to code but cannot analyse a problem, you will build the wrong solution. If you can only analyse but not build, you cannot deliver anything.'\n\nThe WHAT/HOW distinction here is introduced at motivation level. Unit 1 Slide 17 operationalises it — teaching learners HOW to establish WHAT through requirements analysis tools and techniques. Do not go there now.\n\nKeep to 3 minutes."
     },
     {
       "type": "content",
       "title": "Why Does This Qualification Matter?",
       "subtitle": "Four reasons anchored in South African IT",
       "bullets": [
-        "Organisations run on systems — every business function depends on reliable information systems",
-        "Poor analysis = expensive failures — most IT project failures trace to misunderstood requirements (Standish CHAOS Report)",
-        "NQF Level 4 opens careers — analyst, developer, BA support and project coordination roles are in high demand across SA",
-        "Professional practice modelling — structured thinking (analyse → design → build) is the standard the workplace expects"
+        "Organisations run on systems — every business function depends on reliable information systems that someone designed and built",
+        "Poor analysis = expensive failures — most IT project failures trace to misunderstood requirements, not bad code (Standish CHAOS Report)",
+        "NQF Level 4 opens careers — analyst, developer, BA support and project coordination roles are in demand across SA government and industry",
+        "Professional practice modelling — structured thinking (analyse → design → build) is the standard the workplace expects and the standard you will model for your learners"
       ],
       "highlight": "As CET lecturers, you model the standard your learners will carry into the field. Demonstrating structured systems thinking sets the bar for the next generation of SA IT professionals.",
-      "speakerNote": "This is the motivational slide. Pause and ask: 'Who here has experienced an IT system that didn't do what was expected?' Then: 'That is the problem this qualification trains you to prevent.'"
+      "speakerNote": "This is the motivational anchor of the entire briefing. Pause here and let it land.\n\nAsk: 'Who here has experienced an IT system that did not do what was expected — one that was built, delivered, and then rejected or rebuilt?' Wait for a show of hands or a verbal response. Then: 'That is the problem this qualification trains you — and your learners — to prevent.'\n\nThe Standish CHAOS Report statistic (more than 70% of IT project failures trace to poor requirements) will come up again in Unit 1. Plant it here as a seed: 'We will come back to this number in Unit 1. By the end of today you will understand exactly why requirements analysis is where most projects are won or lost.'"
     },
     {
       "type": "content",
       "title": "Your 10-Module Roadmap",
       "subtitle": "15 days · 3 blocks · 56 credits delivered",
       "bullets": [
-        "Block 1 · Days 1–5 · Foundations (23 credits): Systems Analysis, Team Collaboration, Programming Principles, Problem Solving, Design",
+        "Block 1 · Days 1–5 · Foundations (23 credits): Systems Analysis (today), Team Collaboration, Programming Principles, Problem Solving, Design",
         "Block 2 · Days 6–9 · Applied Programming (14 credits): Apply Programming Principles, Web Scripting",
         "Block 3 · Days 11–13 · Systems in Practice (19 credits): Testing IT Systems, Resolve User Problems, Work as Project Team Member",
         "Each unit ends with a formative quiz (self-check) and an assessment task for your Portfolio of Evidence"
       ],
-      "highlight": "56 credits are delivered across these 15 days. The remaining credits toward the full 165-credit qualification are achieved through workplace evidence in your PoE.",
-      "speakerNote": "Distribute the printed module roadmap now if available. Run through the colour-coded block overview briefly — this helps learners see the sequencing logic."
+      "highlight": "56 credits delivered across these 15 days. Remaining credits toward the full 165-credit qualification are achieved through workplace evidence in your PoE.",
+      "speakerNote": "Distribute the printed module roadmap now if available. Run through the colour-coded block overview — 90 seconds maximum. The goal is for learners to see the sequencing logic: foundations first, applied programming second, systems in practice third.\n\nPoint to today specifically: 'We start right now with Unit 1 — Information Systems Analysis. Everything else in this programme builds on what you learn today. If the analysis foundation is clear, every subsequent unit lands easier.'\n\nIf learners ask about specific blocks or units in detail, defer: 'We will brief each unit as we arrive at it. Right now let us focus on getting Unit 1 started.'"
     },
     {
       "type": "summary",
       "title": "Ready to Begin",
-      "subtitle": "Orientation complete — Unit 1 awaits",
+      "subtitle": "Briefing complete — Unit 1 opens now",
       "bullets": [
-        "✓  You understand what Information Technology is and the three forces shaping it",
-        "✓  You understand what an information system is and how it works",
-        "✓  You can describe the 6 phases of the Systems Development Life Cycle",
-        "✓  You can distinguish systems development from software development",
+        "✓  You know what Information Technology is and the three forces shaping it",
+        "✓  You have the vocabulary frame for systems: components, input/output, processes, feedback",
+        "✓  You can name the 6 phases of Systems Development and why coding is only phase 4",
+        "✓  You understand the distinction between systems development and software development",
         "✓  You know your 10-module roadmap across 3 blocks",
-        "✓  You know how to reach your facilitator for support"
+        "✓  You know how to reach your facilitator between sessions"
       ],
-      "highlight": "Any questions before we open Unit 1: Information Systems Analysis (ITSD-14924, Block 1 · Day 1)?",
-      "speakerNote": "Pause for genuine Q&A — 5 minutes now pays dividends throughout the programme. Then navigate to Unit 1 in the LMS and begin the session."
+      "highlight": "Any questions before we open Unit 1: Information Systems Analysis (SAQA 14924 · Block 1 · Day 1)?",
+      "speakerNote": "Pause for genuine Q&A — 3 to 5 minutes maximum. Answer only orientation questions here. Any content question ('what exactly is a DFD?', 'how does Agile work?') gets deferred: 'That is a great question — and exactly what Unit 1 covers. Let us get into it.'\n\nThen navigate to Unit 1 and open with the title slide.\n\nHandoff line to say clearly: 'The briefing gave you the map. Unit 1 gives you the first destination in depth. Everything we named in the briefing — systems, lifecycle, analysis vs development — we are now going to examine properly. Let us begin.'"
     }
   ]
 }

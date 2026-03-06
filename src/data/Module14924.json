@@ -1,4 +1,4 @@
-﻿{
+{
   "module14924SpeakerNotes": {
     "title": "Welcome to Information Systems Analysis. Today we flip the script â€” we think like analysts before we code like developers. Our job is to understand what a system must do, deeply and precisely, before anyone writes a single line of code.",
 
@@ -88,14 +88,14 @@
       "slideNumber": 6,
       "title": "1.0 Introduction to System Analysis",
       "learnerView": {
-        "subtitle": "Session 1 | Introduction to Information Systems Analysis",
+        "subtitle": "Session 1 | System Analysis as a Structured Discipline",
         "onScreenContent": [
-          "Components | Parts and their relationships | Online store: catalogue, cart, payment gateway, user accounts, order management",
-          "Input and Output | What enters and what the system produces | Input: product search + payment details; Output: order confirmation + inventory update",
-          "Processes | Ordered activities transforming input to output | Browse â†’ add to cart â†’ checkout â†’ payment validation â†’ confirmation â†’ dispatch notification",
-          "Feedback Loops | Output data that adjusts future system behaviour | Low stock alert triggers restocking rule; high error rate triggers form redesign"
+          "System analysis is a structured discipline, not a coding task: define the problem before proposing a solution.",
+          "Three core questions guide analysis: What is happening now? Why is it happening? What must change?",
+          "Use the system lens to answer those questions: Components, Input and Output, Processes, and Feedback loops.",
+          "This framing prepares the SDLC and requirements work that follows in Session 1."
         ],
-        "body": "System analysis is the discipline of understanding how a system works, how its parts interact, and how it can be improved. It applies equally to software systems, business processes, and service delivery systems."},
+        "body": "Before methods, models, and tools, analysts must frame the system problem correctly. Strong analysis starts with disciplined questioning and evidence."},
       "facilitatorNotes": "Facilitator Notes\nSlide 6 of 47\nTitle: 1.0 Introduction to System Analysis\n\nFacilitator notes:\nOutcome focus: Explain the role of information systems analysis within the Software Development Life Cycle.\n\nFacilitation flow:\n1) Explain each row of the table in plain language â€” no jargon first pass.\n2) Demonstrate: 'Let us apply these four dimensions to the CET attendance system right now.' Work through each column live with the room.\n3) Check: ask one learner to identify which component of the attendance system is most likely to be the root cause of current failures.\n\nTeaching prompt: 'If you had to analyse a system you have never seen before, what is the absolute first question you would ask?' Take three answers before presenting the slide content. Common answers: 'Who uses it?', 'What does it produce?', 'Where does the data come from?' All valid â€” each maps to a system component.\n\nVisual: sketch AS-IS vs TO-BE with two columns on the board. Left: what the system does now. Right: what it must do after redesign. The gap between them is the requirements.\n\nKey message: 'As a lecturer supervising student projects, this is the lens you give your students at project kickoff. Not the technology stack. The system dimensions.'\n\nTransition: 'The SDLC gives us the structured lifecycle to execute this kind of analysis, design, build, and deploy in a controlled way. Let us look at it in detail.'",
       "source": "Module14924 Enhanced v2"
     },
@@ -191,7 +191,7 @@
     },
     {
       "slideNumber": 13,
-      "title": "How Models Execute the Same SDLC",
+      "title": "The SDLC Backbone: How Methodologies Walk It",
       "learnerView": {
         "subtitle": "SDLC is the backbone â€” methodology is how you walk it",
         "onScreenContent": [
@@ -202,7 +202,7 @@
         ],
         "phaseCards": ["Waterfall", "Agile", "DevOps"]
       },
-      "facilitatorNotes": "Facilitator Notes\nSlide 13 of 47\nTitle: How Models Execute the Same SDLC\n\nFacilitator notes:\nPlacement logic: this slide comes AFTER SDLC detail. Learners must first understand the lifecycle itself, then see how different methods execute it. Do not use this slide before Slide 10.\n\nKey line â€” say this clearly and slowly: 'Different methods. Same lifecycle backbone. The SDLC is not one of the methods. It is the underlying structure that ALL methods implement.'\n\nTalk track:\nâ€” 'We now know what the SDLC phases are and why each one exists.'\nâ€” 'This slide explains how different teams move through those same phases at different rhythms and with different emphases.'\nâ€” 'Waterfall: sequential gates, formal sign-offs, heavy documentation. Best for regulated, stable-requirement projects.'\nâ€” 'Agile: iterative sprint loops, working software every two weeks, continuous user feedback. Best for evolving requirements and fast delivery.'\nâ€” 'DevOps: continuous delivery and monitoring, code can be tested and released multiple times per day. Best for post-go-live, high-frequency update environments.'\n\nAsk: 'For a government SETA compliance reporting system with fixed legal requirements â€” which method? For a student mobile app where features change every semester â€” which method? Why does your answer differ?'\n\nTransition: 'With methodology context clear, we move into the analysis phase itself â€” starting with feasibility, requirements, and the structured techniques that produce them.'",
+      "facilitatorNotes": "Facilitator Notes\nSlide 13 of 47\nTitle: The SDLC Backbone: How Methodologies Walk It\n\nFacilitator notes:\nPlacement logic: this slide comes AFTER SDLC detail. Learners must first understand the lifecycle itself, then see how different methods execute it. Do not use this slide before Slide 10.\n\nKey line â€” say this clearly and slowly: 'Different methods. Same lifecycle backbone. The SDLC is not one of the methods. It is the underlying structure that ALL methods implement.'\n\nTalk track:\nâ€” 'We now know what the SDLC phases are and why each one exists.'\nâ€” 'This slide explains how different teams move through those same phases at different rhythms and with different emphases.'\nâ€” 'Waterfall: sequential gates, formal sign-offs, heavy documentation. Best for regulated, stable-requirement projects.'\nâ€” 'Agile: iterative sprint loops, working software every two weeks, continuous user feedback. Best for evolving requirements and fast delivery.'\nâ€” 'DevOps: continuous delivery and monitoring, code can be tested and released multiple times per day. Best for post-go-live, high-frequency update environments.'\n\nAsk: 'For a government SETA compliance reporting system with fixed legal requirements â€” which method? For a student mobile app where features change every semester â€” which method? Why does your answer differ?'\n\nTransition: 'With methodology context clear, we move into the analysis phase itself â€” starting with feasibility, requirements, and the structured techniques that produce them.'",
       "source": "Module14924 Enhanced v2"
     },
     {
@@ -235,28 +235,30 @@
     },
     {
       "slideNumber": 16,
-      "title": "How Models Execute the Same SDLC",
+      "title": "SDLC Backbone Checkpoint",
       "learnerView": {
-        "subtitle": "Consolidation check before moving to analysis techniques",
+        "subtitle": "Consolidation before deep analysis techniques",
         "onScreenContent": [
           "Waterfall: strong phase gates â€” best when requirements are stable and compliance is strict.",
           "Agile: iterative sprints â€” best when requirements evolve and feedback must be fast.",
-          "DevOps: automates build/test/deploy with continuous monitoring and feedback loops.",
-          "All three rely on the same SDLC logic: plan, design, build, test, release, maintain."
+          "DevOps: automates build, test, and deploy with continuous monitoring and feedback loops.",
+          "All three walk the same SDLC backbone; methodology changes the rhythm, not the lifecycle purpose."
         ],
         "phaseCards": ["Waterfall", "Agile", "DevOps"]
       },
-      "facilitatorNotes": "Facilitator Notes\nSlide 16 of 47\nTitle: How Models Execute the Same SDLC (Consolidation)\n\nFacilitator notes:\nQuick consolidation check before entering the core analysis content.\n\nWorkbook task â€” 2 minutes, then share one response: 'Write one sentence: which methodology would you recommend for a new student registration system at CET, and give two reasons.' This is low-stakes writing to consolidate before moving forward.\n\nAfter sharing, affirm the reasoning structure, not just the answer. Then move on.\n\nTransition: 'Good. With the lifecycle and its execution models clear, let us now look at what systems analysis actually produces â€” and the important distinction between analysis and requirements.'",
+      "facilitatorNotes": "Facilitator Notes\nSlide 16 of 47\nTitle: SDLC Backbone Checkpoint\n\nFacilitator notes:\nQuick consolidation check before entering the core analysis content.\n\nWorkbook task â€” 2 minutes, then share one response: 'Write one sentence: which methodology would you recommend for a new student registration system at CET, and give two reasons.' This is low-stakes writing to consolidate before moving forward.\n\nAfter sharing, affirm the reasoning structure, not just the answer. Then move on.\n\nTransition: 'Good. With the lifecycle and its execution models clear, let us now look at what systems analysis actually produces â€” and the important distinction between analysis and requirements.'",
       "source": "Module14924 Enhanced v2"
     },
     {
       "slideNumber": 17,
       "title": "1.2 Systems Analysis",
       "learnerView": {
-        "subtitle": "Session 1 | Introduction to Information Systems Analysis",
+        "subtitle": "Session 1 | WHAT Before HOW",
         "onScreenContent": [
-          "Systems analysis establishes the objectives of the new system â€” including a costs and benefits analysis to justify the investment before design begins.",
-          "It determines who the system users are, what information they need, what form that information must take, and how it is derived from the incoming data the system receives."
+          "Systems analysis establishes WHAT the system must do before any technical design choices are made.",
+          "It defines objectives, user needs, information requirements, constraints, and expected outcomes in business terms.",
+          "Design and development then determine HOW to implement those requirements using architecture, tools, and code.",
+          "If teams start with HOW first, they risk building a technically sound system that solves the wrong problem."
         ]},
       "facilitatorNotes": "Facilitator Notes\nSlide 17 of 47\nTitle: 1.2 Systems Analysis â€” WHAT, Not HOW\n\nFacilitator notes:\nOutcome focus: Explain the role of information systems analysis within the SDLC.\n\nThis slide carries one of the most important conceptual distinctions in the entire unit. Give it full weight.\n\nSay clearly and slowly: 'Systems analysis tells us WHAT the system must do. Design and development tell us HOW to build it. If you mix these up â€” if you start designing technical solutions before you have defined the requirements â€” you will solve the wrong problem, or the right problem in the wrong way. Both outcomes waste money.'\n\nVisual to draw: two boxes, side by side. Left box: WHAT (Analysis). Right box: HOW (Design + Development). A one-way arrow pointing left to right. Then show two examples:\nWHAT example: 'The system must allow a lecturer to mark full class attendance in under 30 seconds on a mobile device.'\nHOW example: 'We will build a React Native frontend with a FastAPI backend and a PostgreSQL database.'\n\nAsk: 'Why is the WHAT statement more valuable than the HOW statement at this stage of the project?' Expected: because the WHAT can be verified against user needs; the HOW is a technical decision that should flow from the WHAT.\n\nAsk: 'What could go wrong if we specified the HOW first and then tried to reverse-engineer the WHAT from it?' This surfaces the common failure pattern: teams fall in love with a technology and then retrofit requirements to justify it.\n\nTransition: 'Before we commit to building anything, we need to answer a more fundamental question: should we build at all? That is the feasibility study.'",
       "source": "Module14924 Enhanced v2"
@@ -398,16 +400,17 @@
     },
     {
       "slideNumber": 27,
-      "title": "1.6 Information System Components",
+      "title": "1.6 Information System Components in Analysis Practice",
       "learnerView": {
-        "subtitle": "Session 1 | Introduction to Information Systems Analysis",
+        "subtitle": "Session 1 | Diagnosing Systems Through Components",
         "onScreenContent": [
           "Hardware â€” The physical layer: servers, workstations, network equipment, input/output devices. Capacity follows Moore's Law: processing power roughly doubles every two years while cost falls.",
           "Software â€” System software manages hardware resources. Application software performs specific business tasks. Systems may be horizontal (generic, cross-industry), vertical (industry-specific), or legacy (older systems still in production).",
           "Data â€” The raw material of the system. Data is stored in tables; related tables supply information to processes and users. Data = basic facts; Information = data transformed into something useful for decision-making.",
-          "Processes â€” The tasks and business functions that transform data into information. Processes define how data is captured, validated, transformed, and reported."
+          "Processes â€” The tasks and business functions that transform data into information. Processes define how data is captured, validated, transformed, and reported.",
+          "People â€” Users, administrators, and managers who operate and depend on the system. Adoption and training determine whether even technically strong systems succeed in practice."
         ],
-        "body": "Every information system is made up of five interdependent components that must work together to produce useful results. Understanding these components helps analysts identify where problems occur and what must change when a system is redesigned."},
+        "body": "Every information system is made up of five interdependent components that must work together to produce useful results. Analysts use this component lens to avoid misdiagnosis and target the true root cause."},
       "facilitatorNotes": "Facilitator Notes\nSlide 27 of 47\nTitle: 1.6 Information System Components\n\nFacilitator notes:\nOutcome focus: Explain the role of information systems analysis within the SDLC.\n\nFacilitation flow:\n1) Explain each of the five components in plain language.\n2) Apply all five to the CET student registration system as a class exercise â€” ask learners to contribute examples for each component.\n3) Check: ask which component is most likely to be the root cause of the problems with your current institutional system.\n\nKey diagnostic insight: 'When you are analysing a failing system, you must check all five components before diagnosing the root cause. A slow system appears to be a hardware problem â€” but it may be an inefficient database query (software), dirty data causing unnecessary processing (data), a process with redundant steps (processes), or users who have never been trained on the optimal workflow (people). Miss one component and you may fix the wrong thing.'\n\nFifth component â€” People: 'This slide shows four components. The fifth is people â€” the users, administrators, and managers who operate the system. No system succeeds without them. The analyst must understand not just what the system does but who uses it, how they use it, and what will cause them to use it badly or not at all.'\n\nTransition: 'Session 1 complete. We understand what systems analysis is, what the SDLC looks like, who the analyst is, and what information systems are made of. Session 2 applies the technical tools â€” DFDs, decision models, and development approaches â€” to that foundation.'",
       "source": "Module14924 Enhanced v2"
     },
@@ -697,14 +700,14 @@
   "module14924PresentationFlow": {
     "preSessionSlides": [
       {
-        "title": "Before SDLC: What Is a System?",
-        "subtitle": "Foundation first, lifecycle second",
+        "title": "Before SDLC: System Analysis Starts With 3 Questions",
+        "subtitle": "Structured diagnosis before lifecycle methods",
         "bullets": [
-          "Components â€” The building blocks: people, tools, data stores, rules, interfaces, and how they connect. Missing one means missing its dependencies.",
-          "Input and Output â€” What enters and what the system produces. GIGO: Garbage In, Garbage Out.",
-          "Processes â€” Ordered activities transforming input to output. Process mapping exposes delays, rework, and waste.",
-          "Feedback Loops â€” Output data that adjusts future behaviour. Without feedback, systems repeat mistakes indefinitely.",
-          "Why it matters â€” Stronger efficiency, lower cost, better quality, structured problem-solving."
+          "What is happening now? Establish the current reality with evidence, not assumptions.",
+          "Why is it happening? Identify root causes across components, input/output quality, processes, and feedback loops.",
+          "What must change? Define improvement outcomes before selecting technology or implementation methods.",
+          "System lens: Components, Input/Output, Processes, Feedback. This is the analysis vocabulary for Unit 1.",
+          "Why it matters: disciplined diagnosis reduces rework, cost, and failed implementations."
         ],
         "speakerNote": "Open with the definition: System Analysis is the structured process of studying a system to understand how it works today, where the problems are, and what must improve before we design or build anything.\n\nFor each component, use the explainâ€“exampleâ€“implication structure:\n\nComponents: 'The parts of the system and how they relate. In a student registration system: the student portal, the database, the admin console, the SMS notification service, and the approval process of the clerk. Miss one component, miss its dependencies. Changes to the database break the portal. Miss it â€” break it.'\n\nInput and Output: 'What enters and what is produced. GIGO. Bad input creates bad output even with perfect processing logic. The analyst must trace quality on both sides.'\n\nProcesses: 'The ordered activities from input to output. Process mapping exposes the invisible: the step where three people re-capture the same data, the approval that waits three days because nobody owns it.'\n\nFeedback Loops: 'Information from outputs that adjusts future inputs. Without them, systems repeat mistakes indefinitely. Ask: what feedback loop is broken in your attendance system right now?'\n\nFacilitator prompt: 'Name one system at your campus. Identify one component, one input, one process, one output, and one feedback loop that is either missing or broken.'\n\nDraw AS-IS vs TO-BE on board.\n\nTransition: 'The SDLC gives us the lifecycle to execute improvements in a controlled way. But first â€” why does any system need a lifecycle at all?'",
         "phaseCards": ["Components", "Input & Output", "Processes", "Feedback Loops"]
@@ -723,7 +726,7 @@
     ],
     "session1Insertions": {
       "afterSdlc": {
-        "title": "How Models Execute the Same SDLC",
+        "title": "The SDLC Backbone: How Methodologies Walk It",
         "subtitle": "SDLC is the backbone â€” methodology is how you walk it",
         "bullets": [
           "Waterfall: strong sequential phase gates â€” best when requirements are stable, well-defined, and compliance-critical.",
@@ -740,7 +743,7 @@
   "module14924FlowMap": [
     {
       "placement": "Pre-session (before Session 1 starts)",
-      "title": "Before SDLC: What Is a System?"
+      "title": "Before SDLC: System Analysis Starts With 3 Questions"
     },
     {
       "placement": "Pre-session (before Session 1 starts)",
@@ -748,7 +751,7 @@
     },
     {
       "placement": "Session 1 (inserted after SDLC section)",
-      "title": "How Models Execute the Same SDLC"
+      "title": "The SDLC Backbone: How Methodologies Walk It"
     }
   ]
 }
