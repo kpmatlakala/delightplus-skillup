@@ -1307,7 +1307,8 @@ export function buildSlides(mod: Module): Slide[] {
   });
 
   /* 3 ── Content slides — group into chunks of 3 items */
-  const chunkSize = 3;
+  // Projector-friendly pacing: fewer bullets per slide improves readability at distance.
+  const chunkSize = 2;
   for (let i = 0; i < mod.content.length; i += chunkSize) {
     const chunk = mod.content.slice(i, i + chunkSize);
     const isFirst = i === 0;
@@ -2012,10 +2013,10 @@ export function PresentationMode({
                   ? "Programme Orientation · SAQA 78965 · NQF Level 4"
                   : `SAQA ${mod?.id}  ·  NQF Level 4  ·  ${mod?.credits} Credits`}
               </div>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-4 whitespace-pre-line">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 whitespace-pre-line">
                 {slide.title}
               </h1>
-              <p className="text-white/50 text-base mb-5">{slide.subtitle}</p>
+              <p className="text-white/70 text-lg md:text-xl mb-5">{slide.subtitle}</p>
               {mode === "module" && mod && (
                 <div className="flex flex-wrap gap-3 justify-center">
                   <span className="px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white/80 text-sm font-medium">
@@ -2050,10 +2051,10 @@ export function PresentationMode({
           {/* ── Quiz slide layout */}
           {slide.type === "quiz" && slide.quizQuestion && slide.quizOptions && (
             <div className="max-w-3xl w-full mx-auto">
-              <p className="text-xs uppercase tracking-widest font-semibold mb-2 text-purple-300">
+              <p className="text-sm uppercase tracking-widest font-semibold mb-2 text-purple-300/90">
                 {slide.subtitle}
               </p>
-              <h2 className="text-xl md:text-2xl font-bold text-white mb-5 leading-snug">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-5 leading-snug">
                 {slide.quizQuestion}
               </h2>
 
@@ -2088,7 +2089,7 @@ export function PresentationMode({
                           ? isCorrect ? "✓" : isSelected ? "✗" : String.fromCharCode(65 + i)
                           : String.fromCharCode(65 + i)}
                       </span>
-                      <span className="text-sm md:text-base leading-relaxed">{opt}</span>
+                      <span className="text-base md:text-lg lg:text-xl leading-relaxed">{opt}</span>
                     </button>
                   );
                 })}
@@ -2097,11 +2098,11 @@ export function PresentationMode({
               {qState.revealed && slide.quizExplanation && (
                 <div className="flex gap-3 p-4 rounded-xl border border-purple-500/40 bg-purple-500/10">
                   <Lightbulb size={16} className="shrink-0 mt-0.5 text-purple-300" />
-                  <p className="text-sm text-white/80 leading-relaxed">{slide.quizExplanation}</p>
+                  <p className="text-base md:text-lg text-white/85 leading-relaxed">{slide.quizExplanation}</p>
                 </div>
               )}
               {!qState.revealed && (
-                <p className="text-white/30 text-xs mt-4">Select an answer to reveal the explanation.</p>
+                <p className="text-white/50 text-sm mt-4">Select an answer to reveal the explanation.</p>
               )}
             </div>
           )}
@@ -2110,16 +2111,16 @@ export function PresentationMode({
           {slide.type !== "title" && slide.type !== "quiz" && (
             <div className="max-w-4xl w-full mx-auto">
               {slide.subtitle && (
-                <p className={`text-xs uppercase tracking-widest font-semibold mb-2 ${config.accent.split(" ")[0]}`}>
+                <p className={`text-sm uppercase tracking-widest font-semibold mb-2 ${config.accent.split(" ")[0]}`}>
                   {slide.subtitle}
                 </p>
               )}
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-5 leading-snug">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-5 leading-snug">
                 {slide.title}
               </h2>
 
               {slide.bullets && slide.bullets.length > 0 && (
-                <ul className="space-y-2 mb-4">
+                <ul className="space-y-3 md:space-y-4 mb-4">
                   {slide.bullets.map((item, i) => {
                     const isCheckmark = item.startsWith("✓");
                     const cleaned = item.replace(/^✓\s*/, "");
@@ -2135,7 +2136,7 @@ export function PresentationMode({
                             </span>
                           )}
                         </span>
-                        <span className="text-white/90 text-base md:text-lg leading-relaxed">
+                        <span className="text-white/95 text-lg md:text-xl lg:text-2xl leading-snug">
                           {detail ? (
                             <>
                               <span className="font-semibold text-white">{label}</span>
@@ -2153,21 +2154,21 @@ export function PresentationMode({
               )}
 
               {slide.diagram && (
-                <div className="mb-4 p-4 rounded-xl border border-white/20 bg-black/30 overflow-x-auto">
-                  <pre className="text-xs md:text-sm text-white/90 leading-relaxed whitespace-pre font-mono">
+                <div className="mb-4 p-5 rounded-xl border border-white/30 bg-black/40 overflow-x-auto">
+                  <pre className="text-sm md:text-base text-white/95 leading-relaxed whitespace-pre font-mono">
                     {slide.diagram}
                   </pre>
                 </div>
               )}
 
               {slide.body && (
-                <p className="text-white/70 text-sm md:text-base leading-relaxed mb-4">{slide.body}</p>
+                <p className="text-white/85 text-base md:text-lg lg:text-xl leading-relaxed mb-4">{slide.body}</p>
               )}
 
               {slide.highlight && (
                 <div className={`flex gap-3 p-4 rounded-xl border bg-white/5 ${config.accent}`}>
                   <AlertCircle size={18} className="shrink-0 mt-0.5" />
-                  <p className="text-sm md:text-base leading-relaxed opacity-90">{slide.highlight}</p>
+                  <p className="text-base md:text-lg lg:text-xl leading-relaxed opacity-95">{slide.highlight}</p>
                 </div>
               )}
             </div>
