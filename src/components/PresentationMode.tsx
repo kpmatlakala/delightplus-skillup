@@ -29,9 +29,7 @@ import type { Module } from "@/types/course";
 import type { ModuleLessonFlow, LessonSection } from "@/data/moduleLessonFlows";
 import {
   module14924SpeakerNotes,
-  module14924SystemAnalysisSlide,
-  module14924AdamStorySlide,
-  module14924SdlcModelsSlide,
+  module14924PresentationFlow,
 } from "@/data/module14924Presentation";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -946,24 +944,17 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
 
   /* 2.5 — Flow bridge (clear path before session deep-dive) */
   if (flow.moduleId === "14924") {
-    slides.push({
-      type: "content",
-      title: module14924SystemAnalysisSlide.title,
-      subtitle: module14924SystemAnalysisSlide.subtitle,
-      bullets: module14924SystemAnalysisSlide.bullets,
-      highlight: module14924SystemAnalysisSlide.highlight,
-      speakerNote: module14924SystemAnalysisSlide.speakerNote,
-    });
-
-    slides.push({
-      type: "content",
-      title: module14924AdamStorySlide.title,
-      subtitle: module14924AdamStorySlide.subtitle,
-      phaseCards: module14924AdamStorySlide.phaseCards,
-      bullets: module14924AdamStorySlide.bullets,
-      highlight: module14924AdamStorySlide.highlight,
-      speakerNote: module14924AdamStorySlide.speakerNote,
-    });
+    for (const flowSlide of module14924PresentationFlow.preSessionSlides) {
+      slides.push({
+        type: "content",
+        title: flowSlide.title,
+        subtitle: flowSlide.subtitle,
+        phaseCards: flowSlide.phaseCards,
+        bullets: flowSlide.bullets,
+        highlight: flowSlide.highlight,
+        speakerNote: flowSlide.speakerNote,
+      });
+    }
   } else {
     const anchor = getModuleAnchorConfig(flow.moduleId);
     const roadmapItems = sectionTitles.length
@@ -1047,14 +1038,15 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
         session.id === "session-1" &&
         /systems development life cycle|sdlc/i.test(section.title)
       ) {
+        const flowSlide = module14924PresentationFlow.session1Insertions.afterSdlc;
         slides.push({
           type: "content",
-          title: module14924SdlcModelsSlide.title,
-          subtitle: module14924SdlcModelsSlide.subtitle,
-          phaseCards: module14924SdlcModelsSlide.phaseCards,
-          bullets: module14924SdlcModelsSlide.bullets,
-          highlight: module14924SdlcModelsSlide.highlight,
-          speakerNote: module14924SdlcModelsSlide.speakerNote,
+          title: flowSlide.title,
+          subtitle: flowSlide.subtitle,
+          phaseCards: flowSlide.phaseCards,
+          bullets: flowSlide.bullets,
+          highlight: flowSlide.highlight,
+          speakerNote: flowSlide.speakerNote,
         });
       }
     }

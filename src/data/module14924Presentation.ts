@@ -152,3 +152,150 @@ export const module14924SdlcModelsSlide: Module14924PresentationSlide = {
     "Key line to say clearly: 'Different methods, same lifecycle backbone.'\n\n" +
     "Next transition: 'With this model context in mind, we continue Session 1 into feasibility and requirements where analysis decisions become concrete.'",
 };
+
+export type Module14924PresentationFlow = {
+  preSessionSlides: Module14924PresentationSlide[];
+  session1Insertions: {
+    afterSdlc: Module14924PresentationSlide;
+  };
+};
+
+/**
+ * Canonical 14924 presentation order relative to deck flow.
+ * - preSessionSlides: injected before Session 1 header
+ * - session1Insertions.afterSdlc: injected immediately after SDLC section content
+ */
+export const module14924PresentationFlow: Module14924PresentationFlow = {
+  preSessionSlides: [
+    module14924SystemAnalysisSlide,
+    module14924AdamStorySlide,
+  ],
+  session1Insertions: {
+    afterSdlc: module14924SdlcModelsSlide,
+  },
+};
+
+/**
+ * Quick human-readable map of where each 14924 slide appears in the deck.
+ */
+export const module14924FlowMap = [
+  {
+    placement: "Pre-session (before Session 1 starts)",
+    title: module14924SystemAnalysisSlide.title,
+  },
+  {
+    placement: "Pre-session (before Session 1 starts)",
+    title: module14924AdamStorySlide.title,
+  },
+  {
+    placement: "Session 1 (inserted after SDLC section)",
+    title: module14924SdlcModelsSlide.title,
+  },
+] as const;
+
+export type Module14924SlideListItem = {
+  slideNumber: number;
+  title: string;
+  learnerView: {
+    subtitle?: string;
+    badges?: string[];
+    onScreenContent?: string[];
+    body?: string;
+    highlight?: string;
+  };
+  facilitatorNotes: string;
+  source: string;
+};
+
+/**
+ * Numbered list to personalise the early deck flow quickly.
+ *
+ * NOTE:
+ * - Slides 1-4 are explicit and stable.
+ * - From slide 5 onward, slides are generated dynamically from
+ *   module14924LessonFlow Session sections (chunked by bullet density).
+ */
+export const module14924SlideList: Module14924SlideListItem[] = [
+  {
+    slideNumber: 1,
+    title: "Information Systems Analysis",
+    learnerView: {
+      subtitle: "SAQA 14924 · Block 1 · Day 1 · 3 Credits",
+      badges: ["Block 1", "Day 1", "Knowledge"],
+    },
+    facilitatorNotes: module14924SpeakerNotes.title,
+    source: "PresentationMode title slide (buildFlowSlides -> Title)",
+  },
+  {
+    slideNumber: 2,
+    title: "Unit Purpose & Learning Outcomes",
+    learnerView: {
+      subtitle: "Information Systems Analysis",
+      onScreenContent: [
+        "Explain the role of information systems analysis within the Software Development Life Cycle.",
+        "Describe the key responsibilities of an information systems analyst.",
+        "Identify and explain common information-gathering techniques.",
+        "Describe industry-standard systems analysis techniques.",
+      ],
+      body:
+        "People credited with this unit standard are able to describe information systems analysis and explain different systems analysis techniques used in the industry.",
+    },
+    facilitatorNotes: module14924SpeakerNotes.objectives,
+    source: "PresentationMode objectives slide (buildFlowSlides -> Unit Purpose & Learning Outcomes)",
+  },
+  {
+    slideNumber: 3,
+    title: module14924SystemAnalysisSlide.title,
+    learnerView: {
+      subtitle: module14924SystemAnalysisSlide.subtitle,
+      onScreenContent: module14924SystemAnalysisSlide.bullets,
+      highlight: module14924SystemAnalysisSlide.highlight,
+    },
+    facilitatorNotes: module14924SystemAnalysisSlide.speakerNote,
+    source: "module14924PresentationFlow.preSessionSlides[0]",
+  },
+  {
+    slideNumber: 4,
+    title: module14924AdamStorySlide.title,
+    learnerView: {
+      subtitle: module14924AdamStorySlide.subtitle,
+      onScreenContent: module14924AdamStorySlide.bullets,
+      highlight: module14924AdamStorySlide.highlight,
+    },
+    facilitatorNotes: module14924AdamStorySlide.speakerNote,
+    source: "module14924PresentationFlow.preSessionSlides[1]",
+  },
+  {
+    slideNumber: 5,
+    title: "Session 1 Header (dynamic)",
+    learnerView: {
+      subtitle: "Introduction to Information Systems Analysis",
+      body: "Session header generated from module14924LessonFlow -> session-1 summary and outcomes.",
+    },
+    facilitatorNotes:
+      "Generated in PresentationMode from session metadata. Edit in module14924LessonFlow.ts -> lessons -> session-1.",
+    source: "buildFlowSlides session loop -> session-1 header",
+  },
+  {
+    slideNumber: 6,
+    title: "Session 1 Section Slides (dynamic)",
+    learnerView: {
+      body:
+        "Sections 1.0, 1.1, 1.2, etc are expanded into multiple slides automatically based on bullet chunking.",
+    },
+    facilitatorNotes:
+      "Edit content in module14924LessonFlow.ts session sections; edit facilitation prompts in PresentationMode.tsx sectionToSlides().",
+    source: "buildFlowSlides -> sectionToSlides() generated sequence",
+  },
+  {
+    slideNumber: 7,
+    title: module14924SdlcModelsSlide.title,
+    learnerView: {
+      subtitle: module14924SdlcModelsSlide.subtitle,
+      onScreenContent: module14924SdlcModelsSlide.bullets,
+      highlight: module14924SdlcModelsSlide.highlight,
+    },
+    facilitatorNotes: module14924SdlcModelsSlide.speakerNote,
+    source: "module14924PresentationFlow.session1Insertions.afterSdlc",
+  },
+];
