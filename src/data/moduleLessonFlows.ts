@@ -635,6 +635,38 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
         ],
         sections: [
           {
+            title: "1.0 Introduction to System Analysis",
+            blocks: [
+              { type: "paragraph", text: "System analysis is the discipline of understanding how a system works, how its parts interact, and how it can be improved. It applies to software systems, business processes, and real-world service systems." },
+              { type: "heading", text: "Core Concepts Before SDLC" },
+              { type: "table", headers: ["Concept", "Description", "Simple Example"], rows: [
+                ["Components", "The parts that make up a system and their relationships", "Online store: catalog, cart, payment gateway, user accounts"],
+                ["Input and Output", "What enters the system and what it produces", "Input: product search and payment details; Output: order confirmation"],
+                ["Processes", "The ordered activities that transform inputs into outputs", "Browse -> add to cart -> checkout -> payment -> confirmation"],
+                ["Feedback Loops", "Output information used to adjust future behavior", "Low stock alerts trigger restocking rules"],
+              ]},
+              { type: "heading", text: "Why System Analysis Matters" },
+              { type: "list", items: [
+                "Improves efficiency by identifying bottlenecks and redundant steps",
+                "Reduces cost by improving resource usage and preventing rework",
+                "Improves quality and reliability of system outputs",
+                "Supports innovation through structured problem-solving",
+                "Strengthens root-cause analysis when failures happen",
+              ]},
+              { type: "heading", text: "System Analysis Process (Before Full SDLC Detail)" },
+              { type: "ordered-list", items: [
+                "Identify the system and its boundaries",
+                "Gather data (interviews, observation, documents)",
+                "Model the system using diagrams/flows",
+                "Analyse issues, risks, and opportunities",
+                "Propose and evaluate improvement options",
+                "Implement agreed changes",
+                "Test and monitor outcomes",
+              ]},
+              { type: "callout", variant: "tip", text: "Transition to SDLC: once we understand components, inputs/outputs, processes, and feedback, SDLC gives us the disciplined lifecycle to execute analysis, design, build, test, deploy, and maintain effectively." },
+            ],
+          },
+          {
             title: "1.1 The Systems Development Life Cycle (SDLC)",
             blocks: [
               { type: "paragraph", text: "The systems development life cycle (SDLC) gives organisations a means of controlling a large development project by dividing it into manageable stages with well-defined outputs." },

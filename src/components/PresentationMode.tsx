@@ -803,6 +803,25 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
   if (flow.moduleId === "14924") {
     slides.push({
       type: "content",
+      title: "Before SDLC: What Is System Analysis?",
+      subtitle: "Foundation first, lifecycle second",
+      bullets: [
+        "Components: what parts make up the system, and how they connect",
+        "Input and Output: what goes in, what comes out, and what must be measured",
+        "Processes: the sequence of activities that transform inputs into results",
+        "Feedback loops: how outputs influence future inputs and system behavior",
+        "Why it matters: better efficiency, lower cost, better quality, stronger problem-solving",
+      ],
+      highlight:
+        "System analysis is about breaking a system down so we can build it up better. Once we understand the parts and interactions, SDLC gives us the execution roadmap.",
+      speakerNote:
+        "Let's begin by defining system analysis in practical terms before we mention SDLC.\n\n" +
+        "I'll ask learners to name one system they use daily and identify: components, inputs/outputs, process flow, and one feedback loop.\n\n" +
+        "Transition line: 'Now that we can describe how a system works, let's use SDLC to structure how we improve and deliver it.'",
+    });
+
+    slides.push({
+      type: "content",
       title: "Core Concept: Information Systems Analysis",
       subtitle: "Start here before SDLC deep-dive",
       bullets: [
