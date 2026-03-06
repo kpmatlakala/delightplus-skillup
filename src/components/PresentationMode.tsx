@@ -632,7 +632,8 @@ function sectionToSlides(
   sessionLabel: string,
   sessionShortTitle: string,
   moduleId?: string,
-  sessionOutcomes?: string[]
+  sessionOutcomes?: string[],
+  nextSectionTitle?: string
 ): Slide[] {
   const bullets: string[] = [];
   let body = "";
@@ -652,7 +653,7 @@ function sectionToSlides(
         if (!highlight) highlight = block.text;
         break;
       case "table": {
-        const rows = block.rows.slice(0, 5).map((row) =>
+        const rows = block.rows.slice(0, 4).map((row) =>
           block.headers.length === 2
             ? `${row[0] ?? ""}: ${row[1] ?? ""}`
             : row.join(" · ")
@@ -724,6 +725,9 @@ function sectionToSlides(
 
   const moduleName = moduleId ? `(Module ${moduleId}) ` : "";
   const subTopicNote = speakerExtras.length > 0 ? `Sub-topics covered: ${speakerExtras.join(" | ")}.\n\n` : "";
+  const transitionLine = nextSectionTitle
+    ? `Transition line: \"Now that ${section.title} is clear, let's move into ${nextSectionTitle} so we can apply this practically.\"`
+    : 'Transition line: "We have completed the section flow. Next, we consolidate through recap and quiz checks."';
   const baseNote =
     `${subTopicNote}TOPIC: ${section.title}. ${moduleName}\n\n` +
     `${outcomeAnchor}\n\n` +
@@ -735,7 +739,8 @@ function sectionToSlides(
     `• ${matchedPrompt ?? `Ask: 'Can someone give a real-world example of "${section.title}" from their own workplace or study?'`}\n` +
     `• ${matchedVisual ?? "Visual: sketch the concept structure on the board before discussing bullets (diagram, mini-table, or flow)."}\n` +
     "• Ask learners to annotate their workbooks as you present and highlight one key term they must remember.\n" +
-    "• End by restating the practical workplace implication of this concept.";
+    "• End by restating the practical workplace implication of this concept.\n\n" +
+    transitionLine;
 
   if (bullets.length === 0) {
     return [{
@@ -749,7 +754,7 @@ function sectionToSlides(
     }];
   }
 
-  const CHUNK = 5;
+  const CHUNK = 4;
   const result: Slide[] = [];
   for (let i = 0; i < bullets.length; i += CHUNK) {
     const chunk = bullets.slice(i, i + CHUNK);
@@ -768,10 +773,191 @@ function sectionToSlides(
   return result;
 }
 
+function getModuleAnchorConfig(moduleId: string): {
+  subtitle: string;
+  roadmapLead: string;
+  anchorTitle: string;
+  anchorDiagram: string;
+  anchorBullets: string[];
+  anchorHighlight: string;
+} {
+  const defaults = {
+    subtitle: "From foundation to application",
+    roadmapLead: "Follow this sequence to keep understanding and execution aligned.",
+    anchorTitle: "Learning Loop Visual Anchor",
+    anchorDiagram:
+      "Context -> Concepts -> Methods -> Practice -> Feedback -> Improve\n" +
+      "   |          |           |           |           |\n" +
+      "   v          v           v           v           v\n" +
+      "why it matters  what it means  how we do it  try it now  refine approach",
+    anchorBullets: [
+      "Every section should answer: Why this matters before How to do it",
+      "Practice and feedback are built into the flow, not left for the end",
+      "This loop helps learners connect theory to workplace execution",
+    ],
+    anchorHighlight:
+      "When a concept feels difficult, return to the loop: context first, then method, then guided practice.",
+  };
+
+  const moduleConfigs: Record<string, Partial<typeof defaults>> = {
+    "14910": {
+      subtitle: "Collaboration and communication progression",
+      roadmapLead: "We move from team principles to role execution and conflict handling.",
+      anchorTitle: "Team Collaboration Anchor",
+      anchorDiagram:
+        "Team Goal -> Roles -> Communication -> Coordination -> Review -> Improve\n" +
+        "    |          |            |              |           |\n" +
+        "    v          v            v              v           v\n" +
+        "shared purpose  clear ownership  quality handoffs  delivery check  team learning",
+      anchorBullets: [
+        "Clarity of roles and communication is the base of team performance",
+        "Coordination and review prevent avoidable delivery issues",
+        "Continuous improvement turns teams into reliable systems",
+      ],
+      anchorHighlight: "If collaboration weakens, return to role clarity and communication rhythm first.",
+    },
+    "14920": {
+      subtitle: "Problem-solving from definition to corrective action",
+      roadmapLead: "We define the problem first, then test solutions before scaling.",
+      anchorTitle: "Problem-Solving Anchor",
+      anchorDiagram:
+        "Define -> Analyse -> Generate Options -> Select -> Implement -> Review\n" +
+        "   |         |              |             |           |\n" +
+        "   v         v              v             v           v\n" +
+        "clear scope  root cause   evaluated choices  controlled action  learning loop",
+      anchorBullets: [
+        "Root-cause clarity matters more than speed to first answer",
+        "Option evaluation reduces risk before implementation",
+        "Review ensures solutions stay effective over time",
+      ],
+      anchorHighlight: "Do not skip root-cause analysis; quick fixes often recreate the same problem.",
+    },
+    "14918": {
+      subtitle: "Programming logic from concepts to reliable code",
+      roadmapLead: "We translate logic into code with validation at each step.",
+      anchorTitle: "Programming Logic Anchor",
+      anchorDiagram:
+        "Understand Problem -> Design Logic -> Write Code -> Test -> Refine\n" +
+        "       |               |            |         |\n" +
+        "       v               v            v         v\n" +
+        "requirements clarity  algorithm flow  implementation  correctness check",
+      anchorBullets: [
+        "Design before coding prevents avoidable implementation errors",
+        "Testing verifies behavior, validation confirms input/data quality",
+        "Refinement improves readability, maintainability and correctness",
+      ],
+      anchorHighlight: "Good code starts as clear logic, not as fast typing.",
+    },
+    "14927": {
+      subtitle: "Applied problem-solving and decision quality",
+      roadmapLead: "We structure reasoning so team decisions are evidence-based.",
+      anchorTitle: "Decision Quality Anchor",
+      anchorDiagram:
+        "Situation -> Evidence -> Options -> Decision -> Action -> Reflection\n" +
+        "    |          |           |           |          |\n" +
+        "    v          v           v           v          v\n" +
+        "context set   facts first  compare paths  commit plan  improve model",
+      anchorBullets: [
+        "Evidence should drive option selection, not assumptions",
+        "Action plans must include ownership and monitoring",
+        "Reflection improves future decision speed and quality",
+      ],
+      anchorHighlight: "Strong decisions come from structured thinking, not guesswork.",
+    },
+    "14915": {
+      subtitle: "Design discipline before implementation",
+      roadmapLead: "We move from design structure to quality checks before code finalization.",
+      anchorTitle: "Program Design Anchor",
+      anchorDiagram:
+        "Requirements -> Design Artefacts -> Desk Check -> Improve -> Build\n" +
+        "     |              |               |           |\n" +
+        "     v              v               v           v\n" +
+        "scope clarity     flow precision   logic validation  safer implementation",
+      anchorBullets: [
+        "Design artefacts reduce ambiguity before coding starts",
+        "Desk-checking catches logic faults early and cheaply",
+        "Improved design quality lowers downstream rework",
+      ],
+      anchorHighlight: "The cheapest bug is the one found in design, before code exists.",
+    },
+    "14908": {
+      subtitle: "Web scripting from structure to interaction",
+      roadmapLead: "We connect markup, style and behavior in a controlled build cycle.",
+      anchorTitle: "Web Development Anchor",
+      anchorDiagram:
+        "Structure (HTML) -> Style (CSS) -> Behaviour (JS) -> Test -> Iterate\n" +
+        "       |               |               |          |\n" +
+        "       v               v               v          v\n" +
+        "content map         visual clarity   user actions  usability gains",
+      anchorBullets: [
+        "Separate responsibilities make web systems easier to debug",
+        "Testing user interaction is as important as visual correctness",
+        "Iteration improves accessibility, usability and performance",
+      ],
+      anchorHighlight: "Reliable web pages come from clear separation of structure, style and behavior.",
+    },
+    "120379": {
+      subtitle: "Testing discipline from plan to evidence",
+      roadmapLead: "We define test intent early and collect evidence systematically.",
+      anchorTitle: "Testing Anchor",
+      anchorDiagram:
+        "Test Plan -> Test Cases -> Execute -> Log Defects -> Re-test -> Sign-off\n" +
+        "    |           |           |            |            |\n" +
+        "    v           v           v            v            v\n" +
+        "coverage scope  expected results  observed outcomes  fix tracking  quality confidence",
+      anchorBullets: [
+        "Strong test cases link directly to requirements and risks",
+        "Defect logging quality determines fix speed and re-test success",
+        "Sign-off should follow evidence, not deadlines",
+      ],
+      anchorHighlight: "Testing quality is measured by evidence traceability, not number of tests alone.",
+    },
+    "14930": {
+      subtitle: "User support from issue intake to closure",
+      roadmapLead: "We diagnose accurately, resolve efficiently, then prevent recurrence.",
+      anchorTitle: "User Support Anchor",
+      anchorDiagram:
+        "Receive Issue -> Diagnose -> Resolve -> Confirm -> Document -> Prevent\n" +
+        "     |            |          |          |           |\n" +
+        "     v            v          v          v           v\n" +
+        "clear intake    root cause  fix action  user validation  knowledge base",
+      anchorBullets: [
+        "Accurate issue intake shortens total resolution time",
+        "User confirmation is required before ticket closure",
+        "Documentation turns one-off fixes into organisational learning",
+      ],
+      anchorHighlight: "Support maturity means solving issues and reducing future repeats.",
+    },
+    "14919": {
+      subtitle: "Project teamwork from planning to delivery control",
+      roadmapLead: "We align scope, roles and timelines before execution pressure starts.",
+      anchorTitle: "Project Teamwork Anchor",
+      anchorDiagram:
+        "Scope -> Plan -> Roles -> Execute -> Track -> Adapt -> Close\n" +
+        "  |       |       |        |        |        |\n" +
+        "  v       v       v        v        v        v\n" +
+        "clear goals timeline tasks accountability progress control lessons captured",
+      anchorBullets: [
+        "Shared scope understanding reduces scope creep and confusion",
+        "Tracking and adaptation protect delivery under changing conditions",
+        "Closure and retrospectives improve the next project cycle",
+      ],
+      anchorHighlight: "Team projects succeed when planning discipline continues during execution.",
+    },
+  };
+
+  return { ...defaults, ...(moduleConfigs[moduleId] ?? {}) };
+}
+
 /** Build session-structured slides from a ModuleLessonFlow */
 export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
   const slides: Slide[] = [];
   const mn = MODULE_SPEAKER_NOTES[flow.moduleId];
+  const sessions = flow.lessons.filter((l) => /^session-\d/.test(l.id));
+  const firstSession = sessions[0];
+  const sectionTitles = (firstSession?.sections ?? [])
+    .map((section) => section.title?.trim())
+    .filter((title): title is string => Boolean(title));
 
   /* 1 — Title */
   if (mod) {
@@ -799,104 +985,81 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
       `Walk through the unit purpose and each learning outcome clearly. Ask: "Which of these topics do you already know something about?" This activates prior knowledge and shows where to pace more carefully.`,
   });
 
-  /* 2.5 — Unit 1 core concept bridge (before session/activity content) */
+  /* 2.5 — Flow bridge (clear path before session deep-dive) */
   if (flow.moduleId === "14924") {
     slides.push({
       type: "content",
-      title: "Before SDLC: What Is System Analysis?",
-      subtitle: "Foundation first, lifecycle second",
+      title: "How This Session Flows",
+      subtitle: "One clear learning path",
       bullets: [
-        "Components: what parts make up the system, and how they connect",
-        "Input and Output: what goes in, what comes out, and what must be measured",
-        "Processes: the sequence of activities that transform inputs into results",
-        "Feedback loops: how outputs influence future inputs and system behavior",
-        "Why it matters: better efficiency, lower cost, better quality, stronger problem-solving",
+        "Start with System Analysis foundations (components, inputs/outputs, processes, feedback)",
+        "Move into SDLC to structure delivery from planning to maintenance",
+        "Compare execution models (Waterfall, Agile, DevOps)",
+        "Then deepen analyst work: feasibility, requirements, modeling and tools",
+        "Close with practice and application to workplace scenarios",
       ],
       highlight:
-        "System analysis is about breaking a system down so we can build it up better. Once we understand the parts and interactions, SDLC gives us the execution roadmap.",
+        "Order matters: understand the system first, then use SDLC and methods to deliver improvements with control.",
       speakerNote:
-        "Let's begin by defining system analysis in practical terms before we mention SDLC.\n\n" +
-        "I'll ask learners to name one system they use daily and identify: components, inputs/outputs, process flow, and one feedback loop.\n\n" +
-        "Transition line: 'Now that we can describe how a system works, let's use SDLC to structure how we improve and deliver it.'",
+        "Use this as a 60-second map before Session 1 starts, then keep referring back to it as we progress.\n\n" +
+        "Transition line: 'Now let's walk this exact order in Session 1 so each step builds naturally on the previous one.'",
     });
 
     slides.push({
       type: "content",
-      title: "Core Concept: Information Systems Analysis",
-      subtitle: "Start here before SDLC deep-dive",
-      bullets: [
-        "System context: why this system exists and who it serves",
-        "Problem definition: what is broken, missing, delayed, or risky",
-        "Requirements: what must be true for success (measurable)",
-        "Models: represent flow and logic clearly (DFD, decision tools)",
-        "Recommendation: select the best-fit approach (Structured/Agile/JAD/RAD/OO)",
-      ],
-      highlight:
-        "Simple definition: Information Systems Analysis is the structured process of understanding a business problem, identifying user needs, and defining WHAT a system must do before deciding HOW to build it.",
-      speakerNote:
-        "Start with this simple definition (say it slowly): 'Information Systems Analysis is the structured process of understanding a business problem, identifying user needs, and defining WHAT a system must do before deciding HOW to build it.'\n\n" +
-        "Use this explanation arc through the day:\n" +
-        "1) Define the system context (why this system exists)\n" +
-        "2) Define the problem (what is broken/missing)\n" +
-        "3) Define requirements (what must be true when solved)\n" +
-        "4) Model flow and logic (DFD, decision tools)\n" +
-        "5) Recommend approach (structured/Agile/JAD/RAD/OO)\n\n" +
-        "Transition line to SDLC: 'Now that we know the analysis arc, SDLC gives us the disciplined process to execute it stage by stage.'",
-    });
-
-    slides.push({
-      type: "content",
-      title: "SDLC Diagram: Adam's Online Store",
-      subtitle: "From idea to stable online business system",
+      title: "SDLC Visual Anchor (Adam's Store)",
+      subtitle: "Keep this lifecycle in mind during the lesson",
       diagram:
         "[Planning] -> [Requirements Analysis] -> [Design] -> [Implementation] -> [Testing] -> [Deployment & Maintenance]\n" +
         "      |                |                     |                 |                |                     |\n" +
         "      v                v                     v                 v                v                     v\n" +
         "  Business goal     SRS document          DDS architecture   Working code      QA bug reports      Live store + updates",
       bullets: [
-        "Planning: define Adam's business goal, scope, budget, timeline, stakeholders",
-        "Requirements Analysis: finalise SRS (products, cart, checkout, customer accounts, admin panel)",
-        "Design: create DDS (architecture, DB schema, UI wireframes, security model)",
-        "Implementation + Testing: build features, run QA cycles, fix defects until stable",
-        "Deployment & Maintenance: launch store, monitor issues, release improvements continuously",
+        "Each phase produces a concrete output that the next phase depends on",
+        "When this flow is skipped, defects and rework show up later at higher cost",
+        "We will revisit this visual during feasibility, requirements and design sections",
       ],
       highlight:
-        "This is the full lifecycle I will keep referring to whenever we ask: What are we building, why are we building it, and how do we know it works?",
+        "This is not a separate topic slide-set; it is the anchor that connects all Session 1 sections.",
       speakerNote:
-        "Let's walk this diagram left to right with Adam's store context. I will point at each phase and ask one question: 'What is the key output of this phase?'\n\n" +
-        "I will reinforce deliverables: SRS after requirements, DDS after design, tested build before deployment.\n\n" +
-        "Key line: 'If we skip analysis or design, we do not save time; we postpone expensive failure.'",
+        "Keep the walkthrough brief here (about 2 minutes). Session 1 will unpack each piece in depth so we avoid repeating the same explanation twice.",
+    });
+  } else {
+    const anchor = getModuleAnchorConfig(flow.moduleId);
+    const roadmapItems = sectionTitles.length
+      ? sectionTitles.slice(0, 5).map((title, idx) => `Step ${idx + 1}: ${title}`)
+      : [
+          "Step 1: Build core understanding of today's topic",
+          "Step 2: Connect concepts to practical workplace use",
+          "Step 3: Apply methods, tools, or frameworks",
+          "Step 4: Validate understanding through examples",
+          "Step 5: Consolidate and prepare for assessment tasks",
+        ];
+
+    slides.push({
+      type: "content",
+      title: "How This Unit Flows",
+      subtitle: anchor.subtitle,
+      bullets: roadmapItems,
+      highlight:
+        "This roadmap is our sequence contract: we move step-by-step so each section has context before complexity.",
+      speakerNote:
+        `${anchor.roadmapLead} Use this as a quick map before Session 1 starts. Tell learners where they are now, where they are going next, and what success looks like by the end of the day.`,
     });
 
     slides.push({
       type: "content",
-      title: "How Models Execute the Same SDLC",
-      subtitle: "Waterfall vs Agile vs DevOps (same phases, different flow)",
-      diagram:
-        "Waterfall:\n" +
-        "Plan -> Analyze -> Design -> Build -> Test -> Deploy -> Maintain\n\n" +
-        "Agile (Sprint loop):\n" +
-        "Plan -> Design -> Build -> Test -> Review -> Repeat\n\n" +
-        "DevOps (continuous loop):\n" +
-        "Plan -> Code -> Build -> Test -> Release -> Deploy -> Operate -> Monitor -> Feedback -> Plan",
-      bullets: [
-        "Waterfall: strong phase gates; best when requirements are stable and compliance is strict",
-        "Agile: iterative sprints; best when requirements evolve and feedback must be fast",
-        "DevOps: automates build/test/deploy with continuous monitoring and feedback",
-        "All three still rely on the same SDLC logic: plan, design, build, test, release, maintain",
-      ],
-      highlight:
-        "For Adam's store: start with clear requirements, iterate UI and features in sprints, and use CI/CD-style updates after launch.",
+      title: anchor.anchorTitle,
+      subtitle: "Keep this structure in mind across all sections",
+      diagram: anchor.anchorDiagram,
+      bullets: anchor.anchorBullets,
+      highlight: anchor.anchorHighlight,
       speakerNote:
-        "I'll explain that methodologies are different operating styles on top of the same SDLC backbone.\n\n" +
-        "Let's ask: 'If Adam keeps changing product categories weekly, which model helps us adapt fastest?' (Agile/DevOps).\n\n" +
-        "Then I'll close with: 'Model choice changes speed and feedback loops, not the need for analysis discipline.'",
+        "Revisit this anchor whenever attention drops or a section feels dense. It recenters the class and keeps progression logical.",
     });
   }
 
   /* 3 — Sessions */
-  const sessions = flow.lessons.filter((l) => /^session-\d/.test(l.id));
-
   for (const session of sessions) {
     const sessionShortTitle = session.title.replace(/^Session\s*\d+\s*:\s*/i, "").trim();
 
@@ -923,14 +1086,18 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
     });
 
     /* Sections → content slides */
-    for (const section of session.sections ?? []) {
+    const sessionSections = session.sections ?? [];
+    for (let i = 0; i < sessionSections.length; i++) {
+      const section = sessionSections[i];
+      const nextSection = sessionSections[i + 1];
       slides.push(
         ...sectionToSlides(
           section,
           session.label,
           sessionShortTitle || session.label,
           flow.moduleId,
-          session.outcomes
+          session.outcomes,
+          nextSection?.title
         )
       );
     }
