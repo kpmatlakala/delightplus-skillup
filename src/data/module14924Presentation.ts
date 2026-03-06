@@ -207,6 +207,39 @@ export type Module14924SlideListItem = {
   source: string;
 };
 
+const MODULE_14924_TOTAL_SLIDES = 47;
+
+function formatLearnerViewForNotes(view: Module14924SlideListItem["learnerView"]): string {
+  const lines: string[] = [];
+  if (view.subtitle) lines.push(`Subtitle: ${view.subtitle}`);
+  if (view.badges?.length) lines.push(`Badges: ${view.badges.join(" · ")}`);
+  if (view.onScreenContent?.length) {
+    lines.push("On-screen content:");
+    view.onScreenContent.forEach((item, idx) => lines.push(`${idx + 1}. ${item}`));
+  }
+  if (view.body) lines.push(view.body);
+  if (view.highlight) lines.push(`Highlight: ${view.highlight}`);
+  return lines.join("\n");
+}
+
+function formatFacilitatorNotesBlock(
+  slideNumber: number,
+  title: string,
+  learnerView: Module14924SlideListItem["learnerView"],
+  facilitatorScript: string
+): string {
+  const learnerViewText = formatLearnerViewForNotes(learnerView);
+  return (
+    "Facilitator Notes\n" +
+    `Slide ${slideNumber} of ${MODULE_14924_TOTAL_SLIDES}\n` +
+    `Title: ${title}\n\n` +
+    "What learners see:\n" +
+    `${learnerViewText}\n\n` +
+    "Facilitator notes:\n" +
+    facilitatorScript
+  );
+}
+
 /**
  * Numbered list to personalise the early deck flow quickly.
  *
@@ -223,7 +256,15 @@ export const module14924SlideList: Module14924SlideListItem[] = [
       subtitle: "SAQA 14924 · Block 1 · Day 1 · 3 Credits",
       badges: ["Block 1", "Day 1", "Knowledge"],
     },
-    facilitatorNotes: module14924SpeakerNotes.title,
+    facilitatorNotes: formatFacilitatorNotesBlock(
+      1,
+      "Information Systems Analysis",
+      {
+        subtitle: "SAQA 14924 · Block 1 · Day 1 · 3 Credits",
+        badges: ["Block 1", "Day 1", "Knowledge"],
+      },
+      module14924SpeakerNotes.title
+    ),
     source: "PresentationMode title slide (buildFlowSlides -> Title)",
   },
   {
@@ -240,7 +281,22 @@ export const module14924SlideList: Module14924SlideListItem[] = [
       body:
         "People credited with this unit standard are able to describe information systems analysis and explain different systems analysis techniques used in the industry.",
     },
-    facilitatorNotes: module14924SpeakerNotes.objectives,
+    facilitatorNotes: formatFacilitatorNotesBlock(
+      2,
+      "Unit Purpose & Learning Outcomes",
+      {
+        subtitle: "Information Systems Analysis",
+        onScreenContent: [
+          "Explain the role of information systems analysis within the Software Development Life Cycle.",
+          "Describe the key responsibilities of an information systems analyst.",
+          "Identify and explain common information-gathering techniques.",
+          "Describe industry-standard systems analysis techniques.",
+        ],
+        body:
+          "People credited with this unit standard are able to describe information systems analysis and explain different systems analysis techniques used in the industry.",
+      },
+      module14924SpeakerNotes.objectives
+    ),
     source: "PresentationMode objectives slide (buildFlowSlides -> Unit Purpose & Learning Outcomes)",
   },
   {
@@ -251,7 +307,16 @@ export const module14924SlideList: Module14924SlideListItem[] = [
       onScreenContent: module14924SystemAnalysisSlide.bullets,
       highlight: module14924SystemAnalysisSlide.highlight,
     },
-    facilitatorNotes: module14924SystemAnalysisSlide.speakerNote,
+    facilitatorNotes: formatFacilitatorNotesBlock(
+      3,
+      module14924SystemAnalysisSlide.title,
+      {
+        subtitle: module14924SystemAnalysisSlide.subtitle,
+        onScreenContent: module14924SystemAnalysisSlide.bullets,
+        highlight: module14924SystemAnalysisSlide.highlight,
+      },
+      module14924SystemAnalysisSlide.speakerNote
+    ),
     source: "module14924PresentationFlow.preSessionSlides[0]",
   },
   {
@@ -262,7 +327,16 @@ export const module14924SlideList: Module14924SlideListItem[] = [
       onScreenContent: module14924AdamStorySlide.bullets,
       highlight: module14924AdamStorySlide.highlight,
     },
-    facilitatorNotes: module14924AdamStorySlide.speakerNote,
+    facilitatorNotes: formatFacilitatorNotesBlock(
+      4,
+      module14924AdamStorySlide.title,
+      {
+        subtitle: module14924AdamStorySlide.subtitle,
+        onScreenContent: module14924AdamStorySlide.bullets,
+        highlight: module14924AdamStorySlide.highlight,
+      },
+      module14924AdamStorySlide.speakerNote
+    ),
     source: "module14924PresentationFlow.preSessionSlides[1]",
   },
   {
@@ -272,8 +346,15 @@ export const module14924SlideList: Module14924SlideListItem[] = [
       subtitle: "Introduction to Information Systems Analysis",
       body: "Session header generated from module14924LessonFlow -> session-1 summary and outcomes.",
     },
-    facilitatorNotes:
-      "Generated in PresentationMode from session metadata. Edit in module14924LessonFlow.ts -> lessons -> session-1.",
+    facilitatorNotes: formatFacilitatorNotesBlock(
+      5,
+      "Session 1 Header (dynamic)",
+      {
+        subtitle: "Introduction to Information Systems Analysis",
+        body: "Session header generated from module14924LessonFlow -> session-1 summary and outcomes.",
+      },
+      "Generated in PresentationMode from session metadata. Edit in module14924LessonFlow.ts -> lessons -> session-1."
+    ),
     source: "buildFlowSlides session loop -> session-1 header",
   },
   {
@@ -283,8 +364,15 @@ export const module14924SlideList: Module14924SlideListItem[] = [
       body:
         "Sections 1.0, 1.1, 1.2, etc are expanded into multiple slides automatically based on bullet chunking.",
     },
-    facilitatorNotes:
-      "Edit content in module14924LessonFlow.ts session sections; edit facilitation prompts in PresentationMode.tsx sectionToSlides().",
+    facilitatorNotes: formatFacilitatorNotesBlock(
+      6,
+      "Session 1 Section Slides (dynamic)",
+      {
+        body:
+          "Sections 1.0, 1.1, 1.2, etc are expanded into multiple slides automatically based on bullet chunking.",
+      },
+      "Edit content in module14924LessonFlow.ts session sections; edit facilitation prompts in PresentationMode.tsx sectionToSlides()."
+    ),
     source: "buildFlowSlides -> sectionToSlides() generated sequence",
   },
   {
@@ -295,7 +383,16 @@ export const module14924SlideList: Module14924SlideListItem[] = [
       onScreenContent: module14924SdlcModelsSlide.bullets,
       highlight: module14924SdlcModelsSlide.highlight,
     },
-    facilitatorNotes: module14924SdlcModelsSlide.speakerNote,
+    facilitatorNotes: formatFacilitatorNotesBlock(
+      7,
+      module14924SdlcModelsSlide.title,
+      {
+        subtitle: module14924SdlcModelsSlide.subtitle,
+        onScreenContent: module14924SdlcModelsSlide.bullets,
+        highlight: module14924SdlcModelsSlide.highlight,
+      },
+      module14924SdlcModelsSlide.speakerNote
+    ),
     source: "module14924PresentationFlow.session1Insertions.afterSdlc",
   },
 ];
