@@ -27,6 +27,12 @@ import {
 import { Badge } from "@/components/ui/badge";
 import type { Module } from "@/types/course";
 import type { ModuleLessonFlow, LessonSection } from "@/data/moduleLessonFlows";
+import {
+  module14924SpeakerNotes,
+  module14924SystemAnalysisSlide,
+  module14924AdamStorySlide,
+  module14924SdlcModelsSlide,
+} from "@/data/module14924Presentation";
 import { supabase } from "@/integrations/supabase/client";
 import {
   generateSessionCode,
@@ -50,6 +56,7 @@ interface Slide {
   subtitle?: string;
   bullets?: string[];
   diagram?: string;
+  phaseCards?: string[];
   body?: string;
   highlight?: string;
   speakerNote?: string;
@@ -235,55 +242,7 @@ interface ModuleSpeakerNotes {
 
 const MODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes> = {
   /* ── Block 1 ── */
-  "14924": {
-    title:
-      "Welcome to Information Systems Analysis. Today we'll think like analysts before coding like developers.\n\n" +
-      "Let's start with a quick hook (3 minutes): I'll ask, 'Think of one system you used this week (registration, banking, WhatsApp, LMS). What happens if it fails?' We'll capture 3 answers under People / Process / Data on the board.\n\n" +
-      "Bridge statement: 'Everything we do today prevents expensive failure later. Good analysis saves money, time, and reputation.'",
-    objectives:
-      "Let's anchor our learning outcomes around four core ideas:\n" +
-      "• SDLC: I'll emphasise why analysis and design must happen before coding.\n" +
-      "• Analyst role: We'll position the analyst as the translator between business reality and technical implementation.\n" +
-      "• Fact-finding: I'll use Who / What / Where / When / How / Why as our questioning spine.\n" +
-      "• Techniques: We'll treat DFDs and decision models as communication tools, not just diagrams.\n\n" +
-      "As we move through the day, let's keep linking each concept back to the opening hook scenario.",
-
-      activityIndividual:
-      "For individual activities, I'll use the E-D-C cycle: Explain briefly -> Demonstrate one example -> Check learner attempt.\n\n" +
-      "• Systems vs Requirements Analysis: I'll use 'WHAT first, HOW later' and ask learners to rewrite one vague request into a measurable requirement.\n" +
-      "• Feasibility and cost-benefit: We'll classify examples into tangible vs intangible and defend one decision.\n" +
-      "• Fact-finding techniques: I'll give one scenario (remote site, sensitive users, many respondents) and we'll decide which method fits best and why.\n" +
-      "• DFD practice: I'll live-draw Context Diagram first, then Diagram 0, and we'll enforce naming rules (noun for entity/data store, verb phrase for process).\n" +
-      "• Decision tools: We'll compare one decision tree and one decision table for the same rule so everyone sees when each is clearer.\n\n" +
-      "When learners are stuck, I'll use probing questions first and avoid giving final answers too early.",
-
-      activityGroup:
-      "For the group task (25 minutes), we'll run an integrated challenge: 'Analyse the CET Attendance System redesign.'\n\n" +
-      "We'll require these deliverables per group:\n" +
-      "1. Problem statement (1 sentence)\n" +
-      "2. Stakeholder list (internal + external)\n" +
-      "3. Fact-finding plan (at least 3 methods with reasons)\n" +
-      "4. Mini Context DFD (entities + main process + flows)\n" +
-      "5. One recommendation: structured vs Agile (with justification)\n\n" +
-      "I'll assign roles: Facilitator, Scribe, Modeler, Presenter, Timekeeper.\n\n" +
-      "During debrief, I'll ask:\n" +
-      "• 'Which requirement is most risky if misunderstood?'\n" +
-      "• 'What data flow is missing from your model?'\n" +
-      "• 'How would your recommendation change if requirements were unstable?'",
-    summary:
-      "For the close-out (5-7 minutes), I'll say:\n\n" +
-      "'Today we moved from intuition to structured analysis. You can now define a system problem, gather facts, model data movement, and justify an approach before coding starts.'\n\n" +
-      "Then we'll run a rapid recall with four learners:\n" +
-      "1) 'Explain SDLC in one sentence.'\n" +
-      "2) 'Give one fact-finding technique and best-use case.'\n" +
-      "3) 'What is the difference between context diagram and Diagram 0?'\n" +
-      "4) 'When would Agile be better than strict sequential SDLC?'\n\n" +
-      "We'll end with visual consolidation: I'll return to the board map (Problem -> Requirements -> Models -> Recommendation) and ask learners to place one concept under each.\n\n" +
-      "Before dismissal, let's remember:\n" +
-      "• Complete workbook activities and keep DFD practice pages for PoE\n" +
-      "• Bring one real workplace system issue for tomorrow's discussion\n" +
-      "• Ensure attendance sign-out before leaving.",
-  },
+  "14924": module14924SpeakerNotes,
 
   "14920": {
     title:
@@ -989,40 +948,21 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
   if (flow.moduleId === "14924") {
     slides.push({
       type: "content",
-      title: "How This Session Flows",
-      subtitle: "One clear learning path",
-      bullets: [
-        "Start with System Analysis foundations (components, inputs/outputs, processes, feedback)",
-        "Move into SDLC to structure delivery from planning to maintenance",
-        "Compare execution models (Waterfall, Agile, DevOps)",
-        "Then deepen analyst work: feasibility, requirements, modeling and tools",
-        "Close with practice and application to workplace scenarios",
-      ],
-      highlight:
-        "Order matters: understand the system first, then use SDLC and methods to deliver improvements with control.",
-      speakerNote:
-        "Use this as a 60-second map before Session 1 starts, then keep referring back to it as we progress.\n\n" +
-        "Transition line: 'Now let's walk this exact order in Session 1 so each step builds naturally on the previous one.'",
+      title: module14924SystemAnalysisSlide.title,
+      subtitle: module14924SystemAnalysisSlide.subtitle,
+      bullets: module14924SystemAnalysisSlide.bullets,
+      highlight: module14924SystemAnalysisSlide.highlight,
+      speakerNote: module14924SystemAnalysisSlide.speakerNote,
     });
 
     slides.push({
       type: "content",
-      title: "SDLC Visual Anchor (Adam's Store)",
-      subtitle: "Keep this lifecycle in mind during the lesson",
-      diagram:
-        "[Planning] -> [Requirements Analysis] -> [Design] -> [Implementation] -> [Testing] -> [Deployment & Maintenance]\n" +
-        "      |                |                     |                 |                |                     |\n" +
-        "      v                v                     v                 v                v                     v\n" +
-        "  Business goal     SRS document          DDS architecture   Working code      QA bug reports      Live store + updates",
-      bullets: [
-        "Each phase produces a concrete output that the next phase depends on",
-        "When this flow is skipped, defects and rework show up later at higher cost",
-        "We will revisit this visual during feasibility, requirements and design sections",
-      ],
-      highlight:
-        "This is not a separate topic slide-set; it is the anchor that connects all Session 1 sections.",
-      speakerNote:
-        "Keep the walkthrough brief here (about 2 minutes). Session 1 will unpack each piece in depth so we avoid repeating the same explanation twice.",
+      title: module14924AdamStorySlide.title,
+      subtitle: module14924AdamStorySlide.subtitle,
+      phaseCards: module14924AdamStorySlide.phaseCards,
+      bullets: module14924AdamStorySlide.bullets,
+      highlight: module14924AdamStorySlide.highlight,
+      speakerNote: module14924AdamStorySlide.speakerNote,
     });
   } else {
     const anchor = getModuleAnchorConfig(flow.moduleId);
@@ -1100,6 +1040,23 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
           nextSection?.title
         )
       );
+
+      // Unit 14924: once SDLC fundamentals are covered, introduce execution models.
+      if (
+        flow.moduleId === "14924" &&
+        session.id === "session-1" &&
+        /systems development life cycle|sdlc/i.test(section.title)
+      ) {
+        slides.push({
+          type: "content",
+          title: module14924SdlcModelsSlide.title,
+          subtitle: module14924SdlcModelsSlide.subtitle,
+          phaseCards: module14924SdlcModelsSlide.phaseCards,
+          bullets: module14924SdlcModelsSlide.bullets,
+          highlight: module14924SdlcModelsSlide.highlight,
+          speakerNote: module14924SdlcModelsSlide.speakerNote,
+        });
+      }
     }
   }
 
@@ -1564,7 +1521,7 @@ export function PresentationMode({
       subtitle: s?.subtitle,
       badge: s?.badge,
       sessionLabel: s?.sessionLabel,
-      speakerNote: s?.speakerNote,
+      speakerNote: formatPresenterNote(s, i, ss.length),
       nextTitle: ss[i + 1]?.title,
       prevTitle: i > 0 ? ss[i - 1]?.title : undefined,
       isQuiz: s?.type === "quiz",
@@ -1649,6 +1606,38 @@ export function PresentationMode({
   const slide = slides[current];
   const config = SLIDE_CONFIG[slide.type] ?? SLIDE_CONFIG["content"];
   const isLastSlide = current === total - 1;
+
+  const buildOnScreenSummary = (s?: Slide): string => {
+    if (!s) return "";
+    const lines: string[] = [];
+    if (s.subtitle) lines.push(`Subtitle: ${s.subtitle}`);
+    if (s.bullets && s.bullets.length > 0) {
+      lines.push("On-screen content:");
+      s.bullets.forEach((item, idx) => lines.push(`${idx + 1}. ${item}`));
+    }
+    if (s.phaseCards && s.phaseCards.length > 0) {
+      lines.push(`Phase cards: ${s.phaseCards.join(" | ")}`);
+    }
+    if (s.highlight) lines.push(`Highlight: ${s.highlight}`);
+    return lines.join("\n");
+  };
+
+  const formatPresenterNote = (s: Slide | undefined, index: number, totalSlides: number): string | undefined => {
+    if (!s) return undefined;
+    const header = `Slide ${index + 1} of ${totalSlides}\nTitle: ${s.title}`;
+    const summary = buildOnScreenSummary(s);
+    const facilitatorScript = s.speakerNote?.trim();
+
+    return [
+      header,
+      summary ? `\nWhat learners see:\n${summary}` : "",
+      facilitatorScript ? `\nFacilitator notes:\n${facilitatorScript}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n");
+  };
+
+  const presenterNote = formatPresenterNote(slide, current, total);
 
   /* ── Quiz helpers */
   const qState = quizStates[current] ?? { selected: null, revealed: false };
@@ -2007,6 +1996,9 @@ export function PresentationMode({
           {slide.type === "title" && (
             /* ── Title slide layout */
             <div className="text-center max-w-3xl mx-auto">
+              <p className="text-white/70 text-sm md:text-base uppercase tracking-widest font-semibold mb-2">
+                Slide {current + 1}
+              </p>
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-white/70 text-sm mb-5">
                 {mode === "briefing" ? <GraduationCap size={14} /> : <Lightbulb size={14} />}
                 {mode === "briefing"
@@ -2051,6 +2043,9 @@ export function PresentationMode({
           {/* ── Quiz slide layout */}
           {slide.type === "quiz" && slide.quizQuestion && slide.quizOptions && (
             <div className="max-w-3xl w-full mx-auto">
+              <p className="text-white/70 text-sm md:text-base uppercase tracking-widest font-semibold mb-2">
+                Slide {current + 1}
+              </p>
               <p className="text-sm uppercase tracking-widest font-semibold mb-2 text-purple-300/90">
                 {slide.subtitle}
               </p>
@@ -2110,6 +2105,9 @@ export function PresentationMode({
           {/* ── Regular content slides (objectives, content, activity, summary) */}
           {slide.type !== "title" && slide.type !== "quiz" && (
             <div className="max-w-4xl w-full mx-auto">
+              <p className="text-white/70 text-sm md:text-base uppercase tracking-widest font-semibold mb-2">
+                Slide {current + 1}
+              </p>
               {slide.subtitle && (
                 <p className={`text-sm uppercase tracking-widest font-semibold mb-2 ${config.accent.split(" ")[0]}`}>
                   {slide.subtitle}
@@ -2153,6 +2151,20 @@ export function PresentationMode({
                 </ul>
               )}
 
+              {slide.phaseCards && slide.phaseCards.length > 0 && (
+                <div className="mb-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {slide.phaseCards.map((phase, i) => (
+                    <div
+                      key={`${phase}-${i}`}
+                      className="rounded-xl border border-white/30 bg-white/10 px-4 py-3"
+                    >
+                      <p className="text-sm uppercase tracking-wide text-white/60 mb-1">Step {i + 1}</p>
+                      <p className="text-base md:text-lg font-semibold text-white">{phase}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               {slide.diagram && (
                 <div className="mb-4 p-5 rounded-xl border border-white/30 bg-black/40 overflow-x-auto">
                   <pre className="text-sm md:text-base text-white/95 leading-relaxed whitespace-pre font-mono">
@@ -2177,7 +2189,7 @@ export function PresentationMode({
       </div>
 
       {/* ── Speaker notes panel */}
-      {isAdmin && notesOpen && slide.speakerNote && (
+      {isAdmin && notesOpen && presenterNote && (
         <div className="flex-shrink-0 bg-black/90 border-t border-white/10 px-6 md:px-16 py-3 max-h-32 overflow-y-auto">
           <div className="flex items-center gap-2 mb-2">
             <Users size={13} className="text-yellow-400" />
@@ -2185,7 +2197,7 @@ export function PresentationMode({
               Facilitator Notes
             </span>
           </div>
-          <p className="text-white/70 text-sm leading-relaxed whitespace-pre-line">{slide.speakerNote}</p>
+          <p className="text-white/70 text-sm leading-relaxed whitespace-pre-line">{presenterNote}</p>
         </div>
       )}
 

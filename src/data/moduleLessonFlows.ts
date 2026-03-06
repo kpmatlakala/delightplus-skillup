@@ -1,4 +1,6 @@
-﻿// ─── Content block types ─────────────────────────────────────────────────────
+// --- Content block types -----------------------------------------------------
+
+import { module14924LessonFlow } from "./module14924LessonFlow";
 
 export type ContentBlock =
   | { type: "paragraph"; text: string }
@@ -25,7 +27,7 @@ export type LessonOverview = {
   sections?: LessonSection[];
 };
 
-// ─── Module flow type ─────────────────────────────────────────────────────────
+// --- Module flow type ---------------------------------------------------------
 
 export type ModuleLessonFlow = {
   moduleId: string;
@@ -44,7 +46,7 @@ export type ModuleLessonFlow = {
   assessmentPageBody: string;
 };
 
-// ─── Module flows ─────────────────────────────────────────────────────────────
+// --- Module flows -------------------------------------------------------------
 
 export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
   "14910": {
@@ -62,7 +64,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
     quizPlacement: "end",
     quizSummary: "After completing all four sessions you will take a checkpoint quiz to confirm your understanding across the full unit.",
     quizPageTitle: "Quiz & Lab checkpoint",
-    quizPageBody: "The quiz focuses on applying programming principles, recognising correct data representations and choosing appropriate algorithm structures — not just memorising definitions.",
+    quizPageBody: "The quiz focuses on applying programming principles, recognising correct data representations and choosing appropriate algorithm structures � not just memorising definitions.",
     assessmentPageTitle: "Summative assessment overview",
     assessmentPageBody: "The summative assessment draws together everything practised in this unit standard. You will complete a structured task, submit your work as evidence, and meet the criteria in the assessment brief. A registered assessor uses your portfolio to determine competence.",
 
@@ -71,11 +73,11 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
         id: "unit-1",
         label: "Unit 1",
         title: "Learning Unit 1: Apply the principles of Computer Programming",
-        summary: "Overview of Unit Standard 14910 — NQF level, credits, field, purpose and assumed learning.",
+        summary: "Overview of Unit Standard 14910 � NQF level, credits, field, purpose and assumed learning.",
         body: "Unit Standard 14910 (Level 4, 8 credits). Field: Physical, Mathematical, Computer and Life Sciences. Sub-field: Construction, Information Technology and Computer Sciences. Assumed learning: fundamental maths and English at NQF Level 2, basic PC competency, and an ability to describe the principles of computer programming.",
       },
 
-      // ── SESSION 1 ────────────────────────────────────────────────────────────
+      // -- SESSION 1 ------------------------------------------------------------
       {
         id: "session-1",
         label: "Session 1",
@@ -93,8 +95,8 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             blocks: [
               { type: "paragraph", text: "A programming tool or software development tool is a program or application that software developers use to create, debug, maintain, or otherwise support other programs. Sometimes called a text editor, it enables you to create and edit text files. There are two general categories of editor:" },
               { type: "list", items: [
-                "Line editors — A primitive form where you must first specify the exact line number before making changes.",
-                "Screen-oriented editors (full-screen editors) — Enable you to modify any text visible on the display screen by moving the cursor to the desired location.",
+                "Line editors � A primitive form where you must first specify the exact line number before making changes.",
+                "Screen-oriented editors (full-screen editors) � Enable you to modify any text visible on the display screen by moving the cursor to the desired location.",
               ]},
               { type: "callout", variant: "tip", text: "Modern IDEs like VS Code, IntelliJ and Eclipse are screen-oriented editors with many extra features built on top." },
               { type: "heading", text: "Common Editor Keyboard Shortcuts" },
@@ -112,15 +114,15 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
           {
             title: "1.2 The Syntax Checker",
             blocks: [
-              { type: "paragraph", text: "In computer science, a syntax error refers to an error in the syntax of a sequence of characters or tokens intended to be written in a particular programming language. For compiled languages, syntax errors occur strictly at compile-time — a program will not compile until all syntax errors are corrected." },
+              { type: "paragraph", text: "In computer science, a syntax error refers to an error in the syntax of a sequence of characters or tokens intended to be written in a particular programming language. For compiled languages, syntax errors occur strictly at compile-time � a program will not compile until all syntax errors are corrected." },
               { type: "callout", variant: "info", text: "For interpreted languages, not all syntax errors can be reliably detected until run-time, making it harder to differentiate a syntax error from a semantic error." },
               { type: "heading", text: "Syntax Error Severity Codes" },
               { type: "table", headers: ["Code", "Severity", "Meaning"], rows: [
                 ["U", "Unrecoverable", "Stops the compiler system immediately."],
-                ["S", "Severe", "You must correct this — compiler cannot generate code."],
+                ["S", "Severe", "You must correct this � compiler cannot generate code."],
                 ["E", "Error", "Compiler makes an assumption; you should verify it."],
                 ["W", "Warning", "Possible error, but program is syntactically correct."],
-                ["I", "Information", "Draws your attention to something — not necessarily an error."],
+                ["I", "Information", "Draws your attention to something � not necessarily an error."],
               ]},
               { type: "callout", variant: "tip", text: "E-level, W-level and I-level messages can be suppressed. S-level errors must always be corrected before object code can be produced." },
             ],
@@ -130,14 +132,14 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             blocks: [
               { type: "paragraph", text: "Compilation converts your source code into executable instructions the computer can run. Three categories of code are involved:" },
               { type: "list", items: [
-                "User-written code — the statements you type yourself.",
-                "Library functions — pre-built functions provided by the language (e.g. LEFT$, LEN, MID$, ABS, SQR in Q-Basic).",
-                "User-defined functions — functions you create to encapsulate reusable logic and return a single value.",
+                "User-written code � the statements you type yourself.",
+                "Library functions � pre-built functions provided by the language (e.g. LEFT$, LEN, MID$, ABS, SQR in Q-Basic).",
+                "User-defined functions � functions you create to encapsulate reusable logic and return a single value.",
               ]},
               { type: "heading", text: "User-Defined Functions in QBasic" },
               { type: "code", text: "FUNCTION FunctionName(x, y, z)\n  REM body of function\n  FunctionName = x + y + z   ' return value\nEND FUNCTION" },
-              { type: "heading", text: "Subroutines (SUB … END SUB)" },
-              { type: "paragraph", text: "A subroutine (also called a module) is a mini-program inside your main program — a collection of commands that can be executed from anywhere. To add one in QBasic: go to Edit → New Sub, name it, and place commands between SUB and END SUB. A function is the same as a subroutine except it returns a value." },
+              { type: "heading", text: "Subroutines (SUB � END SUB)" },
+              { type: "paragraph", text: "A subroutine (also called a module) is a mini-program inside your main program � a collection of commands that can be executed from anywhere. To add one in QBasic: go to Edit ? New Sub, name it, and place commands between SUB and END SUB. A function is the same as a subroutine except it returns a value." },
               { type: "heading", text: "Local vs Global Variables" },
               { type: "table", headers: ["Scope", "Declaration", "Accessible from"], rows: [
                 ["Local", "Inside a module/procedure without SHARED", "Only that module or procedure"],
@@ -148,7 +150,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
         ],
       },
 
-      // ── SESSION 2 ────────────────────────────────────────────────────────────
+      // -- SESSION 2 ------------------------------------------------------------
       {
         id: "session-2",
         label: "Session 2",
@@ -167,13 +169,13 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             blocks: [
               { type: "paragraph", text: "There are four number systems commonly used in computing. All four can represent any number and can be perfectly converted between one another without any loss of numeric value." },
               { type: "table", headers: ["System", "Base", "Digits used", "Example counting"], rows: [
-                ["Decimal", "10", "0 – 9", "0, 1, 2 … 9, 10, 11 …"],
-                ["Binary", "2", "0 – 1", "0, 1, 10, 11, 100, 101 …"],
-                ["Octal", "8", "0 – 7", "0, 1 … 7, 10, 11 … 17, 20 …"],
-                ["Hexadecimal", "16", "0 – 9, A – F", "0 … 9, A, B, C, D, E, F, 10 …"],
+                ["Decimal", "10", "0 � 9", "0, 1, 2 � 9, 10, 11 �"],
+                ["Binary", "2", "0 � 1", "0, 1, 10, 11, 100, 101 �"],
+                ["Octal", "8", "0 � 7", "0, 1 � 7, 10, 11 � 17, 20 �"],
+                ["Hexadecimal", "16", "0 � 9, A � F", "0 � 9, A, B, C, D, E, F, 10 �"],
               ]},
               { type: "callout", variant: "tip", text: "Binary numbers are often written with a 0b prefix (e.g. 0b1011) and hexadecimal with 0x (e.g. 0x1B84) to avoid confusion with decimal." },
-              { type: "heading", text: "Conversion Reference Table (0 – 15)" },
+              { type: "heading", text: "Conversion Reference Table (0 � 15)" },
               { type: "table", headers: ["Decimal", "Hex", "Octal", "Binary"], rows: [
                 ["0","0","000","00000000"],["1","1","001","00000001"],["2","2","002","00000010"],
                 ["3","3","003","00000011"],["4","4","004","00000100"],["5","5","005","00000101"],
@@ -190,11 +192,11 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
               { type: "paragraph", text: "ALL types of information stored in a computer are stored internally in the same simple format: a sequence of 0s and 1s. How these bits are interpreted determines whether they represent a number, a character, a pixel colour, or a sound sample." },
               { type: "table", headers: ["Unit", "Size", "Possible values"], rows: [
                 ["Bit", "1 bit", "2 values (0 or 1)"],
-                ["Byte", "8 bits", "256 values (0 – 255)"],
+                ["Byte", "8 bits", "256 values (0 � 255)"],
                 ["2-byte word", "16 bits", "~65,000 values"],
               ]},
               { type: "heading", text: "ASCII (American Standard Code for Information Interchange)" },
-              { type: "paragraph", text: "ASCII defines 128 symbols and assigns each a unique numeric code (0 – 127). When you save a file as plain text it is stored using ASCII — one byte per character." },
+              { type: "paragraph", text: "ASCII defines 128 symbols and assigns each a unique numeric code (0 � 127). When you save a file as plain text it is stored using ASCII � one byte per character." },
               { type: "table", headers: ["Character", "Decimal", "Binary"], rows: [
                 ["A","65","01000001"],["B","66","01000010"],
                 ["a","97","01100001"],["b","98","01100010"],
@@ -210,7 +212,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
               { type: "table", headers: ["Data Type", "Description", "Examples"], rows: [
                 ["Integer", "Whole number; no decimal; positive or negative.", "12, -3, 1000000"],
                 ["Real (Float)", "Any number with or without a decimal part.", "1.4534, -0.0003, 3.142"],
-                ["Currency", "Real formatted with a currency symbol and 2 decimal places.", "£12.45, $5500.00"],
+                ["Currency", "Real formatted with a currency symbol and 2 decimal places.", "�12.45, $5500.00"],
                 ["Percentage", "Fractional real displayed as %; 0.5 is shown as 50%.", "25%, 1200%, -5%"],
                 ["Alphanumeric (Text)", "Letters, numbers and symbols; shown in speech marks.", "'DOG', 'ABC123'"],
                 ["Date / Time", "Formatted date or time; format depends on locale settings.", "25/10/2007, 15:00"],
@@ -223,18 +225,18 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             title: "2.4 Logical Operators",
             blocks: [
               { type: "paragraph", text: "Logical operators are used with Boolean values and return a Boolean result. The three fundamental operators are AND, OR and NOT." },
-              { type: "table", headers: ["Operator", "Symbol", "Returns TRUE when…", "Example", "Result"], rows: [
+              { type: "table", headers: ["Operator", "Symbol", "Returns TRUE when�", "Example", "Result"], rows: [
                 ["AND", "&&", "BOTH operands are true", "TRUE && FALSE", "FALSE"],
                 ["OR", "||", "EITHER operand is true", "TRUE || FALSE", "TRUE"],
                 ["NOT", "!", "The single operand is false", "!TRUE", "FALSE"],
               ]},
-              { type: "callout", variant: "info", text: "In Fortran the equivalents are .AND., .OR., .NOT., .EQV. (equivalence) and .NEQV. (not equivalence). Priority order: arithmetic → relational → logical." },
+              { type: "callout", variant: "info", text: "In Fortran the equivalents are .AND., .OR., .NOT., .EQV. (equivalence) and .NEQV. (not equivalence). Priority order: arithmetic ? relational ? logical." },
             ],
           },
         ],
       },
 
-      // ── SESSION 3 ────────────────────────────────────────────────────────────
+      // -- SESSION 3 ------------------------------------------------------------
       {
         id: "session-3",
         label: "Session 3",
@@ -250,10 +252,10 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
           {
             title: "3.1 Algorithms & Pseudocode",
             blocks: [
-              { type: "paragraph", text: "An algorithm is the set of steps a programmer writes that will become a program. It is expressed in pseudocode — a structured English-like notation that does not use the keywords of any specific programming language." },
+              { type: "paragraph", text: "An algorithm is the set of steps a programmer writes that will become a program. It is expressed in pseudocode � a structured English-like notation that does not use the keywords of any specific programming language." },
               { type: "list", items: [
                 "Written as a list of consecutive phrases.",
-                "No flowchart symbols required — arrows can show loops.",
+                "No flowchart symbols required � arrows can show loops.",
                 "Indentation is used to show logic and nesting.",
                 "Any programmer should be able to read it regardless of their usual language.",
               ]},
@@ -271,14 +273,14 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
               { type: "code", text: "Enter\n  Test condition\n  ON TRUE\n    Action A\n  ON FALSE\n    Action B   (can be empty / omitted)\nExit" },
               { type: "heading", text: "Loop (Iteration) Structure" },
               { type: "paragraph", text: "Tests a condition first. If false, control exits immediately without action. If true, one or more actions run and the condition is tested again. This repeats until the condition is false." },
-              { type: "code", text: "Enter\n  Test condition → EXIT on false\n  ON TRUE\n    Action 1\n    Action 2\n    Go back and test again" },
-              { type: "callout", variant: "warning", text: "Always ensure one of the actions inside a loop eventually causes the condition to become false — otherwise you create an infinite loop." },
+              { type: "code", text: "Enter\n  Test condition ? EXIT on false\n  ON TRUE\n    Action 1\n    Action 2\n    Go back and test again" },
+              { type: "callout", variant: "warning", text: "Always ensure one of the actions inside a loop eventually causes the condition to become false � otherwise you create an infinite loop." },
             ],
           },
           {
             title: "3.3 Program Documentation",
             blocks: [
-              { type: "paragraph", text: "Documentation is a written detailed description of the programming cycle and specific facts about the program. It must be written continuously throughout design, development and testing — not just at the end." },
+              { type: "paragraph", text: "Documentation is a written detailed description of the programming cycle and specific facts about the program. It must be written continuously throughout design, development and testing � not just at the end." },
               { type: "heading", text: "What good documentation includes" },
               { type: "list", items: [
                 "Origin and nature of the problem the program solves.",
@@ -288,7 +290,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
                 "Program listings with inline comments.",
                 "Testing results, including test data and expected vs actual output.",
               ]},
-              { type: "callout", variant: "info", text: "Inline comments in your source code are also considered essential documentation. The next person to maintain your code — or a future version of you — will be grateful." },
+              { type: "callout", variant: "info", text: "Inline comments in your source code are also considered essential documentation. The next person to maintain your code � or a future version of you � will be grateful." },
             ],
           },
           {
@@ -305,13 +307,13 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
                 ["Modifiability", "Any part of the system can be changed without affecting other parts."],
                 ["Testability", "Ease with which a modification can be verified to have produced a quality result."],
               ]},
-              { type: "callout", variant: "tip", text: "ISO 9000 certifies quality assurance during business processes. Many organisations — especially those selling to the EU — require this certification." },
+              { type: "callout", variant: "tip", text: "ISO 9000 certifies quality assurance during business processes. Many organisations � especially those selling to the EU � require this certification." },
             ],
           },
         ],
       },
 
-      // ── SESSION 4 ────────────────────────────────────────────────────────────
+      // -- SESSION 4 ------------------------------------------------------------
       {
         id: "session-4",
         label: "Session 4",
@@ -328,7 +330,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
           {
             title: "4.1 Constants and Variables",
             blocks: [
-              { type: "paragraph", text: "A variable is a symbol or name that stands for a value that can change during program execution. Every variable has a name (identifier) and a data type. Variables make programs flexible — using variables instead of hard-coded data means the same program can process different data sets." },
+              { type: "paragraph", text: "A variable is a symbol or name that stands for a value that can change during program execution. Every variable has a name (identifier) and a data type. Variables make programs flexible � using variables instead of hard-coded data means the same program can process different data sets." },
               { type: "code", text: "x + y\n' x and y are variables; they can hold any numeric value" },
               { type: "table", headers: ["Feature", "Variable", "Constant"], rows: [
                 ["Value", "Changes during execution", "Fixed at definition"],
@@ -356,7 +358,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
           {
             title: "4.3 Modular Programming",
             blocks: [
-              { type: "paragraph", text: "Linear programming writes the entire program in a single block from start to finish — it becomes complex and unmanageable as it grows. Modular programming breaks the program into smaller, self-contained pieces (modules), each responsible for one task." },
+              { type: "paragraph", text: "Linear programming writes the entire program in a single block from start to finish � it becomes complex and unmanageable as it grows. Modular programming breaks the program into smaller, self-contained pieces (modules), each responsible for one task." },
               { type: "heading", text: "Advantages of Modular Programming" },
               { type: "list", items: [
                 "The same procedure can be reused without rewriting, reducing code length.",
@@ -367,7 +369,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
               ]},
               { type: "heading", text: "SUBs vs FUNCTIONs in QBasic" },
               { type: "table", headers: ["Feature", "SUB (Subroutine)", "FUNCTION"], rows: [
-                ["Returns a value?", "No", "Yes — stored in the function name"],
+                ["Returns a value?", "No", "Yes � stored in the function name"],
                 ["Called with", "CALL SubName(args)", "result = FuncName(args)"],
                 ["Use case", "Perform an action (e.g. draw a menu)", "Calculate a result (e.g. tax amount)"],
               ]},
@@ -381,18 +383,18 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
           {
             title: "4.4 Debugging Techniques",
             blocks: [
-              { type: "paragraph", text: "Debugging means detecting, locating and correcting bugs — usually by running the program with carefully-designed test data that exercises every part of the code, including edge cases." },
-              { type: "heading", text: "RTFM — Read The Fine Manual" },
+              { type: "paragraph", text: "Debugging means detecting, locating and correcting bugs � usually by running the program with carefully-designed test data that exercises every part of the code, including edge cases." },
+              { type: "heading", text: "RTFM � Read The Fine Manual" },
               { type: "paragraph", text: "Before debugging blindly, take time to find and read the relevant documentation for the compiler, make tool, preprocessor, linker and any libraries you are using. Distinguish between tutorial documentation (learn how) and reference documentation (look up details)." },
               { type: "heading", text: "print() Debugging" },
               { type: "paragraph", text: "Printf debugging involves adding temporary output statements (printf / cout / print) throughout the code to track control flow and variable values during execution. While quick, it has serious disadvantages:" },
               { type: "list", items: [
-                "Very ad hoc — code must be added and removed for each bug found.",
+                "Very ad hoc � code must be added and removed for each bug found.",
                 "Clutters the normal output of the program.",
                 "Slows the program down considerably.",
               ]},
               { type: "callout", variant: "tip", text: "Use a proper debugger (breakpoints, watch expressions, call stack) rather than print statements for systematic, efficient debugging." },
-              { type: "heading", text: "ANWB Debugging — Explain It Out Loud" },
+              { type: "heading", text: "ANWB Debugging � Explain It Out Loud" },
               { type: "paragraph", text: "Find a willing bystander (or even a rubber duck!) and explain out loud how your code works. This forces you to re-examine your assumptions and articulate what is really happening. Very often you discover the cause of the bug while explaining it to someone else." },
             ],
           },
@@ -400,681 +402,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
       },
     ],
   },
-  "14924": {
-    moduleId: "14924",
-    saqa: "14924",
-    introTitle: "Information Systems Analysis",
-    introSummary: "Explore the systems development life cycle, the analyst's roles and responsibilities, information-gathering techniques, data flow diagrams, object-oriented analysis, and structured development approaches.",
-    introBody: "This module introduces the discipline of information systems analysis — establishing what systems are, how they are developed, who the analyst is, and how to gather and model requirements. You will work through feasibility studies, requirements analysis, data flow diagram construction, object-oriented analysis concepts, and development approaches including Agile, CASE tools, JAD, RAD, and structured methods. No prior systems analysis experience is required.",
-    aboutGuide: "This learner guide provides a structured overview of information systems analysis and forms part of the FETC: IT Systems Development qualification (SAQA 78965, NQF Level 4). It is designed to develop your ability to analyse systems and apply structured analysis techniques.",
-    unitPurpose: "People credited with this unit standard are able to describe information systems analysis and explain different systems analysis techniques used in the industry.",
-    quizPlacement: "end",
-    quizSummary: "Test your understanding of information systems analysis, the SDLC, feasibility studies, cost-benefit analysis, requirements analysis, data flow diagrams, object-oriented concepts, and Agile and structured development approaches.",
-    quizPageTitle: "Module Quiz",
-    quizPageBody: "Complete all sessions in the learner guide before attempting this quiz. You can review the material at any time.",
-    assessmentPageTitle: "Portfolio of Evidence",
-    assessmentPageBody: "Submit a Portfolio of Evidence demonstrating your understanding of information systems analysis concepts and techniques.",
-    lessons: [
-      {
-        id: "programme-intro",
-        label: "Introduction",
-        title: "Programme Introduction — FETC: IT Systems Development",
-        summary: "A foundational orientation to the qualification — covering what information systems are, the SDLC, how systems development differs from software development, your full learning roadmap across all 10 modules, and how each lecture in this unit standard connects to the next. No assessed outcomes.",
-        body: "This opening lesson orients you to the qualification before any assessed content begins. It maps the full programme structure — positioning each unit standard in context — and establishes the analytical mindset that underpins every lesson that follows. Work through these sections at your own pace before your facilitator opens Session 1.",
-        sections: [
-          {
-            title: "What is Information Technology?",
-            blocks: [
-              {
-                type: "paragraph" as const,
-                text: "Information Technology (IT) is the combination of hardware and software products and services that organisations use to manage, access, communicate, and share information. IT is not just computers — it is the invisible infrastructure that underpins every business function, from student records and payroll to logistics and customer service.",
-              },
-              {
-                type: "heading" as const,
-                text: "Three Forces Shaping the Future of IT",
-              },
-              {
-                type: "list" as const,
-                items: [
-                  "Changes in the world — globalisation, remote work, digital transformation, and the demand for real-time information access across every sector",
-                  "Changes in technology — faster processors, cloud computing, artificial intelligence, mobile platforms, and the exponential growth of available data (Moore's Law: processing power roughly doubles every two years)",
-                  "Changes in client demand — organisations and end users expect systems that are faster, more intuitive, more accessible, and more secure than ever before",
-                ],
-              },
-              {
-                type: "callout" as const,
-                variant: "info" as const,
-                text: "As a systems developer, you will design, build and maintain the IT infrastructure that organisations depend on. Understanding what IT is — and why it must be carefully planned — is the foundation on which every other unit in this qualification rests.",
-              },
-            ],
-          },
-          {
-            title: "A. What is a System?",
-            blocks: [
-              {
-                type: "callout" as const,
-                variant: "info" as const,
-                text: "Think of your college's student registration portal — it takes in learner data, processes it according to rules, stores records, and produces reports for the DoE. That is a real information system. Understanding how to build, analyse and improve systems like it is exactly what this qualification is about.",
-              },
-              {
-                type: "paragraph" as const,
-                text: "A system is an organised set of interrelated components that work together to achieve a defined goal. An information system specifically collects, processes, stores, and distributes information to support an organisation's day-to-day operations and decision-making.",
-              },
-              {
-                type: "heading" as const,
-                text: "Examples of Information Systems You Already Know",
-              },
-              {
-                type: "list" as const,
-                items: [
-                  "Student registration portal — captures enrolment data, checks eligibility, generates student numbers and timetables",
-                  "Attendance tracking tool — records daily sign-ins, flags patterns, produces reports for the Department of Education",
-                  "Results management system — stores marks, calculates averages, generates transcripts and certificates",
-                  "Leave management system — processes leave applications, checks available balances, notifies line managers",
-                  "Online banking portal — takes your transaction instruction, validates it, updates balances, sends a confirmation",
-                ],
-              },
-              {
-                type: "paragraph" as const,
-                text: "Notice the pattern: every one of these systems takes in data (inputs), applies rules or calculations (processing), retains records (storage), and produces something people act on — a report, a balance, a certificate (outputs). This input–process–storage–output model is the structural DNA of every information system you will ever build or analyse.",
-              },
-            ],
-          },
-          {
-            title: "B. What is Systems Development?",
-            blocks: [
-              {
-                type: "paragraph" as const,
-                text: "Systems development is the end-to-end discipline of planning, analysing, designing, building, testing and maintaining information systems. It is not only about writing code — it is about ensuring the right system gets built in the first place, that it works correctly, and that it keeps working reliably after it is deployed.",
-              },
-              {
-                type: "heading" as const,
-                text: "The Six Phases of the Systems Development Life Cycle",
-              },
-              {
-                type: "ordered-list" as const,
-                items: [
-                  "Investigation — Identify the business problem or opportunity; assess whether a new or improved system is justified before any money is committed",
-                  "Analysis — Establish in detail what the system must do: requirements, data flows, user needs, volume estimates, constraints",
-                  "Design — Specify how the system will work: architecture, data structures, user interfaces, program module structure",
-                  "Development (Coding) — Write and unit-test the program code based on the approved design documents",
-                  "Implementation — Deploy the system, convert existing data, train users, and manage the transition from the old system to the new one",
-                  "Maintenance — Monitor for defects, apply fixes and enhancements, and eventually plan the next iteration or replacement",
-                ],
-              },
-              {
-                type: "callout" as const,
-                variant: "tip" as const,
-                text: "Notice that coding (phase 4) only appears more than halfway through. The analysis and design work that precedes it determines whether what gets built is actually useful. A technically excellent system that solves the wrong problem is still a failure — and failures at this stage cost two to ten times more to fix than failures caught during analysis.",
-              },
-            ],
-          },
-          {
-            title: "C. Systems Development vs Software Development — Are They the Same?",
-            blocks: [
-              {
-                type: "paragraph" as const,
-                text: "These terms are used interchangeably in everyday conversation, but they describe different scopes. Software development is a subset of systems development — it is the phase where programs are written and tested. Systems development is the broader discipline that frames why the software needs to exist and ensures the solution works for the organisation as a whole.",
-              },
-              {
-                type: "table" as const,
-                headers: ["Aspect", "Systems Development", "Software Development"],
-                rows: [
-                  ["Scope", "End-to-end: people, process, data, technology and code", "Primarily code — design, write, test, deploy"],
-                  ["Starting point", "Business problem or organisational need", "Requirements specification handed to developers by an analyst"],
-                  ["Who is involved", "Analysts, business users, managers, developers, QA, trainers", "Developers, testers, DevOps engineers"],
-                  ["Key output", "A working solution that solves the business problem", "A software artefact — an application, API, script or service"],
-                  ["SDLC position", "Spans all 6 phases from investigation to maintenance", "Primarily phases 4–5: development and implementation"],
-                  ["SA NQF framing", "The recognised qualification framing (SAQA 78965, NQF Level 4)", "Usually vendor-specific certifications (e.g. AWS, Oracle, Microsoft)"],
-                ],
-              },
-              {
-                type: "paragraph" as const,
-                text: "How they connect: every piece of software exists inside a larger organisational system. The analyst's work — understanding the problem, gathering requirements, modelling data flows, designing before coding — determines whether the software that eventually gets written solves the right problem for the right people. In this qualification, you will learn to think like an analyst and write like a developer. Both skills are required to be fully effective in the IT workplace.",
-              },
-            ],
-          },
-          {
-            title: "D. Why Study Systems Development?",
-            blocks: [
-              {
-                type: "list" as const,
-                items: [
-                  "Organisations run on systems: every business function — payroll, HR, logistics, student records — depends on reliable information systems. Understanding how they are built is foundational to any IT role, from junior developer to project manager.",
-                  "Poor analysis causes expensive failures: the Standish Group CHAOS Report consistently finds that fewer than 30% of IT projects are completed on time, within budget and to specification. The leading root causes are poor requirements gathering and inadequate analysis — not programming errors. This qualification addresses those root causes directly.",
-                  "NQF Level 4 opens careers: competence in systems development creates pathways into junior analyst, developer, business analyst support and project coordination roles — all in high demand across South African government and private sector.",
-                  "Professional practice modelling: as a CET lecturer delivering vocational IT training, demonstrating structured thinking — breaking a problem down before touching a keyboard, gathering requirements from users, designing before coding — is the professional standard your learners will carry into the workplace.",
-                ],
-              },
-              {
-                type: "callout" as const,
-                variant: "info" as const,
-                text: "Reflection activity: Name one IT system you interact with at your college. Write down one thing it does well and one thing it does poorly. When you reach Session 1 of ITSD-14924, you will have the vocabulary and the analytical tools to describe exactly why that problem exists — and how you would fix it.",
-              },
-            ],
-          },
-          {
-            title: "E. Your Learning Roadmap",
-            blocks: [
-              {
-                type: "paragraph" as const,
-                text: "This qualification is delivered across 15 days in 3 blocks. The 10 unit standards below build on each other — Block 1 establishes the thinking frameworks, Block 2 applies them in working code, and Block 3 brings everything together in a professional practice context.",
-              },
-              {
-                type: "table" as const,
-                headers: ["#", "Code", "Title", "Block", "Credits", "What you will be able to do"],
-                rows: [
-                  ["1", "ITSD-14924", "Information Systems Analysis", "Block 1 · Day 1", "3", "Describe the SDLC, the analyst's role, information-gathering techniques, DFDs, decision tables and CASE tools"],
-                  ["2", "ITSD-14920", "Team Collaboration & Problem Solving", "Block 1 · Day 2", "3", "Contribute effectively to team problem-solving using structured techniques and identify qualities of effective team members"],
-                  ["3", "ITSD-14918", "Programming Principles Introduction", "Block 1 · Day 3", "5", "Explain data types, control structures and write pseudocode for simple problems"],
-                  ["4", "ITSD-14927", "Apply Problem-Solving Strategies", "Block 1 · Day 4", "4", "Analyse workplace problems, evaluate solutions against criteria, and develop an implementation plan"],
-                  ["5", "ITSD-14915", "Design a Computer Program to Specification", "Block 1 · Day 5", "8", "Design programs using structure diagrams, decision tables, pseudocode and desk-checking"],
-                  ["6", "ITSD-14910", "Apply Programming Principles", "Block 2 · Days 6–7", "8", "Write, test and debug structured programs applying data types, functions, control structures and error handling"],
-                  ["7", "ITSD-14933", "Web Scripting", "Block 2 · Days 8–9", "6", "Build interactive web pages using HTML5, CSS3 and JavaScript with DOM manipulation and responsive design"],
-                  ["8", "ITSD-14908", "Testing IT Systems", "Block 3 · Day 11", "6", "Design test cases, execute test plans, log defects and apply quality assurance principles"],
-                  ["9", "ITSD-14919", "Resolve User Problems", "Block 3 · Day 12", "5", "Diagnose and resolve common IT user problems using structured troubleshooting methodology"],
-                  ["10", "ITSD-120379", "Work as Project Team Member", "Block 3 · Day 13", "8", "Participate effectively in a project team, manage deliverables and communicate with stakeholders"],
-                ],
-              },
-              {
-                type: "callout" as const,
-                variant: "tip" as const,
-                text: "Day 10 is a PoE consolidation day — no new unit standard content is delivered. Use this day to organise your portfolio evidence, complete any outstanding workbook activities, and prepare questions for the Block 3 sessions. Your facilitator will be available to provide guidance.",
-              },
-            ],
-          },
-          {
-            title: "F. How the SA&D Course Unfolds",
-            blocks: [
-              {
-                type: "paragraph" as const,
-                text: "The work you do in Session 1 today — understanding what a system is, who the analyst is, how to gather requirements — is not isolated. Every lecture in the Systems Analysis and Design course builds directly on the foundation you are establishing right now. Here is how:",
-              },
-              {
-                type: "table" as const,
-                headers: ["Lecture", "Topic", "SDLC Phase", "How it builds on Day 1"],
-                rows: [
-                  ["L1 — Today", "Introduction to Information Systems", "Analysis", "Establishes the analyst's role, the SDLC, IS components, and information-gathering techniques — the lens through which every other lecture is understood"],
-                  ["L2", "Systems Project Management", "All phases", "Shows how the analyst's work is scoped, planned, and controlled. Feasibility, WBS, and scheduling begin where your Day 1 problem definition ends"],
-                  ["L3", "Requirements Modelling", "Analysis", "Deepens requirements gathering: JAD workshops, RAD prototyping, and Agile iterations are the techniques analysts use after initial fact-finding"],
-                  ["L4", "Data and Process Modelling", "Analysis → Design", "The DFDs you learn today are expanded here: context diagrams → Diagram 0 → levelled diagrams. Logical models become physical design"],
-                  ["L5 & L6", "Object Modelling", "Analysis → Design", "OO analysis (introduced today in section 2.4) is developed into full UML: class diagrams, use cases, sequence diagrams, activity diagrams"],
-                  ["L7", "Data Design", "Design", "The data your analysis identifies becomes database tables. Your DFDs' data stores become ERDs, normalised tables, and referential integrity rules"],
-                  ["L8", "Development Strategies & Implementation", "Design → Implementation", "Your analyst recommendation from Day 1 (build vs buy, which approach) feeds directly into the acquisition process and changeover strategy"],
-                  ["L9", "User Interface Design", "Design", "The user requirements you gather today define what the interface must do. UI design translates analysis outputs into screens, forms and reports"],
-                  ["L10", "System Support and Security", "Maintenance", "The documentation you produce during analysis (requirements, data models, process models) enables future maintenance, security audits, and post-implementation review"],
-                ],
-              },
-              {
-                type: "callout" as const,
-                variant: "tip" as const,
-                text: "Think of Day 1 as the trunk of a tree. Every lecture that follows is a branch that grows from the roots you are putting down today. The analyst who cannot gather requirements (L1) cannot model processes (L4), cannot design data (L7), cannot specify the UI (L9), and cannot support the system (L10). Everything connects.",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        id: "unit-1",
-        label: "Block 1 · Day 1",
-        title: "Systems Analysis Foundations: SDLC, Roles and Techniques",
-        summary: "Lesson plan for ITSD-14924 Block 1, Day 1 — CET Lecturers Systems Development Training. Duration: 300 minutes (5 hours).",
-        body: "UNIT STANDARD: 14924 | NQF LEVEL: 4 | CREDITS: 3 | Block 1 — Day 1 of 5 | Duration: 300 min",
-      },
-      {
-        id: "session-1",
-        label: "Session 1",
-        title: "Introduction to Information Systems Analysis",
-        summary: "Explore SDLC phases, the analyst's key responsibilities, information-gathering techniques, and the distinction from requirements analysis.",
-        body: "Understand the stages of the SDLC that apply to systems analysis, the core functions of the information systems analyst, and the main techniques used to gather requirements from stakeholders and existing systems.",
-        outcomes: [
-          "Explain the role of information systems analysis within the Software Development Life Cycle.",
-          "Describe the key responsibilities of an information systems analyst.",
-          "Identify and explain common information-gathering techniques (interviews, questionnaires, observation, site visits, document review).",
-          "Distinguish between Systems Analysis and Requirements Analysis.",
-        ],
-        sections: [
-          {
-            title: "1.0 Introduction to System Analysis",
-            blocks: [
-              { type: "paragraph", text: "System analysis is the discipline of understanding how a system works, how its parts interact, and how it can be improved. It applies to software systems, business processes, and real-world service systems." },
-              { type: "heading", text: "Core Concepts Before SDLC" },
-              { type: "table", headers: ["Concept", "Description", "Simple Example"], rows: [
-                ["Components", "The parts that make up a system and their relationships", "Online store: catalog, cart, payment gateway, user accounts"],
-                ["Input and Output", "What enters the system and what it produces", "Input: product search and payment details; Output: order confirmation"],
-                ["Processes", "The ordered activities that transform inputs into outputs", "Browse -> add to cart -> checkout -> payment -> confirmation"],
-                ["Feedback Loops", "Output information used to adjust future behavior", "Low stock alerts trigger restocking rules"],
-              ]},
-              { type: "heading", text: "Why System Analysis Matters" },
-              { type: "list", items: [
-                "Improves efficiency by identifying bottlenecks and redundant steps",
-                "Reduces cost by improving resource usage and preventing rework",
-                "Improves quality and reliability of system outputs",
-                "Supports innovation through structured problem-solving",
-                "Strengthens root-cause analysis when failures happen",
-              ]},
-              { type: "heading", text: "System Analysis Process (Before Full SDLC Detail)" },
-              { type: "ordered-list", items: [
-                "Identify the system and its boundaries",
-                "Gather data (interviews, observation, documents)",
-                "Model the system using diagrams/flows",
-                "Analyse issues, risks, and opportunities",
-                "Propose and evaluate improvement options",
-                "Implement agreed changes",
-                "Test and monitor outcomes",
-              ]},
-              { type: "callout", variant: "tip", text: "Transition to SDLC: once we understand components, inputs/outputs, processes, and feedback, SDLC gives us the disciplined lifecycle to execute analysis, design, build, test, deploy, and maintain effectively." },
-            ],
-          },
-          {
-            title: "1.1 The Systems Development Life Cycle (SDLC)",
-            blocks: [
-              { type: "paragraph", text: "The systems development life cycle (SDLC) gives organisations a means of controlling a large development project by dividing it into manageable stages with well-defined outputs." },
-              { type: "heading", text: "Key Characteristics of the SDLC" },
-              { type: "ordered-list", items: [
-                "Every stage defines activities and responsibilities of the development team.",
-                "Each stage terminates in a milestone with defined deliverables (e.g., requirements specification).",
-                "The effort expended on development is often surpassed by maintenance — which may cost twice as much over time.",
-                "Extensive system documentation is necessary during development to support future maintenance.",
-              ]},
-              { type: "heading", text: "SDLC Stages and Deliverables" },
-              { type: "table", headers: ["Stage", "Key Deliverable"], rows: [
-                ["Feasibility Study", "Recommendation to proceed or abandon"],
-                ["Requirements Analysis", "Requirements specifications"],
-                ["Logical Design", "Conceptual design of programs and databases"],
-                ["Physical Design", "Detailed design of modules, databases, hardware and software specs"],
-                ["Coding and Testing", "Accepted system with complete documentation"],
-                ["Conversion", "Installed operational system"],
-                ["Post-implementation Review", "Recommendations for enhancement and organisational adjustment"],
-              ]},
-              { type: "heading", text: "Applied SDLC Scenario: Adam's Online Home Decor Store" },
-              { type: "paragraph", text: "Adam wants an online store where customers can browse and buy home decor products. The SDLC helps the team move from business idea to a stable, secure, maintainable online system." },
-              { type: "table", headers: ["Phase", "How It Applies to Adam's Store", "Main Output"], rows: [
-                ["Planning", "Define business goals, budget, timeline, and success criteria.", "Project scope and plan"],
-                ["Requirements Analysis", "Capture required features: product catalogue, cart, checkout, account management, admin dashboard, payment integration.", "SRS (Software Requirements Specification)"],
-                ["Design", "Define architecture, database structure, page flow, security model, and user interface approach.", "DDS (Design Document Specification)"],
-                ["Implementation", "Develop frontend, backend, APIs, database queries, and integrations according to DDS.", "Working software build"],
-                ["Testing", "Run QA across functional, usability, security, and performance checks; fix defects.", "Test reports + bug fixes"],
-                ["Deployment & Maintenance", "Release to users, monitor incidents, patch bugs, improve features over time.", "Live system + updates"],
-              ]},
-              { type: "callout", variant: "tip", text: "Teaching takeaway: the phase names may vary by model, but the core logic stays the same — plan, define, design, build, validate, release, improve." },
-            ],
-          },
-          {
-            title: "1.1A SDLC Models in Practice: Waterfall, Agile, and DevOps",
-            blocks: [
-              { type: "paragraph", text: "SDLC is the backbone. Methodologies define HOW teams move through those phases. Different projects need different execution styles." },
-              { type: "table", headers: ["Model", "Execution Pattern", "Best Fit", "Risk/Trade-off"], rows: [
-                ["Waterfall", "Sequential phase-by-phase progression", "Stable requirements, regulated projects", "Low flexibility when requirements change late"],
-                ["Agile", "Iterative sprints with frequent stakeholder feedback", "Evolving requirements and fast delivery needs", "Requires disciplined backlog and stakeholder participation"],
-                ["DevOps", "Continuous integration, testing, deployment, and operations feedback", "High-frequency release environments", "Requires automation maturity and shared ownership culture"],
-              ]},
-              { type: "heading", text: "Online Store Lens" },
-              { type: "list", items: [
-                "Waterfall works when Adam's requirements are fixed and approved upfront.",
-                "Agile works when product categories, promotions, and user journeys evolve rapidly.",
-                "DevOps is valuable after go-live, where frequent updates and quick fixes are expected.",
-              ]},
-              { type: "callout", variant: "info", text: "CI/CD in DevOps means code can be integrated, tested, and safely released many times per day, reducing deployment risk while improving response speed to user feedback." },
-            ],
-          },
-          {
-            title: "1.2 Systems Analysis",
-            blocks: [
-              { type: "callout", variant: "info", text: "The task of systems analysis is to establish in detail WHAT the proposed system will do — as opposed to HOW it will be done technologically." },
-              { type: "heading", text: "What Systems Analysis Establishes" },
-              { type: "list", items: [
-                "The objectives of the new system, including costs and benefits analysis.",
-                "Who the system users are, the information they need, its form, and how it is obtained from incoming data.",
-              ]},
-            ],
-          },
-          {
-            title: "1.3 Feasibility Study",
-            blocks: [
-              { type: "paragraph", text: "The main objective of the feasibility study is to determine whether the proposed system is desirable before resources are committed to the full-scale project." },
-              { type: "heading", text: "Five Aspects of a Feasibility Study" },
-              { type: "table", headers: ["Type", "Question Asked"], rows: [
-                ["Legal feasibility", "Will the proposed system conform to laws and regulations?"],
-                ["Ethical feasibility", "Will the proposed system conform to ethical norms?"],
-                ["Technological feasibility", "Do we have the technology and skills needed?"],
-                ["Economic feasibility", "Will the system provide competitive advantage or payoff?"],
-                ["Organisational feasibility", "Will the change be accepted, improving quality of working life?"],
-              ]},
-              { type: "heading", text: "Identifying Benefits and Costs (Economic Feasibility in Practice)" },
-              { type: "paragraph", text: "Economic feasibility requires the analyst to identify and categorise all benefits and costs associated with the proposed system. These fall into two dimensions: tangible (measurable in money) and intangible (difficult to quantify but real in impact)." },
-              { type: "table", headers: ["Category", "Examples"], rows: [
-                ["Tangible Benefits", "Faster processing speed; access to previously unavailable information; reduced employee time on manual tasks; fewer errors in calculations and reporting"],
-                ["Intangible Benefits", "Improved decision-making quality; enhanced data accuracy; stronger competitive position in customer service; better company image; increased employee job satisfaction"],
-                ["Tangible Costs", "Hardware and infrastructure; software licences; analyst and programmer time (person-days); employee salaries during transition; training costs"],
-                ["Intangible Costs", "Loss of competitive edge during transition; reputational risk if the project is delayed or fails; ineffective decision-making while old and new systems co-exist; disruption to working routines"],
-              ]},
-              { type: "callout", variant: "info", text: "Cost-Benefit Analysis checklist: (1) List each development strategy being considered. (2) Identify all costs and benefits for each alternative, including when costs will be incurred and benefits realised. (3) Consider future growth and scalability. (4) Analyse software licensing options. (5) Study the results and prepare a report for management decision." },
-            ],
-          },
-          {
-            title: "1.4 Requirements Analysis",
-            blocks: [
-              { type: "paragraph", text: "The principal objective of requirements analysis is to produce requirements specifications — a detailed description of WHAT the system will do, agreed upon by developers, users, management and other stakeholders." },
-              { type: "heading", text: "Information Gathering Techniques" },
-              { type: "list", items: [
-                "Asking the users (interviews and questionnaires)",
-                "Deriving from an existing system (data analysis, document analysis, observing work)",
-                "Deriving from analysis of the business area (Business Systems Planning, critical success factors)",
-                "Experimenting with the system under development (prototyping)",
-              ]},
-              { type: "heading", text: "Structured Fact-Finding" },
-              { type: "paragraph", text: "Beyond selecting a technique, effective requirements gathering requires a structured fact-finding plan. The analyst must first identify what information is needed, develop an approach, and then execute it. The six guiding questions frame every fact-finding effort:" },
-              { type: "table", headers: ["Question", "What the Analyst is Establishing"], rows: [
-                ["Who?", "Who are the users, decision-makers, and stakeholders? Who provides data? Who receives it? Who is affected when the system fails?"],
-                ["What?", "What data is captured, processed, stored, and reported? What decisions depend on this information? What are the business rules?"],
-                ["Where?", "Where does data originate? Where is it processed? Where are outputs delivered? Are there remote sites or distributed processes?"],
-                ["When?", "When do transactions occur? When must reports be available? When do peaks in volume occur? What are the timing constraints?"],
-                ["How?", "How is data currently captured and processed? How often? How many records? How does the current system handle exceptions?"],
-                ["Why?", "Why does the current system fall short? Why do users need new functionality? Why is this system strategically important?"],
-              ]},
-              { type: "callout", variant: "tip", text: "Critical distinction: always ask what IS being done AND what SHOULD or COULD be done. Users often describe workarounds and manual fixes built around a broken system. Requirements analysis must surface both the current reality and the desired future state — they are rarely the same thing." },
-              { type: "heading", text: "Five Fact-Finding Methods" },
-              { type: "table", headers: ["Method", "Best Used When", "Key Advantage"], rows: [
-                ["Interviews", "Deep understanding of individual roles, complex processes, or sensitive issues is needed", "Allows follow-up questions; uncovers context and opinion that surveys miss"],
-                ["Document Review", "Existing forms, reports, policy documents, and data definitions exist", "Reveals what the system actually does vs what people think it does"],
-                ["Observation", "Users may not accurately describe their own work, or informal workarounds are suspected", "Shows the real process — including undocumented steps and inefficiencies"],
-                ["Questionnaires & Surveys", "Many respondents must be reached, or anonymity encourages honest answers", "Cost-effective at scale; statistical analysis of responses is possible"],
-                ["Research", "Industry standards, benchmarks, or similar systems from other organisations are relevant", "Establishes what is already known — avoids reinventing solutions"],
-              ]},
-            ],
-          },
-          {
-            title: "1.5 Role of the Systems Analyst",
-            blocks: [
-              { type: "paragraph", text: "A systems analyst researches problems, plans solutions, recommends software and systems, and coordinates development to meet business requirements. They must be good communicators with strong analytical and critical thinking skills, and able to work with people of all descriptions." },
-              { type: "heading", text: "Three Primary Roles of the Systems Analyst" },
-              { type: "table", headers: ["Role", "Description"], rows: [
-                ["Consultant", "Works as an outside expert hired to address a specific business problem or need. Brings an independent perspective and specialist knowledge the organisation may not have internally."],
-                ["Supporting Expert", "Provides internal specialist assistance to a department or project team. Advises on IT capabilities, helps design solutions, and guides technical decisions without taking ownership of the project."],
-                ["Agent of Change", "Facilitates and drives organisational transformation. Analyses how work is currently done, proposes improvements, and helps the organisation adapt its people, processes and systems to the new solution."],
-              ]},
-              { type: "heading", text: "Four Qualities of an Effective Systems Analyst" },
-              { type: "list", items: [
-                "Problem solver — breaks complex business problems into manageable parts, identifies root causes, and develops practical, systematic solutions",
-                "Communicator — translates technical concepts for non-technical users and business requirements for developers; writes clearly and listens actively",
-                "Strong personal and professional ethics — handles sensitive data and organisational information with integrity and confidentiality",
-                "Self-disciplined and self-motivated — manages time effectively, meets deadlines under pressure, and drives tasks to completion with minimal supervision",
-              ]},
-              { type: "heading", text: "Key Responsibilities" },
-              { type: "list", items: [
-                "Identify and plan for organisational and human impacts of planned systems.",
-                "Plan a system flow from the ground up.",
-                "Interact with users to document requirements for business requirements documents.",
-                "Write technical requirements from a critical phase.",
-                "Help programmers during development (use cases, flowcharts, database design).",
-                "Perform system testing and deploy the completed system.",
-                "Document requirements and contribute to user manuals.",
-              ]},
-            ],
-          },
-          {
-            title: "1.6 Information System Components",
-            blocks: [
-              { type: "paragraph", text: "Every information system is made up of five interdependent components that must work together to produce useful results. Understanding these components helps analysts identify where problems occur and what must change when a system is redesigned." },
-              { type: "callout", variant: "tip", text: "A mission-critical system is one that is vital to an organisation's operations — if it fails, the organisation cannot function. Examples: a hospital's patient records system, a bank's transaction processing system, a college's student registration portal." },
-              { type: "table", headers: ["Component", "Description"], rows: [
-                ["Hardware", "The physical layer of the information system — servers, workstations, network equipment, input/output devices. Hardware capacity follows Moore's Law: processing power roughly doubles every two years while cost falls, enabling ever-more powerful systems."],
-                ["Software", "System software (operating systems, utilities) manages hardware resources. Application software performs specific business tasks. Enterprise applications (ERP, CRM) span the whole organisation. Systems may be horizontal (generic, used across industries), vertical (industry-specific), or legacy (older systems still in production use)."],
-                ["Data", "The raw material of the system. Data is stored in tables; related tables are linked to supply information to processes and users. Data consists of basic facts; information is data that has been transformed into output that is valuable to users."],
-                ["Processes", "The tasks and business functions that users, managers, and IT staff perform to achieve specific results using the system. Processes define the rules for how data is captured, validated, transformed and reported."],
-                ["People", "All stakeholders who interact with or are affected by the system — end users, managers, IT staff, customers, and regulators. Identifying all people affected is a critical first step in any analysis project."],
-              ]},
-            ],
-          },
-        ],
-      },
-      {
-        id: "session-2",
-        label: "Session 2",
-        title: "Systems Analysis Techniques",
-        summary: "Apply DFDs, decision trees, decision tables, and CASE tools to model and document business systems.",
-        body: "Explore industry-standard systems analysis techniques for representing data flows, business logic, and processes — and understand how CASE tools support the analyst's work.",
-        outcomes: [
-          "Describe industry-standard systems analysis techniques.",
-          "Apply Data Flow Diagrams (DFDs) to document system processes and data flows.",
-          "Use decision trees and decision tables to model business logic.",
-          "Identify Computer-Aided Software Engineering (CASE) tools and data structure modelling techniques.",
-        ],
-        sections: [
-          {
-            title: "2.1 Interviews vs Questionnaires",
-            blocks: [
-              { type: "paragraph", text: "Two primary information-gathering methods are interviews (face-to-face meetings) and questionnaires (self-administered tools). Each has advantages and limitations." },
-              { type: "table", headers: ["Attribute", "Questionnaire", "Interview"], rows: [
-                ["Cost", "Economical", "Less economical"],
-                ["Participants", "Many people simultaneously", "One person at a time"],
-                ["Error risk", "Fewer errors", "Depends on interviewer skill"],
-                ["Anonymity", "Maintained — honest opinions", "Not maintained"],
-                ["Reflection time", "Respondents can think carefully", "May not have enough time"],
-              ]},
-              { type: "heading", text: "Types of Interviews" },
-              { type: "list", items: [
-                "Structured Interview — same wording and order for all interviewees.",
-                "Unstructured Interview — respondents answer freely; allows deeper exploration of complex topics.",
-              ]},
-            ],
-          },
-          {
-            title: "2.2 Data Flow Diagrams (DFDs)",
-            blocks: [
-              { type: "paragraph", text: "A Data Flow Diagram (DFD) shows how data moves through an information system. It graphically characterises data processes and flows in a business system — depicting system inputs, processes, and outputs — but does not show program logic or step-by-step processing detail. A set of DFDs provides a logical model that shows what the system does, not how it does it technically." },
-              { type: "heading", text: "The Four DFD Symbols" },
-              { type: "table", headers: ["Symbol", "Shape", "Naming Convention", "What it Represents"], rows: [
-                ["External Entity", "Double square (rectangle with a shadow)", "Named with a noun (e.g. Student, Department, Bank)", "A person, department, organisation, or system outside the system boundary. Acts as a source (data enters the system) or a sink (data leaves the system). External entities are not controlled by the system being analysed."],
-                ["Data Flow", "Arrow (single or double arrowhead)", "Named with a noun describing the data (e.g. Enrolment Form, Payment Confirmation)", "The movement of data from one component to another. The arrowhead shows direction of flow. Represents data about a person, place, or thing."],
-                ["Process", "Rectangle with rounded corners (or circle)", "Named using verb-adjective-noun form (e.g. Validate Student Record, Calculate Final Mark)", "Work being performed — a transformation of input data into output data. Processes contain the business logic (business rules) of the system. They are described as a 'black box': what goes in and out is shown, but internal logic is hidden at this level."],
-                ["Data Store", "Open-ended rectangle (parallel lines)", "Named with a noun; given a unique reference number D1, D2, D3…", "A repository where data is held for later use. Represents a database, computerised file, or physical filing cabinet. At DFD level you are concerned only with the logical store — not its physical format."],
-              ]},
-              { type: "heading", text: "Context Diagram (Level 0)" },
-              { type: "paragraph", text: "The context diagram is the highest-level DFD. It represents the entire system as a single process numbered 0 and shows all external entities that interact with the system, plus the major data flows between them and the system. No data stores appear at this level. The diagram must fit on one page and uses the name of the information system as the process name." },
-              { type: "callout", variant: "info", text: "Context diagram rules: (1) Must have exactly one process. (2) No freestanding objects. (3) External entities may not connect directly to one another. (4) Every data flow must connect to or from the single process." },
-              { type: "heading", text: "Diagram 0" },
-              { type: "paragraph", text: "Diagram 0 is the explosion of the context diagram — it expands the single process into up to nine numbered sub-processes. All major data stores and all external entities are included. Drawing starts from the input side (data flow from an entity) or works backward from an output data flow." },
-              { type: "heading", text: "Levelling and Balancing" },
-              { type: "paragraph", text: "DFDs are built in layers (levels). Each process on Diagram 0 may be exploded into its own child diagram to show further detail. The child diagram is given the same number as the parent process (e.g. Process 3 on Diagram 0 explodes to Diagram 3). A process that is not exploded further is called a primitive process. Balancing means that a child diagram cannot produce output or receive input that its parent process does not also produce or receive." },
-              { type: "heading", text: "Logical vs Physical DFDs" },
-              { type: "table", headers: ["Type", "Focus", "Purpose"], rows: [
-                ["Logical DFD", "What the business does — the business events that take place and the data required and produced by each event", "Describes current or required business operations independently of any technology. Used during analysis to agree what the system must do."],
-                ["Physical DFD", "How the system will be implemented — names of programs, files, hardware, and people who perform each process", "Shows the specific technology solution. Used during design to specify how the logical model will be built."],
-              ]},
-            ],
-          },
-          {
-            title: "2.3 Structured Analysis Techniques",
-            blocks: [
-              { type: "paragraph", text: "Structured systems analysis uses graphical tools to describe a system as interacting processes that transform input data into output data. These processes may later become code modules during programming." },
-              { type: "heading", text: "Prototyping Approach" },
-              { type: "list", items: [
-                "An initial system version embodying some requirements is built.",
-                "Users define requirements by comparing against the prototype ('as compared to something' approach).",
-                "The prototype may be discarded after use, or evolve into the delivered system.",
-              ]},
-            ],
-          },
-          {
-            title: "2.4 Object-Oriented Analysis",
-            blocks: [
-              { type: "paragraph", text: "Object-oriented (OO) analysis is a widely-used approach that sees a system from the viewpoint of the objects themselves as they function and interact — rather than viewing the system as sequential processes transforming data. It works well where systems undergo continuous maintenance, adaptation, and redesign, because objects and classes are reusable across projects." },
-              { type: "heading", text: "Core OO Concepts" },
-              { type: "table", headers: ["Concept", "Definition"], rows: [
-                ["Object", "A person, place, or thing that is relevant to the system being analysed (e.g. Student, Course, Payment). An object belongs to a class and has specific attribute values and can perform methods."],
-                ["Class", "Defines the set of shared attributes and behaviours found in every object of that type. When an object is created from a class, it is said to be instantiated. A class has subclasses (more specific types) and a superclass (a more general parent type)."],
-                ["Attribute", "A property or characteristic shared by all objects in a class. If objects are nouns, attributes are the adjectives that describe them (e.g. Student has attributes: studentNumber, fullName, dateOfBirth)."],
-                ["Method", "An action that any object of the class can perform. Methods are the verbs — they describe what an object does (e.g. Student.calculateGPA(), Student.generateTranscript()). A method defines the specific task the object carries out."],
-                ["Message", "A request from one object asking another object to perform a specific behaviour or return information. Messages are the mechanism by which objects interact and collaborate."],
-                ["Inheritance", "A derived (child) class automatically inherits all the attributes and behaviours of its base (parent) class. This reduces programming labour — common features are defined once in the parent class and reused by all child classes. Inheritance is a feature unique to object-oriented systems."],
-              ]},
-              { type: "heading", text: "The Unified Modeling Language (UML)" },
-              { type: "paragraph", text: "The UML is the industry-standard notation for modelling object-oriented systems. It uses a set of graphical symbols to represent components and relationships visually. A UML class diagram shows the static features of the system: each class appears as a rectangle with three compartments — the class name at the top, followed by its attributes, followed by its methods." },
-              { type: "callout", variant: "tip", text: "Key OO advantage — Encapsulation: each object is a 'black box'. Other parts of the system interact with it only through its defined methods. This means changing one object's internal logic has minimal impact on other objects, making systems far easier to maintain and extend over time." },
-            ],
-          },
-          {
-            title: "2.5 Systems Development Approaches",
-            blocks: [
-              { type: "paragraph", text: "Systems analysts must understand several approaches to developing information systems. Each approach has strengths suited to different project types — project size, rate of change in requirements, available skills, and organisational context all influence which approach is most appropriate." },
-              { type: "heading", text: "Comparison of Development Approaches" },
-              { type: "table", headers: ["Approach", "Core Idea", "Best Suited For"], rows: [
-                ["Traditional SDLC (Structured)", "Sequential phases — each phase must be completed and signed off before the next begins. Heavy documentation emphasis.", "Large, well-defined projects with stable requirements where changes are costly (e.g. government systems, accounting systems)."],
-                ["CASE-Supported Development", "Uses Computer-Aided Software Engineering tools to automate analyst tasks, generate code, maintain documentation and enforce consistency across the life cycle.", "Projects where productivity, consistency and integration of life cycle activities are priorities."],
-                ["Object-Oriented (OO)", "Analyses and designs in small iterative cycles, each covering analysis → design → implementation of a specific part. The system is viewed as a collection of interacting objects.", "Systems with rapidly changing requirements; modern application development; reuse-critical environments."],
-                ["Agile Methods", "Incremental, iterative development with continuous user feedback. Emphasises working software over documentation, collaboration over contracts, and responding to change over following a fixed plan.", "Smaller teams, projects with evolving requirements, and situations where early, frequent deliverables add value."],
-              ]},
-              { type: "heading", text: "Joint Application Development (JAD)" },
-              { type: "list", items: [
-                "A team-based strategy that brings key business users and IT staff together in structured workshops to define system requirements jointly",
-                "Advantage: key users participate directly — resulting in more accurate requirements, better understanding of shared goals, and stronger commitment to the new system's success",
-                "Advantage: reduces the back-and-forth between analysts and users that plagues traditional interview-based requirements gathering",
-                "Disadvantage: more expensive and time-intensive than individual interviews",
-                "Disadvantage: can be cumbersome if the group is too large relative to the scale of the project",
-              ]},
-              { type: "heading", text: "Rapid Application Development (RAD)" },
-              { type: "list", items: [
-                "A team-based technique that speeds up information systems development and produces a functioning system faster than traditional methods",
-                "Relies heavily on prototyping and active user involvement throughout every phase of development",
-                "Objective: cut development time and expense by involving users in every phase — not just at requirements stage",
-                "The interactive prototyping cycle continues until users are satisfied and the system is complete",
-                "Advantage: systems developed more quickly with significant cost savings; user interface-heavy systems benefit greatly",
-                "Disadvantage: may allow less time to develop quality, consistency, and design standards — emphasis is on the mechanics of the system, not strategic business alignment",
-              ]},
-              { type: "heading", text: "Agile Methods — 12 Core Principles" },
-              { type: "ordered-list", items: [
-                "Satisfy the customer through early and continuous delivery of working software",
-                "Embrace changing requirements — even when introduced late in development",
-                "Deliver functioning software incrementally and frequently (weeks, not months)",
-                "Ensure customers and analysts work together daily throughout the project",
-                "Build projects around motivated individuals; trust them to get the job done",
-                "Promote face-to-face conversation as the most efficient form of communication",
-                "Working software is the primary measure of progress",
-                "Encourage continuous, regular, sustainable development — the team maintains a constant pace indefinitely",
-                "Maintain continuous attention to technical excellence and good design",
-                "Support self-organising teams — the best architectures and designs emerge from empowered teams",
-                "Provide rapid feedback and continuously encourage quality",
-                "At regular intervals, the team reflects on how to become more effective and adjusts accordingly",
-              ]},
-              { type: "callout", variant: "info", text: "Scrum (an Agile framework): begin with a high-level plan that can be changed as the project proceeds. Work is done in fixed-length sprints (time boxes). The team's collective success is more important than individual contribution. Extreme Programming (XP) is another Agile method emphasising pair programming, test-driven development, and continuous integration." },
-              { type: "heading", text: "DevOps and Continuous Delivery" },
-              { type: "paragraph", text: "DevOps extends Agile by integrating development and operations into one continuous lifecycle. The goal is fast, reliable release cycles supported by automation and monitoring." },
-              { type: "table", headers: ["Practice", "Purpose", "Example in Adam's Store"], rows: [
-                ["Continuous Integration (CI)", "Merge code frequently and run automated checks early", "Every change to checkout logic triggers automated tests"],
-                ["Continuous Delivery/Deployment (CD)", "Keep software releasable (or auto-release) at all times", "Release catalog updates and bug fixes safely without long delays"],
-                ["Monitoring & Feedback", "Observe real usage and system health to drive improvement", "Track payment failures and improve checkout reliability"],
-              ]},
-              { type: "callout", variant: "tip", text: "Modern teams often use a hybrid approach: SDLC structure for governance, Agile for delivery cadence, and DevOps for release reliability." },
-              { type: "heading", text: "Other Development Methods" },
-              { type: "table", headers: ["Method", "Brief Description"], rows: [
-                ["Rational Unified Process (RUP)", "An iterative software development framework developed by IBM Rational. Organises the development life cycle into four phases (Inception, Elaboration, Construction, Transition) with defined workflows. Suited to large, complex enterprise projects."],
-                ["Microsoft Solutions Framework (MSF)", "A flexible, scalable framework developed by Microsoft. Emphasises team model, process model, and risk management. Used in Microsoft technology environments and large IT service organisations."],
-              ]},
-            ],
-          },
-          {
-            title: "2.6 What Your Analysis Enables",
-            blocks: [
-              { type: "paragraph", text: "The analysis work completed today — requirements, process models, data flows, stakeholder identification — is not an end in itself. It is the input that makes every downstream phase possible. Here is what each analysis output directly enables:" },
-              { type: "table", headers: ["Your Analysis Output", "Directly Enables", "Lecture / Phase"], rows: [
-                ["Requirements specification (what the system must do)", "Project plan, WBS, and effort estimates. You cannot schedule what you have not defined.", "L2 — Project Management"],
-                ["Stakeholder list and information needs", "JAD workshops and RAD prototype planning. You know who to include and what to validate with them.", "L3 — Requirements Modelling"],
-                ["Logical DFDs and process descriptions", "Physical DFD design and detailed process specifications. The logical model becomes the technical blueprint.", "L4 — Data and Process Modelling"],
-                ["Object identification and class relationships", "UML class diagrams, use case models, and sequence diagrams for the full system design.", "L5 & L6 — Object Modelling"],
-                ["Data store identification and entity list", "Entity-relationship diagrams, table normalisation (1NF → 3NF), and referential integrity rules.", "L7 — Data Design"],
-                ["Analyst recommendation: build, buy, or adapt", "Acquisition process (RFP/RFQ), vendor evaluation, cost-benefit analysis, and changeover planning.", "L8 — Development Strategies"],
-                ["User requirements and process outputs", "Screen designs, report layouts, input forms, and validation rules — every UI element traces to a requirement.", "L9 — User Interface Design"],
-                ["Process documentation and data dictionary", "Maintenance procedures, security audit baseline, performance benchmarks, and the business continuity plan.", "L10 — System Support and Security"],
-              ]},
-              { type: "callout", variant: "warning", text: "The most common reason IT projects fail is not technical — it is analytical. Vague requirements, missed stakeholders, and undocumented processes at this stage cause rework, budget overruns, and sometimes total failure at implementation. The quality of your analysis today determines the quality of everything that follows." },
-            ],
-          },
-        ],
-      },
-      {
-        id: "facilitator-activities",
-        label: "Facilitator Notes",
-        title: "Facilitator Activities — Block 1, Day 1",
-        summary: "Delivery guide, timing, and formative assessment for ITSD-14924 Block 1 Day 1.",
-        body: "Total delivery time: 300 minutes (5 hours). Status: Active.",
-        sections: [
-          {
-            title: "Planned Activities",
-            blocks: [
-              { type: "ordered-list", items: [
-                "Icebreaker (15 min): Share a technology challenge experienced in your department.",
-                "Mini-lecture (20 min): SDLC overview and the analyst's role in a CET context.",
-                "Group Activity: Develop a stakeholder map for a student project tracking system.",
-                "Paired Exercise: Select the most appropriate information-gathering technique for a given scenario.",
-                "Distribute Systems Analysis Quick-Start Toolkit (DFD templates, stakeholder mapping templates).",
-                "Peer Review: Exchange and critique each other's selected analysis techniques.",
-              ]},
-              { type: "callout", variant: "warning", text: "Distribute SDLC flowchart, stakeholder templates, and bilingual glossary at the start. Do not share assessment rubrics with learners before activities." },
-            ],
-          },
-          {
-            title: "Formative Assessment",
-            blocks: [
-              { type: "list", items: [
-                "Observation checklist: participation and stakeholder identification.",
-                "Completed worksheets: Activities 1–4.",
-                "Peer feedback session at end of day.",
-                "Exit reflection ticket (one thing learned, one question remaining).",
-                "Evidence aligned to SAQA 14924 summative requirements.",
-              ]},
-            ],
-          },
-        ],
-      },
-      {
-        id: "learner-activities",
-        label: "Activities",
-        title: "Learner Activities — Block 1, Day 1",
-        summary: "Structured activities mapped to SAQA 14924 assessment criteria.",
-        body: "Complete all activities in your workbook. Submit as part of your Portfolio of Evidence.",
-        sections: [
-          {
-            title: "Activity Schedule",
-            blocks: [
-              { type: "table", headers: ["Activity", "Marks", "Focus"], rows: [
-                ["Activity 1", "5", "Differentiate between Systems Analysis and Requirements Analysis."],
-                ["Activity 2", "9", "Describe the functions of an Information Systems Analyst."],
-                ["Activity 3", "12", "Explain information-gathering techniques (interviews, questionnaires, observation, site visits, document review)."],
-                ["Activity 4", "15", "Describe systems analysis techniques: DFDs, Decision Trees, Decision Tables, and CASE tools."],
-                ["Group Task", "—", "Develop a stakeholder map for a CET lab booking system."],
-              ]},
-            ],
-          },
-        ],
-      },
-      {
-        id: "resources",
-        label: "Resources",
-        title: "Resources — Block 1, Day 1",
-        summary: "Materials required for the Block 1 Day 1 session.",
-        body: "Prepare and print all resources before the session begins.",
-        sections: [
-          {
-            title: "Resource List",
-            blocks: [
-              { type: "list", items: [
-                "SDLC flowchart (printed, one per learner).",
-                "Stakeholder mapping templates.",
-                "Information-gathering checklist.",
-                "Flipchart paper and markers.",
-                "Bilingual glossary (Sepedi/Tshivenda key terms).",
-                "Printed backup materials (offline contingency).",
-                "Facilitator and Learner Guides (SAQA 14924).",
-              ]},
-              { type: "callout", variant: "tip", text: "Duration: 300 minutes (5 hours) | Status: Active" },
-            ],
-          },
-        ],
-      },
-    ],
-  },
+  "14924": module14924LessonFlow,
   "14920": {
     moduleId: "14920",
     saqa: "14920",
@@ -1092,10 +420,10 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
     lessons: [
       {
         id: "unit-1",
-        label: "Block 1 · Day 2",
+        label: "Block 1 � Day 2",
         title: "Teamwork Foundations: Collaboration, Roles and Problem Solving",
-        summary: "Lesson plan for ITSD-14920 Block 1, Day 2 — CET Lecturers Systems Development Training. Duration: 300 minutes (5 hours).",
-        body: "UNIT STANDARD: 14920 | NQF LEVEL: 4 | CREDITS: 3 | Block 1 — Day 2 of 5 | Duration: 300 min",
+        summary: "Lesson plan for ITSD-14920 Block 1, Day 2 � CET Lecturers Systems Development Training. Duration: 300 minutes (5 hours).",
+        body: "UNIT STANDARD: 14920 | NQF LEVEL: 4 | CREDITS: 3 | Block 1 � Day 2 of 5 | Duration: 300 min",
       },
       {
         id: "session-1",
@@ -1127,15 +455,15 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             blocks: [
               { type: "callout", variant: "info", text: "The 8D approach (Eight Disciplines) is a structured method for addressing problems systematically, from planning through celebration of team success." },
               { type: "ordered-list", items: [
-                "Plan — Think about team composition, time frame, and resources needed.",
-                "Build the Team — Assemble people with the right skills; create a team charter and build trust.",
-                "Describe the Problem — Specify the who, what, when, where, why, how, and how many.",
-                "Implement a Temporary Fix — Provide a quick solution while investigating root causes.",
-                "Identify and Eliminate the Root Cause — Use Cause and Effect Analysis and Root Cause Analysis.",
-                "Verify the Solution — Test with FMEA, Impact Analysis, and Six Thinking Hats.",
-                "Implement a Permanent Solution — Roll out, monitor, and confirm no unexpected side effects.",
-                "Prevent the Problem from Recurring — Update procedures, policies and training manuals.",
-                "Celebrate Team Success — Recognise contributions and conduct a Post-Implementation Review.",
+                "Plan � Think about team composition, time frame, and resources needed.",
+                "Build the Team � Assemble people with the right skills; create a team charter and build trust.",
+                "Describe the Problem � Specify the who, what, when, where, why, how, and how many.",
+                "Implement a Temporary Fix � Provide a quick solution while investigating root causes.",
+                "Identify and Eliminate the Root Cause � Use Cause and Effect Analysis and Root Cause Analysis.",
+                "Verify the Solution � Test with FMEA, Impact Analysis, and Six Thinking Hats.",
+                "Implement a Permanent Solution � Roll out, monitor, and confirm no unexpected side effects.",
+                "Prevent the Problem from Recurring � Update procedures, policies and training manuals.",
+                "Celebrate Team Success � Recognise contributions and conduct a Post-Implementation Review.",
               ]},
             ],
           },
@@ -1144,19 +472,19 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             blocks: [
               { type: "heading", text: "Disadvantages" },
               { type: "list", items: [
-                "Competition — members may compete for recognition, creating destructive behaviour.",
-                "Conformity — pressure to agree can suppress creative or minority ideas.",
-                "Lack of objective direction — discussion can wander without effective leadership.",
-                "Time constraints — group problem solving is slower than individual work.",
+                "Competition � members may compete for recognition, creating destructive behaviour.",
+                "Conformity � pressure to agree can suppress creative or minority ideas.",
+                "Lack of objective direction � discussion can wander without effective leadership.",
+                "Time constraints � group problem solving is slower than individual work.",
               ]},
               { type: "heading", text: "Advantages" },
               { type: "list", items: [
-                "Greater output — more ideas due to diverse experience, knowledge and values.",
-                "Cross-fertilisation — exchanging ideas stimulates imagination and exploration.",
-                "Reduced bias — shared responsibility challenges individual biases.",
-                "Increased risk-taking — shared accountability encourages considering bold solutions.",
-                "Higher commitment — contributors feel greater ownership of the solution.",
-                "Better solutions — broad range of knowledge and skills produces higher-quality results.",
+                "Greater output � more ideas due to diverse experience, knowledge and values.",
+                "Cross-fertilisation � exchanging ideas stimulates imagination and exploration.",
+                "Reduced bias � shared responsibility challenges individual biases.",
+                "Increased risk-taking � shared accountability encourages considering bold solutions.",
+                "Higher commitment � contributors feel greater ownership of the solution.",
+                "Better solutions � broad range of knowledge and skills produces higher-quality results.",
               ]},
             ],
           },
@@ -1167,8 +495,8 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
               { type: "heading", text: "NGT Procedure" },
               { type: "ordered-list", items: [
                 "State the brainstorming subject clearly so everyone understands it.",
-                "Each member silently writes down as many ideas as possible (5–10 min).",
-                "Each member states one idea in turn; facilitator records on flipchart — no discussion at this stage.",
+                "Each member silently writes down as many ideas as possible (5�10 min).",
+                "Each member states one idea in turn; facilitator records on flipchart � no discussion at this stage.",
                 "Continue around the group until all members pass.",
                 "Discuss each idea for clarification (wording changed only by the originator's consent).",
                 "Prioritise ideas using multivoting or list reduction.",
@@ -1195,12 +523,12 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             blocks: [
               { type: "list", items: [
                 "Shared goals and a common vision",
-                "Accountability — members accountable to each other and to the team leader",
-                "Clear roles and responsibilities — prevents conflict and poor resource use",
-                "Good communication — effective team meetings, agendas, and follow-up",
-                "Strong leadership — using multiple leadership styles suited to the situation",
+                "Accountability � members accountable to each other and to the team leader",
+                "Clear roles and responsibilities � prevents conflict and poor resource use",
+                "Good communication � effective team meetings, agendas, and follow-up",
+                "Strong leadership � using multiple leadership styles suited to the situation",
               ]},
-              { type: "callout", variant: "tip", text: "Leaders who use 3–4 leadership styles flexibly (directive, visionary, affiliative, participative, pacesetting, coaching) are more effective than those who rely on a single style." },
+              { type: "callout", variant: "tip", text: "Leaders who use 3�4 leadership styles flexibly (directive, visionary, affiliative, participative, pacesetting, coaching) are more effective than those who rely on a single style." },
             ],
           },
           {
@@ -1225,18 +553,18 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             blocks: [
               { type: "heading", text: "Work Contribution Roles" },
               { type: "list", items: [
-                "Initiating — taking initiative, suggesting procedures, providing new energy and ideas.",
-                "Seeking/Giving information — requesting and providing facts, data, and preferences.",
-                "Questioning — stepping back and challenging the group or task assumptions.",
-                "Clarifying — interpreting ideas, linking related contributions from different people.",
-                "Summarising — putting contributions into a pattern without adding new information.",
+                "Initiating � taking initiative, suggesting procedures, providing new energy and ideas.",
+                "Seeking/Giving information � requesting and providing facts, data, and preferences.",
+                "Questioning � stepping back and challenging the group or task assumptions.",
+                "Clarifying � interpreting ideas, linking related contributions from different people.",
+                "Summarising � putting contributions into a pattern without adding new information.",
               ]},
               { type: "heading", text: "Atmosphere Contribution Roles" },
               { type: "list", items: [
-                "Supporting — remembering others' remarks, being encouraging and responsive.",
-                "Observing — noticing group dynamics and commenting constructively.",
-                "Mediating — recognising and working through disagreements.",
-                "Compromising — yielding a position to help the group move forward.",
+                "Supporting � remembering others' remarks, being encouraging and responsive.",
+                "Observing � noticing group dynamics and commenting constructively.",
+                "Mediating � recognising and working through disagreements.",
+                "Compromising � yielding a position to help the group move forward.",
               ]},
             ],
           },
@@ -1245,7 +573,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
       {
         id: "facilitator-activities",
         label: "Facilitator Notes",
-        title: "Facilitator Activities — Block 1, Day 2",
+        title: "Facilitator Activities � Block 1, Day 2",
         summary: "Delivery guide, timing, and formative assessment for ITSD-14920 Block 1 Day 2.",
         body: "Total delivery time: 300 minutes (5 hours). Status: Active.",
         sections: [
@@ -1268,7 +596,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             blocks: [
               { type: "list", items: [
                 "Participation observation checklist.",
-                "Submitted worksheets (Activities 1–6) and completed team charter.",
+                "Submitted worksheets (Activities 1�6) and completed team charter.",
                 "Peer review feedback session.",
                 "Exit reflection ticket.",
               ]},
@@ -1279,7 +607,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
       {
         id: "learner-activities",
         label: "Activities",
-        title: "Learner Activities — Block 1, Day 2",
+        title: "Learner Activities � Block 1, Day 2",
         summary: "Structured activities mapped to SAQA 14920 assessment criteria.",
         body: "Complete all activities in your workbook. Submit as part of your Portfolio of Evidence.",
         sections: [
@@ -1302,7 +630,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
       {
         id: "resources",
         label: "Resources",
-        title: "Resources — Block 1, Day 2",
+        title: "Resources � Block 1, Day 2",
         summary: "Materials required for the Block 1 Day 2 session.",
         body: "Prepare and print all resources before the session begins.",
         sections: [
@@ -1341,10 +669,10 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
     lessons: [
       {
         id: "unit-1",
-        label: "Block 1 · Day 3",
+        label: "Block 1 � Day 3",
         title: "Programming Foundations: Logic, Data and Structure",
-        summary: "Lesson plan for ITSD-14918 Block 1, Day 3 — CET Lecturers Systems Development Training. Duration: 300 minutes (5 hours).",
-        body: "UNIT STANDARD: 14918 | NQF LEVEL: 3 | CREDITS: 5 | Block 1 — Day 3 of 5 | Duration: 300 min",
+        summary: "Lesson plan for ITSD-14918 Block 1, Day 3 � CET Lecturers Systems Development Training. Duration: 300 minutes (5 hours).",
+        body: "UNIT STANDARD: 14918 | NQF LEVEL: 3 | CREDITS: 5 | Block 1 � Day 3 of 5 | Duration: 300 min",
       },
       {
         id: "session-1",
@@ -1370,7 +698,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
                 "Put the program into production.",
                 "Maintain and enhance the program.",
               ]},
-              { type: "callout", variant: "info", text: "Planning the logic requires developing an algorithm — a finite, ordered set of unambiguous steps that terminates with a solution. Flowcharts and pseudocode are common representations." },
+              { type: "callout", variant: "info", text: "Planning the logic requires developing an algorithm � a finite, ordered set of unambiguous steps that terminates with a solution. Flowcharts and pseudocode are common representations." },
             ],
           },
           {
@@ -1401,7 +729,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
                 "Each set of instructions runs top to bottom with one entry and one exit.",
                 "Groups of statements may be formed into named modules.",
               ]},
-              { type: "code", text: "// Pseudocode example — simple grade check\nINPUT score\nIF score >= 50 THEN\n    PRINT \"Pass\"\nELSE\n    PRINT \"Fail\"\nEND IF" },
+              { type: "code", text: "// Pseudocode example � simple grade check\nINPUT score\nIF score >= 50 THEN\n    PRINT \"Pass\"\nELSE\n    PRINT \"Fail\"\nEND IF" },
               { type: "callout", variant: "tip", text: "Pseudocode is easier to write than source code and language-independent. It should be clear enough that a human can execute it by hand." },
             ],
           },
@@ -1425,14 +753,14 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             blocks: [
               { type: "paragraph", text: "Computers internally store all data as binary. Understanding hexadecimal, octal, and decimal notation is essential for programming and interpreting memory contents." },
               { type: "table", headers: ["System", "Base", "Digits Used", "Example"], rows: [
-                ["Binary", "2", "0, 1", "1101₂ = 13 decimal"],
-                ["Decimal", "10", "0–9", "2993 = two thousand nine hundred ninety-three"],
-                ["Octal", "8", "0–7", "040 = 32 decimal"],
-                ["Hexadecimal", "16", "0–9, A–F", "0x1F = 31 decimal"],
+                ["Binary", "2", "0, 1", "11012 = 13 decimal"],
+                ["Decimal", "10", "0�9", "2993 = two thousand nine hundred ninety-three"],
+                ["Octal", "8", "0�7", "040 = 32 decimal"],
+                ["Hexadecimal", "16", "0�9, A�F", "0x1F = 31 decimal"],
               ]},
               { type: "heading", text: "Hexadecimal Digit Table" },
               { type: "table", headers: ["Hex", "Binary", "Decimal"], rows: [
-                ["0–9", "0000–1001", "0–9"],
+                ["0�9", "0000�1001", "0�9"],
                 ["A", "1010", "10"],
                 ["B", "1011", "11"],
                 ["C", "1100", "12"],
@@ -1448,7 +776,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
               { type: "table", headers: ["Type", "Description", "Examples"], rows: [
                 ["Integer", "Whole numbers, positive or negative", "12, -3, 1274"],
                 ["Real/Float", "Numbers with decimal parts", "1.4534, -0.0003, 3.142"],
-                ["Currency", "Formatted real numbers with currency symbol", "£12.45, $5500"],
+                ["Currency", "Formatted real numbers with currency symbol", "�12.45, $5500"],
                 ["Percentage", "Fractional real stored as decimal, displayed as %", "50% stored as 0.5"],
                 ["Alphanumeric/Text", "Letters, numbers, symbols", "\"DOG\", \"ABC123\""],
                 ["Date/Time", "Formatted date or time values", "25/10/2007, 15:00"],
@@ -1502,7 +830,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
               { type: "heading", text: "Internal Documentation" },
               { type: "list", items: [
                 "Block comments at the head of every subprogram (name, purpose, parameter list).",
-                "Meaningful variable names — no nonstandard abbreviations.",
+                "Meaningful variable names � no nonstandard abbreviations.",
                 "Brief comment next to every variable and constant declaration.",
                 "Comments before or within complex sections of code.",
               ]},
@@ -1570,9 +898,9 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
           {
             title: "4.1 Structure Charts",
             blocks: [
-              { type: "paragraph", text: "A Structure Chart shows the breakdown of a system to its lowest manageable levels. It arranges program modules into a tree — each module represented by a box, lines showing connections and ownership." },
+              { type: "paragraph", text: "A Structure Chart shows the breakdown of a system to its lowest manageable levels. It arranges program modules into a tree � each module represented by a box, lines showing connections and ownership." },
               { type: "list", items: [
-                "Top-down design tool — constructed of squares (modules) connected by lines.",
+                "Top-down design tool � constructed of squares (modules) connected by lines.",
                 "Visualises the relationships between modules and subsystems.",
                 "Used for structured programming to understand how code is organised.",
               ]},
@@ -1615,7 +943,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
       {
         id: "facilitator-activities",
         label: "Facilitator Notes",
-        title: "Facilitator Activities — Block 1, Day 3",
+        title: "Facilitator Activities � Block 1, Day 3",
         summary: "Delivery guide, timing, and formative assessment for ITSD-14918 Block 1 Day 3.",
         body: "Total delivery time: 300 minutes (5 hours). Status: Active.",
         sections: [
@@ -1625,7 +953,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
               { type: "ordered-list", items: [
                 "Interactive pseudocode demonstration (whiteboard or projected IDE).",
                 "Live Python coding example using offline environment (VS Code + Python).",
-                "Debugging exercise: provide code containing 2–3 deliberate errors for learners to find and fix.",
+                "Debugging exercise: provide code containing 2�3 deliberate errors for learners to find and fix.",
                 "Group discussion: how programming logic applies to teaching in a CET classroom context.",
                 "Distribute Programming Quick-Start Toolkit (pseudocode reference card, flowchart templates).",
               ]},
@@ -1637,7 +965,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             blocks: [
               { type: "list", items: [
                 "Observation checklist: participation and engagement with coding activities.",
-                "Completed worksheets: Activities 1–7.",
+                "Completed worksheets: Activities 1�7.",
                 "Peer feedback on pseudocode exercises.",
                 "Exit reflection ticket.",
               ]},
@@ -1648,7 +976,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
       {
         id: "learner-activities",
         label: "Activities",
-        title: "Learner Activities — Block 1, Day 3",
+        title: "Learner Activities � Block 1, Day 3",
         summary: "Structured activities mapped to SAQA 14918 assessment criteria.",
         body: "Complete all activities in your workbook. Submit as part of your Portfolio of Evidence.",
         sections: [
@@ -1671,7 +999,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
       {
         id: "resources",
         label: "Resources",
-        title: "Resources — Block 1, Day 3",
+        title: "Resources � Block 1, Day 3",
         summary: "Materials required for the Block 1 Day 3 session.",
         body: "Prepare and print all resources before the session begins.",
         sections: [
@@ -1710,10 +1038,10 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
     lessons: [
       {
         id: "unit-1",
-        label: "Block 1 · Day 4",
+        label: "Block 1 � Day 4",
         title: "Problem-Solving Strategies: Analyse, Evaluate and Implement",
-        summary: "Lesson plan for ITSD-14927 Block 1, Day 4 — CET Lecturers Systems Development Training. Duration: 300 minutes (5 hours).",
-        body: "UNIT STANDARD: 14927 | NQF LEVEL: 4 | CREDITS: 4 | Block 1 — Day 4 of 5 | Duration: 300 min",
+        summary: "Lesson plan for ITSD-14927 Block 1, Day 4 � CET Lecturers Systems Development Training. Duration: 300 minutes (5 hours).",
+        body: "UNIT STANDARD: 14927 | NQF LEVEL: 4 | CREDITS: 4 | Block 1 � Day 4 of 5 | Duration: 300 min",
       },
       {
         id: "session-1",
@@ -1747,7 +1075,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
           {
             title: "1.2 The Ishikawa (Fishbone) Diagram",
             blocks: [
-              { type: "paragraph", text: "The Ishikawa diagram (also called the fishbone or cause-and-effect diagram) was developed by Kaoru Ishikawa in 1968. It maps potential causes of a problem along lines that connect to a box identifying the problem — the 'fishhead'." },
+              { type: "paragraph", text: "The Ishikawa diagram (also called the fishbone or cause-and-effect diagram) was developed by Kaoru Ishikawa in 1968. It maps potential causes of a problem along lines that connect to a box identifying the problem � the 'fishhead'." },
               { type: "heading", text: "Common Categories of Causes" },
               { type: "table", headers: ["Category", "Example Questions"], rows: [
                 ["People", "Are there enough participants? Are their skills adequate?"],
@@ -1790,7 +1118,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
           {
             title: "2.1 Developing Alternatives",
             blocks: [
-              { type: "paragraph", text: "Look at the problem from different angles. Brainstorming — rapid noting of alternatives regardless of how silly they seem — is an excellent discovery process." },
+              { type: "paragraph", text: "Look at the problem from different angles. Brainstorming � rapid noting of alternatives regardless of how silly they seem � is an excellent discovery process." },
               { type: "heading", text: "When Evaluating Alternatives, Note Those That:" },
               { type: "list", items: [
                 "Need more information",
@@ -1810,7 +1138,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
                 ["Feasibility", "Resources needed; likelihood of solving the problem and affordability."],
                 ["Flexibility", "Ability to respond to unintended consequences or change course once begun."],
               ]},
-              { type: "paragraph", text: "Rate each alternative on a scale of 1–3 for each dimension. The alternative with the highest total score is recommended." },
+              { type: "paragraph", text: "Rate each alternative on a scale of 1�3 for each dimension. The alternative with the highest total score is recommended." },
             ],
           },
           {
@@ -1834,7 +1162,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
         label: "Session 3",
         title: "Implement and Monitor the Solution",
         summary: "Develop an implementation plan, communicate changes to stakeholders, monitor outcomes, and review effectiveness.",
-        body: "Create a step-by-step implementation plan with resource allocation and milestones. Monitor progress, consult stakeholders, and review outcomes — modifying the solution if needed.",
+        body: "Create a step-by-step implementation plan with resource allocation and milestones. Monitor progress, consult stakeholders, and review outcomes � modifying the solution if needed.",
         outcomes: [
           "Develop an implementation plan with tasks, timeline, and resource allocation.",
           "Consult affected stakeholders throughout the implementation process.",
@@ -1867,7 +1195,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
               { type: "ordered-list", items: [
                 "How effective is the solution?",
                 "Did it achieve what I wanted?",
-                "What consequences — both good and bad — did it have in my situation?",
+                "What consequences � both good and bad � did it have in my situation?",
               ]},
               { type: "paragraph", text: "Whether or not you achieved your goals, reflect on what you have learned: about yourself, about what you consider important, and how you approach problems in the future." },
             ],
@@ -1877,7 +1205,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
       {
         id: "facilitator-activities",
         label: "Facilitator Notes",
-        title: "Facilitator Activities — Block 1, Day 4",
+        title: "Facilitator Activities � Block 1, Day 4",
         summary: "Delivery guide, timing, and formative assessment for ITSD-14927 Block 1 Day 4.",
         body: "Total delivery time: 300 minutes (5 hours). Status: Active.",
         sections: [
@@ -1899,7 +1227,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             blocks: [
               { type: "list", items: [
                 "Observation checklist: participation in fishbone and process mapping activities.",
-                "Submitted problem analysis plans and worksheets (Activities 1–6).",
+                "Submitted problem analysis plans and worksheets (Activities 1�6).",
                 "Peer review feedback session.",
                 "Exit reflection ticket.",
               ]},
@@ -1910,7 +1238,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
       {
         id: "learner-activities",
         label: "Activities",
-        title: "Learner Activities — Block 1, Day 4",
+        title: "Learner Activities � Block 1, Day 4",
         summary: "Structured activities mapped to SAQA 14927 assessment criteria.",
         body: "Complete all activities in your workbook. Submit as part of your Portfolio of Evidence.",
         sections: [
@@ -1933,7 +1261,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
       {
         id: "resources",
         label: "Resources",
-        title: "Resources — Block 1, Day 4",
+        title: "Resources � Block 1, Day 4",
         summary: "Materials required for the Block 1 Day 4 session.",
         body: "Prepare and print all resources before the session begins.",
         sections: [
@@ -1960,7 +1288,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
     saqa: "14915",
     introTitle: "Design a Computer Program",
     introSummary: "Apply fundamental program design techniques and demonstrate an understanding of computer program features and documentation tools.",
-    introBody: "This module covers applying program design principles — structure diagrams, decision trees, decision tables, UML techniques, and development tools — to design programs that solve specified problems.",
+    introBody: "This module covers applying program design principles � structure diagrams, decision trees, decision tables, UML techniques, and development tools � to design programs that solve specified problems.",
     aboutGuide: "This learner guide covers computer program design for the FETC: IT Systems Development qualification (SAQA 78965, NQF Level 4). It targets learners who can apply programming principles to design complete program solutions.",
     unitPurpose: "Qualifying learners are able to: Apply fundamental principles of procedural programming design techniques; Demonstrate an understanding of the features of a procedural computer program; Operate procedural computer program development tools.",
     quizPlacement: "end",
@@ -1972,10 +1300,10 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
     lessons: [
       {
         id: "unit-1",
-        label: "Block 1 · Day 5",
+        label: "Block 1 � Day 5",
         title: "Program Design: From Specifications to Structured Solutions",
-        summary: "Lesson plan for ITSD-14915 Block 1, Day 5 — CET Lecturers Systems Development Training. Duration: 300 minutes (5 hours).",
-        body: "UNIT STANDARD: 14915 | NQF LEVEL: 4 | CREDITS: 8 | Block 1 — Day 5 of 5 | Duration: 300 min",
+        summary: "Lesson plan for ITSD-14915 Block 1, Day 5 � CET Lecturers Systems Development Training. Duration: 300 minutes (5 hours).",
+        body: "UNIT STANDARD: 14915 | NQF LEVEL: 4 | CREDITS: 8 | Block 1 � Day 5 of 5 | Duration: 300 min",
       },
       {
         id: "session-1",
@@ -2000,7 +1328,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
                 "Define the deployment strategy: distributed vs non-distributed, firewall configurations.",
                 "Choose appropriate technologies based on application requirements and organisational policies.",
               ]},
-              { type: "callout", variant: "info", text: "Structure diagrams are a top-down design tool — start with the big picture and decompose into smaller, independent modules." },
+              { type: "callout", variant: "info", text: "Structure diagrams are a top-down design tool � start with the big picture and decompose into smaller, independent modules." },
             ],
           },
           {
@@ -2140,10 +1468,10 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             blocks: [
               { type: "paragraph", text: "A compiler translates the entire source program at one time through the following stages:" },
               { type: "ordered-list", items: [
-                "Source module — your original source code (checked for syntax errors).",
-                "Object module — the translated machine-language code produced by the compiler.",
-                "Link/load phase — pre-written library programs are added to the object module.",
-                "Load module — the final executable that can be run by the computer.",
+                "Source module � your original source code (checked for syntax errors).",
+                "Object module � the translated machine-language code produced by the compiler.",
+                "Link/load phase � pre-written library programs are added to the object module.",
+                "Load module � the final executable that can be run by the computer.",
               ]},
             ],
           },
@@ -2152,7 +1480,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
       {
         id: "facilitator-activities",
         label: "Facilitator Notes",
-        title: "Facilitator Activities — Block 1, Day 5",
+        title: "Facilitator Activities � Block 1, Day 5",
         summary: "Delivery guide, timing, and formative assessment for ITSD-14915 Block 1 Day 5.",
         body: "Total delivery time: 300 minutes (5 hours). Status: Active.",
         sections: [
@@ -2175,7 +1503,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             blocks: [
               { type: "list", items: [
                 "Observation checklist: participation in design and desk-checking activities.",
-                "Completed design documents (Activities 1–9).",
+                "Completed design documents (Activities 1�9).",
                 "Peer review feedback session.",
                 "Exit reflection ticket.",
               ]},
@@ -2186,7 +1514,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
       {
         id: "learner-activities",
         label: "Activities",
-        title: "Learner Activities — Block 1, Day 5",
+        title: "Learner Activities � Block 1, Day 5",
         summary: "Structured activities mapped to SAQA 14915 assessment criteria.",
         body: "Complete all activities in your workbook. Submit your Program Design Document as part of your Portfolio of Evidence.",
         sections: [
@@ -2212,7 +1540,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
       {
         id: "resources",
         label: "Resources",
-        title: "Resources — Block 1, Day 5",
+        title: "Resources � Block 1, Day 5",
         summary: "Materials required for the Block 1 Day 5 session.",
         body: "Prepare and print all resources before the session begins.",
         sections: [
@@ -2273,7 +1601,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             title: "1.1 Purpose of Testing",
             blocks: [
               { type: "paragraph", text: "Testing is the process of exercising a product to identify differences between expected and actual behaviour, commonly called bugs or defects. The fundamental purpose of testing is to find defects." },
-              { type: "callout", variant: "info", text: "Testing does not prove that no errors exist — it can only show that errors exist. A system that passes all tests may still contain defects not covered by test cases." },
+              { type: "callout", variant: "info", text: "Testing does not prove that no errors exist � it can only show that errors exist. A system that passes all tests may still contain defects not covered by test cases." },
               { type: "heading", text: "Why Testing Matters" },
               { type: "list", items: [
                 "Verifies the system meets its specification before users depend on it.",
@@ -2302,10 +1630,10 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             blocks: [
               { type: "paragraph", text: "Software test procedures determine how software is exercised to find defects. The main types are:" },
               { type: "list", items: [
-                "Black-box testing — tests functionality without knowledge of internal code structure.",
-                "White-box testing — uses knowledge of internal code to design test cases.",
-                "Grey-box testing — tests with partial knowledge of internals.",
-                "Regression testing — repeats previous tests after changes to confirm no existing functionality is broken.",
+                "Black-box testing � tests functionality without knowledge of internal code structure.",
+                "White-box testing � uses knowledge of internal code to design test cases.",
+                "Grey-box testing � tests with partial knowledge of internals.",
+                "Regression testing � repeats previous tests after changes to confirm no existing functionality is broken.",
               ]},
             ],
           },
@@ -2397,11 +1725,11 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
               { type: "paragraph", text: "A diagnostic data adapter (DDA) attaches additional information to a test run in Microsoft Test Manager. A DDA can affect the performance of the machine being tested and collect data about the test environment." },
               { type: "heading", text: "Common Diagnostic Data Adapters" },
               { type: "list", items: [
-                "System Information — collects details about the test machine's hardware and OS.",
-                "IntelliTrace — records program execution steps for post-test analysis.",
-                "Event Log — captures Windows event log entries during the test.",
-                "Screen Recorder — records screen activity during the test run.",
-                "Code Coverage — measures which lines of code were executed by the tests.",
+                "System Information � collects details about the test machine's hardware and OS.",
+                "IntelliTrace � records program execution steps for post-test analysis.",
+                "Event Log � captures Windows event log entries during the test.",
+                "Screen Recorder � records screen activity during the test run.",
+                "Code Coverage � measures which lines of code were executed by the tests.",
               ]},
             ],
           },
@@ -2427,7 +1755,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
                 "Access controlled to prevent unauthorised changes during testing.",
                 "Contains all required software versions (system under test + dependencies).",
               ]},
-              { type: "callout", variant: "tip", text: "Always document the exact lab configuration used for each test run — this allows defects to be reliably reproduced." },
+              { type: "callout", variant: "tip", text: "Always document the exact lab configuration used for each test run � this allows defects to be reliably reproduced." },
             ],
           },
         ],
@@ -2460,13 +1788,13 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             blocks: [
               { type: "paragraph", text: "The following documents are typically produced when preparing and conducting a formal test:" },
               { type: "list", items: [
-                "Test Plan — master document describing scope, approach, resources, schedule, and responsibilities.",
-                "Test Case Specification — detailed inputs, execution steps, expected outputs, and pass/fail criteria for each test.",
-                "Test Script — step-by-step instructions for executing each test case.",
-                "Test Data — the specific data values to be used during test execution.",
-                "Test Log — a record of all test activities during execution (what ran, when, who ran it).",
-                "Defect Report — documents each defect found, its severity, steps to reproduce, and resolution status.",
-                "Test Summary Report — final document summarising test results, coverage, and sign-off recommendations.",
+                "Test Plan � master document describing scope, approach, resources, schedule, and responsibilities.",
+                "Test Case Specification � detailed inputs, execution steps, expected outputs, and pass/fail criteria for each test.",
+                "Test Script � step-by-step instructions for executing each test case.",
+                "Test Data � the specific data values to be used during test execution.",
+                "Test Log � a record of all test activities during execution (what ran, when, who ran it).",
+                "Defect Report � documents each defect found, its severity, steps to reproduce, and resolution status.",
+                "Test Summary Report � final document summarising test results, coverage, and sign-off recommendations.",
               ]},
             ],
           },
@@ -2494,7 +1822,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
         label: "Unit 1",
         title: "Work as a Project Team Member",
         summary: "Overview of project team membership principles.",
-        body: "UNIT STANDARD: 120379 | NQF LEVEL: 4 | CREDITS: 8 | FIELD: Business, Commerce and Management Studies — Project Management",
+        body: "UNIT STANDARD: 120379 | NQF LEVEL: 4 | CREDITS: 8 | FIELD: Business, Commerce and Management Studies � Project Management",
       },
       {
         id: "session-1",
@@ -2577,7 +1905,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
                 ["Growth", "Provide opportunities to learn new skills and take on challenges."],
               ]},
               { type: "heading", text: "Coaching and Loyalty" },
-              { type: "paragraph", text: "A team leader who coaches rather than commands builds loyalty. Coaching involves listening, asking questions, and helping team members discover their own solutions — rather than simply giving orders. Loyal team members are more likely to go beyond the minimum requirement and support the team through challenges." },
+              { type: "paragraph", text: "A team leader who coaches rather than commands builds loyalty. Coaching involves listening, asking questions, and helping team members discover their own solutions � rather than simply giving orders. Loyal team members are more likely to go beyond the minimum requirement and support the team through challenges." },
             ],
           },
         ],
@@ -2633,7 +1961,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
           {
             title: "1.2 Session-Less HTTP and Session Management",
             blocks: [
-              { type: "paragraph", text: "HTTP is stateless — there is no built-in facility to identify or track a particular user between requests. Application developers must manage state explicitly using session IDs." },
+              { type: "paragraph", text: "HTTP is stateless � there is no built-in facility to identify or track a particular user between requests. Application developers must manage state explicitly using session IDs." },
               { type: "heading", text: "Three Methods to Deliver Session IDs" },
               { type: "table", headers: ["Method", "Advantage", "Risk"], rows: [
                 ["URL-embedded session ID", "Works even with cookies disabled; easy to share.", "Exposed in browser history, logs, and referrer headers."],
@@ -2643,7 +1971,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
               { type: "heading", text: "Session ID Requirements" },
               { type: "list", items: [
                 "Must look random and pass statistical tests of randomness.",
-                "Must be unpredictable — cannot be derived from time, date, or IP address.",
+                "Must be unpredictable � cannot be derived from time, date, or IP address.",
                 "Should be at least 50 characters long to resist brute-force attacks.",
               ]},
             ],
@@ -2655,9 +1983,9 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
               { type: "heading", text: "Implications of Limited Bandwidth" },
               { type: "list", items: [
                 "Large images and pages cause long load times, especially for dial-up users.",
-                "Pages with large amounts of code have bigger file sizes — reduce code where possible.",
+                "Pages with large amounts of code have bigger file sizes � reduce code where possible.",
                 "Some browsers on slower hardware can struggle to process heavy pages.",
-                "User perceived performance suffers — design for acceptable experience on slow connections.",
+                "User perceived performance suffers � design for acceptable experience on slow connections.",
               ]},
             ],
           },
@@ -2677,7 +2005,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
           {
             title: "2.1 Active Server Pages (ASP)",
             blocks: [
-              { type: "paragraph", text: "ASP (Active Server Pages) is a Microsoft technology for producing dynamic web content. ASP pages execute on the server side — the server processes the ASP code and returns HTML to the client browser." },
+              { type: "paragraph", text: "ASP (Active Server Pages) is a Microsoft technology for producing dynamic web content. ASP pages execute on the server side � the server processes the ASP code and returns HTML to the client browser." },
               { type: "heading", text: "The Seven Core ASP Objects" },
               { type: "table", headers: ["Object", "Purpose"], rows: [
                 ["Application", "Stores information shared by all visitors connected to the application."],
@@ -2699,9 +2027,9 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
                 ["Functionality", "Limited by HTML/JavaScript; relies on server for complex logic.", "Full desktop capabilities; can render graphs locally."],
                 ["Offline use", "Generally not possible.", "Can function with delayed server sync."],
                 ["Responsiveness", "Every interaction may require a server round-trip.", "Most interactions are local; lower latency."],
-                ["Security", "Firewall-friendly — uses HTTP.", "May require specific port configuration."],
+                ["Security", "Firewall-friendly � uses HTTP.", "May require specific port configuration."],
               ]},
-              { type: "callout", variant: "tip", text: "Validate user inputs on the client side (with JavaScript) for better UX — but ALWAYS re-validate on the server. Never rely solely on client-side validation." },
+              { type: "callout", variant: "tip", text: "Validate user inputs on the client side (with JavaScript) for better UX � but ALWAYS re-validate on the server. Never rely solely on client-side validation." },
             ],
           },
         ],
@@ -2721,7 +2049,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
           {
             title: "3.1 Copyright on the Internet",
             blocks: [
-              { type: "paragraph", text: "Copyright is legal protection for original works of authorship. On the Internet, almost everything is automatically copyright protected once it is created — you do not need a copyright notice for protection to apply." },
+              { type: "paragraph", text: "Copyright is legal protection for original works of authorship. On the Internet, almost everything is automatically copyright protected once it is created � you do not need a copyright notice for protection to apply." },
               { type: "heading", text: "What Is Protected on the Web" },
               { type: "list", items: [
                 "Original text, graphics, audio, and video on web pages.",
@@ -2729,7 +2057,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
                 "Lists of web sites compiled by an individual or organisation.",
                 "Links, if compiled in a sufficiently original way.",
               ]},
-              { type: "heading", text: "When Creating a Web Page — What You CANNOT Do" },
+              { type: "heading", text: "When Creating a Web Page � What You CANNOT Do" },
               { type: "list", items: [
                 "Copy content from another person's website onto your own.",
                 "Copy-paste text from multiple sources to create a 'new' document without attribution.",
@@ -2743,8 +2071,8 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             title: "3.2 Ownership and Royalties",
             blocks: [
               { type: "paragraph", text: "Ownership of internet content and software must be clearly defined in contracts before development begins. The more important the content or technology is to a business, the more crucial it is to secure broad ownership or licensing rights." },
-              { type: "paragraph", text: "Royalty-free (RF) means the right to use copyrighted material without paying royalties per use or per unit sold. Many technology standards (e.g. IEEE 1394, H.264) require per-device royalties — these costs can amount to millions of dollars for large manufacturers." },
-              { type: "callout", variant: "warning", text: "Software royalty arrangements must be clearly defined at the start of a contract — including what happens when the contractual period expires and who owns the adapted source code." },
+              { type: "paragraph", text: "Royalty-free (RF) means the right to use copyrighted material without paying royalties per use or per unit sold. Many technology standards (e.g. IEEE 1394, H.264) require per-device royalties � these costs can amount to millions of dollars for large manufacturers." },
+              { type: "callout", variant: "warning", text: "Software royalty arrangements must be clearly defined at the start of a contract � including what happens when the contractual period expires and who owns the adapted source code." },
             ],
           },
         ],
@@ -2754,7 +2082,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
         label: "Session 4",
         title: "Version Control and Security Issues for Internet Applications",
         summary: "Identify version control practices and explain common internet security threats and countermeasures.",
-        body: "Security is a critical concern in internet development. Understand threats including session hijacking, denial of service, and data tampering — and the technical measures that address them.",
+        body: "Security is a critical concern in internet development. Understand threats including session hijacking, denial of service, and data tampering � and the technical measures that address them.",
         outcomes: [
           "Identify version control issues related to internet development.",
           "Identify security issues related to internet development and explain ways of handling each.",
@@ -2778,10 +2106,10 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
               { type: "table", headers: ["Mechanism", "How It Works"], rows: [
                 ["Firewall", "Controls access between networks; blocks unauthorized incoming/outgoing traffic at defined choke points."],
                 ["HTTPS", "Encrypts HTTP traffic to prevent sniffing of session IDs and credentials."],
-                ["Security Token", "Generates a random 6-digit code every 30–60 seconds; only valid for that window — prevents reuse of stolen credentials."],
+                ["Security Token", "Generates a random 6-digit code every 30�60 seconds; only valid for that window � prevents reuse of stolen credentials."],
                 ["JIT Compiler", "Compiles bytecode at runtime; not a security measure directly but relevant to application performance and deployment."],
               ]},
-              { type: "callout", variant: "info", text: "Using HTTPS prevents attackers from sniffing session IDs transmitted over the network — one of the simplest and most effective session security measures." },
+              { type: "callout", variant: "info", text: "Using HTTPS prevents attackers from sniffing session IDs transmitted over the network � one of the simplest and most effective session security measures." },
             ],
           },
           {
@@ -2865,7 +2193,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             blocks: [
               { type: "paragraph", text: "Personal communication at the point of receiving a problem sets the user's expectations. Key techniques:" },
               { type: "list", items: [
-                "Listen actively — let the user fully describe the problem before asking questions.",
+                "Listen actively � let the user fully describe the problem before asking questions.",
                 "Use plain, non-technical language when speaking to non-technical users.",
                 "Acknowledge the problem and confirm you understand it correctly.",
                 "Give a realistic timeframe for resolution and communicate it clearly.",
@@ -2894,7 +2222,7 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
               { type: "table", headers: ["Category", "Description"], rows: [
                 ["Hardware failure", "A failed component (motherboard, hard drive) or a physical issue (unplugged cable, router needing restart)."],
                 ["Software issue", "Operating system bug, Windows update side-effect, or application error."],
-                ["User-created problem", "Unintentional change — something deleted, disabled, or misconfigured by the user."],
+                ["User-created problem", "Unintentional change � something deleted, disabled, or misconfigured by the user."],
                 ["Training/documentation", "No real technical fault; user needs guidance or documentation is outdated."],
                 ["Outside vendor issue", "Third-party software or supported hardware with its own support obligation."],
               ]},
@@ -2904,13 +2232,13 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             title: "2.2 Troubleshooting Steps",
             blocks: [
               { type: "ordered-list", items: [
-                "Reboot — try this before escalating; many issues resolve with a restart.",
-                "Replicate the problem — reproduce the error yourself to understand it firsthand.",
-                "Retrace user steps — ask what changed or was installed before the problem appeared.",
-                "Check Device Manager — look for yellow or red warning indicators on hardware.",
-                "Review error logs — identify frequency and source of the problem.",
-                "Isolate the problem — determine if it affects one machine or multiple users.",
-                "Seek obvious solutions — check cables, connections, and simple physical causes first.",
+                "Reboot � try this before escalating; many issues resolve with a restart.",
+                "Replicate the problem � reproduce the error yourself to understand it firsthand.",
+                "Retrace user steps � ask what changed or was installed before the problem appeared.",
+                "Check Device Manager � look for yellow or red warning indicators on hardware.",
+                "Review error logs � identify frequency and source of the problem.",
+                "Isolate the problem � determine if it affects one machine or multiple users.",
+                "Seek obvious solutions � check cables, connections, and simple physical causes first.",
               ]},
               { type: "callout", variant: "tip", text: "Identifying the problem category early (hardware / software / user / vendor) helps you know which diagnostic path to follow and avoids wasting time." },
             ],
@@ -2935,9 +2263,9 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             title: "3.1 Making Solutions Effective",
             blocks: [
               { type: "paragraph", text: "A solution is only effective if it resolves the problem permanently. After implementing a fix, follow up with the user to confirm the problem has not recurred." },
-              { type: "heading", text: "Review — Modify — Standardise" },
+              { type: "heading", text: "Review � Modify � Standardise" },
               { type: "table", headers: ["Step", "What It Means"], rows: [
-                ["Review", "Evaluate the solution against the original problem requirement — did it achieve the goal?"],
+                ["Review", "Evaluate the solution against the original problem requirement � did it achieve the goal?"],
                 ["Modify", "If the solution is not fully working, adjust it. Example: move items to a more accessible location."],
                 ["Standardise", "If the solution works well, document it as the standard approach for all similar problems."],
               ]},
@@ -2947,9 +2275,9 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
             title: "3.2 Problem-Solving Techniques",
             blocks: [
               { type: "list", items: [
-                "Compare to previous problems — draw on your experience of similar faults to find the solution faster.",
-                "Troubleshooting (process of elimination) — methodically eliminate possible causes until the actual cause is found.",
-                "Seek expert help — use the internet, software vendors, hardware manufacturers, or colleagues for guidance on unfamiliar problems.",
+                "Compare to previous problems � draw on your experience of similar faults to find the solution faster.",
+                "Troubleshooting (process of elimination) � methodically eliminate possible causes until the actual cause is found.",
+                "Seek expert help � use the internet, software vendors, hardware manufacturers, or colleagues for guidance on unfamiliar problems.",
               ]},
             ],
           },
@@ -2969,8 +2297,8 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
           {
             title: "4.1 Reporting a Resolution",
             blocks: [
-              { type: "paragraph", text: "When closing a problem, tell the user exactly what was done to fix it — which parts were replaced, what was repaired or reconfigured, and how the actions taken have resolved the original issue." },
-              { type: "callout", variant: "info", text: "Think of it like a workshop handing back a repaired car with a job card — the users needs to be able to verify that everything they reported has been addressed." },
+              { type: "paragraph", text: "When closing a problem, tell the user exactly what was done to fix it � which parts were replaced, what was repaired or reconfigured, and how the actions taken have resolved the original issue." },
+              { type: "callout", variant: "info", text: "Think of it like a workshop handing back a repaired car with a job card � the users needs to be able to verify that everything they reported has been addressed." },
             ],
           },
           {
@@ -3005,14 +2333,14 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
           {
             title: "5.1 Escalating Unresolved Problems",
             blocks: [
-              { type: "paragraph", text: "If you cannot resolve a problem within your capability or the agreed timeframe, escalate it. Before contacting the user, identify who can fix it and arrange the next steps — so you can give the user maximum information when you call." },
+              { type: "paragraph", text: "If you cannot resolve a problem within your capability or the agreed timeframe, escalate it. Before contacting the user, identify who can fix it and arrange the next steps � so you can give the user maximum information when you call." },
               { type: "list", items: [
                 "Find out who can resolve the problem before telling the user you cannot.",
                 "If possible, arrange expert attention before phoning the user.",
                 "If resolution will take longer than the support agreement allows, arrange a loaner device.",
                 "Approach escalated problems as joint problems to be solved together, not passed away.",
               ]},
-              { type: "callout", variant: "warning", text: "Never tell a user to find their own solution — even if it is a vendor issue. Always remain involved until the problem is resolved to the user's satisfaction." },
+              { type: "callout", variant: "warning", text: "Never tell a user to find their own solution � even if it is a vendor issue. Always remain involved until the problem is resolved to the user's satisfaction." },
             ],
           },
           {
