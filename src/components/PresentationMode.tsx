@@ -29,7 +29,8 @@ import type { Module } from "@/types/course";
 import type { ModuleLessonFlow, LessonSection } from "@/data/moduleLessonFlows";
 import {
   module14924SpeakerNotes,
-  module14924PresentationFlow,
+  module14924SlideList,
+  type Module14924SlideListItem,
 } from "@/data/module14924Presentation";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -224,6 +225,90 @@ function getQuizSlides(moduleId: string, moduleTitle: string): Slide[] {
       `Pause for the knowledge check. Do not read out the correct answer — wait for learners to respond. ` +
       `After the reveal, ask: "Can someone explain WHY the other options are incorrect?" This deepens understanding beyond rote recall.`,
   }));
+}
+
+function extractFacilitatorScript(notes: string): string {
+  const marker = "Facilitator notes:\n";
+  const markerIndex = notes.indexOf(marker);
+  if (markerIndex === -1) return notes.trim();
+  return notes.slice(markerIndex + marker.length).trim();
+}
+
+function toModule14924Slide(item: Module14924SlideListItem, quizIndexRef: { current: number }): Slide {
+  const subtitle = item.learnerView.subtitle;
+  const bullets = item.learnerView.onScreenContent;
+  const body = item.learnerView.body;
+  const speakerNote = extractFacilitatorScript(item.facilitatorNotes);
+  const phaseCards = item.learnerView.phaseCards;
+
+  if (item.slideNumber === 1) {
+    return {
+      type: "title",
+      title: item.title,
+      subtitle,
+      body,
+      badge: item.learnerView.badges?.[item.learnerView.badges.length - 1],
+      speakerNote,
+    };
+  }
+
+  if (/^Session\s+\d+$/i.test(item.title)) {
+    return {
+      type: "objectives",
+      title: item.title,
+      subtitle,
+      bullets,
+      body,
+      speakerNote,
+      isSessionStart: true,
+      sessionLabel: item.title,
+    };
+  }
+
+  if (/^Knowledge Check\b/i.test(item.title)) {
+    const quiz = PRESENTATION_QUIZZES["14924"]?.[quizIndexRef.current++];
+    if (quiz) {
+      return {
+        type: "quiz",
+        title: item.title,
+        subtitle: subtitle ?? "Session Quiz · Information Systems Analysis",
+        quizQuestion: quiz.question,
+        quizOptions: quiz.options,
+        quizCorrect: quiz.correct,
+        quizExplanation: quiz.explanation,
+        speakerNote,
+      };
+    }
+  }
+
+  if (/^Session Wrap-Up$/i.test(item.title)) {
+    return {
+      type: "summary",
+      title: item.title,
+      subtitle,
+      bullets,
+      body,
+      speakerNote,
+    };
+  }
+
+  return {
+    type: "content",
+    title: item.title,
+    subtitle,
+    bullets,
+    body,
+    phaseCards,
+    speakerNote,
+  };
+}
+
+function buildModule14924SlidesFromJson(): Slide[] {
+  const quizIndexRef = { current: 0 };
+  return module14924SlideList
+    .slice()
+    .sort((a, b) => a.slideNumber - b.slideNumber)
+    .map((item) => toModule14924Slide(item, quizIndexRef));
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -908,6 +993,11 @@ function getModuleAnchorConfig(moduleId: string): {
 
 /** Build session-structured slides from a ModuleLessonFlow */
 export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
+  if (flow.moduleId === "14924") {
+    // Module 14924 is authored as a full deck in JSON; render directly from that source of truth.
+    return buildModule14924SlidesFromJson();
+  }
+
   const slides: Slide[] = [];
   const mn = MODULE_SPEAKER_NOTES[flow.moduleId];
   const sessions = flow.lessons.filter((l) => /^session-\d/.test(l.id));
@@ -943,52 +1033,38 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
   });
 
   /* 2.5 — Flow bridge (clear path before session deep-dive) */
-  if (flow.moduleId === "14924") {
-    for (const flowSlide of module14924PresentationFlow.preSessionSlides) {
-      slides.push({
-        type: "content",
-        title: flowSlide.title,
-        subtitle: flowSlide.subtitle,
-        phaseCards: flowSlide.phaseCards,
-        bullets: flowSlide.bullets,
-        highlight: flowSlide.highlight,
-        speakerNote: flowSlide.speakerNote,
-      });
-    }
-  } else {
-    const anchor = getModuleAnchorConfig(flow.moduleId);
-    const roadmapItems = sectionTitles.length
-      ? sectionTitles.slice(0, 5).map((title, idx) => `Step ${idx + 1}: ${title}`)
-      : [
-          "Step 1: Build core understanding of today's topic",
-          "Step 2: Connect concepts to practical workplace use",
-          "Step 3: Apply methods, tools, or frameworks",
-          "Step 4: Validate understanding through examples",
-          "Step 5: Consolidate and prepare for assessment tasks",
-        ];
+  const anchor = getModuleAnchorConfig(flow.moduleId);
+  const roadmapItems = sectionTitles.length
+    ? sectionTitles.slice(0, 5).map((title, idx) => `Step ${idx + 1}: ${title}`)
+    : [
+        "Step 1: Build core understanding of today's topic",
+        "Step 2: Connect concepts to practical workplace use",
+        "Step 3: Apply methods, tools, or frameworks",
+        "Step 4: Validate understanding through examples",
+        "Step 5: Consolidate and prepare for assessment tasks",
+      ];
 
-    slides.push({
-      type: "content",
-      title: "How This Unit Flows",
-      subtitle: anchor.subtitle,
-      bullets: roadmapItems,
-      highlight:
-        "This roadmap is our sequence contract: we move step-by-step so each section has context before complexity.",
-      speakerNote:
-        `${anchor.roadmapLead} Use this as a quick map before Session 1 starts. Tell learners where they are now, where they are going next, and what success looks like by the end of the day.`,
-    });
+  slides.push({
+    type: "content",
+    title: "How This Unit Flows",
+    subtitle: anchor.subtitle,
+    bullets: roadmapItems,
+    highlight:
+      "This roadmap is our sequence contract: we move step-by-step so each section has context before complexity.",
+    speakerNote:
+      `${anchor.roadmapLead} Use this as a quick map before Session 1 starts. Tell learners where they are now, where they are going next, and what success looks like by the end of the day.`,
+  });
 
-    slides.push({
-      type: "content",
-      title: anchor.anchorTitle,
-      subtitle: "Keep this structure in mind across all sections",
-      diagram: anchor.anchorDiagram,
-      bullets: anchor.anchorBullets,
-      highlight: anchor.anchorHighlight,
-      speakerNote:
-        "Revisit this anchor whenever attention drops or a section feels dense. It recenters the class and keeps progression logical.",
-    });
-  }
+  slides.push({
+    type: "content",
+    title: anchor.anchorTitle,
+    subtitle: "Keep this structure in mind across all sections",
+    diagram: anchor.anchorDiagram,
+    bullets: anchor.anchorBullets,
+    highlight: anchor.anchorHighlight,
+    speakerNote:
+      "Revisit this anchor whenever attention drops or a section feels dense. It recenters the class and keeps progression logical.",
+  });
 
   /* 3 — Sessions */
   for (const session of sessions) {
@@ -1032,24 +1108,7 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
         )
       );
 
-      // Unit 14924: once SDLC fundamentals are covered, introduce execution models.
-      if (
-        flow.moduleId === "14924" &&
-        session.id === "session-1" &&
-        /systems development life cycle\s*\(sdlc\)/i.test(section.title) &&
-        !/models in practice/i.test(section.title)
-      ) {
-        const flowSlide = module14924PresentationFlow.session1Insertions.afterSdlc;
-        slides.push({
-          type: "content",
-          title: flowSlide.title,
-          subtitle: flowSlide.subtitle,
-          phaseCards: flowSlide.phaseCards,
-          bullets: flowSlide.bullets,
-          highlight: flowSlide.highlight,
-          speakerNote: flowSlide.speakerNote,
-        });
-      }
+      // Module-specific insertions are handled inside each module's own deck builder.
     }
   }
 
