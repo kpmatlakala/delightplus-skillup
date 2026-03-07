@@ -149,13 +149,13 @@ const module14924Data = {
       "slideNumber": 3,
       "title": "What Is a System?",
       "learnerView": {
-        "subtitle": "Foundation first, lifecycle second",
+        "subtitle": "Every system has these parts",
         "onScreenContent": [
-          "Components - The building blocks: people, tools, data stores, rules, interfaces, and how they connect.",
-          "Input and Output - What enters the system and what it produces. Bad input creates bad output even with perfect processing logic. This is GIGO: Garbage In, Garbage Out.",
-          "Processes — The ordered activities that transform input into output. Process mapping exposes delays, rework, and bottlenecks that add cost without adding value.",
-          "Feedback Loops — Output data used to adjust future system behaviour. Without feedback, systems repeat mistakes indefinitely and cannot improve.",
-          "Why it matters — Stronger efficiency, lower cost, better quality, improved problem-solving decisions at every level of the organisation."
+          "Components — people, tools, data, rules",
+          "Inputs & Outputs — what enters, what leaves",
+          "Processes — transform input into output",
+          "Feedback loops — improve future results",
+          "Purpose — efficiency, quality, better decisions"
         ]
       },
       "facilitatorNotes": [
@@ -198,75 +198,82 @@ const module14924Data = {
     },
     {
       "slideNumber": 4,
-      "title": "Adam's Story: Why We Need an SDLC",
+      "title": "Adam Wants to Open an Online Store",
       "learnerView": {
-        "subtitle": "The structured path from idea to stable delivery",
+        "subtitle": "A real-world system problem",
         "onScreenContent": [
-          "Any system — an online store, a student portal, an attendance tracker, a grants management tool — follows the same structured journey from idea to reliable operation.",
-          "Without a lifecycle, teams jump from idea to code, skip requirements, miss stakeholders, and then spend more fixing mistakes than they spent building features.",
-          "Adam's online store is one example. The system your students will build for their capstone is another. The lifecycle logic is identical."
-        ],
-        "phaseCards": [
+          "Adam wants to sell products online",
+          "His friend is a software developer",
+          "Adam says: 'Just build the website'",
+          "The developer asks: 'Build what exactly?'",
+          "This is where systems analysis begins"
+        ]
+      },
+      "facilitatorNotes": [
+        "Facilitator Notes",
+        "Slide 4 of 47",
+        "Title: Adam Wants to Open an Online Store",
+        "",
+        "Facilitator notes:",
+        "Tell the story as a problem, not as a method lecture.",
+        "",
+        "Story hook:",
+        "'Adam wants to open an online store to sell sneakers. He calls his developer friend and says: Just build me a website.'",
+        "'The developer replies: Okay, but how should it work?'",
+        "",
+        "Ask learners:",
+        "- How will customers pay?",
+        "- Who manages stock?",
+        "- What happens if payment fails?",
+        "- How do orders get delivered?",
+        "",
+        "Use the teaching line:",
+        "'Before we write code, we must answer these questions. That structured thinking is called systems analysis.'",
+        "",
+        "Small teaching trick:",
+        "'Imagine Adam says: Just build me something like Takealot.'",
+        "Then ask: 'Is that a requirement, or just an idea?'",
+        "",
+        "Transition: 'Now let us look at the structured steps that turn Adam's idea into a working system.'",
+      ].join("\n"),
+      "source": "Module14924 Enhanced v2"
+    },
+    {
+      "slideNumber": 5,
+      "title": "How Adam's Store Gets Built",
+      "learnerView": {
+        "subtitle": "The Software Development Life Cycle (SDLC)",
+        "onScreenContent": [
           "Planning",
           "Requirements Analysis",
           "Design",
           "Implementation",
           "Testing",
           "Deployment & Maintenance"
-        ]
-      },
-      "facilitatorNotes": [
-        "Facilitator Notes",
-        "Slide 4 of 47",
-        "Title: Adam's Story: Why We Need an SDLC",
-        "",
-        "Facilitator notes:",
-        "Link back to Slide 3: 'Adam's online store and your attendance system both contain components, inputs, outputs, processes, and feedback loops. The SDLC gives us the structure to improve any of them.'",
-        "",
-        "Walk the phase cards from left to right, one line each:",
-        "- Planning: 'Agree purpose, boundaries, success criteria, budget, and timeline before work begins.'",
-        "- Requirements Analysis: 'Define what users and stakeholders need the system to do.'",
-        "- Design: 'Decide the solution structure before building.'",
-        "- Implementation: 'Build according to the approved design.'",
-        "- Testing: 'Verify behavior before release, not after.'",
-        "- Deployment and Maintenance: 'Run live, fix issues, and improve continuously.'",
-        "",
-        "Key clarification: 'The example is Adam, but the lifecycle applies to every system your learners will build.'",
-        "",
-        "Transition: 'Next we unpack each SDLC phase in detail, then compare methodologies for moving through those phases.'",
-      ].join("\n"),
-      "source": "Module14924 Enhanced v2"
-    },
-    {
-      "slideNumber": 5,
-      "title": "Session 1",
-      "learnerView": {
-        "subtitle": "Introduction to Information Systems Analysis",
-        "onScreenContent": [
-          "Explain the role of information systems analysis within the Software Development Life Cycle.",
-          "Describe the key responsibilities of an information systems analyst.",
-          "Identify and apply common information-gathering techniques: interviews, questionnaires, observation, site visits, and document review.",
-          "Distinguish between Systems Analysis and Requirements Analysis."
         ],
-        "body": "Session 1 covers SDLC phases, the analyst's responsibilities, fact-finding techniques, feasibility studies, and the critical distinction between systems analysis and requirements analysis."
+        "body": "These steps form the Software Development Life Cycle (SDLC): the structured path from idea to reliable operation."
       },
       "facilitatorNotes": [
         "Facilitator Notes",
         "Slide 5 of 47",
-        "Title: Session 1 Divider",
+        "Title: How Adam's Store Gets Built",
         "",
         "Facilitator notes:",
-        "Session opening sequence — do not skip these steps:",
+        "Now introduce the lifecycle after the story.",
         "",
-        "1. Set the workplace context: 'This session solves the problem of building systems nobody asked for, or systems that solve the wrong problem. By the time we finish, you will have the tools to prevent both.'",
+        "Walk the six phases briefly, one line each:",
+        "- Planning: 'Define goals, scope, timeline, and resources.'",
+        "- Requirements Analysis: 'Define what the system must do.'",
+        "- Design: 'Define how the solution will work.'",
+        "- Implementation: 'Build the solution.'",
+        "- Testing: 'Validate that it works correctly.'",
+        "- Deployment & Maintenance: 'Release, support, and improve continuously.'",
         "",
-        "2. Walk through the four outcomes and define what success looks like for each. Be concrete: 'Success on Outcome 3 means you can walk into a stakeholder meeting with a fact-finding plan, not a blank notebook.'",
+        "Key clarification:",
+        "'These steps are not theory only. This is how real systems are delivered successfully.'",
         "",
-        "3. Prime participation: ask two learners to share one experience where a system they used failed to meet expectations. Ask: 'In hindsight, which SDLC phase was likely skipped or done badly?' This activates prior knowledge before new content lands.",
-        "",
-        "Activation question: 'What do you already know about information systems analysis? Give me one word or phrase each.' Rapid-fire around the room — write responses on the board. Return to this list at the end of the session to show what was added.",
-        "",
-        "Visual-first strategy: before any slide content, draw a concept map on the board with 'Information System' in the centre. Ask learners to suggest branches. Common responses: database, users, forms, reports, processes, rules. Build the map with them, not for them.",
+        "Transition:",
+        "'Next we unpack each SDLC phase in detail and connect it to the artefacts your students produce in their PoE.'",
       ].join("\n"),
       "source": "Module14924 Enhanced v2"
     },

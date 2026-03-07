@@ -186,10 +186,12 @@ const programmeBriefingData = {
         "Each unit ends with a quiz, and each block ends with one combined assessment",
       ],
       highlight:
-        "You complete 56 credits in 15 days; remaining credits toward 165 come through PoE workplace evidence.",
+        "You complete 56 credits across three blocks with quizzes per unit and one assessment per block.",
       speakerNotes: [
         "Each unit in the programme ends with a short quiz.",
-        "— They help you check whether you understood the key concepts before moving forward."
+        "— They help you check whether you understood the key concepts before moving forward.",
+        "Instead of having a full assessment after every unit, the programme uses block assessments. When we finish a block, the next session begins with **one combined assessment that covers all the units from that block.",
+        "Final block assessment is written in the same week (Friday) due to the 15-day schedule"
       ],
     },
     {
