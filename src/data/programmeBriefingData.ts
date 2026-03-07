@@ -183,14 +183,18 @@ const programmeBriefingData = {
         "Block 1 · Days 1–5 · Foundations (23 credits): Systems Analysis (today), Team Collaboration, Programming Principles, Problem Solving, Design",
         "Block 2 · Days 6–9 · Applied Programming (14 credits): Apply Programming Principles, Web Scripting",
         "Block 3 · Days 11–13 · Systems in Practice (19 credits): Testing IT Systems, Resolve User Problems, Work as Project Team Member",
-        "Each unit ends with a formative quiz (self-check) and an assessment task for your Portfolio of Evidence",
+        "Each unit ends with a quiz, and each block ends with one combined assessment",
       ],
       highlight:
         "You complete 56 credits in 15 days; remaining credits toward 165 come through PoE workplace evidence.",
       speakerNotes: [
-        "Distribute the printed module roadmap now if available. Run through the colour-coded block overview — 90 seconds maximum. The goal is for learners to see the sequencing logic: foundations first, applied programming second, systems in practice third.",
-        "Point to today specifically: 'We start right now with Unit 1 — Information Systems Analysis. Everything else in this programme builds on what you learn today. If the analysis foundation is clear, every subsequent unit lands easier.'",
-        "If learners ask about specific blocks or units in detail, defer: 'We will brief each unit as we arrive at it. Right now let us focus on getting Unit 1 started.'",
+        "Before we start Unit 1, I want you to see the overall structure of the programme so you know where today fits in.",
+        "Block 1 – Foundations",
+        "The first block, which runs over the first five days, focuses on the foundations of systems development — systems analysis, collaboration, programming principles, problem solving, and design.",
+        "Block 2 – Applied Programming",
+        "The second block moves into applied programming, where you begin implementing those principles in code and web scripting.",
+        "Block 3 – Systems in Practice",
+        "The final block focuses on real-world systems work — testing systems, resolving user problems, and working as part of a project team."
       ],
     },
     {
