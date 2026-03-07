@@ -188,13 +188,8 @@ const programmeBriefingData = {
       highlight:
         "You complete 56 credits in 15 days; remaining credits toward 165 come through PoE workplace evidence.",
       speakerNotes: [
-        "Before we start Unit 1, I want you to see the overall structure of the programme so you know where today fits in.",
-        "Block 1 – Foundations",
-        "The first block, which runs over the first five days, focuses on the foundations of systems development — systems analysis, collaboration, programming principles, problem solving, and design.",
-        "Block 2 – Applied Programming",
-        "The second block moves into applied programming, where you begin implementing those principles in code and web scripting.",
-        "Block 3 – Systems in Practice",
-        "The final block focuses on real-world systems work — testing systems, resolving user problems, and working as part of a project team."
+        "Each unit in the programme ends with a short quiz.",
+        "— They help you check whether you understood the key concepts before moving forward."
       ],
     },
     {
