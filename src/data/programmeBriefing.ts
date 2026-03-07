@@ -1,4 +1,4 @@
-import briefingJson from "./ProgrammeBriefing.json";
+import programmeBriefingData from "./programmeBriefingData";
 
 export type ProgrammeBriefingSlide = {
   type: "title" | "objectives" | "content" | "activity" | "summary" | "quiz" | "end-deck";
@@ -10,13 +10,23 @@ export type ProgrammeBriefingSlide = {
   body?: string;
   highlight?: string;
   speakerNote?: string;
+  speakerNotes?: string[];
   badge?: string;
 };
 
-type ProgrammeBriefingJsonShape = {
+type ProgrammeBriefingDataShape = {
   programmeBriefingSlides: ProgrammeBriefingSlide[];
 };
 
-const data = briefingJson as ProgrammeBriefingJsonShape;
+const data = programmeBriefingData as unknown as ProgrammeBriefingDataShape;
 
-export const programmeBriefingSlides: ProgrammeBriefingSlide[] = data.programmeBriefingSlides;
+export const programmeBriefingSlides: ProgrammeBriefingSlide[] = data.programmeBriefingSlides.map((slide) => {
+  const speakerNote = slide.speakerNotes?.length
+    ? slide.speakerNotes.join("\n\n")
+    : slide.speakerNote;
+
+  return {
+    ...slide,
+    speakerNote,
+  };
+});
