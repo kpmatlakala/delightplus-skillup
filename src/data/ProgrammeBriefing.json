@@ -12,13 +12,13 @@
       "title": "Meet Your Facilitator",
       "subtitle": "Who you'll be learning with",
       "bullets": [
-        "Kabelo Matlakala — Scrum Master & Systems Development Facilitator, Data Science Academy",
+        "Kabelo Matlakala — Scrum Master, Data Science Academy",
         "BSc Mathematical Sciences, University of Limpopo",
-        "Software Developer background — mLab CodeTribe Academy (2024–2025)",
-        "Based in Limpopo Province, South Africa",
-        "Email: matlakalakabelo1@gmail.com  ·  Mobile: +27 72 713 8367"
+        "Software Development background",
+        "Email: matlakalakabelo1@gmail.com",
+        "Mobile: +27 72 713 8367"
       ],
-      "highlight": "Kabelo delivers all 3 blocks. Reach out directly between sessions for support.",
+      "highlight": "Based in Limpopo Province, South Africa",
       "speakerNote": "Keep this brief — 2 minutes maximum. Mention your background in both software development and systems analysis. The credibility point matters: learners need to see that this content is grounded in real professional practice, not just academic theory.\n\nOptional: share one real project you have worked on that required both analysis and development skills. One sentence is enough. It anchors your authority early."
     },
     {
@@ -27,13 +27,13 @@
       "subtitle": "The invisible infrastructure every organisation depends on",
       "bullets": [
         "IT is the combination of hardware and software products and services that organisations use to manage, access, communicate, and share information",
-        "IT is not just computers — it underpins every business function: student records, payroll, logistics, service delivery",
-        "Force 1 — Changes in the world: globalisation, remote work, digital transformation, real-time information demand",
-        "Force 2 — Changes in technology: cloud computing, AI, mobile platforms, exponential data growth (Moore's Law)",
-        "Force 3 — Changes in client demand: systems must be faster, more intuitive, more accessible, and more secure than ever before"
+        "IT is not just computers — it underpins every business function",
+        "Force 1 — Changes in the world: globalisation, remote work",
+        "Force 2 — Changes in technology: cloud computing, AI",
+        "Force 3 — Changes in client demand: systems must be faster"
       ],
       "highlight": "As systems developers, learners will design, build and maintain the IT infrastructure organisations depend on. Understanding WHAT IT is — and WHY it must be planned — is the foundation of every unit in this qualification.",
-      "speakerNote": "Ask: 'Name one IT system your institution runs on that would cause serious disruption if it went down for a full day.' Use the answer to anchor the three forces — the system they named exists because of Force 1, runs on technology shaped by Force 2, and must meet expectations driven by Force 3.\n\nStress that IT planning is not a technical problem — it is a business problem. The three forces create the pressure. Systems development is the discipline that responds to that pressure in a controlled, professional way.\n\nKeep this to 4 minutes. Do not go into technical depth on any of the three forces — that is Unit content. This slide creates motivation and context, not instruction."
+      "speakerNote": "Ask: 'Name one IT system your institution runs on that would cause serious disruption if it went down for a full day.' student records, payroll, logistics, service delivery Use the answer to anchor the three forces — the system they named exists because of Force 1, runs on technology shaped by Force 2, and must meet expectations driven by Force 3.\n\nStress that IT planning is not a technical problem — it is a business problem. The three forces create the pressure. Systems development is the discipline that responds to that pressure in a controlled, professional way.\n\nKeep this to 4 minutes. Do not go into technical depth on any of the three forces — that is Unit content. This slide creates motivation and context, not instruction."
     },
     {
       "type": "content",
@@ -53,28 +53,28 @@
       "title": "What is Systems Development?",
       "subtitle": "6 phases — coding is only phase 4",
       "bullets": [
-        "Investigation — Identify and confirm the business problem worth solving",
-        "Analysis — Establish exactly WHAT the system must do: requirements, data flows, user needs, constraints",
+        "Investigation — Identify and confirm the business problem",
+        "Analysis — Establish exactly WHAT the system must do",
         "Design — Specify HOW it will work: architecture, data structures, module structure, user interfaces",
-        "Development — Write and unit-test the code based on the approved design documents",
-        "Implementation — Deploy, convert existing data, train users, manage the transition to live operation",
-        "Maintenance — Monitor for defects, apply fixes and enhancements, plan future iterations"
+        "Development — Write and unit-test the code",
+        "Implementation — Deploy, manage the transition to live operation",
+        "Maintenance — Monitor for defects, fixes and plan future iterations"
       ],
       "highlight": "Coding (phase 4) only appears more than halfway through. Analysis and design before it determine whether what gets built is actually useful. A technically perfect system that solves the wrong problem is still a failure.",
-      "speakerNote": "Read the phase list left to right — one sentence each. Keep it fast. The point is NOT to teach the SDLC here — it is to show learners that development is a structured discipline with phases, not just 'write code until it works'.\n\nThe punchline is the highlight: phase 4 (code) comes after analysis and design. Most people think systems development IS coding. Correct that misconception now, gently.\n\nForward pointer — say explicitly: 'Unit 1 opens with this lifecycle in detail. By the time you finish Session 1 today, you will be able to describe each phase, name its deliverable, and explain what happens when it is skipped. Right now I just need you to see the shape.'\n\nDo NOT teach feasibility, requirements analysis, or the SDLC in depth here. This slide creates the overview. Unit 1 delivers the substance."
+      "speakerNote": "Read the phase list left to right — one sentence each. Keep it fast .: requirements, data flows, user needs, constraints; based on the approved design documents;  convert existing data, train users; .The point is NOT to teach the SDLC here — it is to show learners that development is a structured discipline with phases, not just 'write code until it works'.\n\nThe punchline is the highlight: phase 4 (code) comes after analysis and design. Most people think systems development IS coding. Correct that misconception now, gently.\n\nForward pointer — say explicitly: 'Unit 1 opens with this lifecycle in detail. By the time you finish Session 1 today, you will be able to describe each phase, name its deliverable, and explain what happens when it is skipped. Right now I just need you to see the shape.'\n\nDo NOT teach feasibility, requirements analysis, or the SDLC in depth here. This slide creates the overview. Unit 1 delivers the substance."
     },
     {
       "type": "content",
       "title": "Systems Development vs Software Development",
       "subtitle": "Different scopes — deeply connected",
       "bullets": [
-        "Software Development — the coding subset: design, write, test, and deploy software artefacts",
-        "Systems Development — end-to-end: people, process, data, technology AND code",
+        "Software Development —: design, write, test, and deploy software artefacts",
+        "Systems Development —: people, process, data, technology AND code",
         "Software development is a SUBSET that sits inside systems development",
         "The analyst determines WHAT to build and WHY · The developer determines HOW to build it",
-        "In this qualification: you will think like an analyst AND write like a developer — both skills are required"
+        "In this qualification: you will think like an analyst AND write like a developer"
       ],
-      "highlight": "SAQA 78965 is the recognised SA pathway to analyst, developer, BA support, and project coordination roles across government and industry.",
+      "highlight": "",
       "speakerNote": "Clear up the most common misconception before learners carry it into the unit content: this is NOT a pure coding course.\n\nFrame the expectation plainly: 'Roughly 40% of this programme is analysis and design thinking. 60% is implementation. Both halves make you a complete professional. If you only know how to code but cannot analyse a problem, you will build the wrong solution. If you can only analyse but not build, you cannot deliver anything.'\n\nThe WHAT/HOW distinction here is introduced at motivation level. Unit 1 Slide 17 operationalises it — teaching learners HOW to establish WHAT through requirements analysis tools and techniques. Do not go there now.\n\nKeep to 3 minutes."
     },
     {
@@ -87,7 +87,7 @@
         "NQF Level 4 opens careers — analyst, developer, BA support and project coordination roles are in demand across SA government and industry",
         "Professional practice modelling — structured thinking (analyse → design → build) is the standard the workplace expects and the standard you will model for your learners"
       ],
-      "highlight": "As CET lecturers, you model the standard your learners will carry into the field. Demonstrating structured systems thinking sets the bar for the next generation of SA IT professionals.",
+      "highlight": "",
       "speakerNote": "This is the motivational anchor of the entire briefing. Pause here and let it land.\n\nAsk: 'Who here has experienced an IT system that did not do what was expected — one that was built, delivered, and then rejected or rebuilt?' Wait for a show of hands or a verbal response. Then: 'That is the problem this qualification trains you — and your learners — to prevent.'\n\nThe Standish CHAOS Report statistic (more than 70% of IT project failures trace to poor requirements) will come up again in Unit 1. Plant it here as a seed: 'We will come back to this number in Unit 1. By the end of today you will understand exactly why requirements analysis is where most projects are won or lost.'"
     },
     {
@@ -115,7 +115,7 @@
         "✓  You know your 10-module roadmap across 3 blocks",
         "✓  You know how to reach your facilitator between sessions"
       ],
-      "highlight": "Any questions before we open Unit 1: Information Systems Analysis (SAQA 14924 · Block 1 · Day 1)?",
+      "highlight": "",
       "speakerNote": "Pause for genuine Q&A — 3 to 5 minutes maximum. Answer only orientation questions here. Any content question ('what exactly is a DFD?', 'how does Agile work?') gets deferred: 'That is a great question — and exactly what Unit 1 covers. Let us get into it.'\n\nThen navigate to Unit 1 and open with the title slide.\n\nHandoff line to say clearly: 'The briefing gave you the map. Unit 1 gives you the first destination in depth. Everything we named in the briefing — systems, lifecycle, analysis vs development — we are now going to examine properly. Let us begin.'"
     }
   ]

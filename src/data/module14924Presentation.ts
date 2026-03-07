@@ -1,4 +1,4 @@
-import module14924Json from "./Module14924.json";
+import module14924Data from "./module14924Data";
 
 export type Module14924SpeakerNotes = {
   title: string;
@@ -47,7 +47,7 @@ type Module14924JsonShape = {
   module14924FlowMap?: Array<{ placement: string; title: string }>;
 };
 
-const data = module14924Json as Module14924JsonShape;
+const data = module14924Data as Module14924JsonShape;
 
 function extractFacilitatorScript(notes: string): string {
   const marker = "Facilitator notes:\n";
