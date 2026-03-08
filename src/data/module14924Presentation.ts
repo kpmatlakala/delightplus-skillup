@@ -14,6 +14,7 @@ export type Module14924PresentationSlide = {
   bullets: string[];
   highlight: string;
   speakerNote: string;
+  cards?: string[];
   phaseCards?: string[];
 };
 
@@ -24,6 +25,7 @@ export type Module14924SlideListItem = {
     subtitle?: string;
     badges?: string[];
     onScreenContent?: string[];
+    cards?: string[];
     body?: string;
     highlight?: string;
     // Some authored JSON entries include phase cards on the learner view object.
@@ -69,6 +71,7 @@ function toPresentationSlide(item: Module14924SlideListItem): Module14924Present
     title: item.title,
     subtitle: item.learnerView.subtitle ?? "",
     bullets: item.learnerView.onScreenContent ?? [],
+    cards: item.learnerView.cards,
     highlight: item.learnerView.highlight ?? "",
     speakerNote: extractFacilitatorScript(item.facilitatorNotes),
     phaseCards: item.learnerView.phaseCards,

@@ -98,14 +98,14 @@ const module14924Data = {
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 1 of 47",
+        "Slide 1 of 41",
         "Title: Information Systems Analysis",
         "",
         "Facilitator notes:",
         "Welcome learners and set the tone immediately.",
         "",
         "Opening line: 'Today we think like analysts before we code like developers. Our job is not to jump to a solution — it is to understand the problem so precisely that the right solution becomes obvious.'",
-      
+
       ].join("\n"),
       "source": "Module14924 Enhanced v2"
     },
@@ -124,7 +124,7 @@ const module14924Data = {
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 2 of 47",
+        "Slide 2 of 41",
         "Title: Unit Purpose & Learning Outcomes",
         "",
         "Facilitator notes:",
@@ -154,15 +154,15 @@ const module14924Data = {
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 3 of 47",
+        "Slide 3 of 41",
         "Title: What Is a System?",
         "",
         "Facilitator notes:",
-        "a set of components that work together to achieve a purpose.",
+        "System - a set of components that work together to achieve a purpose.-",
         "",
         "Now the question becomes: how do we examine that system to understand problems and improve it?",
-"That is where system analysis begins.",        
-        
+        "That is where system analysis begins.",
+
       ].join("\n"),
       "source": "Module14924 Enhanced v2"
     },
@@ -181,10 +181,10 @@ const module14924Data = {
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 4 of 47",
+        "Slide 4 of 41",
         "Title: Adam Wants to Open an Online Store",
         "",
-        "Facilitator notes:",        
+        "Facilitator notes:",
         "",
         "Story hook:",
         "'Adam wants to open an online store to sell sneakers. He calls his developer friend and says: Just build me a website.'",
@@ -199,12 +199,7 @@ const module14924Data = {
         "Use the teaching line:",
         "'This is exactly where system analysis begins...",
         "Before building anything, we must understand the system itself.'",
-        "",
-        "Small teaching trick:",
-        "'Imagine Adam says: Just build me something like Takealot.'",
-        "Then ask: 'Is that a requirement, or just an idea?'",
-        "",
-        "Transition: 'Now let us look at the structured steps that turn Adam's idea into a working system.'",
+
       ].join("\n"),
       "source": "Module14924 Enhanced v2"
     },
@@ -215,14 +210,14 @@ const module14924Data = {
         "subtitle": "Looking at the system before building it",
         "onScreenContent": [
           "Analysts first identify the components of the system -- customers, products, payments, delivery, support.",
-          "Analysts then examine inputs and outputs"         
-          
+          "Analysts then examine inputs and outputs"
+
         ],
         "body": "These steps form the Software Development Life Cycle (SDLC): the structured path from idea to reliable operation."
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 5 of 47",
+        "Slide 5 of 41",
         "Title: How Adam's Store Gets Built",
         "",
         "Facilitator notes:",
@@ -234,7 +229,7 @@ const module14924Data = {
         "The product database",
         "The payment system",
         "The delivery service",
-        
+
         "If analysts miss one component — for example the delivery company — the system design may fail later",
         "",
         "Can anyone think of another component Adam might need?",
@@ -242,11 +237,11 @@ const module14924Data = {
         "",
         "Inputs and Outputs:",
         "information systems: Garbage In, Garbage Out.",
-"If incorrect data enters the system, the outputs will also be incorrect.",
-"",
-"If a customer enters the wrong delivery address, the system will still process the order — but the package will go to the wrong place.",
-"",
-"By identifying components, inputs, and outputs, analysts start to understand how the system works. -- But to fully understand a system, we must also study the processes and feedback inside the system."
+        "If incorrect data enters the system, the outputs will also be incorrect.",
+        "",
+        "If a customer enters the wrong delivery address, the system will still process the order — but the package will go to the wrong place.",
+        "",
+        "By identifying components, inputs, and outputs, analysts start to understand how the system works. -- But to fully understand a system, we must also study the processes and feedback inside the system."
       ].join("\n"),
       "source": "Module14924 Enhanced v2"
     },
@@ -258,33 +253,41 @@ const module14924Data = {
         "onScreenContent": [
           "System analysis is a structured discipline, not a coding task: define the problem before proposing a solution.",
           "Three core questions guide analysis: What is happening now? Why is it happening? What must change?",
-          "Use the system lens to answer those questions: Components, Input and Output, Processes, and Feedback loops.",
-          "This framing prepares the SDLC and requirements work that follows in Session 1."
+          "Use the system lens to answer those questions: Adam’s store identified",
+
         ],
-        "body": "Before methods, models, and tools, analysts must frame the system problem correctly. Strong analysis starts with disciplined questioning and evidence."
+        "phaseCards": [
+          "Components",
+          "Inputs & Outputs",
+          "Processes",
+          "Feedback Loops",
+        ],
+        "body": ""
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 6 of 47",
+        "Slide 6 of 41",
         "Title: 1.0 Introduction to System Analysis",
         "",
         "Facilitator notes:",
-        "Outcome focus: Explain the role of information systems analysis within the Software Development Life Cycle.",
+        "System analysis is a structured way of studying a system before building or improving it",
         "",
-        "Facilitation flow:",
-        "1) Explain each row of the table in plain language with minimal jargon.",
-        "2) Demonstrate by applying the four dimensions to the CET attendance system live.",
-        "3) Check understanding by asking one learner to identify the most likely root-cause component.",
+        "good projects always start with understanding the problem first.",
+        "",
+        "1️⃣ What is happening now? Understand how the current system works.",
+        "2️⃣ Why is it happening? Identify the root causes of problems.",
+        "3️⃣ What must change? Define improvements the system should make.",
+        "",
+        "System analysis is really about asking the right questions before proposing solutions.",
         "",
         "Teaching prompt: 'If you had to analyse a system you have never seen before, what is the first question you would ask?'",
         "Common answers: 'Who uses it?', 'What does it produce?', and 'Where does the data come from?'",
         "All are valid because each maps to a core system dimension.",
         "",
-        "Visual: Sketch AS-IS vs TO-BE in two columns. The gap between them becomes the requirements list.",
+        "System analysis compares the current system (AS-IS) with the future improved system (TO-BE).",
+        "The gap between them becomes the system requirements.",
         "",
-        "Key message: 'At project kickoff, teach system dimensions first, not technology choices.'",
-        "",
-        "Transition: 'The SDLC gives us the lifecycle to execute analysis, design, build, and deployment in a controlled way.'",
+
       ].join("\n"),
       "source": "Module14924 Enhanced v2"
     },
@@ -294,15 +297,15 @@ const module14924Data = {
       "learnerView": {
         "subtitle": "Session 1 | Why System Analysis Matters",
         "onScreenContent": [
-          "Improves efficiency by identifying bottlenecks, redundant steps, and unnecessary complexity in current processes.",
-          "Reduces cost by improving resource usage and preventing expensive rework caused by misunderstood requirements.",
-          "Improves quality and reliability of system outputs by catching design and logic problems before they are built into the system.",
-          "Supports structured innovation through disciplined problem-solving rather than reactive trial and error."
+          "Efficiency - identifying bottlenecks, redundant steps, and unnecessary complexity in current processes.",
+          "Cost - improving resource usage and preventing expensive rework caused by misunderstood requirements.",
+          "Quality - improving the reliability of system outputs by catching design and logic problems before they are built into the system.",
+          "Innovation - supporting structured problem-solving rather than reactive trial and error."
         ]
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 7 of 47",
+        "Slide 7 of 41",
         "Title: 1.0 Introduction to System Analysis (cont.)",
         "",
         "Facilitator notes:",
@@ -322,132 +325,52 @@ const module14924Data = {
     },
     {
       "slideNumber": 8,
-      "title": "1.0 Introduction to System Analysis (cont.)",
+      "title": "1.1 SDLC Flow",
       "learnerView": {
-        "subtitle": "Session 1 | The System Analysis Process",
-        "onScreenContent": [
-          "Step 1: Identify the system and define its boundaries — what is inside scope and what is outside.",
-          "Step 2: Gather data using interviews, observation, document review, and questionnaires.",
-          "Step 3: Model the system using diagrams and process flows to make it visible and discussable.",
-          "Step 4: Analyse issues, risks, and improvement opportunities against the organisation's business objectives."
-        ]
+        "subtitle": "Session 1 | Analyst Thinking + SDLC Lifecycle",
+        "onScreenContent": [ ],
+        "phaseCards": [
+          "Identify & Boundaries / Feasibility",
+          "Gather Info / Requirements",
+          "Model / Logical Design",
+          "Analyse / Physical Design",
+          "Propose Options / Implementation",
+          "Implement / Testing",
+          "Test & Monitor / Deployment",
+          "Iterate / Maintenance"
+        ],
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 8 of 47",
-        "Title: 1.0 Introduction to System Analysis (cont.)",
+        "Slide 8 of 41",
+        "Title: 1.1 SDLC Flow",
         "",
-        "Facilitator notes:",
-        "Continued. Introduce the process steps before the SDLC lifecycle detail.",
+        "Purpose:",
+        "Use one visual to connect analyst-centric thinking steps with formal SDLC project stages.",
         "",
-        "For Step 1, emphasise scope: 'Defining scope is one of the hardest and most important things an analyst does. A system boundary that is too wide means you are trying to fix everything and end up fixing nothing. Too narrow and you miss the root cause.'",
+        "Explain:",
+        "'Each card has two parts: the first shows how analysts think; the second shows how organisations manage the same work through SDLC stages and deliverables.'",
         "",
-        "For Step 2, ask: 'Which of these four data-gathering methods do you think is most commonly done badly in practice? Why?' Common answer: interviews — because people ask leading questions or speak only to management and miss the people who actually use the system daily.",
+        "Use Adam's store example card-by-card:",
+        "- Identify & Boundaries / Feasibility: Define the store scope and decide whether the project is worth doing.",
+        "- Gather Info / Requirements: Capture features — catalogue, cart, checkout, payments, delivery.",
+        "- Model / Logical Design: Represent flows, entities, and interactions conceptually.",
+        "- Analyse / Physical Design: Select technical architecture, stack, and data structures.",
+        "- Propose Options / Implementation: Choose the best option and begin building.",
+        "- Implement / Testing: Validate payments, stock updates, and order processing.",
+        "- Test & Monitor / Deployment: Launch, monitor behaviour, and stabilise operations.",
+        "- Iterate / Maintenance: Improve, fix, and scale as business needs evolve.",
         "",
-        "For Step 3: 'Modelling makes the invisible visible. A DFD, a flowchart, a use case diagram — these are not bureaucracy. They are thinking tools that make a complex process discussable, verifiable, and buildable.'",
+        "Key message:",
+        "'System analysis and SDLC are not competing models — they are two views of one disciplined process: thinking clearly, then delivering reliably.'",
         "",
-        "Transition: 'These eight steps sit inside the SDLC — the formal lifecycle that structures all of this work. Let us now look at the SDLC in detail.'",
+        "Transition:",
+        "'Now we move into methodology choices — Waterfall, Agile, and DevOps — which all walk this same backbone at different rhythms.'"
       ].join("\n"),
       "source": "Module14924 Enhanced v2"
     },
     {
       "slideNumber": 9,
-      "title": "1.0 Introduction to System Analysis (cont.)",
-      "learnerView": {
-        "subtitle": "Session 1 | Completing the Analysis Process",
-        "onScreenContent": [
-          "Step 5: Propose and evaluate improvement options — compare alternatives before recommending a solution.",
-          "Step 6: Implement agreed changes according to the chosen development approach and design specifications.",
-          "Step 7: Test and monitor outcomes against the original requirements and agreed success criteria.",
-          "Step 8: Iterate — system analysis is not a one-time event. Systems evolve and analysis must evolve with them."
-        ]
-      },
-      "facilitatorNotes": [
-        "Facilitator Notes",
-        "Slide 9 of 47",
-        "Title: 1.0 Introduction to System Analysis (cont.)",
-        "",
-        "Facilitator notes:",
-        "Continued. Complete the 8-step analysis process.",
-        "",
-        "For Step 5: 'Proposing options, not prescribing solutions, is a professional discipline. The analyst's job is to present alternatives with honest trade-offs, not to advocate for a favourite technology.'",
-        "",
-        "For Step 8, make the iteration point concrete: 'A student registration system that works well today will need re-analysis when the institution adds new programmes, changes assessment rules, or integrates with a new national system. Analysis is a lifecycle, not a one-off task. This is why maintenance skills are as valuable as build skills.'",
-        "",
-        "Connect to PoE: 'Your students will need to demonstrate evidence from each of these steps in their Portfolio of Evidence. A well-understood analysis process makes PoE compilation straightforward — because learners know exactly what evidence to collect at each stage.'",
-        "",
-        "Transition: 'Now let us look at the formal structure that houses all of these steps: the Systems Development Life Cycle.'",
-      ].join("\n"),
-      "source": "Module14924 Enhanced v2"
-    },
-    {
-      "slideNumber": 10,
-      "title": "1.1 The Systems Development Life Cycle (SDLC)",
-      "learnerView": {
-        "subtitle": "Session 1 | Introduction to Information Systems Analysis",
-        "onScreenContent": [
-          "The SDLC divides a large development project into manageable stages, each with defined activities, responsibilities, and measurable deliverables.",
-          "Every stage terminates in a milestone: a formal deliverable that must be produced and approved before the next stage begins.",
-          "Maintenance costs typically exceed original development costs over the full system lifetime - documentation during development is not optional, it is the foundation for everything that follows.",
-          "Extensive documentation during development is necessary to support future maintenance, auditing, and system handover to new teams."
-        ],
-        "body": "The Systems Development Life Cycle gives organisations a means of controlling a large development project by dividing it into manageable stages with well-defined outputs and clear accountability at each stage gate."
-      },
-      "facilitatorNotes": [
-        "Facilitator Notes",
-        "Slide 10 of 47",
-        "Title: 1.1 The Systems Development Life Cycle (SDLC)",
-        "",
-        "Facilitator notes:",
-        "Outcome focus: Explain the role of information systems analysis within the Software Development Life Cycle.",
-        "",
-        "Facilitator question to open: 'Which SDLC phase do you think is most commonly skipped when a project is under deadline pressure?' Take answers before responding. Expected: Testing or Requirements Analysis. Then ask: 'What are the consequences of skipping each of those?'",
-        "",
-        "For Testing skipped: bugs in production, user trust destroyed, emergency patches, reputational damage.",
-        "For Requirements skipped: built the wrong system, expensive rework, users reject the deliverable, scope creep on every subsequent phase.",
-        "",
-        "Visual: draw the SDLC as a looped timeline on the board — not a straight line. The loop represents maintenance feeding back into the next cycle. Under each phase, write one real deliverable and one real consequence of skipping it.",
-        "",
-        "Maintenance cost point: 'Studies consistently show that maintenance costs exceed development costs over a system's lifetime. Every shortcut taken during development creates a larger bill during maintenance. Documentation is not bureaucracy — it is insurance.'",
-        "",
-        "Transition: 'Let us now map each phase to its specific deliverable so you know exactly what must be produced at each stage.'",
-      ].join("\n"),
-      "source": "Module14924 Enhanced v2"
-    },
-    {
-      "slideNumber": 11,
-      "title": "1.1 The Systems Development Life Cycle (SDLC) (cont.)",
-      "learnerView": {
-        "subtitle": "Session 1 | SDLC Phases and Deliverables",
-        "onScreenContent": [
-          "Phase 1 - Feasibility Study: Is this worth doing? Deliverable: Go/No-Go recommendation report with cost-benefit analysis.",
-          "Phase 2 - Requirements Analysis: What must the system do? Deliverable: Software Requirements Specification (SRS), agreed by all stakeholders.",
-          "Phase 3 - Logical Design: What is the conceptual structure? Deliverable: Conceptual design of programmes, data models, and system architecture.",
-          "Phase 4 - Physical Design: How will it be built? Deliverable: Detailed technical specifications for modules, databases, hardware, and software."
-        ]
-      },
-      "facilitatorNotes": [
-        "Facilitator Notes",
-        "Slide 11 of 47",
-        "Title: 1.1 The Systems Development Life Cycle (SDLC) (cont.)",
-        "",
-        "Facilitator notes:",
-        "Continued. For each phase, ask: 'What happens if this phase is skipped entirely?'",
-        "",
-        "Phase 1 skipped — Feasibility: 'You commit resources to a project that was never viable — legally, technically, or financially. The Standish Group's CHAOS Report shows 19% of IT projects are cancelled outright. Many of those would have been stopped at feasibility if it had been done properly.'",
-        "",
-        "Phase 2 skipped — Requirements: 'You build the wrong system. The development team works hard, delivers on time, and produces something nobody asked for. This is the most expensive mistake in software development.'",
-        "",
-        "Phase 3 skipped — Logical Design: 'You build a system that cannot scale, cannot integrate with adjacent systems, and falls apart when volume increases.'",
-        "",
-        "Phase 4 skipped — Physical Design: 'Developers make independent technical decisions that conflict with each other. The result is a system that works in parts but fails as a whole.'",
-        "",
-        "Ask learners to annotate their workbooks with one real-world example of a project consequence for each skipped phase.",
-      ].join("\n"),
-      "source": "Module14924 Enhanced v2"
-    },
-    {
-      "slideNumber": 12,
       "title": "1.1 The Systems Development Life Cycle (SDLC) (cont.)",
       "learnerView": {
         "subtitle": "Session 1 | Applied SDLC: Adam's Online Store",
@@ -460,7 +383,7 @@ const module14924Data = {
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 12 of 47",
+        "Slide 9 of 41",
         "Title: 1.1 The Systems Development Life Cycle (SDLC) (cont.)",
         "",
         "Facilitator notes:",
@@ -480,138 +403,44 @@ const module14924Data = {
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 13,
-      "title": "The SDLC Backbone: How Methodologies Walk It",
+      "slideNumber": 10,
+      "title": "1.1 SDLC Models: Waterfall, Agile, and DevOps",
       "learnerView": {
-        "subtitle": "SDLC is the backbone — methodology is how you walk it",
+        "subtitle": "Session 1 | The SDLC Backbone and Methodologies",
         "onScreenContent": [
-          "Waterfall: strong sequential phase gates — best when requirements are stable, well-defined, and compliance-critical.",
-          "Agile: iterative sprints with stakeholder review after each cycle — best when requirements evolve and delivery speed matters.",
-          "DevOps: automates build, test, and deploy pipelines with continuous monitoring and fast feedback loops.",
-          "All three execute the same SDLC logic: plan, define, design, build, validate, release, maintain."
+          "Waterfall | Sequential phase-by-phase progression | Best for stable requirements and regulated projects | Low flexibility when requirements change late",
+          "Agile | Iterative sprints with frequent stakeholder review | Best for evolving requirements and fast delivery | Requires active user participation",
+          "DevOps | Continuous integration, automated testing, and deployment | Best for high-frequency releases | Requires automation maturity and shared Dev/Ops culture",
+          "All three follow the same SDLC logic: plan, define, design, build, validate, release, maintain",
         ],
-        "phaseCards": [
-          "Waterfall",
-          "Agile",
-          "DevOps"
-        ]
+        
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 13 of 47",
-        "Title: The SDLC Backbone: How Methodologies Walk It",
+        "Slide 10 of 41",
+        "Title: 1.1 SDLC Models: Waterfall, Agile, and DevOps",
         "",
-        "Facilitator notes:",
-        "Placement logic: this slide comes AFTER SDLC detail. Learners must first understand the lifecycle itself, then see how different methods execute it. Do not use this slide before Slide 10.",
-        "",
-        "Key line — say this clearly and slowly: 'Different methods. Same lifecycle backbone. The SDLC is not one of the methods. It is the underlying structure that ALL methods implement.'",
-        "",
-        "Talk track:",
-        "— 'We now know what the SDLC phases are and why each one exists.'",
-        "— 'This slide explains how different teams move through those same phases at different rhythms and with different emphases.'",
-        "— 'Waterfall: sequential gates, formal sign-offs, heavy documentation. Best for regulated, stable-requirement projects.'",
-        "— 'Agile: iterative sprint loops, working software every two weeks, continuous user feedback. Best for evolving requirements and fast delivery.'",
-        "— 'DevOps: continuous delivery and monitoring, code can be tested and released multiple times per day. Best for post-go-live, high-frequency update environments.'",
-        "",
-        "Ask: 'For a government SETA compliance reporting system with fixed legal requirements — which method? For a student mobile app where features change every semester — which method? Why does your answer differ?'",
-        "",
-        "Transition: 'With methodology context clear, we move into the analysis phase itself — starting with feasibility, requirements, and the structured techniques that produce them.'",
-      ].join("\n"),
-      "source": "Module14924 Enhanced v2"
-    },
-    {
-      "slideNumber": 14,
-      "title": "1.1A SDLC Models in Practice: Waterfall, Agile, and DevOps",
-      "learnerView": {
-        "subtitle": "Session 1 | Introduction to Information Systems Analysis",
-        "onScreenContent": [
-          "Waterfall | Sequential phase-by-phase progression | Stable requirements, regulated projects | Low flexibility when requirements change late in the project",
-          "Agile | Iterative sprints with frequent stakeholder review | Evolving requirements and fast delivery environments | Requires disciplined backlog management and active user participation",
-          "DevOps | Continuous integration, testing, and automated deployment | High-frequency release environments | Requires automation maturity and shared culture between development and operations teams",
-          "Waterfall works for Adam when requirements are fixed and approved upfront. Agile works when product features and user needs evolve rapidly based on real feedback."
-        ],
-        "body": "The SDLC is the backbone. Methodologies define HOW teams move through those phases. Different project contexts require different execution rhythms and different levels of documentation rigour."
-      },
-      "facilitatorNotes": [
-        "Facilitator Notes",
-        "Slide 14 of 47",
-        "Title: 1.1A SDLC Models in Practice: Waterfall, Agile, and DevOps",
-        "",
-        "Facilitator notes:",
-        "Outcome focus: Explain the role of information systems analysis within the SDLC.",
+        "Purpose of this slide:",
+        "Unify SDLC methodology concepts and show how teams move through phases differently depending on context.",
         "",
         "Facilitation flow:",
         "1) Explain each model in one sentence — plain language, no acronyms first pass.",
-        "2) Apply Adam's store scenario: 'Adam's initial build used Waterfall — he had a fixed spec and needed predictability. Once live, his team shifted to Agile for feature updates. Today, his deployment pipeline uses DevOps CI/CD.'",
-        "3) Check: ask one learner which model they would recommend for a brand-new student management system at CET and why. Listen for their reasoning, not just the answer.",
+        "2) Apply Adam's store scenario: 'Adam's initial build used Waterfall — fixed requirements and predictability. After launch, Agile was used for iterative feature updates. Today, DevOps CI/CD handles continuous deployment.'",
+        "3) Check: ask learners which methodology they would recommend for a new student management system at CET and why. Emphasize reasoning over the answer.",
         "",
-        "Visual to draw on board: a horizontal timeline for Waterfall (one straight arrow through phases). Overlapping loops for Agile (repeated sprint cycles). A continuous circular pipeline for DevOps. The contrast is memorable and fast to sketch.",
+        "Visual suggestion: draw on board —",
+        "- Waterfall: straight horizontal arrow through phases",
+        "- Agile: overlapping sprint loops",
+        "- DevOps: continuous circular pipeline",
+        "Contrast shows methodology execution while SDLC phases stay the same.",
         "",
-        "Transition: 'Now let us focus on the analysis phase itself — specifically what systems analysis establishes before design begins.'",
+        "Transition:",
+        "'Next, we focus on the analysis phase itself — what systems analysis establishes before design begins.'",
       ].join("\n"),
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 15,
-      "title": "1.1A SDLC Models in Practice: Waterfall, Agile, and DevOps (cont.)",
-      "learnerView": {
-        "subtitle": "Session 1 | The CET Lens",
-        "onScreenContent": [
-          "Agile suits CET projects where programme requirements, assessment rules, or student demographics change from semester to semester.",
-          "DevOps is valuable post-go-live when frequent small updates, content fixes, and incremental improvements are expected on a regular basis."
-        ]
-      },
-      "facilitatorNotes": [
-        "Facilitator Notes",
-        "Slide 15 of 47",
-        "Title: 1.1A SDLC Models in Practice (cont.) — CET Lens",
-        "",
-        "Facilitator notes:",
-        "Continued. Bring methodology choice back to the CET lecturer context.",
-        "",
-        "Key facilitation point: 'Your students will ask you which methodology to use for their capstone. The honest answer is: it depends on the project. Use this as your decision framework: How stable are the requirements? How fast must you deliver? How available is the user for feedback?'",
-        "",
-        "Ask: 'Which methodology would you recommend for a student building a community resource directory for a rural WIL site — where the community representative is available for weekly check-ins?' The conditions point to Agile.",
-        "",
-        "Transition: 'Now let us look at what systems analysis actually establishes — and how it differs from requirements analysis.'",
-      ].join("\n"),
-      "source": "Module14924 Enhanced v2"
-    },
-    {
-      "slideNumber": 16,
-      "title": "SDLC Backbone Checkpoint",
-      "learnerView": {
-        "subtitle": "Consolidation before deep analysis techniques",
-        "onScreenContent": [
-          "Waterfall: strong phase gates — best when requirements are stable and compliance is strict.",
-          "Agile: iterative sprints — best when requirements evolve and feedback must be fast.",
-          "DevOps: automates build, test, and deploy with continuous monitoring and feedback loops.",
-          "All three walk the same SDLC backbone; methodology changes the rhythm, not the lifecycle purpose."
-        ],
-        "phaseCards": [
-          "Waterfall",
-          "Agile",
-          "DevOps"
-        ]
-      },
-      "facilitatorNotes": [
-        "Facilitator Notes",
-        "Slide 16 of 47",
-        "Title: SDLC Backbone Checkpoint",
-        "",
-        "Facilitator notes:",
-        "Quick consolidation check before entering the core analysis content.",
-        "",
-        "Workbook task — 2 minutes, then share one response: 'Write one sentence: which methodology would you recommend for a new student registration system at CET, and give two reasons.' This is low-stakes writing to consolidate before moving forward.",
-        "",
-        "After sharing, affirm the reasoning structure, not just the answer. Then move on.",
-        "",
-        "Transition: 'Good. With the lifecycle and its execution models clear, let us now look at what systems analysis actually produces — and the important distinction between analysis and requirements.'",
-      ].join("\n"),
-      "source": "Module14924 Enhanced v2"
-    },
-    {
-      "slideNumber": 17,
+      "slideNumber": 11,
       "title": "1.2 Systems Analysis",
       "learnerView": {
         "subtitle": "Session 1 | WHAT Before HOW",
@@ -624,7 +453,7 @@ const module14924Data = {
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 17 of 47",
+        "Slide 11 of 41",
         "Title: 1.2 Systems Analysis — WHAT, Not HOW",
         "",
         "Facilitator notes:",
@@ -647,7 +476,7 @@ const module14924Data = {
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 18,
+      "slideNumber": 12,
       "title": "1.3 Feasibility Study",
       "learnerView": {
         "subtitle": "Session 1 | Introduction to Information Systems Analysis",
@@ -661,7 +490,7 @@ const module14924Data = {
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 18 of 47",
+        "Slide 12 of 41",
         "Title: 1.3 Feasibility Study",
         "",
         "Facilitator notes:",
@@ -683,41 +512,46 @@ const module14924Data = {
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 19,
+      "slideNumber": 13,
       "title": "1.3 Feasibility Study (cont.)",
       "learnerView": {
         "subtitle": "Session 1 | Tangible and Intangible Costs and Benefits",
-        "onScreenContent": [
-          "Tangible Benefits: Faster processing speed | Access to previously unavailable management information | Reduced staff time on manual data capture | Fewer errors in calculations and reporting",
-          "Intangible Benefits: Improved decision-making quality | Enhanced data accuracy and trust | Stronger competitive position | Better institutional image | Increased staff and student satisfaction",
-          "Tangible Costs: Hardware and infrastructure investment | Software licences | Analyst and developer time in person-days | Staff salaries during transition and training | Training and change management programme",
-          "Intangible Costs: Loss of operational focus during transition | Reputational risk if the project is delayed or fails publicly | Reduced decision quality while old and new systems co-exist | Disruption to established working routines and institutional habits"
+        "phaseCards": [
+          "Tangible Benefits",
+          "Intangible Benefits",
+          "Tangible Costs",
+          "Intangible Costs"
         ]
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 19 of 47",
+        "Slide 13 of 41",
         "Title: 1.3 Feasibility Study (cont.) — Tangible and Intangible",
         "",
         "Facilitator notes:",
-        "Continued. Cover the cost-benefit classification in detail.",
+        "Purpose: Cover cost-benefit classification in detail while keeping the slide uncluttered.",
         "",
-        "Activity — classify these four items as tangible benefit, intangible benefit, tangible cost, or intangible cost:",
-        "1) 'Three-day training programme for 20 lecturers on the new LMS'",
-        "2) 'Improved lecturer satisfaction scores in the annual staff survey'",
-        "3) 'Server upgrade required to run the new system'",
-        "4) 'Staff resistance and morale drop during the transition period'",
+        "Explain to learners:",
+        "- Tangible Benefits: Faster processing speed, access to previously unavailable management information, reduced staff time on manual data capture, fewer errors in reporting.",
+        "- Intangible Benefits: Improved decision-making quality, enhanced data accuracy and trust, stronger competitive position, better institutional image, increased staff and student satisfaction.",
+        "- Tangible Costs: Hardware/infrastructure investment, software licences, analyst and developer person-days, staff salaries during transition and training, training and change management programme.",
+        "- Intangible Costs: Loss of operational focus during transition, reputational risk if project is delayed or fails publicly, reduced decision quality while old and new systems co-exist, disruption to established working routines and institutional habits.",
         "",
-        "Answers: (1) Tangible cost, (2) Intangible benefit, (3) Tangible cost, (4) Intangible cost.",
+        "Activity suggestion:",
+        "Classify these items as tangible benefit, intangible benefit, tangible cost, or intangible cost:",
+        "1) 'Three-day training programme for 20 lecturers on the new LMS' → Tangible cost",
+        "2) 'Improved lecturer satisfaction scores in the annual staff survey' → Intangible benefit",
+        "3) 'Server upgrade required to run the new system' → Tangible cost",
+        "4) 'Staff resistance and morale drop during the transition period' → Intangible cost",
         "",
-        "Key insight: 'Intangible costs are systematically underestimated in project proposals because they do not appear on an invoice and are hard to quantify before the event. But the disruption of a poorly managed transition can cost more in lost productivity than the system itself. A proper feasibility study surfaces them before they become surprises.'",
+        "Key insight: Intangible costs are often underestimated in proposals because they do not appear on invoices and are hard to quantify before the event. Poorly managed transitions can cost more in lost productivity than the system itself. A proper feasibility study surfaces them in advance.",
         "",
-        "Transition: 'Feasibility established that we should proceed. Now requirements analysis defines precisely what we are building. Let us look at how that works.'",
+        "Transition: 'Feasibility established that we should proceed. Next, requirements analysis defines precisely what we are building.'",
       ].join("\n"),
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 20,
+      "slideNumber": 14,
       "title": "1.4 Requirements Analysis",
       "learnerView": {
         "subtitle": "Session 1 | Introduction to Information Systems Analysis",
@@ -727,11 +561,11 @@ const module14924Data = {
           "Deriving from the business domain: Business Systems Planning, critical success factor analysis, benchmarking against comparable institutions.",
           "Experimenting with prototypes: build a rough version and let users react to something concrete rather than abstract descriptions."
         ],
-        "body": "The principal objective of requirements analysis is to produce a Requirements Specification — a detailed, agreed description of WHAT the system will do, signed off by developers, users, management, and all relevant stakeholders."
+        
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 20 of 47",
+        "Slide 14 of 41",
         "Title: 1.4 Requirements Analysis",
         "",
         "Facilitator notes:",
@@ -750,7 +584,7 @@ const module14924Data = {
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 21,
+      "slideNumber": 15,
       "title": "1.4 Requirements Analysis (cont.)",
       "learnerView": {
         "subtitle": "Session 1 | The 6W Fact-Finding Framework — Part 1",
@@ -763,7 +597,7 @@ const module14924Data = {
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 21 of 47",
+        "Slide 15 of 41",
         "Title: 1.4 Requirements Analysis (cont.) — 6W Framework Part 1",
         "",
         "Facilitator notes:",
@@ -780,7 +614,7 @@ const module14924Data = {
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 22,
+      "slideNumber": 16,
       "title": "1.4 Requirements Analysis (cont.)",
       "learnerView": {
         "subtitle": "Session 1 | Fact-Finding Techniques",
@@ -793,7 +627,7 @@ const module14924Data = {
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 22 of 47",
+        "Slide 16 of 41",
         "Title: 1.4 Requirements Analysis (cont.) — Fact-Finding Techniques",
         "",
         "Facilitator notes:",
@@ -812,7 +646,7 @@ const module14924Data = {
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 23,
+      "slideNumber": 17,
       "title": "1.5 Role of the Systems Analyst",
       "learnerView": {
         "subtitle": "Session 1 | Introduction to Information Systems Analysis",
@@ -822,11 +656,11 @@ const module14924Data = {
           "Agent of Change — Facilitates and drives organisational transformation. Analyses how work is currently done, proposes improvements, and guides the organisation through adopting the new solution.",
           "Problem Solver — Breaks complex business problems into manageable parts, identifies root causes, and develops systematic, practical solutions that can be built, tested, and maintained."
         ],
-        "body": "A systems analyst researches problems, plans solutions, recommends software and systems, and coordinates development to meet business requirements. They need strong analytical thinking, communication skills, and the ability to work with people at every level of an organisation."
+        
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 23 of 47",
+        "Slide 17 of 41",
         "Title: 1.5 Role of the Systems Analyst",
         "",
         "Facilitator notes:",
@@ -841,12 +675,12 @@ const module14924Data = {
         "",
         "Visual to draw on board: a bridge. Business stakeholders on the left (language: problems, costs, users, outcomes). Technical team on the right (language: code, databases, APIs, latency). The analyst stands on the bridge — and is equally fluent in both languages.",
         "",
-        "Transition: 'Four qualities define the most effective analysts. Let us look at those before we close this section.'",
+        
       ].join("\n"),
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 24,
+      "slideNumber": 18,
       "title": "1.5 Role of the Systems Analyst (cont.)",
       "learnerView": {
         "subtitle": "Session 1 | Four Qualities of an Effective Analyst",
@@ -859,7 +693,7 @@ const module14924Data = {
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 24 of 47",
+        "Slide 18 of 41",
         "Title: 1.5 Role of the Systems Analyst (cont.) — Four Qualities",
         "",
         "Facilitator notes:",
@@ -874,7 +708,7 @@ const module14924Data = {
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 25,
+      "slideNumber": 19,
       "title": "1.5 Role of the Systems Analyst (cont.)",
       "learnerView": {
         "subtitle": "Session 1 | Key Responsibilities — Part 1",
@@ -887,7 +721,7 @@ const module14924Data = {
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 25 of 47",
+        "Slide 19 of 41",
         "Title: 1.5 Role of the Systems Analyst (cont.) — Responsibilities Part 1",
         "",
         "Facilitator notes:",
@@ -902,7 +736,7 @@ const module14924Data = {
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 26,
+      "slideNumber": 20,
       "title": "1.5 Role of the Systems Analyst (cont.)",
       "learnerView": {
         "subtitle": "Session 1 | Key Responsibilities — Part 2",
@@ -914,7 +748,7 @@ const module14924Data = {
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 26 of 47",
+        "Slide 20 of 41",
         "Title: 1.5 Role of the Systems Analyst (cont.) — Responsibilities Part 2",
         "",
         "Facilitator notes:",
@@ -931,42 +765,41 @@ const module14924Data = {
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 27,
-      "title": "1.6 Information System Components in Analysis Practice",
+      "slideNumber": 21,
+      "title": "1.2 Diagnosing Systems Through Components",
       "learnerView": {
         "subtitle": "Session 1 | Diagnosing Systems Through Components",
-        "onScreenContent": [
-          "Hardware — The physical layer: servers, workstations, network equipment, input/output devices. Capacity follows Moore's Law: processing power roughly doubles every two years while cost falls.",
-          "Software — System software manages hardware resources. Application software performs specific business tasks. Systems may be horizontal (generic, cross-industry), vertical (industry-specific), or legacy (older systems still in production).",
-          "Data — The raw material of the system. Data is stored in tables; related tables supply information to processes and users. Data = basic facts; Information = data transformed into something useful for decision-making.",
-          "Processes — The tasks and business functions that transform data into information. Processes define how data is captured, validated, transformed, and reported.",
-          "People — Users, administrators, and managers who operate and depend on the system. Adoption and training determine whether even technically strong systems succeed in practice."
+        "phaseCards": [
+          "Hardware",
+          "Software",
+          "Data",
+          "Processes",
+          "People"
         ],
-        "body": "Every information system is made up of five interdependent components that must work together to produce useful results. Analysts use this component lens to avoid misdiagnosis and target the true root cause."
+        "body": "Every information system is made up of five interdependent components. Analysts use this lens to identify root causes and avoid misdiagnosis."
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 27 of 47",
-        "Title: 1.6 Information System Components",
+        "Slide 21 of 41",
+        "Title: 1.2 Diagnosing Systems Through Components",
         "",
-        "Facilitator notes:",
-        "Outcome focus: Explain the role of information systems analysis within the SDLC.",
+        "Purpose: Introduce the five key components of any information system and explain why understanding them helps analysts pinpoint issues.",
         "",
-        "Facilitation flow:",
-        "1) Explain each of the five components in plain language.",
-        "2) Apply all five to the CET student registration system as a class exercise — ask learners to contribute examples for each component.",
-        "3) Check: ask which component is most likely to be the root cause of the problems with your current institutional system.",
+        "Facilitator explanation for each card:",
+        "- Hardware: The physical layer, e.g., servers, workstations, network equipment, and I/O devices. Capacity generally improves over time (Moore’s Law).",
+        "- Software: Includes system software that manages hardware and application software that performs business tasks. Systems can be horizontal (generic), vertical (industry-specific), or legacy (older systems still running).",
+        "- Data: The raw material stored in tables. Data = facts; information = data processed into something useful for decision-making.",
+        "- Processes: Business tasks that transform data into information. Defines how data is captured, validated, transformed, and reported.",
+        "- People: Users, administrators, managers — success depends on adoption, training, and how people interact with the system.",
         "",
-        "Key diagnostic insight: 'When you are analysing a failing system, you must check all five components before diagnosing the root cause. A slow system appears to be a hardware problem — but it may be an inefficient database query (software), dirty data causing unnecessary processing (data), a process with redundant steps (processes), or users who have never been trained on the optimal workflow (people). Miss one component and you may fix the wrong thing.'",
+        "Key teaching line: 'A system is only as strong as the weakest component. Ignoring any one of these five can lead to failure.'",
         "",
-        "Fifth component — People: 'This slide shows four components. The fifth is people — the users, administrators, and managers who operate the system. No system succeeds without them. The analyst must understand not just what the system does but who uses it, how they use it, and what will cause them to use it badly or not at all.'",
-        "",
-        "Transition: 'Session 1 complete. We understand what systems analysis is, what the SDLC looks like, who the analyst is, and what information systems are made of. Session 2 applies the technical tools — DFDs, decision models, and development approaches — to that foundation.'",
+        "Transition: 'With these components in mind, we can analyze existing systems more effectively and propose meaningful improvements.'",
       ].join("\n"),
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 28,
+      "slideNumber": 22,
       "title": "Session 2",
       "learnerView": {
         "subtitle": "Systems Analysis Techniques",
@@ -980,7 +813,7 @@ const module14924Data = {
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 28 of 47",
+        "Slide 22 of 41",
         "Title: Session 2 Divider",
         "",
         "Facilitator notes:",
@@ -999,108 +832,99 @@ const module14924Data = {
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 29,
-      "title": "2.1 Interviews vs Questionnaires",
+      "slideNumber": 23,
+      "title": "2.1 Fact-Finding Methods",
       "learnerView": {
         "subtitle": "Session 2 | Systems Analysis Techniques",
-        "onScreenContent": [
-          "Cost | Questionnaires more economical at scale | Interviews less economical — require one facilitator per respondent",
-          "Reach | Questionnaires reach many people simultaneously | Interviews reach one person at a time",
-          "Accuracy | Questionnaires have fewer interpretation errors when well-designed | Interviews depend heavily on facilitator skill and consistency",
-          "Depth | Questionnaires cannot probe or follow up on interesting responses | Interviews allow deep exploration of complex topics and surface unstated assumptions"
+        "cards": [
+          "Interviews",
+          "Questionnaires",
+          "Document Review",
+          "Observation",
+          "Prototyping"
         ],
-        "body": "Two primary fact-finding methods: interviews (real-time dialogue, one respondent at a time) and questionnaires (self-administered, scalable, anonymous). Each has specific strengths suited to different stakeholder groups and information needs."
+        "body": "Fact-finding methods help analysts gather accurate and complete information about the system and its users."
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 29 of 47",
-        "Title: 2.1 Interviews vs Questionnaires",
+        "Slide 23 of 41",
+        "Title: 2.1 Fact-Finding Methods",
         "",
-        "Facilitator notes:",
-        "Outcome focus: Identify and explain common information-gathering techniques.",
+        "Purpose: Introduce the main information-gathering techniques and when to use each.",
         "",
-        "Facilitation flow:",
-        "1) Explain the comparison table row by row.",
-        "2) Demonstrate: give the CET attendance system scenario. Ask — 'You need to understand why lecturers are using WhatsApp instead of the official system, AND you need to reach 150 lecturers across five campuses. Which method do you use for each goal?'",
-        "Expected: interviews for the WHY (depth, follow-up, context), questionnaires for the SCALE (reaching 150 people efficiently).",
-        "3) Check: 'What would you learn from a questionnaire that an interview would not give you? What would an interview reveal that a questionnaire would miss?'",
+        "Interviews: real-time dialogue with one respondent. Allows depth, follow-ups, uncovering unstated assumptions.",
+        "Questionnaires: self-administered surveys. Economical at scale, anonymous, but limited depth.",
+        "Document Review: analyse existing manuals, reports, and system logs to extract facts.",
+        "Observation: watch the system in action to see what people actually do versus what they say.",
+        "Prototyping: create a working model to clarify requirements and collect feedback.",
         "",
-        "Anonymity point: 'In many institutions, lecturers will not criticise a management-owned system openly if they think their name is attached to the feedback. Questionnaires create the psychological safety to surface real problems. If you only do interviews, you may only hear what people are comfortable saying to authority. Anonymised questionnaires often reveal a very different picture.'",
+        "Scenario: CET attendance system — use interviews to understand WHY lecturers bypass the system; questionnaires to efficiently reach all 150 lecturers across five campuses.",
+        "Key teaching point: No single method suffices. Combine methods appropriately for each stakeholder and goal.",
         "",
-        "Transition: 'Now let us look at the visual technique that documents what you discover through all fact-finding methods: the Data Flow Diagram.'",
+        "Transition: 'Once information is gathered, we visualise it with a Data Flow Diagram (DFD).'",
       ].join("\n"),
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 30,
-      "title": "2.1 Interviews vs Questionnaires (cont.)",
+      "slideNumber": 24,
+      "title": "2.1 Interview Types",
       "learnerView": {
-        "subtitle": "Session 2 | Types of Interview",
-        "onScreenContent": [
-          "Structured Interview — Same questions in the same order for every interviewee. Best for: comparing responses across multiple stakeholders and ensuring consistency. Easier to analyse. Less flexible.",
-          "Unstructured Interview — Respondents answer freely; the facilitator follows the conversation where it leads. Best for: exploring complex or sensitive topics; surfacing hidden issues; building trust and rapport. Harder to analyse at scale."
-        ]
+        "subtitle": "Session 2 | Fact-Finding Techniques",
+        "cards": [
+          "Structured Interview",
+          "Unstructured Interview",
+          "Semi-Structured Interview"
+        ],
+        "body": "Different interview types balance consistency and depth. Analysts choose the type depending on the stakeholder and information needed."
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 30 of 47",
-        "Title: 2.1 Interviews vs Questionnaires (cont.) — Interview Types",
+        "Slide 24 of 41",
+        "Title: 2.1 Interview Types",
         "",
-        "Facilitator notes:",
-        "Continued. Cover structured vs unstructured interview types.",
+        "Structured: same questions in same order for all respondents. Easy to compare and analyse; less flexible.",
+        "Unstructured: free conversation, follows the topic wherever it leads. Good for exploring complex or sensitive issues; harder to analyse.",
+        "Semi-Structured: blend of both — core questions for consistency, with flexibility to dive deeper when needed.",
         "",
-        "Practical insight: 'In practice, experienced analysts use a semi-structured approach — they prepare a list of core questions (structured) but allow the conversation to go deeper when something important emerges (unstructured). This gives both consistency and depth.'",
+        "Scenario: DHET compliance officer → structured for legal accuracy; first-year lecturer → unstructured to understand workflow and frustrations.",
+        "Key teaching point: Experienced analysts use combinations of fact-finding methods and interview types to balance depth, breadth, and reliability.",
         "",
-        "Scenario question: 'Which type of interview would you use when speaking with the DHET compliance officer about regulatory requirements? Which when speaking with a first-year lecturer who uses the attendance system daily?' The answers should differ — compliance officer needs structured consistency for legal accuracy; daily user needs unstructured depth to surface real workflow problems.",
-        "",
-        "Knowledge consolidation: 'You now have five fact-finding techniques: interviews, questionnaires, document review, observation, and prototyping. For any given analysis situation, the question is not which ONE to use — it is which combination, in what sequence, for which stakeholder group.'",
-        "",
-        "Transition: 'Once we have gathered our information through these methods, we need a visual tool to model the data flows and processes we discovered. That tool is the DFD.'",
+        "Transition: 'Now that we understand how to gather information, we model it using Data Flow Diagrams.'",
       ].join("\n"),
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 31,
+      "slideNumber": 25,
       "title": "2.2 Data Flow Diagrams (DFDs)",
       "learnerView": {
-        "subtitle": "Session 2 | Systems Analysis Techniques",
-        "onScreenContent": [
-          "External Entity | Rectangle with shadow or double border | Named with a NOUN (Student, Lecturer, Bank) | A person, department, or system outside the system boundary. Acts as a data source (data enters) or sink (data exits). External entities are NOT controlled by the system.",
-          "Data Flow | Arrow with single or double arrowhead | Named with a NOUN describing the data (Enrolment Form, Payment Confirmation) | The movement of data between components. The arrowhead shows direction. Represents data about a person, place, or event.",
-          "Process | Rounded rectangle or circle | Named verb-adjective-noun (Validate Student Record, Calculate Final Mark) | Work being performed — a transformation of input data into output data. Contains the business logic. A 'black box' at DFD level: inputs and outputs are shown, internal logic is hidden.",
-          "Data Store | Open-ended rectangle or parallel lines | Named with a NOUN plus unique reference number D1, D2, D3 | A repository where data is held for later use. Represents a database, computerised file, or physical filing system. At DFD level we show the logical store, not its physical implementation."
+        "subtitle": "Session 2 | Visualising System Processes",
+        "cards": [
+          "External Entity",
+          "Data Flow",
+          "Process",
+          "Data Store"
         ],
-        "body": "A Data Flow Diagram shows how data moves through an information system. It graphically characterises data processes and flows — depicting system inputs, processes, and outputs — without showing programme logic or step-by-step processing detail. A DFD models what a system does, not how it does it technically."
+        "body": "DFDs graphically show how data moves through a system, what transforms it, and where it is stored — without showing detailed program logic."
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 31 of 47",
+        "Slide 25 of 41",
         "Title: 2.2 Data Flow Diagrams (DFDs)",
         "",
-        "Facilitator notes:",
-        "Outcome focus: Describe industry-standard systems analysis techniques.",
+        "External Entity: outside the system, sends or receives data. Named with a NOUN.",
+        "Data Flow: arrow showing movement of data between components. Named with a NOUN describing the data.",
+        "Process: transforms inputs to outputs. Named with a verb phrase. Represents business logic; 'black box' at DFD level.",
+        "Data Store: repository for data. Named with NOUN plus reference number (D1, D2...).",
         "",
-        "Before this slide, draw the four DFD symbols on the whiteboard with names only. Ask learners to guess what each one represents. Common confusions:",
-        "— Students mix up process and data store symbols",
-        "— Students add arrows directly between two external entities (DFD violation)",
-        "— Students name processes with nouns instead of verb phrases",
+        "Demonstration: CET Attendance DFD — lecturer submits data, process transforms it, data store holds it, report goes to admin. Draw live on board.",
+        "Common mistakes to warn against: naming processes with nouns only, arrows directly between external entities, missing data store references.",
         "",
-        "Facilitation flow:",
-        "1) Explain each symbol using the naming rule as the primary anchor — the naming rule tells you what the symbol represents.",
-        "2) Live draw: CET Attendance DFD from scratch on the board. 'Lecturer [external entity] → Attendance Data [data flow] → Record Attendance [process] → D1 Attendance Record [data store] → Generate Report [process] → Attendance Report [data flow] → Admin [external entity].' Narrate every naming decision.",
-        "3) Make one deliberate error — for example, name the process 'Attendance' instead of 'Record Attendance'. Ask learners to spot the mistake and explain the rule that was broken.",
-        "",
-        "Common mistakes to explicitly warn against:",
-        "— Process named with a noun only: WRONG — 'Attendance'. RIGHT — 'Record Attendance'. 'The noun tells you nothing about what the process does. The verb phrase tells you exactly what it does.'",
-        "— Arrow directly between two external entities: 'This is the most common DFD violation. ALL data flows must pass through a process. If Student sends data directly to Admin with no process in between, you have not modelled a system — you have drawn two people talking.'",
-        "— Missing data store reference numbers: 'Every data store gets a unique reference — D1, D2, D3. This allows you to show the same data store on multiple pages without redrawing it, just reference the number.'",
-        "",
-        "Transition: 'Let us now look at the two levels of DFD — Context Diagram and Diagram 0 — and how they relate to each other through levelling and balancing.'",
+        "Transition: 'Next we explore DFD levels: Context Diagram and Diagram 0, showing how detailed views relate to the overall system.'",
       ].join("\n"),
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 32,
+      "slideNumber": 26,
       "title": "2.2 Data Flow Diagrams (DFDs) (cont.)",
       "learnerView": {
         "subtitle": "Session 2 | Logical vs Physical DFDs",
@@ -1111,7 +935,7 @@ const module14924Data = {
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 32 of 47",
+        "Slide 26 of 41",
         "Title: 2.2 Data Flow Diagrams (DFDs) (cont.) — Logical vs Physical",
         "",
         "Facilitator notes:",
@@ -1132,7 +956,7 @@ const module14924Data = {
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 33,
+      "slideNumber": 27,
       "title": "2.3 Structured Analysis Techniques",
       "learnerView": {
         "subtitle": "Session 2 | Systems Analysis Techniques",
@@ -1146,7 +970,7 @@ const module14924Data = {
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 33 of 47",
+        "Slide 27 of 41",
         "Title: 2.3 Structured Analysis Techniques",
         "",
         "Facilitator notes:",
@@ -1165,249 +989,301 @@ const module14924Data = {
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 34,
+      "slideNumber": 28,
       "title": "2.4 Object-Oriented Analysis",
       "learnerView": {
         "subtitle": "Session 2 | Systems Analysis Techniques",
-        "onScreenContent": [
-          "Object — A person, place, or thing relevant to the system (Student, Course, Payment). An object belongs to a class, holds specific attribute values, and can perform methods.",
-          "Class — Defines the shared attributes and behaviours found in every object of that type. Objects are instantiated from classes. Classes have subclasses (more specific types) and a superclass (more general parent).",
-          "Attribute — A property shared by all objects in a class. If objects are nouns, attributes are the adjectives describing them (e.g. Student has: studentNumber, fullName, dateOfBirth, programme).",
-          "Method — An action that any object of the class can perform. Methods are the verbs (e.g. Student.calculateGPA(), Student.generateTranscript()). A method defines what the object does, not how it does it internally."
+        "cards": [
+          "Object",
+          "Class",
+          "Attribute",
+          "Method"
         ],
-        "body": "Object-oriented analysis views a system from the perspective of the objects themselves as they function and interact — rather than as sequential processes transforming data. It works well for systems that undergo continuous maintenance and redesign, because classes and objects are reusable across projects."
+        "body": "Object-oriented analysis views a system as interacting objects rather than as a sequence of processes transforming data."
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 34 of 47",
+        "Slide 28 of 41",
         "Title: 2.4 Object-Oriented Analysis",
         "",
-        "Facilitator notes:",
-        "Outcome focus: Describe industry-standard systems analysis techniques.",
+        "Purpose:",
+        "Introduce the core concepts used in object-oriented systems analysis.",
         "",
-        "Facilitation flow:",
-        "1) Ground the concepts in the CET student context immediately: 'Student is a class. A specific learner — Kabelo Matlakala, student number 20240023 — is an object, an instance of the Student class. fullName, studentNumber, dateOfBirth, and programme are attributes. calculateGPA() and generateTranscript() are methods.'",
-        "2) Demonstrate encapsulation with the light switch analogy: 'You do not need to understand the electrical wiring to turn a light on. The switch is the method. The internal wiring is encapsulated inside the wall. If an electrician rewires the circuit, the switch still works the same way. That is encapsulation — and it is why OO systems are easier to maintain.'",
-        "3) Check: ask learners to identify at least two objects, two attributes per object, and two methods per object for the CET Attendance System.",
+        "Explain each card:",
+        "Object — A real-world entity relevant to the system such as Student, Course, or Payment. An object represents a specific instance of a class.",
+        "Class — A blueprint that defines the attributes and behaviours shared by all objects of that type.",
+        "Attribute — A property that describes an object. Example: studentNumber, fullName, programme.",
+        "Method — An action the object can perform. Methods are verbs such as calculateGPA() or generateTranscript().",
         "",
-        "Key comparison with structured analysis: 'Structured analysis thinks in processes — what does the system DO. OO analysis thinks in objects — what entities exist and how do they interact. Modern systems often use both perspectives at different stages of the same project: OO for requirements and logical design, structured for process mapping and data flow documentation.'",
+        "Example for CET:",
+        "Class: Student",
+        "Object: Kabelo Matlakala (studentNumber 20240023)",
+        "Attributes: studentNumber, fullName, programme",
+        "Methods: calculateGPA(), generateTranscript()",
         "",
-        "Transition: 'Now let us compare the full range of development approaches available to an analyst recommending a solution.'",
+        "Teaching analogy:",
+        "Encapsulation is like a light switch — you flip the switch (method) without needing to understand the wiring behind the wall.",
+        "",
+        "Check for understanding:",
+        "Ask learners to identify two objects, two attributes, and two methods for the CET Attendance System."
+      ].join("\n"),
+      "source": "Module14924 Enhanced v2"
+    },
+    {
+      "slideNumber": 29,
+      "title": "2.5 Systems Development Approaches",
+      "learnerView": {
+        "subtitle": "Session 2 | Systems Analysis Techniques",
+        "cards": [
+          "Traditional SDLC",
+          "CASE-Supported Development",
+          "Object-Oriented Development",
+          "Agile Methods"
+        ],
+        "body": "Different development approaches suit different project contexts, requirement stability, and delivery timelines."
+      },
+      "facilitatorNotes": [
+        "Facilitator Notes",
+        "Slide 29 of 41",
+        "Title: 2.5 Systems Development Approaches",
+        "",
+        "Purpose:",
+        "Introduce the main approaches analysts can recommend for systems development.",
+        "",
+        "Explain each card:",
+        "Traditional SDLC — Sequential phases with formal sign-off. Best for stable, well-defined systems such as accounting or government systems.",
+        "CASE-Supported — Uses specialised software tools to assist analysis, design, documentation, and code generation.",
+        "Object-Oriented Development — Builds systems around reusable classes and objects. Works well when requirements change frequently.",
+        "Agile Methods — Focus on iterative delivery, working software, and continuous stakeholder feedback.",
+        "",
+        "Facilitation question:",
+        "Ask learners which approach their institution most closely resembles and why.",
+        "",
+        "Teaching visual:",
+        "Draw a quadrant on the board with axes:",
+        "Requirement Stability (Low–High)",
+        "Team Size (Small–Large)",
+        "Place each development approach in the appropriate quadrant."
+      ].join("\n"),
+      "source": "Module14924 Enhanced v2"
+    },
+    {
+      "slideNumber": 30,
+      "title": "2.5 Systems Development Approaches (cont.)",
+      "learnerView": {
+        "subtitle": "Session 2 | Joint Application Development (JAD)",
+        "cards": [
+          "Collaborative Workshops",
+          "User Participation",
+          "Shared Requirements",
+          "Facilitated Sessions"
+        ]
+      },
+      "facilitatorNotes": [
+        "Facilitator Notes",
+        "Slide 30 of 41",
+        "Title: Joint Application Development (JAD)",
+        "",
+        "Purpose:",
+        "Explain how JAD accelerates requirements gathering through structured workshops.",
+        "",
+        "Explanation:",
+        "JAD replaces multiple one-on-one interviews with facilitated workshops where key users and IT staff work together to define system requirements.",
+        "",
+        "Advantages:",
+        "Users participate directly, improving requirement accuracy.",
+        "Shared understanding develops among stakeholders.",
+        "Reduces back-and-forth clarification cycles.",
+        "",
+        "Disadvantages:",
+        "Requires skilled facilitation.",
+        "More expensive than interviews if many participants are involved.",
+        "",
+        "Experiential link:",
+        "Explain that this classroom discussion format resembles a simplified JAD session.",
+        "",
+        "Key insight:",
+        "People support what they helped to create."
+      ].join("\n"),
+      "source": "Module14924 Enhanced v2"
+    },
+    {
+      "slideNumber": 31,
+      "title": "2.5 Systems Development Approaches (cont.)",
+      "learnerView": {
+        "subtitle": "Session 2 | Rapid Application Development (RAD)",
+        "cards": [
+          "Rapid Prototyping",
+          "Continuous User Feedback",
+          "Iterative Development",
+          "Faster Delivery"
+        ]
+      },
+      "facilitatorNotes": [
+        "Facilitator Notes",
+        "Slide 31 of 41",
+        "Title: Rapid Application Development (RAD)",
+        "",
+        "Purpose:",
+        "Explain how RAD shortens development time through iterative prototyping.",
+        "",
+        "Explanation:",
+        "RAD emphasises building working prototypes quickly, gathering feedback, and refining the system through repeated cycles.",
+        "",
+        "Advantages:",
+        "Faster development.",
+        "Users see working screens early.",
+        "Excellent for user-interface heavy systems.",
+        "",
+        "Disadvantages:",
+        "Less time for architecture and design.",
+        "Systems may become harder to maintain later.",
+        "",
+        "Discussion question:",
+        "Ask learners to identify systems where RAD would be inappropriate (e.g., payroll, medical records, financial systems)."
+      ].join("\n"),
+      "source": "Module14924 Enhanced v2"
+    },
+    {
+      "slideNumber": 32,
+      "title": "2.5 Systems Development Approaches (cont.)",
+      "learnerView": {
+        "subtitle": "Session 2 | Agile Principles",
+        "cards": [
+          "Early Delivery",
+          "Continuous Improvement",
+          "Welcoming Change",
+          "Customer Collaboration"
+        ]
+      },
+      "facilitatorNotes": [
+        "Facilitator Notes",
+        "Slide 32 of 41",
+        "Title: Agile Principles",
+        "",
+        "Purpose:",
+        "Introduce key Agile values guiding modern development teams.",
+        "",
+        "Explain each principle:",
+        "Early Delivery — Deliver working software early and often.",
+        "Continuous Improvement — Teams regularly reflect and improve processes.",
+        "Welcoming Change — Changing requirements are expected and embraced.",
+        "Customer Collaboration — Frequent interaction with users ensures the system solves the real problem.",
+        "",
+        "CET teaching link:",
+        "Students should demonstrate working prototypes early in their projects rather than submitting only planning documents.",
+        "",
+        "Key message:",
+        "Working software is the primary measure of progress."
+      ].join("\n"),
+      "source": "Module14924 Enhanced v2"
+    },
+    {
+      "slideNumber": 33,
+      "title": "2.5 Systems Development Approaches (cont.)",
+      "learnerView": {
+        "subtitle": "Session 2 | Agile Principles 3–6",
+        "cards": [
+          "Frequent Delivery",
+          "Business–Developer Collaboration",
+          "Motivated Teams",
+          "Face-to-Face Communication"
+        ]
+      },
+      "facilitatorNotes": [
+        "Facilitator Notes",
+        "Slide 33 of 41",
+        "Title: Agile Principles 3–6",
+        "",
+        "Explain each principle:",
+        "",
+        "Frequent Delivery:",
+        "Deliver working software regularly in small increments rather than waiting months for a full release.",
+        "",
+        "Business–Developer Collaboration:",
+        "Stakeholders and developers work together continuously, not only at the start or end of a project.",
+        "",
+        "Motivated Teams:",
+        "Successful Agile projects rely on motivated individuals who are trusted to organise their work.",
+        "",
+        "Face-to-Face Communication:",
+        "Direct conversation is the most effective way to share complex information.",
+        "",
+        "Teaching connection:",
+        "Relate this to WIL projects where students work directly with employers and receive continuous feedback."
+      ].join("\n"),
+      "source": "Module14924 Enhanced v2"
+    },
+    {
+      "slideNumber": 34,
+      "title": "2.5 Systems Development Approaches (cont.)",
+      "learnerView": {
+        "subtitle": "Session 2 | Agile Principles 7–10",
+        "cards": [
+          "Working Software",
+          "Sustainable Pace",
+          "Technical Excellence",
+          "Simplicity"
+        ]
+      },
+      "facilitatorNotes": [
+        "Facilitator Notes",
+        "Slide 34 of 41",
+        "Title: Agile Principles 7–10",
+        "",
+        "Working Software:",
+        "The main measure of progress is functioning software, not documentation or planning.",
+        "",
+        "Sustainable Pace:",
+        "Teams should maintain a steady, manageable pace instead of relying on overtime and burnout.",
+        "",
+        "Technical Excellence:",
+        "High-quality design and coding practices make systems easier to change and maintain.",
+        "",
+        "Simplicity:",
+        "Build only what is necessary. Avoid unnecessary features or complexity.",
+        "",
+        "Teaching link:",
+        "Remind learners that student PoE projects must demonstrate working prototypes."
       ].join("\n"),
       "source": "Module14924 Enhanced v2"
     },
     {
       "slideNumber": 35,
-      "title": "2.5 Systems Development Approaches",
+      "title": "2.5 Systems Development Approaches (cont.)",
       "learnerView": {
-        "subtitle": "Session 2 | Systems Analysis Techniques",
-        "onScreenContent": [
-          "Traditional SDLC (Structured) | Sequential phases with formal sign-off gates | Large, well-defined, stable-requirement projects | Government systems, accounting systems, compliance platforms",
-          "CASE-Supported | Computer-Aided Software Engineering tools automate analysis tasks, generate code, and maintain documentation | Projects where productivity, consistency, and life-cycle integration are priorities",
-          "Object-Oriented (OO) | Small iterative analysis-design-build cycles; system as interacting objects | Rapidly changing requirements; environments where reuse is a priority",
-          "Agile Methods | Incremental delivery with continuous user feedback; working software over documentation | Small teams; evolving requirements; situations where early frequent delivery creates value"
-        ],
-        "body": "Analysts must understand multiple development approaches. Project size, rate of requirement change, available skills, and organisational context all determine which approach is most appropriate — and the analyst is often the person who makes that recommendation."
+        "subtitle": "Session 2 | Agile Principles and DevOps",
+        "cards": [
+          "Self-Organising Teams",
+          "Continuous Reflection",
+          "Continuous Integration (CI)",
+          "Continuous Deployment (CD)"
+        ]
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 35 of 47",
-        "Title: 2.5 Systems Development Approaches",
+        "Slide 35 of 41",
+        "Title: Final Agile Principles + DevOps",
         "",
-        "Facilitator notes:",
-        "Outcome focus: Describe industry-standard systems analysis techniques.",
+        "Self-Organising Teams:",
+        "The best solutions often emerge from teams that organise their own work rather than following strict top-down control.",
         "",
-        "Facilitation flow:",
-        "1) For each approach, explain the core philosophy in one sentence before any detail: what problem was this approach designed to solve?",
-        "2) Ask learners: which of these approaches does their institution currently use for IT projects — or uses most closely? Why?",
-        "3) Group challenge: 'Which approach would you recommend for a new student feedback app that will be piloted with 50 students next semester, with weekly check-ins with the student SRC?' Map the project characteristics to the approach.",
+        "Continuous Reflection:",
+        "Teams regularly review how they work and improve their processes.",
         "",
-        "Visual to draw on board: a two-axis quadrant. Horizontal axis: Requirement Stability (Low to High). Vertical axis: Team Size (Small to Large). Ask learners to place each methodology in the correct quadrant together. Then add a third dimension verbally: delivery urgency.",
+        "Continuous Integration (CI):",
+        "Developers frequently merge code and automatically test it to detect problems early.",
         "",
-        "Key Agile principle for CET: 'Working software is the primary measure of progress.' This is directly relevant to PoE: your students must show working prototypes, not just planning documents. A beautiful requirements document with a broken prototype does not meet the standard.",
+        "Continuous Deployment (CD):",
+        "Software can be released quickly because testing and deployment are automated.",
         "",
-        "Transition: 'Let us now look at two specific techniques within this landscape: JAD and RAD — both of which involve intensive stakeholder collaboration.'",
+        "Teaching connection:",
+        "For student projects, the key lesson is to keep the code in a working state and commit changes regularly using version control."
       ].join("\n"),
       "source": "Module14924 Enhanced v2"
     },
     {
       "slideNumber": 36,
-      "title": "2.5 Systems Development Approaches (cont.)",
-      "learnerView": {
-        "subtitle": "Session 2 | Joint Application Development (JAD)",
-        "onScreenContent": [
-          "JAD brings key business users and IT staff together in structured workshops to define system requirements jointly — replacing serial one-on-one interviews with a collaborative group process.",
-          "Advantage: Key users participate directly — resulting in more accurate requirements, better shared understanding, and stronger commitment to the final system because they helped define it.",
-          "Advantage: Reduces the back-and-forth iteration between analysts and users that slows traditional interview-based requirements gathering.",
-          "Disadvantage: More expensive and time-intensive than individual interviews. Can become cumbersome if the group is larger than the complexity of the project warrants."
-        ]
-      },
-      "facilitatorNotes": [
-        "Facilitator Notes",
-        "Slide 36 of 47",
-        "Title: 2.5 Systems Development Approaches (cont.) — JAD",
-        "",
-        "Facilitator notes:",
-        "Continued. Cover Joint Application Development.",
-        "",
-        "Make it immediate and experiential: 'What you are doing right now — in this training room — is a form of JAD. Lecturers from different CET campuses, different subject areas, different institutional contexts, working together to define how you will teach, supervise, and assess systems development. You are living the methodology. This is why JAD works: people support what they helped to create.'",
-        "",
-        "Key benefit to drive home: 'When stakeholders define requirements together in a room, they are not just building a specification — they are building buy-in. Resistance to a new system drops dramatically when the people who will use it were the people who specified it.'",
-        "",
-        "Disadvantage realism: 'JAD sessions require skilled facilitation. An underskilled facilitator can allow one dominant voice to override all others, producing a specification that reflects one person's preferences rather than the organisation's actual needs. This is why the analyst's facilitation skills are as important as their technical skills.'",
-        "",
-        "Transition: 'JAD focuses on requirements definition through collaboration. RAD focuses on speed of delivery through rapid prototyping. Let us look at RAD.'",
-      ].join("\n"),
-      "source": "Module14924 Enhanced v2"
-    },
-    {
-      "slideNumber": 37,
-      "title": "2.5 Systems Development Approaches (cont.)",
-      "learnerView": {
-        "subtitle": "Session 2 | Rapid Application Development (RAD)",
-        "onScreenContent": [
-          "RAD speeds up information systems development by involving users in every phase — not just at requirements stage — and relies heavily on iterative prototyping.",
-          "Objective: cut development time and cost by replacing lengthy requirements documentation with rapid build-feedback-revise cycles.",
-          "The interactive prototyping cycle continues until users are satisfied and the system meets functional requirements.",
-          "Advantage: systems developed faster with significant cost savings; user interface-heavy systems benefit greatly from the rapid feedback cycle."
-        ]
-      },
-      "facilitatorNotes": [
-        "Facilitator Notes",
-        "Slide 37 of 47",
-        "Title: 2.5 Systems Development Approaches (cont.) — RAD",
-        "",
-        "Facilitator notes:",
-        "Continued. Cover Rapid Application Development.",
-        "",
-        "Key advantage to articulate: 'RAD is excellent when the user interface is the most complex part of the system — forms, dashboards, mobile apps, reporting views. Showing users a working screen on Day 3 and asking for feedback is far more productive than asking them on Day 1 to describe in words what they want a screen to look like. The prototype replaces a thousand words of specification.'",
-        "",
-        "Key disadvantage to be honest about: 'RAD trades design rigour for delivery speed. A RAD-built system can be fast to build and expensive to maintain — because the pressure to prototype quickly can cause developers to bypass architecture, data modelling, and security design. For mission-critical systems where correctness and auditability matter more than speed, RAD is the wrong choice.'",
-        "",
-        "Ask: 'When would you NOT use RAD? Give me a real example of a system type where you would choose a different approach.' Expected: financial systems, medical records, payroll, examination result processing — any system where an error has serious consequences.",
-        "",
-        "Transition: 'RAD and JAD both emphasise user involvement. The Agile manifesto formalised this philosophy into 12 principles. Let us work through them quickly.'",
-      ].join("\n"),
-      "source": "Module14924 Enhanced v2"
-    },
-    {
-      "slideNumber": 38,
-      "title": "2.5 Systems Development Approaches (cont.)",
-      "learnerView": {
-        "subtitle": "Session 2 | RAD Trade-offs and Agile Principles 1–2",
-        "onScreenContent": [
-          "RAD disadvantage: may allow less time to develop quality, consistency, and architectural standards — the system works but may be expensive to maintain or extend.",
-          "RAD disadvantage: emphasis on mechanics of the system rather than strategic business alignment — fast builds can solve the visible problem while missing the underlying one.",
-          "Agile Principle 1: Satisfy the customer through early and continuous delivery of working software.",
-          "Agile Principle 2: Welcome changing requirements, even late in development — ability to respond to change is a competitive advantage."
-        ]
-      },
-      "facilitatorNotes": [
-        "Facilitator Notes",
-        "Slide 38 of 47",
-        "Title: 2.5 Systems Development Approaches (cont.) — RAD trade-offs + Agile Principles 1-2",
-        "",
-        "Facilitator notes:",
-        "Continued. Begin the Agile principles sequence.",
-        "",
-        "For each Agile principle, connect it to the CET lecturer context: 'How would this principle change the way you supervise a student capstone project?'",
-        "",
-        "Principle 1 interpretation: 'Early and continuous delivery does NOT mean skipping planning. It means that delivery of working software happens in small increments throughout the project, not only at the end. Your students should be delivering working prototypes from Week 3 of their project — not submitting their first working version in the final week.'",
-        "",
-        "Principle 2 interpretation: 'This is the principle that feels most counterintuitive. It says welcome change. Not tolerate it — welcome it. In a CET WIL context, this means when the employer changes the project scope, that is not a problem — it is an opportunity to deliver something that better reflects the real business need. Agile teams are designed to accommodate this.'",
-      ].join("\n"),
-      "source": "Module14924 Enhanced v2"
-    },
-    {
-      "slideNumber": 39,
-      "title": "2.5 Systems Development Approaches (cont.)",
-      "learnerView": {
-        "subtitle": "Session 2 | Agile Principles 3–6",
-        "onScreenContent": [
-          "Agile Principle 3: Deliver functioning software incrementally and frequently — in weeks, not months.",
-          "Agile Principle 4: Business people and developers must work together daily throughout the project, not just at kickoff and sign-off.",
-          "Agile Principle 5: Build projects around motivated individuals — give them the environment and support they need, and trust them to deliver.",
-          "Agile Principle 6: Face-to-face conversation is the most efficient and effective method of conveying information within a development team."
-        ]
-      },
-      "facilitatorNotes": [
-        "Facilitator Notes",
-        "Slide 39 of 47",
-        "Title: 2.5 Systems Development Approaches (cont.) — Agile Principles 3-6",
-        "",
-        "Facilitator notes:",
-        "Continued. Agile principles 3–6.",
-        "",
-        "Principle 4 connection to WIL: 'This is exactly why Work-Integrated Learning works as a delivery mechanism. When students are embedded with an employer, the business-developer collaboration happens naturally every day. The challenge is formalising it into PoE evidence — and that is where you as the lecturer add value.'",
-        "",
-        "Principle 5 connection to lecturer role: 'As a lecturer, assessor, and future WIL supervisor, your job is to provide the environment — the resources, the safety, the structured feedback — and then trust your learners to make technical decisions. Micromanaging the HOW undermines both the learning and the product. Define the WHAT clearly. Then get out of the way.'",
-        "",
-        "Principle 6 reality check: 'In a post-COVID world, many teams work remotely. Agile principle 6 was written in 1999. The modern interpretation: use the richest available communication channel for the most complex decisions. Video call over email. In-person over video. The richer the channel, the more you can communicate and the fewer the misunderstandings.'",
-      ].join("\n"),
-      "source": "Module14924 Enhanced v2"
-    },
-    {
-      "slideNumber": 40,
-      "title": "2.5 Systems Development Approaches (cont.)",
-      "learnerView": {
-        "subtitle": "Session 2 | Agile Principles 7–10",
-        "onScreenContent": [
-          "Agile Principle 7: Working software is the primary measure of progress — not plans, documents, or meeting outputs.",
-          "Agile Principle 8: Agile promotes sustainable development — the team maintains a constant, predictable pace indefinitely, avoiding the burnout of crunch-driven projects.",
-          "Agile Principle 9: Continuous attention to technical excellence and good design enhances agility — shortcuts now create constraints later.",
-          "Agile Principle 10: Simplicity — the art of maximising the amount of work NOT done — is essential. Build only what is needed."
-        ]
-      },
-      "facilitatorNotes": [
-        "Facilitator Notes",
-        "Slide 40 of 47",
-        "Title: 2.5 Systems Development Approaches (cont.) — Agile Principles 7-10",
-        "",
-        "Facilitator notes:",
-        "Continued. Agile principles 7–10.",
-        "",
-        "Principle 7 — PoE connection: 'Working software is the primary measure. In a PoE context, this means your students must demonstrate a working prototype. A beautifully written requirements document with a broken or non-functional build does not meet professional standards. Function is the evidence.'",
-        "",
-        "Principle 8 — sustainable pace: 'This principle directly addresses the culture of burning developers out on crunch projects. The research is clear: overtime beyond two weeks creates a net productivity deficit — more errors, more rework, more burnout. Sustainable pace is not a compromise on ambition. It is the condition for sustained high performance.'",
-        "",
-        "Principle 10 — simplicity: 'This is the hardest principle for students to grasp because ambition drives them to add features. Simplicity says: what can we REMOVE without losing value? The best solution is often the simplest one that meets the requirement. Ask your students: what would happen if we removed this feature? If the answer is nothing important, remove it.'",
-        "",
-        "Ask: 'Which of these four Agile principles do you think is most relevant to how CET students should approach their capstone projects? Defend your answer with one specific reason.'",
-      ].join("\n"),
-      "source": "Module14924 Enhanced v2"
-    },
-    {
-      "slideNumber": 41,
-      "title": "2.5 Systems Development Approaches (cont.)",
-      "learnerView": {
-        "subtitle": "Session 2 | Agile Principles 11–12 and DevOps CI/CD",
-        "onScreenContent": [
-          "Agile Principle 11: The best architectures, requirements, and designs emerge from self-organising teams — not from top-down mandates.",
-          "Agile Principle 12: At regular intervals, the team reflects on how to become more effective, then adjusts its behaviour accordingly.",
-          "CI — Continuous Integration: merge code frequently and run automated tests immediately. Every change triggers verification so integration errors are caught at the source.",
-          "CD — Continuous Deployment: keep software releasable at all times and automate the deployment pipeline so safe releases happen without manual gatekeeping delays."
-        ]
-      },
-      "facilitatorNotes": [
-        "Facilitator Notes",
-        "Slide 41 of 47",
-        "Title: 2.5 Systems Development Approaches (cont.) — Final Agile Principles + DevOps",
-        "",
-        "Facilitator notes:",
-        "Continued. Final Agile principles and DevOps CI/CD.",
-        "",
-        "Principle 12 — retrospectives, make it live: 'At the end of each Block in this training programme, we will run a retrospective. Three questions: What worked? What did not? What will we change for the next Block? That is Agile Principle 12 in practice. You are experiencing the methodology, not just studying it.'",
-        "",
-        "CI/CD for the CET context: 'For student capstone projects, CI/CD at full scale is advanced. But the underlying principle — always keep your code in a working, testable state; never let the build break — is directly applicable to any project. Teach your students to commit working code, not broken work-in-progress.'",
-        "",
-        "Git connection: 'Version control through Git is the practical implementation of CI for student projects. Every commit is a verifiable, testable state. The PoE evidence trail is built into the commit history. This is why Git is part of the capstone toolkit for this programme.'",
-        "",
-        "Transition: 'Two enterprise methodologies to complete the picture, then we connect all of today's analysis work to what it enables downstream.'",
-      ].join("\n"),
-      "source": "Module14924 Enhanced v2"
-    },
-    {
-      "slideNumber": 42,
       "title": "2.5 Systems Development Approaches (cont.)",
       "learnerView": {
         "subtitle": "Session 2 | Enterprise Methodologies and DevOps Monitoring",
@@ -1420,7 +1296,7 @@ const module14924Data = {
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 42 of 47",
+        "Slide 36 of 41",
         "Title: 2.5 Systems Development Approaches (cont.) — Enterprise Methodologies",
         "",
         "Facilitator notes:",
@@ -1437,7 +1313,7 @@ const module14924Data = {
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 43,
+      "slideNumber": 37,
       "title": "2.6 What Your Analysis Enables",
       "learnerView": {
         "subtitle": "Session 2 | Systems Analysis Techniques",
@@ -1451,7 +1327,7 @@ const module14924Data = {
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 43 of 47",
+        "Slide 37 of 41",
         "Title: 2.6 What Your Analysis Enables",
         "",
         "Facilitator notes:",
@@ -1470,14 +1346,14 @@ const module14924Data = {
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 44,
+      "slideNumber": 38,
       "title": "Knowledge Check 1 of 3",
       "learnerView": {
         "subtitle": "Session Quiz | Information Systems Analysis"
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 44 of 47",
+        "Slide 38 of 41",
         "Title: Knowledge Check 1 of 3",
         "",
         "Facilitator notes:",
@@ -1505,14 +1381,14 @@ const module14924Data = {
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 45,
+      "slideNumber": 39,
       "title": "Knowledge Check 2 of 3",
       "learnerView": {
         "subtitle": "Session Quiz | Information Systems Analysis"
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 45 of 47",
+        "Slide 39 of 41",
         "Title: Knowledge Check 2 of 3",
         "",
         "Facilitator notes:",
@@ -1542,14 +1418,14 @@ const module14924Data = {
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 46,
+      "slideNumber": 40,
       "title": "Knowledge Check 3 of 3",
       "learnerView": {
         "subtitle": "Session Quiz | Information Systems Analysis"
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 46 of 47",
+        "Slide 40 of 41",
         "Title: Knowledge Check 3 of 3",
         "",
         "Facilitator notes:",
@@ -1577,7 +1453,7 @@ const module14924Data = {
       "source": "Module14924 Enhanced v2"
     },
     {
-      "slideNumber": 47,
+      "slideNumber": 41,
       "title": "Session Wrap-Up",
       "learnerView": {
         "subtitle": "Key takeaways from today — Module 14924",
@@ -1592,7 +1468,7 @@ const module14924Data = {
       },
       "facilitatorNotes": [
         "Facilitator Notes",
-        "Slide 47 of 47",
+        "Slide 41 of 41",
         "Title: Session Wrap-Up",
         "",
         "Facilitator notes:",

@@ -56,6 +56,7 @@ interface Slide {
   subtitle?: string;
   bullets?: string[];
   diagram?: string;
+  cards?: string[];
   phaseCards?: string[];
   body?: string;
   highlight?: string;
@@ -240,6 +241,7 @@ function toModule14924Slide(item: Module14924SlideListItem, quizIndexRef: { curr
   const bullets = item.learnerView.onScreenContent;
   const body = item.learnerView.body;
   const speakerNote = extractFacilitatorScript(item.facilitatorNotes);
+  const cards = item.learnerView.cards;
   const phaseCards = item.learnerView.phaseCards;
 
   if (item.slideNumber === 1) {
@@ -298,6 +300,7 @@ function toModule14924Slide(item: Module14924SlideListItem, quizIndexRef: { curr
     title: item.title,
     subtitle,
     bullets,
+    cards,
     body,
     phaseCards,
     speakerNote,
@@ -1533,6 +1536,9 @@ export function PresentationMode({
     if (s.phaseCards && s.phaseCards.length > 0) {
       lines.push(`Phase cards: ${s.phaseCards.join(" | ")}`);
     }
+    if (s.cards && s.cards.length > 0) {
+      lines.push(`Cards: ${s.cards.join(" | ")}`);
+    }
     if (s.highlight) lines.push(`Highlight: ${s.highlight}`);
     return lines.join("\n");
   };
@@ -2064,7 +2070,20 @@ export function PresentationMode({
                 </ul>
               )}
 
-              {slide.phaseCards && slide.phaseCards.length > 0 && (
+              {slide.cards && slide.cards.length > 0 && (
+                <div className="mb-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {slide.cards.map((card, i) => (
+                    <div
+                      key={`${card}-${i}`}
+                      className="rounded-xl border border-white/30 bg-white/10 px-4 py-4"
+                    >
+                      <p className="text-base md:text-lg font-semibold text-white">{card}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {!slide.cards && slide.phaseCards && slide.phaseCards.length > 0 && (
                 <div className="mb-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                   {slide.phaseCards.map((phase, i) => (
                     <div

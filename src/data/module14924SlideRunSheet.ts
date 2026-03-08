@@ -29,6 +29,9 @@ function buildLearnerView(s: (typeof slides)[number]): string[] {
   if (s.phaseCards?.length) {
     lines.push(`Phase cards: ${s.phaseCards.join(" | ")}`);
   }
+  if (s.cards?.length) {
+    lines.push(`Cards: ${s.cards.join(" | ")}`);
+  }
   if (s.highlight) lines.push(`Highlight: ${s.highlight}`);
   return lines;
 }
