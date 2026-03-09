@@ -57,6 +57,13 @@ export default function LearnerPortalPage() {
             </div>
             <Progress value={overallProgress} className="h-2" />
           </div>
+          <div className="flex items-center justify-start lg:justify-end">
+            <img
+              src="/logos/dsa-logo.png"
+              alt="The Data Science Academy"
+              className="h-12 w-auto object-contain"
+            />
+          </div>
         </div>
       </div>
 
