@@ -131,6 +131,7 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
   const avatarUrl = profileAvatarUrl || ((user?.user_metadata?.avatar_url as string | undefined) ?? "");
   const email = user?.email ?? "";
   const initials = getInitials(displayName, email);
+  const showLearnerHeaderLogo = role === "user" && location.pathname.startsWith("/learner");
 
   return (
     <div className="flex min-h-screen">
@@ -139,6 +140,13 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
         <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-sm border-b border-border px-6 py-4 md:px-8">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div>
+              {showLearnerHeaderLogo && (
+                <img
+                  src="/logos/dsa-logo.png"
+                  alt="The Data Science Academy"
+                  className="h-8 w-auto object-contain mb-1"
+                />
+              )}
               <h1 className="font-display text-xl font-bold text-foreground">{title}</h1>
               {subtitle && <p className="text-sm text-muted-foreground mt-0.5">{subtitle}</p>}
             </div>
