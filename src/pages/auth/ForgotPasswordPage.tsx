@@ -1,35 +1,33 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export default function LoginPage() {
-  const navigate = useNavigate();
+export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState(false);
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError(null);
+    setSubmitted(false);
     setLoading(true);
 
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const redirectTo = `${window.location.origin}/auth/reset-password`;
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim(), { redirectTo });
 
     setLoading(false);
 
-    if (signInError) {
-      setError(signInError.message);
+    if (resetError) {
+      setError(resetError.message);
       return;
     }
 
-    navigate("/", { replace: true });
+    setSubmitted(true);
   };
 
   return (
@@ -41,8 +39,8 @@ export default function LoginPage() {
       <div className="absolute inset-0 bg-background/55" />
 
       <div className="relative z-10 w-full max-w-md rounded-lg border border-border bg-card/95 backdrop-blur-sm p-6 shadow-lg">
-        <h1 className="font-display text-2xl font-bold text-foreground">CET Connect Student Portal</h1>
-        <p className="text-sm text-muted-foreground mt-1">Sign in to continue your learning journey.</p>
+        <h1 className="font-display text-2xl font-bold text-foreground">Forgot Password</h1>
+        <p className="text-sm text-muted-foreground mt-1">Enter your email and we’ll send you a reset link.</p>
 
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <div className="space-y-1.5">
@@ -51,40 +49,28 @@ export default function LoginPage() {
               id="email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(event) => setEmail(event.target.value)}
               required
               autoComplete="email"
             />
           </div>
 
-          <div className="space-y-1.5">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              autoComplete="current-password"
-            />
-            <div className="pt-1">
-              <Link to="/auth/forgot-password" className="text-xs text-primary hover:underline">
-                Forgot password?
-              </Link>
-            </div>
-          </div>
-
           {error && <p className="text-sm text-destructive">{error}</p>}
+          {submitted && (
+            <p className="text-sm text-muted-foreground">
+              If an account exists for this email, a password reset link has been sent.
+            </p>
+          )}
 
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Signing in..." : "Sign In"}
+          <Button type="submit" className="w-full" disabled={loading || !email.trim()}>
+            {loading ? "Sending..." : "Send Reset Link"}
           </Button>
         </form>
 
         <p className="mt-4 text-sm text-muted-foreground">
-          New learner?{" "}
-          <Link to="/auth/signup" className="text-primary hover:underline">
-            Create account
+          Back to{" "}
+          <Link to="/auth/login" className="text-primary hover:underline">
+            Sign in
           </Link>
         </p>
       </div>

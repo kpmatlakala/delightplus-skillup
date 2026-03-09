@@ -21,6 +21,8 @@ import LearnerPortalPage from "./pages/LearnerPortalPage";
 import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/auth/LoginPage";
 import SignupPage from "./pages/auth/SignupPage";
+import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import NotFound from "./pages/NotFound";
 import PresentationRemotePage from "./pages/PresentationRemotePage";
 import PresentationLaunchPage from "./pages/PresentationLaunchPage";
@@ -42,7 +44,10 @@ const App = () => (
             <Route element={<PublicOnlyRoute />}>
               <Route path="/auth/login" element={<LoginPage />} />
               <Route path="/auth/signup" element={<SignupPage />} />
+              <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
             </Route>
+
+            <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
 
             <Route element={<ProtectedRoute allowedRoles={["admin", "lecturer"]} />}>
               <Route path="/" element={<Index />} />
