@@ -32,6 +32,11 @@ import {
   module14924SlideList,
   type Module14924SlideListItem,
 } from "@/data/module14924Presentation";
+import {
+  module14920SpeakerNotes,
+  module14920SlideList,
+  type Module14920SlideListItem,
+} from "@/data/module14920Presentation";
 import { programmeBriefingSlides } from "@/data/programmeBriefing";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -315,6 +320,58 @@ function buildModule14924SlidesFromJson(): Slide[] {
     .map((item) => toModule14924Slide(item, quizIndexRef));
 }
 
+function toModule14920Slide(item: Module14920SlideListItem, quizIndexRef: { current: number }): Slide {
+  const lines = item.content
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const bulletLines = lines.filter((line) => line.startsWith("• ")).map((line) => line.replace(/^•\s*/, ""));
+  const nonBulletLines = lines.filter((line) => !line.startsWith("• "));
+  const subtitle = nonBulletLines[0];
+  const body = nonBulletLines.slice(1).join("\n") || undefined;
+
+  if (item.type === "qa" || /^Knowledge Check\b/i.test(item.title)) {
+    const quiz = PRESENTATION_QUIZZES["14920"]?.[quizIndexRef.current++];
+    if (quiz) {
+      return {
+        type: "quiz",
+        title: item.title,
+        subtitle: subtitle ?? "Session Quiz · Participate in Groups and/or Teams",
+        quizQuestion: quiz.question,
+        quizOptions: quiz.options,
+        quizCorrect: quiz.correct,
+        quizExplanation: quiz.explanation,
+        speakerNote: item.notes,
+      };
+    }
+  }
+
+  const mappedType: SlideType =
+    item.type === "title"
+      ? "title"
+      : item.type === "summary"
+      ? "summary"
+      : item.type === "activity"
+      ? "activity"
+      : "content";
+
+  return {
+    type: mappedType,
+    title: item.title,
+    subtitle,
+    body,
+    bullets: bulletLines.length ? bulletLines : undefined,
+    cards: item.cards,
+    phaseCards: item.phaseCards,
+    speakerNote: item.notes,
+  };
+}
+
+function buildModule14920SlidesFromJson(): Slide[] {
+  const quizIndexRef = { current: 0 };
+  return module14920SlideList.map((item) => toModule14920Slide(item, quizIndexRef));
+}
+
 /* ─────────────────────────────────────────────────────────────────────────────
    Per-module facilitator speaker notes
    These are the talking-point scripts displayed on the mobile remote.
@@ -330,39 +387,7 @@ interface ModuleSpeakerNotes {
 const MODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes> = {
   /* ── Block 1 ── */
   "14924": module14924SpeakerNotes,
-
-  "14920": {
-    title:
-      "Welcome to Participate in Groups/Teams — the human side of IT.\n\n" +
-      "Before we start: attendance register, then ask — 'Raise your hand if you've ever worked in a team that wasn't functioning well.' Nearly every hand goes up.\n\n" +
-      "Follow-up: 'Without naming anyone, what was the root cause of the problem?' Common answers: unclear roles, one person doing everything, conflict. Write these on the board — we'll revisit them at the end to see how today's content addresses them.",
-    objectives:
-      "Walk through all 4 outcomes. Key point to emphasise:\n\n" +
-      "• This is a PRACTICAL unit — the Team Charter group task carries significant PoE marks. Take it seriously.\n" +
-      "• Outcome 3 (NGT) is for teams that need structured idea generation without loud personalities dominating — very common in IT meetings.\n\n" +
-      "Ask: 'Which of these outcomes is most relevant to your current work situation?' This personalises the learning.",
-    activityIndividual:
-      "Allow 8–10 minutes per activity.\n\n" +
-      "• Activity 3 (NGT suitability): Give a realistic scenario — e.g., 'Your team needs to prioritise 10 bug fixes but two senior developers keep dominating the discussion.' Ask: would NGT help? Walk through the 5 NGT steps before they answer.\n" +
-      "• Activity 5 (qualities of effective team member): Don't just list qualities — ask learners to rate themselves on each quality from 1–5. They don't share, but it builds self-awareness.\n" +
-      "• Activity 6 (strategies for collaboration): Push for specifics, not platitudes. 'Have regular meetings' → 'What TIME and FREQUENCY? What's the agenda format?'",
-    activityGroup:
-      "Team Charter task — allow 25 minutes, then structured presentations.\n\n" +
-      "Groups of 4. Each charter must include:\n" +
-      "1. Team purpose statement (one sentence)\n" +
-      "2. Assigned roles: Coordinator, Communicator, Analyst, Quality Checker\n" +
-      "3. Communication agreement: how and how often they'll update each other\n" +
-      "4. One team norm: what behaviour will NOT be tolerated\n\n" +
-      "Each group has 3 minutes to present. Class votes (thumbs) on which charter they'd most want to work under.\n\n" +
-      "Remind: this connects directly to SAQA 120379 (Block 3 — Work as a Project Team Member).",
-    summary:
-      "Round-robin verbal activity — each learner states ONE quality of an effective team member without repeating what was already said.\n\n" +
-      "Go back to the board: 'Look at the team problems you described at the start. How many does today's content give you a tool to address?'\n\n" +
-      "Remind learners:\n" +
-      "• Workbook must be completed before Block 1 assessment\n" +
-      "• Team Charter is a PoE artefact — keep it safe\n" +
-      "• Tomorrow: Describe Principles of Computer Programming (Day 3).",
-  },
+  "14920": module14920SpeakerNotes,
 
   "14918": {
     title:
@@ -1000,6 +1025,11 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
   if (flow.moduleId === "14924") {
     // Module 14924 is authored as a full deck in JSON; render directly from that source of truth.
     return buildModule14924SlidesFromJson();
+  }
+
+  if (flow.moduleId === "14920") {
+    // Module 14920 follows the same dedicated data-source pattern as 14924.
+    return buildModule14920SlidesFromJson();
   }
 
   const slides: Slide[] = [];
@@ -2070,6 +2100,18 @@ export function PresentationMode({
                 </ul>
               )}
 
+              {slide.diagram && (
+                <div className="mb-4 p-5 rounded-xl border border-white/30 bg-black/40 overflow-x-auto">
+                  <pre className="text-sm md:text-base text-white/95 leading-relaxed whitespace-pre font-mono">
+                    {slide.diagram}
+                  </pre>
+                </div>
+              )}
+
+              {slide.body && (
+                <p className="text-white/85 text-base md:text-lg lg:text-xl leading-relaxed mb-4">{slide.body}</p>
+              )}
+
               {slide.cards && slide.cards.length > 0 && (
                 <div className="mb-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                   {slide.cards.map((card, i) => (
@@ -2095,18 +2137,6 @@ export function PresentationMode({
                     </div>
                   ))}
                 </div>
-              )}
-
-              {slide.diagram && (
-                <div className="mb-4 p-5 rounded-xl border border-white/30 bg-black/40 overflow-x-auto">
-                  <pre className="text-sm md:text-base text-white/95 leading-relaxed whitespace-pre font-mono">
-                    {slide.diagram}
-                  </pre>
-                </div>
-              )}
-
-              {slide.body && (
-                <p className="text-white/85 text-base md:text-lg lg:text-xl leading-relaxed mb-4">{slide.body}</p>
               )}
 
               {slide.highlight && (
