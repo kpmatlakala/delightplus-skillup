@@ -848,8 +848,7 @@ export default function ModuleDetailPage() {
   </style>
 </head>
 <body>
-  <div class="hdr">
-    <div class="hdr-logos"><img src="/logos/lcx-logo.png" alt="LCX"/></div>
+  <div class="hdr">   
     <div class="hdr-text">
       <h1>Further Education and Training Certificate: IT Systems Development</h1>
       <p>SAQA ID: 78965 &nbsp;·&nbsp; NQF Level 4 &nbsp;·&nbsp; 165 Credits</p>
@@ -934,6 +933,7 @@ export default function ModuleDetailPage() {
   const visibleDownloads = isLearnerView ? learnerVisibleDownloads : downloads;
   const activeDoc = studyDocs.find((doc) => doc.file_name === activeDocName) ?? studyDocs[0] ?? null;
   const learnerGuideDoc = studyDocs.find((doc) => isLearnerGuideFile(doc.file_name)) ?? activeDoc;
+  const learnerGuideDownloadHref = learnerGuideDownloads[0]?.href ?? learnerGuideDoc?.download_href;
   const assessmentDoc = studyDocs.find((doc) => isAssessmentTaskLabel(getDisplayDocName(doc.file_name))) ?? null;
   const workbookDoc = studyDocs.find((doc) => isWorkbookLabel(getDisplayDocName(doc.file_name))) ?? null;
   const facilitatorDoc = studyDocs.find((doc) => isFacilitatorLabel(getDisplayDocName(doc.file_name))) ?? null;
@@ -1136,8 +1136,16 @@ export default function ModuleDetailPage() {
                           {/* ── intro / about ─ */}
                           <div className="border-b border-border bg-muted/30 px-5 py-4">
                             <div className="flex items-center justify-between gap-3 mb-3">
-                              <img src="/logos/lcx-logo.png" alt="LCX" className="h-16 w-auto object-contain shrink-0" />
                               <img src="/logos/dsa-logo.png" alt="DSA" className="h-16 w-auto object-contain shrink-0" />
+                              {learnerGuideDownloadHref && (
+                                <a
+                                  href={learnerGuideDownloadHref}
+                                  download
+                                  className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-2 text-xs text-primary hover:bg-secondary/30"
+                                >
+                                  <Download size={13} /> Download Learner Guide
+                                </a>
+                              )}
                             </div>
                             <p className="text-[10px] font-semibold tracking-widest uppercase text-muted-foreground mb-1">Learner Guide Introduction</p>
                             <h2 className="text-base font-display font-semibold text-foreground mb-2">{moduleLessonFlow!.introTitle}</h2>
