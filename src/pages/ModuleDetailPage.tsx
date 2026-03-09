@@ -1049,6 +1049,11 @@ export default function ModuleDetailPage() {
           <span className="flex items-center gap-1.5 font-medium text-foreground/70">Block {mod.block} · {mod.days}</span>
           <span className="flex items-center gap-1.5"><BookOpen size={13} className="text-accent" /> {mod.activities.length} Activities</span>
           <span className="flex items-center gap-1.5"><FileText size={13} className="text-accent" /> {visibleDownloads.length} Documents</span>
+          {learnerGuideDownloadHref && (
+            <a href={learnerGuideDownloadHref} download className="flex items-center gap-1.5 text-primary hover:underline">
+              <Download size={13} /> Download Guide
+            </a>
+          )}
         </div>
       </div>
 

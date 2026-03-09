@@ -98,7 +98,7 @@ export function useModuleProgress() {
 
       // Persist to Supabase (fire-and-forget; errors are silent to avoid
       // blocking the learner — the optimistic state is already correct)
-      await supabase.rpc("cet_upsert_module_progress", {
+      const { error } = await supabase.rpc("cet_upsert_module_progress", {
         p_unit_std_id: moduleId,
         p_guide_completed: patch.guide_completed ?? null,
         p_quiz_passed: patch.quiz_passed ?? null,
@@ -108,6 +108,21 @@ export function useModuleProgress() {
         p_assessment_submitted: patch.assessment_submitted ?? null,
         p_assessment_submitted_at: patch.assessment_submitted_at ?? null,
       });
+
+      // Backward-compatible fallback for environments still using the older
+      // RPC parameter contract from unified schema rollout.
+      if (error) {
+        const { error: fallbackError } = await supabase.rpc("cet_upsert_module_progress", {
+          p_module_unit_standard_id: moduleId,
+          p_guide_completed: patch.guide_completed ?? null,
+          p_quiz_completed: patch.quiz_passed ?? null,
+          p_assessment_submitted: patch.assessment_submitted ?? null,
+        });
+
+        if (fallbackError) {
+          console.warn("Unable to persist module progress:", fallbackError.message);
+        }
+      }
     },
     [user?.id, role]
   );
