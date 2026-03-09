@@ -87,6 +87,10 @@ export default function LoginPage() {
             Create account
           </Link>
         </p>
+
+        <div className="mt-4 flex justify-center">
+          <img src="/logos/dsa-logo.png" alt="The Data Science Academy" className="h-10 w-auto object-contain" />
+        </div>
       </div>
     </div>
   );

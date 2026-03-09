@@ -110,18 +110,19 @@ export default function AppSidebar() {
           ${collapsed ? "flex items-center justify-center py-5" : "px-5 py-5"}`}
       >
         {collapsed ? (
-          <span className="font-display text-lg font-bold text-sidebar-primary-foreground">
-            D<span className="text-sidebar-primary">S</span>
-          </span>
+          <img src="/logos/dsa-logo.png" alt="DSA" className="h-8 w-8 rounded-sm object-contain" />
         ) : (
-          <>
-            <h1 className="font-display text-lg font-bold text-sidebar-primary-foreground tracking-tight">
-              DSA<span className="text-sidebar-primary"> Tracker</span>
-            </h1>
-            <p className="text-xs text-sidebar-muted mt-0.5">
-              {role === "user" ? "Learner Portal" : "Course Management System"}
-            </p>
-          </>
+          <div className="flex items-center gap-3">
+            <img src="/logos/dsa-logo.png" alt="DSA" className="h-9 w-9 rounded-sm object-contain" />
+            <div>
+              <h1 className="font-display text-lg font-bold text-sidebar-primary-foreground tracking-tight">
+                DSA<span className="text-sidebar-primary"> Tracker</span>
+              </h1>
+              <p className="text-xs text-sidebar-muted mt-0.5">
+                {role === "user" ? "Learner Portal" : "Course Management System"}
+              </p>
+            </div>
+          </div>
         )}
       </div>
 
@@ -178,6 +179,14 @@ export default function AppSidebar() {
           <p className="text-xs text-sidebar-muted mt-0.5">
             {role === "user" ? "Learner Access" : "CET Venda · Block 1–3"}
           </p>
+          <a
+            href="https://thedatascienceacademy.co.za/"
+            target="_blank"
+            rel="noreferrer"
+            className="text-xs text-sidebar-muted mt-1 inline-block hover:text-sidebar-foreground"
+          >
+            thedatascienceacademy.co.za
+          </a>
         </div>
       )}
 
