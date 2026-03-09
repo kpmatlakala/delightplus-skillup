@@ -97,15 +97,14 @@ export default function BlockAssessmentPage() {
     const escaped = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     const html = `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>${meta?.label ?? "Block Assessment"}</title>
 <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;font-size:11.5px;color:#111;padding:40px 48px}
-.hdr{background:#111;color:#fff;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.hdr-logos img{height:64px;width:auto;object-fit:contain;filter:brightness(0) invert(1)}
+.hdr{background:#111;color:#fff;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:16px}
+.hdr-brand img{height:76px;width:auto;object-fit:contain;filter:brightness(0) invert(1)}
 .hdr-text{flex:1;text-align:center}.hdr-text h1{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
 .hdr-text p{font-size:10px;margin-top:3px;opacity:.8}pre{white-space:pre-wrap;word-break:break-word;line-height:1.75;font-family:Arial,sans-serif;font-size:11.5px}
 .actions{display:flex;gap:10px;margin-bottom:20px}button{padding:7px 20px;background:#111;color:#fff;border:none;cursor:pointer;font-size:11px;border-radius:4px}
 @media print{.actions{display:none!important}body{padding:20px}}</style></head><body>
-<div class="hdr"><div class="hdr-logos"><img src="/logos/lcx-logo.png" alt="LCX"/></div>
-<div class="hdr-text"><h1>Further Education and Training Certificate: IT Systems Development</h1><p>SAQA ID: 78965 &nbsp;·&nbsp; NQF Level 4 &nbsp;·&nbsp; 165 Credits</p></div>
-<div class="hdr-logos"><img src="/logos/dsa-logo.png" alt="DSA"/></div></div>
+<div class="hdr"><div class="hdr-brand"><img src="/logos/dsa-logo.png" alt="DSA"/></div>
+<div class="hdr-text"><h1>Further Education and Training Certificate: IT Systems Development</h1><p>SAQA ID: 78965 &nbsp;·&nbsp; NQF Level 4 &nbsp;·&nbsp; 165 Credits</p></div></div>
 <div class="actions"><button onclick="window.print()">🖨&nbsp; Print / Save as PDF</button><button onclick="window.close()">✕&nbsp; Close</button></div>
 <pre>${escaped}</pre></body></html>`;
     const win = window.open("", "_blank", "width=900,height=700,scrollbars=yes");
