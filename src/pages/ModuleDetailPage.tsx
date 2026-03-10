@@ -69,7 +69,7 @@ function isLearnerGuideFile(fileName: string) {
 
 function getDocCategory(label: string) {
   const normalized = label.toLowerCase();
-  if (normalized.includes("learner guide")) return "Learner Guide";
+  if (normalized.includes("learner guide") || normalized.includes("leaner guide")) return "Learner Guide";
   if (normalized.includes("learner workbook")) return "Workbook";
   if (normalized.includes("assessment") || normalized.includes("summative")) return "Assessment";
   if (normalized.includes("facilitator")) return "Facilitator Guide";
@@ -77,7 +77,8 @@ function getDocCategory(label: string) {
 }
 
 function isLearnerGuideLabel(label: string) {
-  return label.toLowerCase().includes("learner guide");
+  const normalized = label.toLowerCase();
+  return normalized.includes("learner guide") || normalized.includes("leaner guide");
 }
 
 function isAssessmentTaskLabel(label: string) {
@@ -932,7 +933,7 @@ export default function ModuleDetailPage() {
   const backLabel = isLearnerView ? "Back to Learner Portal" : "Back to Modules";
   const visibleDownloads = isLearnerView ? learnerVisibleDownloads : downloads;
   const activeDoc = studyDocs.find((doc) => doc.file_name === activeDocName) ?? studyDocs[0] ?? null;
-  const learnerGuideDoc = studyDocs.find((doc) => isLearnerGuideFile(doc.file_name)) ?? activeDoc;
+  const learnerGuideDoc = studyDocs.find((doc) => isLearnerGuideFile(doc.file_name)) ?? null;
   const learnerGuideDownloadHref = learnerGuideDownloads[0]?.href ?? learnerGuideDoc?.download_href;
   const assessmentDoc = studyDocs.find((doc) => isAssessmentTaskLabel(getDisplayDocName(doc.file_name))) ?? null;
   const workbookDoc = studyDocs.find((doc) => isWorkbookLabel(getDisplayDocName(doc.file_name))) ?? null;
