@@ -41,6 +41,10 @@ import {
   module14918SlideList,
   type Module14918SlideListItem,
 } from "@/data/module14918Presentation";
+import {
+  module14927SlideList,
+  type Module14927SlideListItem,
+} from "@/data/module14927Presentation";
 import { programmeBriefingSlides } from "@/data/programmeBriefing";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -426,6 +430,58 @@ function toModule14918Slide(item: Module14918SlideListItem, quizIndexRef: { curr
 function buildModule14918SlidesFromJson(): Slide[] {
   const quizIndexRef = { current: 0 };
   return module14918SlideList.map((item) => toModule14918Slide(item, quizIndexRef));
+}
+
+function toModule14927Slide(item: Module14927SlideListItem, quizIndexRef: { current: number }): Slide {
+  const lines = item.content
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const bulletLines = lines.filter((line) => line.startsWith("• ")).map((line) => line.replace(/^•\s*/, ""));
+  const nonBulletLines = lines.filter((line) => !line.startsWith("• "));
+  const subtitle = nonBulletLines[0];
+  const body = nonBulletLines.slice(1).join("\n") || undefined;
+
+  if (item.type === "qa" || /^Knowledge Check\b/i.test(item.title)) {
+    const quiz = PRESENTATION_QUIZZES["14927"]?.[quizIndexRef.current++];
+    if (quiz) {
+      return {
+        type: "quiz",
+        title: item.title,
+        subtitle: subtitle ?? "Session Quiz · Apply Problem-Solving Strategies",
+        quizQuestion: quiz.question,
+        quizOptions: quiz.options,
+        quizCorrect: quiz.correct,
+        quizExplanation: quiz.explanation,
+        speakerNote: item.notes,
+      };
+    }
+  }
+
+  const mappedType: SlideType =
+    item.type === "title"
+      ? "title"
+      : item.type === "summary"
+      ? "summary"
+      : item.type === "activity"
+      ? "activity"
+      : "content";
+
+  return {
+    type: mappedType,
+    title: item.title,
+    subtitle,
+    body,
+    bullets: bulletLines.length ? bulletLines : undefined,
+    cards: item.cards,
+    phaseCards: item.phaseCards,
+    speakerNote: item.notes,
+  };
+}
+
+function buildModule14927SlidesFromJson(): Slide[] {
+  const quizIndexRef = { current: 0 };
+  return module14927SlideList.map((item) => toModule14927Slide(item, quizIndexRef));
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -1091,6 +1147,11 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
   if (flow.moduleId === "14918") {
     // Module 14918 now follows the same dedicated data-source pattern.
     return buildModule14918SlidesFromJson();
+  }
+
+  if (flow.moduleId === "14927") {
+    // Module 14927 follows the dedicated editable data-source pattern.
+    return buildModule14927SlidesFromJson();
   }
 
   const slides: Slide[] = [];
