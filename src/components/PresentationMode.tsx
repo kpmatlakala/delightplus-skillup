@@ -69,6 +69,8 @@ interface Slide {
   subtitle?: string;
   bullets?: string[];
   diagram?: string;
+  imageUrl?: string;
+  imageAlt?: string;
   cards?: string[];
   phaseCards?: string[];
   body?: string;
@@ -369,6 +371,8 @@ function toModule14920Slide(item: Module14920SlideListItem, quizIndexRef: { curr
     subtitle,
     body,
     bullets: bulletLines.length ? bulletLines : undefined,
+    imageUrl: item.imageUrl,
+    imageAlt: item.imageAlt,
     cards: item.cards,
     phaseCards: item.phaseCards,
     speakerNote: item.notes,
@@ -2227,6 +2231,17 @@ export function PresentationMode({
                   <pre className="text-sm md:text-base text-white/95 leading-relaxed whitespace-pre font-mono">
                     {slide.diagram}
                   </pre>
+                </div>
+              )}
+
+              {slide.imageUrl && (
+                <div className="mb-4 rounded-xl border border-white/30 bg-black/40 p-2">
+                  <img
+                    src={slide.imageUrl}
+                    alt={slide.imageAlt ?? slide.title}
+                    className="w-full max-h-[460px] object-contain rounded-lg"
+                    loading="lazy"
+                  />
                 </div>
               )}
 

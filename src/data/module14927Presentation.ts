@@ -7,6 +7,8 @@ type Module14927LearnerView = {
   onScreenContent?: string[];
   phaseCards?: string[];
   cards?: string[];
+  imageUrl?: string;
+  imageAlt?: string;
 };
 
 type Module14927RawSlide = {
@@ -27,6 +29,8 @@ export type Module14927SlideListItem = {
   duration: number;
   phaseCards?: string[];
   cards?: string[];
+  imageUrl?: string;
+  imageAlt?: string;
   quiz?: {
     question: string;
     options: string[];
@@ -78,6 +82,8 @@ function toModule14927Slide(
     duration: 5,
     phaseCards: raw.learnerView?.phaseCards,
     cards: raw.learnerView?.cards,
+    imageUrl: raw.learnerView?.imageUrl,
+    imageAlt: raw.learnerView?.imageAlt,
     ...(quizForSlide ? { quiz: quizForSlide } : {}),
   };
 }
