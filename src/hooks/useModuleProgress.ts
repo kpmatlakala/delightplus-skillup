@@ -98,7 +98,7 @@ export function useModuleProgress() {
 
       // Persist to Supabase (fire-and-forget; errors are silent to avoid
       // blocking the learner — the optimistic state is already correct)
-      const { error } = await supabase.rpc("cet_upsert_module_progress", {
+      const { error } = await (supabase as any).rpc("cet_upsert_module_progress", {
         p_unit_std_id: moduleId,
         p_guide_completed: patch.guide_completed ?? null,
         p_quiz_passed: patch.quiz_passed ?? null,
