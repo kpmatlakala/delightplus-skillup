@@ -119,7 +119,7 @@ export default function AppSidebar() {
                 DSA<span className="text-sidebar-primary"> Tracker</span>
               </h1>
               <p className="text-xs text-sidebar-muted mt-0.5">
-                {role === "user" ? "Learner Portal" : "Course Management System"}
+                {role === "learner" ? "Learner Portal" : "Course Management System"}
               </p>
             </div>
           </div>
