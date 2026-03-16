@@ -560,7 +560,7 @@ interface ModuleSpeakerNotes {
   summary: string;
 }
 
-const MODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes> = {
+const MODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes | Record<string, string>> = {
   /* ── Block 1 ── */
   "14924": module14924SpeakerNotes,
   "14920": module14920SpeakerNotes,

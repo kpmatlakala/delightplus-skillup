@@ -115,7 +115,7 @@ export function useModuleFlow(moduleId: string | undefined): UseModuleFlowResult
     const errors: string[] = [];
 
     for (const [id, flowData] of entries) {
-      const { error } = await supabase.rpc("cet_upsert_module_flow", {
+      const { error } = await (supabase as any).rpc("cet_upsert_module_flow", {
         p_unit_std_id: id,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         p_flow: flowData as any,

@@ -112,7 +112,7 @@ export function useModuleProgress() {
       // Backward-compatible fallback for environments still using the older
       // RPC parameter contract from unified schema rollout.
       if (error) {
-        const { error: fallbackError } = await supabase.rpc("cet_upsert_module_progress", {
+        const { error: fallbackError } = await (supabase as any).rpc("cet_upsert_module_progress", {
           p_module_unit_standard_id: moduleId,
           p_guide_completed: patch.guide_completed ?? null,
           p_quiz_completed: patch.quiz_passed ?? null,
