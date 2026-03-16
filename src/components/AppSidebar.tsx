@@ -59,7 +59,7 @@ export default function AppSidebar() {
   const [mobileOpen, setMobileOpen]       = useState(false);
   const [collapsed, setCollapsed]         = useState(false);
 
-  const items    = role === "user" ? learnerNavItems : navItems;
+  const items    = role === "learner" ? learnerNavItems : navItems;
   const isActive = (href: string) => location.pathname === href;
 
   const toggleGroup = (label: string) =>
@@ -119,7 +119,7 @@ export default function AppSidebar() {
                 DSA<span className="text-sidebar-primary"> Tracker</span>
               </h1>
               <p className="text-xs text-sidebar-muted mt-0.5">
-                {role === "user" ? "Learner Portal" : "Course Management System"}
+                {role === "learner" ? "Learner Portal" : "Course Management System"}
               </p>
             </div>
           </div>
@@ -177,7 +177,7 @@ export default function AppSidebar() {
         <div className="px-5 py-3 border-t border-sidebar-border">
           <p className="text-xs text-sidebar-muted">SAQA 78965 · NQF Level 4</p>
           <p className="text-xs text-sidebar-muted mt-0.5">
-            {role === "user" ? "Learner Access" : "CET Venda · Block 1–3"}
+            {role === "learner" ? "Learner Access" : "CET Venda · Block 1–3"}
           </p>
           <a
             href="https://thedatascienceacademy.co.za/"

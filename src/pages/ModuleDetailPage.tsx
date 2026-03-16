@@ -778,7 +778,7 @@ export default function ModuleDetailPage() {
           selectedFiles.map(async (file) => {
             const extractedFilePath = file.file_name?.trim().length
               ? file.file_name
-              : `${file.source_path.replaceAll("/", "__")}.json`;
+              : `${file.source_path.split("/").join("__")}.json`;
             const fileResponse = await fetch(`/docs/SAQA_78965_CET_Training/_extracted/${encodePathSegments(extractedFilePath)}`);
             if (!fileResponse.ok) return null;
             const payload = (await fileResponse.json()) as ExtractedDoc;
@@ -1734,11 +1734,11 @@ export default function ModuleDetailPage() {
         <PresentationMode
           module={mod}
           flow={moduleLessonFlow}
-          isAdmin={role === "admin" || role === "moderator"}
+          isAdmin={role === "admin" || role === "lecturer"}
           onClose={() => setIsPresenting(false)}
           nextUnitId={nextModule?.id}
           nextUnitTitle={nextModule?.title}
-          routePrefix={role === "user" ? "/learner/modules" : "/modules"}
+          routePrefix={role === "learner" ? "/learner/modules" : "/modules"}
         />
       )}
     </AppLayout>

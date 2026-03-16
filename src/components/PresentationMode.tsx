@@ -375,8 +375,8 @@ function toModule14920Slide(item: Module14920SlideListItem, quizIndexRef: { curr
     subtitle,
     body,
     bullets: bulletLines.length ? bulletLines : undefined,
-    imageUrl: item.imageUrl,
-    imageAlt: item.imageAlt,
+    imageUrl: (item as Record<string, unknown>).imageUrl as string | undefined,
+    imageAlt: (item as Record<string, unknown>).imageAlt as string | undefined,
     cards: item.cards,
     phaseCards: item.phaseCards,
     speakerNote: item.notes,
@@ -560,7 +560,7 @@ interface ModuleSpeakerNotes {
   summary: string;
 }
 
-const MODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes> = {
+const MODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes | Record<string, string>> = {
   /* ── Block 1 ── */
   "14924": module14924SpeakerNotes,
   "14920": module14920SpeakerNotes,

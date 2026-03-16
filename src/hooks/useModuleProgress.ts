@@ -34,11 +34,11 @@ export function useModuleProgress() {
   const fetchAllProgress = useCallback(async () => {
     if (!user?.id || role !== "learner") return;
     setLoading(true);
-    const { data, error } = await supabase.rpc("cet_get_all_module_progress");
+    const { data, error } = await (supabase as any).rpc("cet_get_all_module_progress");
     setLoading(false);
     if (error || !data) return;
     const map: ProgressMap = {};
-    for (const row of data) {
+    for (const row of (data as ModuleProgressRow[])) {
       map[row.module_unit_standard_id] = row as ModuleProgressRow;
     }
     setProgressMap(map);
@@ -98,7 +98,7 @@ export function useModuleProgress() {
 
       // Persist to Supabase (fire-and-forget; errors are silent to avoid
       // blocking the learner — the optimistic state is already correct)
-      const { error } = await supabase.rpc("cet_upsert_module_progress", {
+      const { error } = await (supabase as any).rpc("cet_upsert_module_progress", {
         p_unit_std_id: moduleId,
         p_guide_completed: patch.guide_completed ?? null,
         p_quiz_passed: patch.quiz_passed ?? null,
@@ -112,7 +112,7 @@ export function useModuleProgress() {
       // Backward-compatible fallback for environments still using the older
       // RPC parameter contract from unified schema rollout.
       if (error) {
-        const { error: fallbackError } = await supabase.rpc("cet_upsert_module_progress", {
+        const { error: fallbackError } = await (supabase as any).rpc("cet_upsert_module_progress", {
           p_module_unit_standard_id: moduleId,
           p_guide_completed: patch.guide_completed ?? null,
           p_quiz_completed: patch.quiz_passed ?? null,
