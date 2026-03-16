@@ -86,7 +86,7 @@ export function useModuleFlow(moduleId: string | undefined): UseModuleFlowResult
       id: string,
       data: ModuleLessonFlow
     ): Promise<{ error: string | null }> => {
-      const { error } = await supabase.rpc("cet_upsert_module_flow", {
+      const { error } = await (supabase as any).rpc("cet_upsert_module_flow", {
         p_unit_std_id: id,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         p_flow: data as any,
