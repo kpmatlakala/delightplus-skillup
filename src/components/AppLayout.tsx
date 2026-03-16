@@ -131,7 +131,7 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
   const avatarUrl = profileAvatarUrl || ((user?.user_metadata?.avatar_url as string | undefined) ?? "");
   const email = user?.email ?? "";
   const initials = getInitials(displayName, email);
-  const showLearnerHeaderLogo = role === "user" && location.pathname.startsWith("/learner");
+  const showLearnerHeaderLogo = role === "learner" && location.pathname.startsWith("/learner");
 
   return (
     <div className="flex min-h-screen">

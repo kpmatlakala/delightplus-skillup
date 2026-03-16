@@ -778,7 +778,7 @@ export default function ModuleDetailPage() {
           selectedFiles.map(async (file) => {
             const extractedFilePath = file.file_name?.trim().length
               ? file.file_name
-              : `${file.source_path.replaceAll("/", "__")}.json`;
+              : `${file.source_path.split("/").join("__")}.json`;
             const fileResponse = await fetch(`/docs/SAQA_78965_CET_Training/_extracted/${encodePathSegments(extractedFilePath)}`);
             if (!fileResponse.ok) return null;
             const payload = (await fileResponse.json()) as ExtractedDoc;
