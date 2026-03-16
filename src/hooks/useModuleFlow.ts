@@ -68,9 +68,9 @@ export function useModuleFlow(moduleId: string | undefined): UseModuleFlowResult
     loadedFor.current = moduleId;
 
     setLoading(true);
-    supabase
+    (supabase as any)
       .rpc("cet_get_module_flow", { p_unit_std_id: moduleId })
-      .then(({ data, error }) => {
+      .then(({ data, error }: { data: unknown; error: { message: string } | null }) => {
         setLoading(false);
         if (error || data === null || data === undefined) return; // keep static
         if (isValidFlow(data)) {
