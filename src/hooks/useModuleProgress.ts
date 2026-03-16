@@ -34,11 +34,11 @@ export function useModuleProgress() {
   const fetchAllProgress = useCallback(async () => {
     if (!user?.id || role !== "learner") return;
     setLoading(true);
-    const { data, error } = await supabase.rpc("cet_get_all_module_progress");
+    const { data, error } = await (supabase as any).rpc("cet_get_all_module_progress");
     setLoading(false);
     if (error || !data) return;
     const map: ProgressMap = {};
-    for (const row of data) {
+    for (const row of (data as ModuleProgressRow[])) {
       map[row.module_unit_standard_id] = row as ModuleProgressRow;
     }
     setProgressMap(map);
