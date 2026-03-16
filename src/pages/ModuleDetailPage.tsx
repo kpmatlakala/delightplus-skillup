@@ -1734,11 +1734,11 @@ export default function ModuleDetailPage() {
         <PresentationMode
           module={mod}
           flow={moduleLessonFlow}
-          isAdmin={role === "admin" || role === "moderator"}
+          isAdmin={role === "admin" || role === "lecturer"}
           onClose={() => setIsPresenting(false)}
           nextUnitId={nextModule?.id}
           nextUnitTitle={nextModule?.title}
-          routePrefix={role === "user" ? "/learner/modules" : "/modules"}
+          routePrefix={role === "learner" ? "/learner/modules" : "/modules"}
         />
       )}
     </AppLayout>
