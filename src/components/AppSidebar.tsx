@@ -59,7 +59,7 @@ export default function AppSidebar() {
   const [mobileOpen, setMobileOpen]       = useState(false);
   const [collapsed, setCollapsed]         = useState(false);
 
-  const items    = role === "user" ? learnerNavItems : navItems;
+  const items    = role === "learner" ? learnerNavItems : navItems;
   const isActive = (href: string) => location.pathname === href;
 
   const toggleGroup = (label: string) =>
