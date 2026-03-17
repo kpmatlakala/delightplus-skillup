@@ -147,6 +147,12 @@ interface Props {
   onAnswerChange: (idx: number, value: string) => void;
   downloadHref?: string;
   learnerName: string;
+  profile?: {
+    id_number?: string;
+    phone?: string;
+    department?: string;
+    school?: string;
+  };
   onRequestSubmit: (payload: AssessmentPayload) => void;
   isSubmitting?: boolean;
   submitError?: string;
@@ -161,6 +167,7 @@ export function AssessmentForm({
   onAnswerChange,
   downloadHref,
   learnerName,
+  profile,
   onRequestSubmit,
   isSubmitting,
   submitError,
@@ -175,10 +182,12 @@ export function AssessmentForm({
   /* Learner info fields (cover page) */
   const [info, setInfo] = useState({
     name: learnerName ?? "",
-    idNumber: "",
-    contactNumber: "",
+    idNumber: profile?.id_number ?? "",
+    contactNumber: profile?.phone ?? "",
     date: new Date().toLocaleDateString("en-ZA"),
     venue: "",
+    department: profile?.department ?? "",
+    school: profile?.school ?? "",
   });
   const setField = (key: keyof typeof info) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setInfo((p) => ({ ...p, [key]: e.target.value }));
@@ -265,6 +274,8 @@ export function AssessmentForm({
             {[
               { label: "Full Name & Surname", key: "name" as const, full: true },
               { label: "ID Number", key: "idNumber" as const },
+              { label: "Department", key: "department" as const },
+              { label: "School/Institution", key: "school" as const },
               { label: "Contact Telephone No.", key: "contactNumber" as const },
               { label: "Date of Assessment", key: "date" as const },
               { label: "Venue", key: "venue" as const },

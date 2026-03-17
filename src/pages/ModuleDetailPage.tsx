@@ -10,6 +10,7 @@ import { useModuleFlow } from "@/hooks/useModuleFlow";
 import { useAuth } from "@/hooks/useAuth";
 import { useModuleProgress } from "@/hooks/useModuleProgress";
 import { supabase } from "@/integrations/supabase/client";
+import { useProfile } from "@/hooks/useProfile";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
@@ -617,6 +618,7 @@ function hasDocForCategory(downloads: Array<{ label: string; href: string }>, ca
 export default function ModuleDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { role, user } = useAuth();
+  const { profile } = useProfile();
   const {
     progressMap,
     markGuideCompleted,
@@ -1609,11 +1611,19 @@ export default function ModuleDetailPage() {
                             onAnswerChange={(idx, val) => setOnlineAnswers((prev) => ({ ...prev, [idx]: val }))}
                             downloadHref={assessmentDownloadHref}
                             learnerName={
+                              profile?.display_name ??
+                              profile?.username ??
                               user?.user_metadata?.display_name ??
                               user?.user_metadata?.full_name ??
                               user?.email ??
                               ""
                             }
+                            profile={profile ? {
+                              id_number: profile.id_number ?? undefined,
+                              phone: profile.phone ?? undefined,
+                              department: profile.department ?? undefined,
+                              school: profile.school ?? undefined,
+                            } : undefined}
                             onRequestSubmit={(payload: AssessmentPayload) => {
                               setPendingSubmissionText(payload.submissionText);
                               setShowSubmitConfirm(true);

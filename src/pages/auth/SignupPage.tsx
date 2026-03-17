@@ -8,13 +8,24 @@ import { Label } from "@/components/ui/label";
 export default function SignupPage() {
   const [fullName, setFullName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [idNumber, setIdNumber] = useState("");
+  const [department, setDepartment] = useState("");
+  const [school, setSchool] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const ensurePublicUserRow = async (userId: string, displayName: string, userEmail: string) => {
+  const ensurePublicUserRow = async (
+    userId: string,
+    displayName: string,
+    userEmail: string,
+    phone: string,
+    idNumber: string,
+    department: string,
+    school: string
+  ) => {
     const db = supabase as unknown as {
       from: (table: string) => {
         upsert: (payload: Record<string, unknown>, options?: { onConflict?: string }) => Promise<{ error: { message: string } | null }>;
@@ -30,6 +41,10 @@ export default function SignupPage() {
         username,
         display_name: displayName,
         role: "user",
+        phone: phone,
+        id_number: idNumber,
+        department: department,
+        school: school,
       },
       { onConflict: "id" }
     );
@@ -52,6 +67,9 @@ export default function SignupPage() {
         data: {
           full_name: fullName,
           phone_number: phoneNumber,
+          id_number: idNumber,
+          department: department,
+          school: school,
         },
       },
     });
@@ -63,13 +81,24 @@ export default function SignupPage() {
     }
 
     if (data.user) {
-      await ensurePublicUserRow(data.user.id, fullName, email);
+      await ensurePublicUserRow(
+        data.user.id,
+        fullName,
+        email,
+        phoneNumber,
+        idNumber,
+        department,
+        school
+      );
     }
 
     setLoading(false);
     setSuccessMessage("Account created. If email confirmation is enabled, confirm your email before login.");
     setFullName("");
     setPhoneNumber("");
+    setIdNumber("");
+    setDepartment("");
+    setSchool("");
     setEmail("");
     setPassword("");
   };
@@ -79,6 +108,7 @@ export default function SignupPage() {
       <div className="w-full max-w-md rounded-lg border border-border bg-card p-6">
         <h1 className="font-display text-2xl font-bold text-foreground">Create Learner Account</h1>
         <p className="text-sm text-muted-foreground mt-1">Learners can sign up to track progress and submit assessments.</p>
+
 
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <div className="space-y-1.5">
@@ -112,6 +142,36 @@ export default function SignupPage() {
               onChange={(e) => setPhoneNumber(e.target.value)}
               required
               autoComplete="tel"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="idNumber">ID Number</Label>
+            <Input
+              id="idNumber"
+              value={idNumber}
+              onChange={(e) => setIdNumber(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="department">Department</Label>
+            <Input
+              id="department"
+              value={department}
+              onChange={(e) => setDepartment(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="school">School/Institution</Label>
+            <Input
+              id="school"
+              value={school}
+              onChange={(e) => setSchool(e.target.value)}
+              required
             />
           </div>
 
