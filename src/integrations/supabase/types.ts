@@ -14,7 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      users: {
+        Row: {
+          app_metadata: Json
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          location: string | null
+          reputation: number
+          role: string
+          updated_at: string
+          username: string | null
+          website: string | null
+        }
+        Insert: {
+          app_metadata?: Json
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id: string
+          location?: string | null
+          reputation?: number
+          role?: string
+          updated_at?: string
+          username?: string | null
+          website?: string | null
+        }
+        Update: {
+          app_metadata?: Json
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          location?: string | null
+          reputation?: number
+          role?: string
+          updated_at?: string
+          username?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
