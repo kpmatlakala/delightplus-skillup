@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Link, useLocation } from "react-router-dom";
 import AppSidebar from "./AppSidebar";
 import { Button } from "@/components/ui/button";
@@ -36,27 +37,23 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
   const location = useLocation();
   const [profileDisplayName, setProfileDisplayName] = useState("");
   const [profileAvatarUrl, setProfileAvatarUrl] = useState("");
-  // Announcements count (learner-only — hook no-ops for other roles via its internal guard)
   const { items: announcements } = useAnnouncements();
-  // Announcement count — learners see public items; admin sees all (incl. Admin Only)
   const announcementCount = role === "learner"
     ? announcements.filter((a) => a.audience !== "Admin Only").length
     : announcements.length;
-  // Unread messages — live from DB
   const unreadMessages = useUnreadCount(user?.id ?? null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const loadProfileSummary = async () => {
       const rpc = supabase as unknown as {
         rpc: (fn: string, params?: Record<string, unknown>) => Promise<{ data: Array<{ display_name: string | null; avatar_url: string | null }> | null; error: { message: string } | null }>;
       };
-
       const { data } = await rpc.rpc("cet_get_my_profile_v2");
       const row = (data ?? [])[0];
       setProfileDisplayName(row?.display_name ?? "");
       setProfileAvatarUrl(row?.avatar_url ?? "");
     };
-
     loadProfileSummary();
   }, [user?.id]);
 
@@ -69,15 +66,19 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
     <div className="flex min-h-screen">
       {role !== "learner" && <AppSidebar />}
       <main className="flex-1 min-w-0">
-        <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-sm border-b border-border px-6 py-4 md:px-8">
-          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <header
+          className={`sticky top-0 z-30 bg-background/80 backdrop-blur-sm border-b border-border ${
+            isMobile ? "px-3 py-2" : "px-6 py-4 md:px-8"
+          }`}
+        >
+          <div className={`flex ${isMobile ? "flex-row items-center justify-between gap-2" : "flex-col gap-3 md:flex-row md:items-center md:justify-between"}`}>
             <div>
-              <h1 className="font-display text-xl font-bold text-foreground">{title}</h1>
-              {subtitle && <p className="text-sm text-muted-foreground mt-0.5">{subtitle}</p>}
+              <h1 className={`font-display ${isMobile ? "text-lg" : "text-xl"} font-bold text-foreground`}>{title}</h1>
+              {!isMobile && subtitle && <p className="text-sm text-muted-foreground mt-0.5">{subtitle}</p>}
             </div>
 
-            <div className="flex items-center gap-2">
-              {role && <Badge variant="outline" className="uppercase text-xs">{role}</Badge>}
+            <div className={`flex items-center ${isMobile ? "gap-1" : "gap-2"}`}>
+              {role && <Badge variant="outline" className={`uppercase ${isMobile ? "text-[10px]" : "text-xs"}`}>{role}</Badge>}
 
               {/* Comms shortcuts — visible for all roles */}
               {role && (
@@ -85,16 +86,16 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
                   {/* Announcements / Bell */}
                   <Link
                     to="/communications"
-                    className={`relative p-2 rounded-lg transition-colors ${
+                    className={`relative rounded-lg transition-colors ${isMobile ? "p-1" : "p-2"} ${
                       location.pathname === "/communications" && !location.search.includes("messages")
                         ? "bg-primary/10 text-primary"
                         : "text-muted-foreground hover:bg-secondary/60 hover:text-foreground"
                     }`}
                     title="Updates & Announcements"
                   >
-                    <Bell size={16} />
+                    <Bell size={isMobile ? 14 : 16} />
                     {announcementCount > 0 && (
-                      <span className="absolute -top-0.5 -right-0.5 min-w-[14px] h-[14px] rounded-full bg-accent text-accent-foreground text-[9px] font-bold flex items-center justify-center px-0.5 leading-none">
+                      <span className={`absolute -top-0.5 -right-0.5 min-w-[12px] h-[12px] rounded-full bg-accent text-accent-foreground ${isMobile ? "text-[8px]" : "text-[9px]"} font-bold flex items-center justify-center px-0.5 leading-none`}>
                         {announcementCount > 9 ? "9+" : announcementCount}
                       </span>
                     )}
@@ -103,16 +104,16 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
                   {/* Messages / Mail */}
                   <Link
                     to="/communications?tab=messages"
-                    className={`relative p-2 rounded-lg transition-colors ${
+                    className={`relative rounded-lg transition-colors ${isMobile ? "p-1" : "p-2"} ${
                       location.pathname === "/communications" && location.search.includes("messages")
                         ? "bg-primary/10 text-primary"
                         : "text-muted-foreground hover:bg-secondary/60 hover:text-foreground"
                     }`}
                     title="Messages"
                   >
-                    <Mail size={16} />
+                    <Mail size={isMobile ? 14 : 16} />
                     {unreadMessages > 0 && (
-                      <span className="absolute -top-0.5 -right-0.5 min-w-[14px] h-[14px] rounded-full bg-destructive text-destructive-foreground text-[9px] font-bold flex items-center justify-center px-0.5 leading-none">
+                      <span className={`absolute -top-0.5 -right-0.5 min-w-[12px] h-[12px] rounded-full bg-destructive text-destructive-foreground ${isMobile ? "text-[8px]" : "text-[9px]"} font-bold flex items-center justify-center px-0.5 leading-none`}>
                         {unreadMessages > 9 ? "9+" : unreadMessages}
                       </span>
                     )}
@@ -122,16 +123,18 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="h-auto py-1.5 px-2">
-                    <div className="flex items-center gap-2">
-                      <Avatar className="h-8 w-8">
+                  <Button variant="outline" size="sm" className={`h-auto ${isMobile ? "py-1 px-1" : "py-1.5 px-2"}`}>
+                    <div className="flex items-center gap-1">
+                      <Avatar className={isMobile ? "h-6 w-6" : "h-8 w-8"}>
                         <AvatarImage src={avatarUrl} alt={displayName || email} />
                         <AvatarFallback>{initials}</AvatarFallback>
                       </Avatar>
-                      <div className="hidden sm:block text-left">
-                        <p className="text-xs font-medium leading-tight">{displayName || "My Profile"}</p>
-                        <p className="text-[11px] text-muted-foreground leading-tight">{email}</p>
-                      </div>
+                      {!isMobile && (
+                        <div className="hidden sm:block text-left">
+                          <p className="text-xs font-medium leading-tight">{displayName || "My Profile"}</p>
+                          <p className="text-[11px] text-muted-foreground leading-tight">{email}</p>
+                        </div>
+                      )}
                     </div>
                   </Button>
                 </DropdownMenuTrigger>
@@ -150,7 +153,7 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
             </div>
           </div>
         </header>
-        <div className="p-6 md:p-8 animate-fade-in">{children}</div>
+        <div className={isMobile ? "p-2 animate-fade-in" : "p-6 md:p-8 animate-fade-in"}>{children}</div>
       </main>
     </div>
   );
