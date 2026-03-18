@@ -633,10 +633,43 @@ as $$
 $$;
 
 create or replace function public.cet_get_my_profile_v2()
-returns table (id uuid, username text, display_name text, bio text, avatar_url text, location text, website text, role text, reputation integer, phone text, created_at timestamptz, updated_at timestamptz)
+returns table (
+  id uuid,
+  email text,
+  full_name text,
+  display_name text,
+  bio text,
+  avatar_url text,
+  location text,
+  website text,
+  role text,
+  reputation integer,
+  phone text,
+  id_number text,
+  department text,
+  school text,
+  created_at timestamptz,
+  updated_at timestamptz
+)
 language sql stable security definer set search_path = public, cet
 as $$
-  select u.id, u.username::text, u.display_name::text, u.bio, u.avatar_url, u.location::text, u.website::text, u.role::text, u.reputation, l.phone, u.created_at, u.updated_at
+  select
+    u.id,
+    u.email,
+    u.full_name,
+    u.display_name,
+    u.bio,
+    u.avatar_url,
+    u.location,
+    u.website,
+    u.role,
+    u.reputation,
+    l.phone,
+    l.id_number,
+    l.department,
+    l.school,
+    u.created_at,
+    u.updated_at
   from public.users u
   left join cet.learners l on l.user_id = u.id
   where u.id = auth.uid();
@@ -745,7 +778,7 @@ create or replace function public.cet_get_module_flow(p_unit_std_id text)
 returns jsonb
 language sql stable security definer set search_path = public, cet
 as $$
-  select flow from cet.module_content_flows where unit_standard_id = p_unit_std_id limit 1;
+  select flow from cet.module_content_flows where unit_standard_id = p_unit_std_id;
 $$;
 
 create or replace function public.cet_upsert_module_flow(p_unit_std_id text, p_flow jsonb)
@@ -761,7 +794,6 @@ begin
 end;
 $$;
 
--- ── 16. Public RPC bridge — announcements ───────────────────────────────────
 
 create or replace function public.cet_get_announcements()
 returns table (id uuid, title text, message text, audience text, pinned boolean, author text, created_at timestamptz)
