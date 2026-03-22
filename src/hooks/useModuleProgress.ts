@@ -167,7 +167,7 @@ export function useModuleProgress() {
   // ------------------------------------------------------------------
   // clearMyModuleProgress — dev/retest helper
   // Removes the calling user's progress row for a single module,
-  // both locally (optimistic) and in Supabase via cet_clear_my_module_progress.
+  // both locally (optimistic) and in Supabase via dsa_clear_my_module_progress.
   // ------------------------------------------------------------------
   const clearMyModuleProgress = useCallback(
     async (moduleId: string): Promise<void> => {
@@ -181,7 +181,7 @@ export function useModuleProgress() {
       });
 
       // Clear guide-position localStorage key so the module restarts from scratch
-      localStorage.removeItem(`cet_sess_${user.id}_${moduleId}`);
+      localStorage.removeItem(`dsa_sess_${user.id}_${moduleId}`);
 
       // Clear sessionStorage OTP gate so the assessment re-locks
       sessionStorage.removeItem(`assessment_otp_${moduleId}`);

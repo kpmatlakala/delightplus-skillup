@@ -885,7 +885,7 @@ export default function ModuleDetailPage() {
       setHighestSessionReached(999);
     } else {
       // Still working through the guide — restore the session tab and progress markers
-      const saved = localStorage.getItem(`cet_sess_${user?.id}_${id}`);
+      const saved = localStorage.getItem(`dsa_sess_${user?.id}_${id}`);
       if (saved) {
         try {
           const parsed = JSON.parse(saved) as { mode?: string; sessionIdx?: number; maxSessionIdx?: number };
@@ -911,7 +911,7 @@ export default function ModuleDetailPage() {
     if (!id || role !== "learner" || !user?.id || guideCompleted) return;
     if (workspaceView !== "guide") return;
     localStorage.setItem(
-      `cet_sess_${user.id}_${id}`,
+      `dsa_sess_${user.id}_${id}`,
       JSON.stringify({ mode: guideMode, sessionIdx: sessionIndex, maxSessionIdx: highestSessionReached })
     );
   }, [id, role, user?.id, guideMode, sessionIndex, guideCompleted, workspaceView]);
@@ -1341,7 +1341,7 @@ export default function ModuleDetailPage() {
                                   setWorkspaceView("quiz");
                                   setHighestSessionReached(999); // all sessions done
                                   // Guide complete — no need to persist navigation state
-                                  if (user?.id && id) localStorage.removeItem(`cet_sess_${user.id}_${id}`);
+                                  if (user?.id && id) localStorage.removeItem(`dsa_sess_${user.id}_${id}`);
                                 }
                               }}
                               className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-xs font-medium hover:bg-primary/90 transition-colors"

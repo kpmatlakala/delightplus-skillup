@@ -25,7 +25,7 @@ export interface LearnerAssessmentStatus {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Typed RPC helper (cet_* RPCs are not in generated types)
+// Typed RPC helper (dsa_* RPCs are not in generated types)
 // ─────────────────────────────────────────────────────────────────────────────
 
 const rpc = supabase as unknown as {
