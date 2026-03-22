@@ -99,7 +99,7 @@ export default function Dashboard() {
           <AccordionTrigger className="px-4 py-3 text-sm font-semibold hover:no-underline">
             <div className="flex items-center gap-2">
               <GraduationCap size={15} className="text-accent shrink-0" />
-              <span>FETC: IT Systems Development — Programme Introduction &amp; Facilitator Briefing</span>
+              <span>DSA Programme Introduction &amp; Facilitator Briefing</span>
             </div>
           </AccordionTrigger>
           <AccordionContent className="px-4 pb-5 space-y-6 text-sm">
