@@ -175,9 +175,9 @@ export default function AppSidebar() {
       {/* Footer — only shown when expanded */}
       {!collapsed && (
         <div className="px-5 py-3 border-t border-sidebar-border">
-          <p className="text-xs text-sidebar-muted">SAQA 78965 · NQF Level 4</p>
+          <p className="text-xs text-sidebar-muted">Data Science Academy</p>
           <p className="text-xs text-sidebar-muted mt-0.5">
-            {role === "learner" ? "Learner Access" : "CET Venda · Block 1–3"}
+            {role === "learner" ? "Learner Access" : "Multi-Program LMS · Block 1–3"}
           </p>
           <a
             href="https://thedatascienceacademy.co.za/"
