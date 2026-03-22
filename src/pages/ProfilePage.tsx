@@ -59,7 +59,7 @@ export default function ProfilePage() {
       setLoading(true);
       setError(null);
 
-      const { data, error: loadError } = await rpc.rpc("cet_get_my_profile_v2");
+      const { data, error: loadError } = await rpc.rpc("dsa_get_my_profile_v2");
 
       if (loadError) {
         setError(loadError.message);
@@ -94,7 +94,7 @@ export default function ProfilePage() {
     setError(null);
     setSuccess(null);
 
-    const { error: updateError } = await rpc.rpc("cet_update_my_profile_v2", {
+    const { error: updateError } = await rpc.rpc("dsa_update_my_profile_v2", {
       p_username: username,
       p_display_name: displayName,
       p_bio: bio,

@@ -64,7 +64,7 @@ export function useMessages(myUserId: string | null): UseMessagesReturn {
     if (!myUserId) return;
     setLoadingConvs(true);
     try {
-      const { data, error } = await rpc.rpc("cet_get_my_conversations");
+      const { data, error } = await rpc.rpc("dsa_get_my_conversations");
       if (!error && Array.isArray(data)) {
         setConversations(data as DbConversation[]);
       }
@@ -78,7 +78,7 @@ export function useMessages(myUserId: string | null): UseMessagesReturn {
   const fetchMessages = useCallback(async (conversationId: string) => {
     setLoadingMsgs(true);
     try {
-      const { data, error } = await rpc.rpc("cet_get_conversation_messages", {
+      const { data, error } = await rpc.rpc("dsa_get_conversation_messages", {
         p_conversation_id: conversationId,
       });
       if (!error && Array.isArray(data)) {
@@ -93,12 +93,12 @@ export function useMessages(myUserId: string | null): UseMessagesReturn {
 
   const sendMessage = useCallback(
     async (recipientUserId: string, body: string): Promise<string | null> => {
-      const { data, error } = await rpc.rpc("cet_send_message", {
+      const { data, error } = await rpc.rpc("dsa_send_message", {
         p_recipient_id: recipientUserId,
         p_body: body,
       });
       if (error) {
-        console.error("cet_send_message:", error.message);
+        console.error("dsa_send_message:", error.message);
         return null;
       }
       return data as string;
@@ -115,7 +115,7 @@ export function useMessages(myUserId: string | null): UseMessagesReturn {
         c.conversation_id === conversationId ? { ...c, unread_count: 0 } : c
       )
     );
-    await rpc.rpc("cet_mark_conversation_read", {
+    await rpc.rpc("dsa_mark_conversation_read", {
       p_conversation_id: conversationId,
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -124,7 +124,7 @@ export function useMessages(myUserId: string | null): UseMessagesReturn {
 
   useEffect(() => {
     if (!myUserId) return;
-    rpc.rpc("cet_get_facilitator_user_id").then(({ data }) => {
+    rpc.rpc("dsa_get_facilitator_user_id").then(({ data }) => {
       if (data) setFacilitatorUserId(data as string);
     });
   }, [myUserId]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -141,11 +141,11 @@ export function useMessages(myUserId: string | null): UseMessagesReturn {
     if (!myUserId) return;
 
     const channel = supabase
-      .channel("cet-messages-realtime")
+      .channel("dsa-messages-realtime")
       .on(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         "postgres_changes" as any,
-        { event: "INSERT", schema: "cet", table: "messages" },
+        { event: "INSERT", schema: "dsa", table: "messages" },
         () => {
           void fetchConversations();
           setNewMessageSignal((n) => n + 1);

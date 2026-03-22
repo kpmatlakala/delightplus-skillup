@@ -62,7 +62,7 @@ export default function AttendancePage() {
       setLoading(true);
       setError(null);
 
-      const modulesResponse = await rpc.rpc("cet_modules");
+      const modulesResponse = await rpc.rpc("dsa_modules");
 
       if (modulesResponse.error) {
         setError(modulesResponse.error.message);
@@ -76,7 +76,7 @@ export default function AttendancePage() {
         setSelectedModule(moduleRows[0].id);
       }
 
-      const enrollmentResponse = await rpc.rpc("cet_enrolled_learners");
+      const enrollmentResponse = await rpc.rpc("dsa_enrolled_learners");
 
       if (enrollmentResponse.error) {
         setError(enrollmentResponse.error.message);
@@ -96,7 +96,7 @@ export default function AttendancePage() {
   const ensureSession = async () => {
     if (!selectedModule) return null;
 
-    const created = await rpc.rpc("cet_get_or_create_attendance_session", {
+    const created = await rpc.rpc("dsa_get_or_create_attendance_session", {
       p_module_id: selectedModule,
       p_session_date: sessionDate,
       p_created_by: user?.id ?? null,
@@ -119,7 +119,7 @@ export default function AttendancePage() {
 
       if (!selectedModule) return;
 
-      const existing = await rpc.rpc("cet_get_or_create_attendance_session", {
+      const existing = await rpc.rpc("dsa_get_or_create_attendance_session", {
         p_module_id: selectedModule,
         p_session_date: sessionDate,
         p_created_by: user?.id ?? null,
@@ -136,7 +136,7 @@ export default function AttendancePage() {
 
       if (!existingSessionId) return;
 
-      const records = await rpc.rpc("cet_get_attendance_records", { p_session_id: existingSessionId });
+      const records = await rpc.rpc("dsa_get_attendance_records", { p_session_id: existingSessionId });
 
       if (records.error) {
         setError(records.error.message);
@@ -164,7 +164,7 @@ export default function AttendancePage() {
     }
 
     const now = new Date().toISOString();
-    const result = await rpc.rpc("cet_check_in", {
+    const result = await rpc.rpc("dsa_check_in", {
       p_session_id: effectiveSessionId,
       p_learner_id: learnerId,
       p_marked_by: user?.id ?? null,
@@ -194,7 +194,7 @@ export default function AttendancePage() {
     setError(null);
 
     const now = new Date().toISOString();
-    const result = await rpc.rpc("cet_check_out", {
+    const result = await rpc.rpc("dsa_check_out", {
       p_session_id: sessionId,
       p_learner_id: learnerId,
       p_marked_by: user?.id ?? null,

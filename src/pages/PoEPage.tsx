@@ -58,7 +58,7 @@ function AdminPoEView() {
   useEffect(() => {
     const fetch = async () => {
       const rpc = supabase as unknown as RpcClient;
-      const { data, error: e } = await rpc.rpc("cet_enrolled_learners");
+      const { data, error: e } = await rpc.rpc("dsa_enrolled_learners");
       if (e) { setError(e.message); setLoading(false); return; }
       setLearners(((data as EnrolledLearner[]) ?? []).sort((a, b) => a.full_name.localeCompare(b.full_name)));
       setLoading(false);
@@ -189,7 +189,7 @@ function LearnerPoEView() {
   useEffect(() => {
     const fetch = async () => {
       const rpc = supabase as unknown as RpcClient;
-      const { data, error: e } = await rpc.rpc("cet_get_all_module_progress");
+      const { data, error: e } = await rpc.rpc("dsa_get_all_module_progress");
       if (e) { setError(e.message); setLoading(false); return; }
       setProgress((data as ModuleProgress[]) ?? []);
       setLoading(false);

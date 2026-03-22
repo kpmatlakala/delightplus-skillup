@@ -50,7 +50,7 @@ async function ensureLearnerRegistration(user: User): Promise<void> {
     rpc: (fn: string, params?: Record<string, unknown>) => Promise<{ data: string | null; error: { message: string } | null }>;
   };
 
-  const { error } = await rpc.rpc("cet_self_register_learner", {
+  const { error } = await rpc.rpc("dsa_self_register_learner", {
     p_full_name: (user.user_metadata?.full_name as string | undefined) ?? null,
     p_email: user.email ?? null,
     p_phone: (user.user_metadata?.phone_number as string | undefined) ?? null,
