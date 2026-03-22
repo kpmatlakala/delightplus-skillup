@@ -29,7 +29,7 @@ export default function LearnersPage() {
         rpc: (fn: string, params?: Record<string, unknown>) => Promise<{ data: EnrolledLearner[] | null; error: { message: string } | null }>;
       };
 
-      const { data, error: fetchError } = await rpc.rpc("cet_enrolled_learners");
+      const { data, error: fetchError } = await rpc.rpc("dsa_enrolled_learners");
 
       if (fetchError) {
         setError(fetchError.message);

@@ -13,7 +13,7 @@ export interface Announcement {
   author: string;
 }
 
-// ── Shape returned by cet_get_announcements() ─────────────────────────────────
+// ── Shape returned by dsa_get_announcements() ─────────────────────────────────
 interface DbRow {
   id: string;
   title: string;
@@ -58,7 +58,7 @@ export function useAnnouncements() {
       normalized.includes("404") ||
       normalized.includes("not found") ||
       normalized.includes("could not find") ||
-      normalized.includes("cet_get_announcements")
+      normalized.includes("dsa_get_announcements")
     );
   };
 
@@ -70,7 +70,7 @@ export function useAnnouncements() {
 
     try {
       const rpc = supabase as unknown as Rpc;
-      const { data, error } = await rpc.rpc("cet_get_announcements");
+      const { data, error } = await rpc.rpc("dsa_get_announcements");
       if (!error && Array.isArray(data)) {
         setItems((data as DbRow[]).map(mapRow));
         setError(null);
@@ -109,7 +109,7 @@ export function useAnnouncements() {
       .on(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         "postgres_changes" as any,
-        { event: "*", schema: "cet", table: "announcements" },
+        { event: "*", schema: "dsa", table: "announcements" },
         () => { void load(); }
       )
       .subscribe();
@@ -140,7 +140,7 @@ export function useAnnouncements() {
         },
         ...prev,
       ]);
-      const { error } = await rpc.rpc("cet_post_announcement", {
+      const { error } = await rpc.rpc("dsa_post_announcement", {
         p_title: title,
         p_message: message,
         p_audience: audience,
@@ -167,7 +167,7 @@ export function useAnnouncements() {
       // Optimistic update
       setItems((prev) => prev.map((a) => (a.id === id ? { ...a, pinned: newPinned } : a)));
       const rpc = supabase as unknown as Rpc;
-      const { error } = await rpc.rpc("cet_pin_announcement", { p_id: id, p_pinned: newPinned });
+      const { error } = await rpc.rpc("dsa_pin_announcement", { p_id: id, p_pinned: newPinned });
       if (error) {
         if (isRpcMissingError(error.message)) {
           setRpcUnavailable(true);
@@ -187,7 +187,7 @@ export function useAnnouncements() {
       // Optimistic remove
       setItems((prev) => prev.filter((a) => a.id !== id));
       const rpc = supabase as unknown as Rpc;
-      const { error } = await rpc.rpc("cet_delete_announcement", { p_id: id });
+      const { error } = await rpc.rpc("dsa_delete_announcement", { p_id: id });
       if (error) {
         if (isRpcMissingError(error.message)) {
           setRpcUnavailable(true);

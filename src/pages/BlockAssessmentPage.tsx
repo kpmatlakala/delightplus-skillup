@@ -211,7 +211,7 @@ export default function BlockAssessmentPage() {
               disabled={otpInput.length !== 6 || otpValidating}
               onClick={async () => {
                 setOtpValidating(true);
-                const { data } = await rpc.rpc("cet_validate_assessment_otp", {
+                const { data } = await rpc.rpc("dsa_validate_assessment_otp", {
                   p_module_id: blockKey,
                   p_otp: otpInput,
                 });

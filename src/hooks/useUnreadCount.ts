@@ -19,7 +19,7 @@ export function useUnreadCount(myUserId: string | null): number {
   const refresh = useCallback(async () => {
     if (!myUserId) { setCount(0); return; }
     const rpc = supabase as unknown as AnyRpc;
-    const { data } = await rpc.rpc("cet_get_my_conversations");
+    const { data } = await rpc.rpc("dsa_get_my_conversations");
     if (Array.isArray(data)) {
       const total = (data as ConvRow[]).reduce((s, c) => s + (c.unread_count ?? 0), 0);
       setCount(total);
@@ -34,11 +34,11 @@ export function useUnreadCount(myUserId: string | null): number {
     if (!myUserId) return;
 
     const channel = supabase
-      .channel(`cet-unread-count-${myUserId}`)
+      .channel(`dsa-unread-count-${myUserId}`)
       .on(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         "postgres_changes" as any,
-        { event: "INSERT", schema: "cet", table: "messages" },
+        { event: "INSERT", schema: "dsa", table: "messages" },
         () => { void refresh(); }
       )
       .subscribe();

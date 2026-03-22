@@ -357,7 +357,7 @@ function MessagesPanel({
     const rpc = supabase as unknown as {
       rpc: (fn: string) => Promise<{ data: LearnerContact[] | null; error: { message: string } | null }>;
     };
-    rpc.rpc("cet_list_learners_for_messaging")
+    rpc.rpc("dsa_list_learners_for_messaging")
       .then(({ data, error }) => {
         if (!error && data) setLearnerList(data);
         setLearnerLoadState(error ? "error" : "done");

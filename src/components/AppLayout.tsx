@@ -102,7 +102,7 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
         rpc: (fn: string, params?: Record<string, unknown>) => Promise<{ data: Array<{ display_name: string | null; avatar_url: string | null }> | null; error: { message: string } | null }>;
       };
 
-      const { data } = await rpc.rpc("cet_get_my_profile_v2");
+      const { data } = await rpc.rpc("dsa_get_my_profile_v2");
       const row = (data ?? [])[0];
       setProfileDisplayName(row?.display_name ?? "");
       setProfileAvatarUrl(row?.avatar_url ?? "");

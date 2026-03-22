@@ -58,7 +58,7 @@ function AdminPoEView() {
   useEffect(() => {
     const fetch = async () => {
       const rpc = supabase as unknown as RpcClient;
-      const { data, error: e } = await rpc.rpc("cet_enrolled_learners");
+      const { data, error: e } = await rpc.rpc("dsa_enrolled_learners");
       if (e) { setError(e.message); setLoading(false); return; }
       setLearners(((data as EnrolledLearner[]) ?? []).sort((a, b) => a.full_name.localeCompare(b.full_name)));
       setLoading(false);
@@ -97,10 +97,10 @@ function AdminPoEView() {
           <AlertCircle size={15} /> LMS → PoE Automation Pipeline
         </h3>
         <div className="text-sm text-white/65 space-y-1">
-          <p>✅ <strong className="text-white/85">Already automated:</strong> Guide completion, quiz results, and assessment submission flags are tracked per learner per module via <code className="text-amber-300 text-xs">cet_upsert_module_progress</code>.</p>
-          <p>✅ <strong className="text-white/85">Already automated:</strong> Attendance check-in/check-out is recorded via <code className="text-amber-300 text-xs">cet_check_in</code> / <code className="text-amber-300 text-xs">cet_check_out</code> per session.</p>
+          <p>✅ <strong className="text-white/85">Already automated:</strong> Guide completion, quiz results, and assessment submission flags are tracked per learner per module via <code className="text-amber-300 text-xs">dsa_upsert_module_progress</code>.</p>
+          <p>✅ <strong className="text-white/85">Already automated:</strong> Attendance check-in/check-out is recorded via <code className="text-amber-300 text-xs">dsa_check_in</code> / <code className="text-amber-300 text-xs">dsa_check_out</code> per session.</p>
           <p>🔧 <strong className="text-white/85">Next step — file upload:</strong> Wire the "Submit Assessment" button in each module to Supabase Storage so learners upload their evidence PDF directly. This sets <code className="text-amber-300 text-xs">assessment_submitted = true</code> automatically.</p>
-          <p>🔧 <strong className="text-white/85">Next step — admin progress view:</strong> Add a <code className="text-amber-300 text-xs">cet_get_learner_progress</code> RPC so admins can see each learner's milestone status in the table below rather than the portal progress bar only.</p>
+          <p>🔧 <strong className="text-white/85">Next step — admin progress view:</strong> Add a <code className="text-amber-300 text-xs">dsa_get_learner_progress</code> RPC so admins can see each learner's milestone status in the table below rather than the portal progress bar only.</p>
           <p>🔧 <strong className="text-white/85">Future — auto-fill export:</strong> Generate a pre-filled PoE PDF server-side (Edge Function) using learner profile + DB progress data, so the cover page and checklist ticks populate automatically.</p>
         </div>
       </div>
@@ -189,7 +189,7 @@ function LearnerPoEView() {
   useEffect(() => {
     const fetch = async () => {
       const rpc = supabase as unknown as RpcClient;
-      const { data, error: e } = await rpc.rpc("cet_get_all_module_progress");
+      const { data, error: e } = await rpc.rpc("dsa_get_all_module_progress");
       if (e) { setError(e.message); setLoading(false); return; }
       setProgress((data as ModuleProgress[]) ?? []);
       setLoading(false);

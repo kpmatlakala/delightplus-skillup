@@ -24,7 +24,7 @@ export default function Dashboard() {
         rpc: (fn: string, params?: Record<string, unknown>) => Promise<{ data: Array<{ id: string }> | null; error: { message: string } | null }>;
       };
 
-      const { data, error } = await rpc.rpc("cet_enrolled_learners");
+      const { data, error } = await rpc.rpc("dsa_enrolled_learners");
       if (!error) {
         setEnrolledCount((data ?? []).length);
       }
@@ -34,7 +34,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <AppLayout title="Dashboard" subtitle="FET Certificate: IT Systems Development — SAQA 78965">
+    <AppLayout title="Dashboard" subtitle="DSA Learning Management System">
       {/* Program banner */}
       <div className="rounded-lg border border-accent/20 bg-accent/5 px-4 py-3 mb-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
@@ -78,7 +78,7 @@ export default function Dashboard() {
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-0.5">Learner Portal Access</p>
-          <p className="font-semibold text-sm text-foreground">Invite learners to register on CET Connect</p>
+          <p className="font-semibold text-sm text-foreground">Invite learners to register on DSA LMS</p>
           <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
             Learners scan this QR code — or open the link below — to create their account and access course content.
           </p>
@@ -99,7 +99,7 @@ export default function Dashboard() {
           <AccordionTrigger className="px-4 py-3 text-sm font-semibold hover:no-underline">
             <div className="flex items-center gap-2">
               <GraduationCap size={15} className="text-accent shrink-0" />
-              <span>FETC: IT Systems Development — Programme Introduction &amp; Facilitator Briefing</span>
+              <span>DSA Programme Introduction &amp; Facilitator Briefing</span>
             </div>
           </AccordionTrigger>
           <AccordionContent className="px-4 pb-5 space-y-6 text-sm">

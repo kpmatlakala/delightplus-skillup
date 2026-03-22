@@ -25,7 +25,7 @@ export interface LearnerAssessmentStatus {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Typed RPC helper (cet_* RPCs are not in generated types)
+// Typed RPC helper (dsa_* RPCs are not in generated types)
 // ─────────────────────────────────────────────────────────────────────────────
 
 const rpc = supabase as unknown as {
@@ -58,7 +58,7 @@ export function useAssessmentControl(
   const fetchOtp = useCallback(async () => {
     if (!moduleId || !isAdmin) return;
     setLoadingOtp(true);
-    const { data } = await rpc.rpc("cet_get_active_otp", { p_module_id: moduleId });
+    const { data } = await rpc.rpc("dsa_get_active_otp", { p_module_id: moduleId });
     setLoadingOtp(false);
     setOtp((data as OtpRecord | null) ?? null);
   }, [moduleId, isAdmin]);
@@ -67,7 +67,7 @@ export function useAssessmentControl(
   const fetchStatuses = useCallback(async () => {
     if (!moduleId || !isAdmin) return;
     setLoadingStatuses(true);
-    const { data } = await rpc.rpc("cet_get_module_assessment_status", {
+    const { data } = await rpc.rpc("dsa_get_module_assessment_status", {
       p_module_id: moduleId,
     });
     setLoadingStatuses(false);
@@ -85,7 +85,7 @@ export function useAssessmentControl(
   const generateOtp = useCallback(async () => {
     if (!moduleId) return;
     setGenerating(true);
-    const { data } = await rpc.rpc("cet_generate_assessment_otp", {
+    const { data } = await rpc.rpc("dsa_generate_assessment_otp", {
       p_module_id: moduleId,
     });
     setGenerating(false);
@@ -96,7 +96,7 @@ export function useAssessmentControl(
   const revokeOtp = useCallback(async () => {
     if (!moduleId) return;
     setRevoking(true);
-    await rpc.rpc("cet_revoke_assessment_otp", { p_module_id: moduleId });
+    await rpc.rpc("dsa_revoke_assessment_otp", { p_module_id: moduleId });
     setRevoking(false);
     setOtp(null);
   }, [moduleId]);
@@ -105,7 +105,7 @@ export function useAssessmentControl(
   const validateOtp = useCallback(
     async (otpInput: string): Promise<boolean> => {
       if (!moduleId) return false;
-      const { data } = await rpc.rpc("cet_validate_assessment_otp", {
+      const { data } = await rpc.rpc("dsa_validate_assessment_otp", {
         p_module_id: moduleId,
         p_otp: otpInput.trim(),
       });
@@ -117,7 +117,7 @@ export function useAssessmentControl(
   const clearLearnerProgress = useCallback(
     async (learnerId: string, targetModuleId?: string) => {
       setClearingLearnerId(learnerId);
-      await rpc.rpc("cet_admin_clear_learner_progress", {
+      await rpc.rpc("dsa_admin_clear_learner_progress", {
         p_user_id: learnerId,
         p_module_id: targetModuleId ?? null,
       });
