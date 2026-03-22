@@ -116,10 +116,10 @@ export default function AppSidebar() {
             <img src="/logos/dsa-logo.png" alt="DSA" className="h-9 w-9 rounded-sm object-contain" />
             <div>
               <h1 className="font-display text-lg font-bold text-sidebar-primary-foreground tracking-tight">
-                DSA<span className="text-sidebar-primary"> Tracker</span>
+                DSA<span className="text-sidebar-primary"> LMS</span>
               </h1>
               <p className="text-xs text-sidebar-muted mt-0.5">
-                {role === "learner" ? "Learner Portal" : "Course Management System"}
+                {role === "learner" ? "Learner Portal" : "Learning Management System"}
               </p>
             </div>
           </div>
