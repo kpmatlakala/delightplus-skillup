@@ -64,7 +64,11 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      cet_check_in: {
+      dsa_admin_clear_learner_progress: {
+        Args: { p_module_id?: string; p_user_id: string }
+        Returns: undefined
+      }
+      dsa_check_in: {
         Args: {
           p_learner_id: string
           p_marked_by?: string
@@ -72,7 +76,7 @@ export type Database = {
         }
         Returns: undefined
       }
-      cet_check_out: {
+      dsa_check_out: {
         Args: {
           p_learner_id: string
           p_marked_by?: string
@@ -80,8 +84,12 @@ export type Database = {
         }
         Returns: undefined
       }
-      cet_delete_announcement: { Args: { p_id: string }; Returns: undefined }
-      cet_enrolled_learners: {
+      dsa_clear_my_module_progress: {
+        Args: { p_module_id: string }
+        Returns: undefined
+      }
+      dsa_delete_announcement: { Args: { p_id: string }; Returns: undefined }
+      dsa_enrolled_learners: {
         Args: never
         Returns: {
           email: string
@@ -93,12 +101,12 @@ export type Database = {
           status: string
         }[]
       }
-      cet_generate_assessment_otp: {
+      dsa_generate_assessment_otp: {
         Args: { p_module_id: string }
         Returns: Json
       }
-      cet_get_active_otp: { Args: { p_module_id: string }; Returns: Json }
-      cet_get_all_module_progress: {
+      dsa_get_active_otp: { Args: { p_module_id: string }; Returns: Json }
+      dsa_get_all_module_progress: {
         Args: never
         Returns: {
           assessment_submitted: boolean
@@ -112,7 +120,7 @@ export type Database = {
           updated_at: string
         }[]
       }
-      cet_get_announcements: {
+      dsa_get_announcements: {
         Args: never
         Returns: {
           audience: string
@@ -124,7 +132,7 @@ export type Database = {
           title: string
         }[]
       }
-      cet_get_attendance_records: {
+      dsa_get_attendance_records: {
         Args: { p_session_id: string }
         Returns: {
           check_in_at: string
@@ -133,7 +141,7 @@ export type Database = {
           present: boolean
         }[]
       }
-      cet_get_conversation_messages: {
+      dsa_get_conversation_messages: {
         Args: { p_conversation_id: string }
         Returns: {
           body: string
@@ -143,8 +151,8 @@ export type Database = {
           sent_at: string
         }[]
       }
-      cet_get_facilitator_user_id: { Args: never; Returns: string }
-      cet_get_module_assessment_status: {
+      dsa_get_facilitator_user_id: { Args: never; Returns: string }
+      dsa_get_module_assessment_status: {
         Args: { p_module_id: string }
         Returns: {
           assessment_submitted: boolean
@@ -156,8 +164,8 @@ export type Database = {
           submission_path: string
         }[]
       }
-      cet_get_module_flow: { Args: { p_unit_std_id: string }; Returns: Json }
-      cet_get_my_conversations: {
+      dsa_get_module_flow: { Args: { p_unit_std_id: string }; Returns: Json }
+      dsa_get_my_conversations: {
         Args: never
         Returns: {
           conversation_id: string
@@ -170,7 +178,7 @@ export type Database = {
           unread_count: number
         }[]
       }
-      cet_get_my_profile: {
+      dsa_get_my_profile: {
         Args: never
         Returns: {
           avatar_url: string
@@ -186,7 +194,7 @@ export type Database = {
           website: string
         }[]
       }
-      cet_get_my_profile_v2: {
+      dsa_get_my_profile_v2: {
         Args: never
         Returns: {
           avatar_url: string
@@ -203,7 +211,7 @@ export type Database = {
           website: string
         }[]
       }
-      cet_get_or_create_attendance_session: {
+      dsa_get_or_create_attendance_session: {
         Args: {
           p_created_by?: string
           p_module_id: string
@@ -212,7 +220,7 @@ export type Database = {
         }
         Returns: string
       }
-      cet_list_learners_for_messaging: {
+      dsa_list_learners_for_messaging: {
         Args: never
         Returns: {
           full_name: string
@@ -221,11 +229,11 @@ export type Database = {
           user_id: string
         }[]
       }
-      cet_mark_conversation_read: {
+      dsa_mark_conversation_read: {
         Args: { p_conversation_id: string }
         Returns: undefined
       }
-      cet_modules: {
+      dsa_modules: {
         Args: never
         Returns: {
           block_no: number
@@ -234,27 +242,27 @@ export type Database = {
           title: string
         }[]
       }
-      cet_pin_announcement: {
+      dsa_pin_announcement: {
         Args: { p_id: string; p_pinned: boolean }
         Returns: undefined
       }
-      cet_post_announcement: {
+      dsa_post_announcement: {
         Args: { p_audience?: string; p_message: string; p_title: string }
         Returns: string
       }
-      cet_revoke_assessment_otp: {
+      dsa_revoke_assessment_otp: {
         Args: { p_module_id: string }
         Returns: undefined
       }
-      cet_self_register_learner: {
+      dsa_self_register_learner: {
         Args: { p_email?: string; p_full_name?: string; p_phone?: string }
         Returns: string
       }
-      cet_send_message: {
+      dsa_send_message: {
         Args: { p_body: string; p_recipient_id: string }
         Returns: string
       }
-      cet_update_my_profile_v2: {
+      dsa_update_my_profile_v2: {
         Args: {
           p_avatar_url: string
           p_bio: string
@@ -279,11 +287,11 @@ export type Database = {
           website: string
         }[]
       }
-      cet_upsert_module_flow: {
+      dsa_upsert_module_flow: {
         Args: { p_flow: Json; p_unit_std_id: string }
         Returns: undefined
       }
-      cet_upsert_module_progress: {
+      dsa_upsert_module_progress: {
         Args: {
           p_assessment_submitted?: boolean
           p_assessment_submitted_at?: string
@@ -296,7 +304,7 @@ export type Database = {
         }
         Returns: undefined
       }
-      cet_validate_assessment_otp: {
+      dsa_validate_assessment_otp: {
         Args: { p_module_id: string; p_otp: string }
         Returns: boolean
       }
