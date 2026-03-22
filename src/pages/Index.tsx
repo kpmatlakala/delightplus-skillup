@@ -78,7 +78,7 @@ export default function Dashboard() {
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-0.5">Learner Portal Access</p>
-          <p className="font-semibold text-sm text-foreground">Invite learners to register on CET Connect</p>
+          <p className="font-semibold text-sm text-foreground">Invite learners to register on DSA LMS</p>
           <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
             Learners scan this QR code — or open the link below — to create their account and access course content.
           </p>
