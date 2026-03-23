@@ -35,7 +35,7 @@ const getInitials = (displayName: string | null, email: string) => {
 };
 
 export default function ProfilePage() {
-  const { user } = useAuth();
+  const { user, getUnifiedProfile, updateProfile, refreshProfile } = useAuth();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [changingPassword, setChangingPassword] = useState(false);
