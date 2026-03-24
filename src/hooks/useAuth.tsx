@@ -1,11 +1,10 @@
-// hooks/useAuth.tsx
-import { useEffect, useState, createContext, useContext, ReactNode } from "react";
-import type { User, Session } from "@supabase/supabase-js";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
 export type AppRole = "admin" | "lecturer" | "learner";
 
-interface LearnerProfile {
+export interface LearnerProfile {
   id: string;
   user_id: string;
   learner_code: string | null;
@@ -27,7 +26,7 @@ interface LearnerProfile {
   updated_at: string;
 }
 
-interface UnifiedProfile {
+export interface UnifiedProfile {
   id: string;
   email: string;
   full_name: string | null;
@@ -45,23 +44,7 @@ interface UnifiedProfile {
   updated_at: string;
 }
 
-interface AuthContextValue {
-  user: User | null;
-  session: Session | null;
-  role: AppRole | null;
-  loading: boolean;
-  profile: LearnerProfile | null;
-  profileLoading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error?: any; data?: any }>;
-  signUp: (email: string, password: string) => Promise<{ error?: any; data?: any }>;
-  signOut: () => Promise<void>;
-  refreshRole: () => Promise<void>;
-  getUnifiedProfile: () => Promise<{ data?: UnifiedProfile; error?: string }>;
-  updateProfile: (updates: ProfileUpdates) => Promise<{ data?: UnifiedProfile; error?: string }>;
-  refreshProfile: () => Promise<void>;
-}
-
-interface ProfileUpdates {
+export interface ProfileUpdates {
   p_full_name?: string;
   p_display_name?: string;
   p_phone?: string;
@@ -74,207 +57,203 @@ interface ProfileUpdates {
   p_website?: string;
 }
 
+interface AuthContextValue {
+  user: User | null;
+  session: Session | null;
+  role: AppRole | null;
+  loading: boolean;
+  profile: LearnerProfile | null;
+  profileLoading: boolean;
+  signIn: (email: string, password: string) => Promise<{ error?: unknown; data?: unknown }>;
+  signUp: (email: string, password: string) => Promise<{ error?: unknown; data?: unknown }>;
+  signOut: () => Promise<void>;
+  refreshRole: () => Promise<void>;
+  refreshProfile: () => Promise<void>;
+  getUnifiedProfile: () => Promise<{ data?: UnifiedProfile; error?: string }>;
+  updateProfile: (updates: ProfileUpdates) => Promise<{ data?: UnifiedProfile; error?: string }>;
+}
+
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-/**
- * Map database roles to frontend AppRole types
- * Database: 'admin', 'moderator', 'learner'
- * Frontend: 'admin', 'lecturer', 'learner'
- */
-export const mapDbRoleToAppRole = (dbRole: string | null | undefined): AppRole => {
-  if (dbRole === "admin") return "admin";
-  if (dbRole === "moderator") return "lecturer";
-  if (dbRole === "learner") return "learner";
-  // Default fallback for any unknown role
-  console.warn(`Unknown role "${dbRole}" in database, defaulting to "learner"`);
+// ── Typed helper to bypass generated-types restrictions ───────────────────────
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const db = supabase as any;
+
+const mapPublicRole = (rawRole: string | null | undefined): AppRole => {
+  if (rawRole === "admin") return "admin";
+  if (rawRole === "moderator") return "lecturer";
   return "learner";
 };
 
+/**
+ * Fetch role from public.users — the authoritative role column.
+ * Falls back to "learner" on any error so the app never hangs.
+ */
 async function fetchRoleForUser(userId: string): Promise<AppRole> {
   try {
-    const { data, error } = await supabase
-      .from("learners")
+    const { data, error } = await db
+      .from("users")
       .select("role")
-      .eq("user_id", userId)
+      .eq("id", userId)
       .maybeSingle();
 
     if (error) {
-      console.warn("Unable to fetch role from cet.learners:", error.message);
+      console.warn("fetchRoleForUser:", error.message);
       return "learner";
     }
-
-    console.log(`User ${userId} role from DB:`, data?.role);
-    const mappedRole = mapDbRoleToAppRole(data?.role);
-    console.log(`User ${userId} mapped role:`, mappedRole);
-    return mappedRole;
+    return mapPublicRole(data?.role);
   } catch (err) {
-    console.error("Error fetching role:", err);
+    console.warn("fetchRoleForUser threw:", err);
     return "learner";
   }
 }
 
+/**
+ * Auto-register a new learner via RPC (idempotent).
+ * Never throws — errors are logged and swallowed.
+ */
 async function ensureLearnerRegistration(user: User): Promise<void> {
   try {
-    // Check if learner record already exists
-    const { data: existing } = await supabase
-      .from("learners")
-      .select("id")
-      .eq("user_id", user.id)
-      .maybeSingle();
-
-    if (existing) {
-      return; // Already registered
-    }
-
-    const { error } = await supabase.rpc("cet_self_register_learner", {
-      p_full_name: (user.user_metadata?.full_name as string) || 
-                   (user.user_metadata?.display_name as string) ||
-                   user.email?.split('@')[0] || null,
+    const { error } = await db.rpc("cet_self_register_learner", {
+      p_full_name: (user.user_metadata?.full_name as string | undefined) ?? null,
       p_email: user.email ?? null,
+      p_phone: (user.user_metadata?.phone_number as string | undefined) ?? null,
     });
-
-    if (error) {
-      console.warn("Unable to auto-register learner profile:", error.message);
-    }
+    if (error) console.warn("ensureLearnerRegistration:", error.message);
   } catch (err) {
-    console.error("Error in ensureLearnerRegistration:", err);
+    console.warn("ensureLearnerRegistration threw:", err);
   }
 }
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [role, setRole] = useState<AppRole | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [profile, setProfile] = useState<LearnerProfile | null>(null);
-  const [profileLoading, setProfileLoading] = useState(true);
+// ── Provider ──────────────────────────────────────────────────────────────────
 
-  const loadLearnerProfile = async (userId: string) => {
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [session, setSession]               = useState<Session | null>(null);
+  const [user, setUser]                     = useState<User | null>(null);
+  const [role, setRole]                     = useState<AppRole | null>(null);
+  const [loading, setLoading]               = useState(true);
+  const [profile, setProfile]               = useState<LearnerProfile | null>(null);
+  const [profileLoading, setProfileLoading] = useState(false);
+
+  // ── Load learner profile via RPC (correct search_path already set) ────────
+  const loadLearnerProfile = async (_userId: string) => {
     setProfileLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("learners")
-        .select("*")
-        .eq("user_id", userId)
-        .maybeSingle();
-
-      if (error) {
-        console.error("Error loading learner profile:", error);
-      } else if (data) {
-        setProfile(data);
+      const { data, error } = await db.rpc("cet_get_my_profile_v2");
+      if (!error && data) {
+        const row = Array.isArray(data) ? data[0] : data;
+        if (row) setProfile(row as LearnerProfile);
       }
-    } catch (error) {
-      console.error("Error loading learner profile:", error);
+    } catch (err) {
+      console.warn("loadLearnerProfile threw:", err);
     } finally {
       setProfileLoading(false);
     }
   };
 
+  // ── Resolve role — NEVER awaited in bootstrap so it can't block loading ───
   const resolveRole = async (activeUser: User | null) => {
     if (!activeUser) {
       setRole(null);
       return;
     }
-
     const resolvedRole = await fetchRoleForUser(activeUser.id);
-    
-    // Only auto-register if they're a learner and don't have a record
-    if (resolvedRole === "learner") {
-      await ensureLearnerRegistration(activeUser);
-      // Reload profile after registration
-      await loadLearnerProfile(activeUser.id);
-    }
-    
     setRole(resolvedRole);
+
+    // Auto-register learners (fire-and-forget)
+    if (resolvedRole === "learner") {
+      void ensureLearnerRegistration(activeUser);
+    }
   };
 
+  // ── Bootstrap ─────────────────────────────────────────────────────────────
   useEffect(() => {
     let isMounted = true;
+
+    // Hard failsafe: force loading=false after 3 s no matter what
+    const failsafe = setTimeout(() => {
+      if (isMounted) {
+        console.warn("Auth failsafe: forcing loading=false after 3 s");
+        setLoading(false);
+        setRole((prev) => prev ?? "learner");
+      }
+    }, 3000);
 
     const bootstrap = async () => {
       try {
         const { data } = await supabase.auth.getSession();
         if (!isMounted) return;
 
+        const activeUser = data.session?.user ?? null;
         setSession(data.session);
-        setUser(data.session?.user ?? null);
-        
-        if (data.session?.user) {
-          await resolveRole(data.session.user);
-          await loadLearnerProfile(data.session.user.id);
+        setUser(activeUser);
+
+        if (activeUser) {
+          // Fire-and-forget: role + profile arrive after loading=false
+          void resolveRole(activeUser);
+          void loadLearnerProfile(activeUser.id);
         } else {
-          setProfileLoading(false);
+          setRole(null);
+          setProfile(null);
         }
-      } catch (error) {
-        console.error("Bootstrap error:", error);
+      } catch (err) {
+        console.error("Auth bootstrap error:", err);
+        if (isMounted) {
+          setRole(null);
+          setProfile(null);
+        }
       } finally {
+        // Always unblock the UI immediately
         if (isMounted) setLoading(false);
       }
     };
 
-    bootstrap();
+    void bootstrap();
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, nextSession) => {
-      setSession(nextSession);
-      setUser(nextSession?.user ?? null);
-      
-      if (nextSession?.user) {
-        await resolveRole(nextSession.user);
-        await loadLearnerProfile(nextSession.user.id);
-      } else {
-        setRole(null);
-        setProfile(null);
-        setProfileLoading(false);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, nextSession) => {
+        if (!isMounted) return;
+        const nextUser = nextSession?.user ?? null;
+        setSession(nextSession);
+        setUser(nextUser);
+
+        if (nextUser) {
+          void resolveRole(nextUser);
+          void loadLearnerProfile(nextUser.id);
+        } else {
+          setRole(null);
+          setProfile(null);
+        }
       }
-    });
+    );
 
     return () => {
       isMounted = false;
+      clearTimeout(failsafe);
       subscription.unsubscribe();
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // ── Auth actions ──────────────────────────────────────────────────────────
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      
-      if (!error && data.user) {
-        await resolveRole(data.user);
-        await loadLearnerProfile(data.user.id);
-      }
-      
-      return { data, error };
-    } catch (error) {
-      console.error("Sign in error:", error);
-      return { error };
+      const result = await supabase.auth.signInWithPassword({ email, password });
+      return result;
+    } catch (err) {
+      console.error("signIn error:", err);
+      return { error: err };
     }
   };
 
   const signUp = async (email: string, password: string) => {
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-      
-      // The trigger handle_new_user() will auto-create the learner profile
-      if (!error && data.user) {
-        // Wait a moment for the trigger to create the profile
-        setTimeout(async () => {
-          await resolveRole(data.user);
-          await loadLearnerProfile(data.user.id);
-        }, 1000);
-      }
-      
-      return { data, error };
-    } catch (error) {
-      console.error("Sign up error:", error);
-      return { error };
+      const result = await supabase.auth.signUp({ email, password });
+      return result;
+    } catch (err) {
+      console.error("signUp error:", err);
+      return { error: err };
     }
   };
 
@@ -283,81 +262,69 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await supabase.auth.signOut();
       setProfile(null);
       setRole(null);
-    } catch (error) {
-      console.error("Sign out error:", error);
+    } catch (err) {
+      console.error("signOut error:", err);
     }
   };
 
   const refreshRole = async () => {
-    if (user) {
-      await resolveRole(user);
-    }
-  };
-
-  const getUnifiedProfile = async (): Promise<{ data?: UnifiedProfile; error?: string }> => {
-    if (!user) {
-      return { error: "No user logged in" };
-    }
-
-    try {
-      const { data, error } = await supabase.rpc("cet_get_my_profile_v2");
-      
-      if (error) {
-        console.error("RPC error:", error);
-        return { error: error.message };
-      }
-      
-      const profileData = Array.isArray(data) && data.length > 0 ? data[0] : data;
-      return { data: profileData as UnifiedProfile };
-    } catch (error: any) {
-      console.error("Error getting unified profile:", error);
-      return { error: error.message || "Unknown error occurred" };
-    }
-  };
-
-  const updateProfile = async (updates: ProfileUpdates): Promise<{ data?: UnifiedProfile; error?: string }> => {
-    if (!user) {
-      return { error: "No user logged in" };
-    }
-
-    try {
-      const { data, error } = await supabase.rpc("cet_update_my_profile_v2", updates);
-      
-      if (error) {
-        console.error("Update error:", error);
-        return { error: error.message };
-      }
-      
-      const updatedProfile = Array.isArray(data) && data.length > 0 ? data[0] : data;
-      
-      if (updatedProfile) {
-        setProfile(prev => prev ? {
-          ...prev,
-          full_name: updatedProfile.full_name,
-          display_name: updatedProfile.display_name,
-          phone: updatedProfile.phone,
-          id_number: updatedProfile.id_number,
-          department: updatedProfile.department,
-          school: updatedProfile.school,
-          bio: updatedProfile.bio,
-          avatar_url: updatedProfile.avatar_url,
-          location: updatedProfile.location,
-          website: updatedProfile.website,
-        } : null);
-      }
-      
-      return { data: updatedProfile as UnifiedProfile };
-    } catch (error: any) {
-      console.error("Error updating profile:", error);
-      return { error: error.message || "Unknown error occurred" };
-    }
+    if (user) await resolveRole(user);
   };
 
   const refreshProfile = async () => {
-    if (user) {
-      await loadLearnerProfile(user.id);
+    if (user) await loadLearnerProfile(user.id);
+  };
+
+  // ── Profile RPCs ──────────────────────────────────────────────────────────
+
+  const getUnifiedProfile = async (): Promise<{ data?: UnifiedProfile; error?: string }> => {
+    if (!user) return { error: "No user logged in" };
+    try {
+      const { data, error } = await db.rpc("cet_get_my_profile_v2");
+      if (error) return { error: error.message as string };
+      const row = Array.isArray(data) && data.length > 0 ? data[0] : data;
+      return { data: (row ?? undefined) as UnifiedProfile | undefined };
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Unknown error";
+      return { error: msg };
     }
   };
+
+  const updateProfile = async (
+    updates: ProfileUpdates
+  ): Promise<{ data?: UnifiedProfile; error?: string }> => {
+    if (!user) return { error: "No user logged in" };
+    try {
+      const { data, error } = await db.rpc("cet_update_my_profile_v2", updates);
+      if (error) return { error: error.message as string };
+      const row = Array.isArray(data) && data.length > 0 ? data[0] : data;
+      if (row) {
+        setProfile((prev) =>
+          prev
+            ? {
+                ...prev,
+                full_name:    row.full_name,
+                display_name: row.display_name,
+                phone:        row.phone,
+                id_number:    row.id_number,
+                department:   row.department,
+                school:       row.school,
+                bio:          row.bio,
+                avatar_url:   row.avatar_url,
+                location:     row.location,
+                website:      row.website,
+              }
+            : null
+        );
+      }
+      return { data: (row ?? undefined) as UnifiedProfile | undefined };
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Unknown error";
+      return { error: msg };
+    }
+  };
+
+  // ── Context value ─────────────────────────────────────────────────────────
 
   const value: AuthContextValue = {
     user,
@@ -370,20 +337,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     signUp,
     signOut,
     refreshRole,
+    refreshProfile,
     getUnifiedProfile,
     updateProfile,
-    refreshProfile,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within an AuthProvider");
+  return ctx;
 }
-
-export type { LearnerProfile, UnifiedProfile, ProfileUpdates };

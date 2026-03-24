@@ -55,7 +55,7 @@ export default function ProfilePage() {
   const [location, setLocation] = useState("");
   const [website, setWebsite] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  
+
   // Password change state
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -72,10 +72,14 @@ export default function ProfilePage() {
     setLoading(true);
     setError(null);
 
-    const { data, error: loadError } = await rpc.rpc("cet_get_my_profile_v2");
+    setLoading(true);
+    setError(null);
 
-    if (loadError) {
-      setError(loadError.message);
+    const supabaseAny = supabase as any;
+    const { data, error } = await supabaseAny.rpc("cet_get_my_profile_v2");
+
+    if (error) {
+      setError(error.message);
       setLoading(false);
       return;
     }
@@ -122,19 +126,23 @@ export default function ProfilePage() {
       p_website: website,
     });
 
-    const { error: updateError } = await rpc.rpc("cet_update_my_profile_v2", {
-      p_full_name: fullName,
-      p_display_name: displayName,
-      p_phone: phoneNumber,
-      p_id_number: idNumber,
-      p_department: department,
-      p_school: school,
-      p_bio: bio,
-      p_avatar_url: avatarUrl,
-      p_location: location,
-      p_website: website,
-      p_role: "learner",
-    });
+    const supabaseAny = supabase as any;
+    const { error: updateError } = await supabaseAny.rpc(
+      "cet_update_my_profile_v2",
+      {
+        p_full_name: fullName,
+        p_display_name: displayName,
+        p_phone: phoneNumber,
+        p_id_number: idNumber,
+        p_department: department,
+        p_school: school,
+        p_bio: bio,
+        p_avatar_url: avatarUrl,
+        p_location: location,
+        p_website: website,
+        p_role: "learner",
+      },
+    );
 
     if (updateError) {
       console.error("Update error:", updateError);
@@ -144,13 +152,13 @@ export default function ProfilePage() {
     }
 
     console.log("Update successful, reloading profile...");
-    
+
     // Wait a moment for the database to update, then reload
     setTimeout(async () => {
       await loadProfile();
       setSaving(false);
       setSuccess("Profile updated successfully.");
-      
+
       // Clear success message after 3 seconds
       setTimeout(() => setSuccess(null), 3000);
     }, 500);
@@ -214,7 +222,7 @@ export default function ProfilePage() {
     setNewPassword("");
     setConfirmPassword("");
     setSecuritySuccess("Password changed successfully.");
-    
+
     // Clear success message after 3 seconds
     setTimeout(() => setSecuritySuccess(null), 3000);
   };

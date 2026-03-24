@@ -1,10 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-type AnyRpc = {
-  rpc: (fn: string) => Promise<{ data: unknown; error: { message: string } | null }>;
-};
-
 interface ConvRow {
   unread_count: number;
 }
@@ -17,33 +13,51 @@ export function useUnreadCount(myUserId: string | null): number {
   const [count, setCount] = useState(0);
 
   const refresh = useCallback(async () => {
-    if (!myUserId) { setCount(0); return; }
-    const rpc = supabase as unknown as AnyRpc;
-    const { data } = await rpc.rpc("cet_get_my_conversations");
-    if (Array.isArray(data)) {
-      const total = (data as ConvRow[]).reduce((s, c) => s + (c.unread_count ?? 0), 0);
-      setCount(total);
+    if (!myUserId) { 
+      setCount(0); 
+      return; 
+    }
+    
+    try {
+      const supabaseAny = supabase as any;
+      const { data, error } = await supabaseAny.rpc("cet_get_my_conversations");
+      
+      if (error) {
+        console.error("Error fetching unread count:", error);
+        return;
+      }
+      
+      if (Array.isArray(data)) {
+        const total = (data as ConvRow[]).reduce((s, c) => s + (c.unread_count ?? 0), 0);
+        setCount(total);
+      }
+    } catch (err) {
+      console.error("Error in unread count refresh:", err);
     }
   }, [myUserId]);
 
   // Initial fetch
-  useEffect(() => { void refresh(); }, [refresh]);
+  useEffect(() => { 
+    void refresh(); 
+  }, [refresh]);
 
   // Realtime: new message → re-fetch
   useEffect(() => {
     if (!myUserId) return;
 
-    const channel = supabase
+    const supabaseAny = supabase as any;
+    const channel = supabaseAny
       .channel(`cet-unread-count-${myUserId}`)
       .on(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        "postgres_changes" as any,
+        "postgres_changes",
         { event: "INSERT", schema: "cet", table: "messages" },
         () => { void refresh(); }
       )
       .subscribe();
 
-    return () => { void supabase.removeChannel(channel); };
+    return () => { 
+      supabaseAny.removeChannel(channel); 
+    };
   }, [myUserId, refresh]);
 
   return count;
