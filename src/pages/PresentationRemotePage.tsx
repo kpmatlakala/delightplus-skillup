@@ -17,6 +17,7 @@ import { useParams } from "react-router-dom";
 import {
   ChevronLeft,
   ChevronRight,
+  ArrowRight,
   BookOpen,
   Target,
   Zap,
@@ -80,12 +81,13 @@ export default function PresentationRemotePage() {
 
   const [state, setState] = useState<SlideStatePayload | null>(null);
   const [status, setStatus] = useState<ConnectionStatus>("connecting");
-  const [notesExpanded, setNotesExpanded] = useState(true);
 
   /* Keep refs so interval/channel callbacks are never stale */
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
   const stateRef   = useRef<SlideStatePayload | null>(null);
   const pingTimer  = useRef<ReturnType<typeof setInterval> | null>(null);
+  const reconnectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const reconnectCount = useRef(0);
 
   useEffect(() => { stateRef.current = state; }, [state]);
 
@@ -94,40 +96,64 @@ export default function PresentationRemotePage() {
     channelRef.current?.send({ type: "broadcast", event: EV_CMD, payload: cmd });
   };
 
-  /* ── Channel lifecycle */
-  useEffect(() => {
-    if (!upperCode) return;
+  /* ── Channel setup — extracted so we can call it again on reconnect */
+  const connectChannel = (code: string) => {
+    // Clean up any existing channel first
+    if (channelRef.current) {
+      supabase.removeChannel(channelRef.current);
+      channelRef.current = null;
+    }
+    if (pingTimer.current) { clearInterval(pingTimer.current); pingTimer.current = null; }
 
-    const ch = supabase.channel(channelName(upperCode), {
+    const ch = supabase.channel(channelName(code), {
       config: { broadcast: { ack: false } },
     } as Parameters<typeof supabase.channel>[1]);
 
     ch
       .on("broadcast", { event: EV_SLIDE_STATE }, ({ payload }: { payload: SlideStatePayload }) => {
+        reconnectCount.current = 0; // successful connection — reset backoff
         setState(payload);
         setStatus("connected");
       })
-      .subscribe((status) => {
-        if (status === "SUBSCRIBED") {
+      .subscribe((subStatus) => {
+        if (subStatus === "SUBSCRIBED") {
           setStatus("waiting");
-          // Ask the desktop for the latest state immediately
           ch.send({ type: "broadcast", event: EV_REQUEST_SYNC, payload: {} });
-        } else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+        } else if (subStatus === "CHANNEL_ERROR" || subStatus === "TIMED_OUT") {
           setStatus("disconnected");
+          // Auto-reconnect with exponential backoff (max 8 s)
+          const delay = Math.min(1000 * 2 ** reconnectCount.current, 8000);
+          reconnectCount.current += 1;
+          reconnectTimer.current = setTimeout(() => {
+            setStatus("connecting");
+            connectChannel(code);
+          }, delay);
         }
       });
 
     channelRef.current = ch;
 
-    /* Heartbeat ping every 5 s — desktop responds with current slide state */
+    /* Retry sync every 1.5 s until we get a slide-state response,
+       then switch to a 5 s keepalive ping so the desktop tracks presence. */
     pingTimer.current = setInterval(() => {
-      ch.send({ type: "broadcast", event: EV_PING, payload: {} });
-    }, 5_000);
+      if (!stateRef.current) {
+        ch.send({ type: "broadcast", event: EV_REQUEST_SYNC, payload: {} });
+      } else {
+        ch.send({ type: "broadcast", event: EV_PING, payload: {} });
+      }
+    }, 1_500);
+  };
 
+  /* ── Channel lifecycle */
+  useEffect(() => {
+    if (!upperCode) return;
+    connectChannel(upperCode);
     return () => {
       if (pingTimer.current) clearInterval(pingTimer.current);
-      supabase.removeChannel(ch);
+      if (reconnectTimer.current) clearTimeout(reconnectTimer.current);
+      if (channelRef.current) supabase.removeChannel(channelRef.current);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [upperCode]);
 
   /* ─────────────────── Render ────────────────────────────────────────────── */
@@ -138,180 +164,186 @@ export default function PresentationRemotePage() {
   const isQuiz   = state?.isQuiz ?? false;
 
   return (
-    <div className="min-h-dvh flex flex-col bg-gray-950 text-white select-none">
+    /* h-dvh + flex col — children must use flex-shrink-0 or flex-1 min-h-0
+       so the middle region actually clips and scrolls instead of expanding. */
+    <div className="h-dvh flex flex-col bg-gray-950 text-white select-none overflow-hidden">
 
-      {/* ── Header bar */}
-      <header className="flex items-center justify-between px-4 py-3 bg-black/60 border-b border-white/10 flex-shrink-0">
-        <div className="flex items-center gap-2">
-          <GraduationCap size={16} className="text-white/50" />
-          <span className="text-white/60 text-sm font-medium">CET Connect Remote</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <code className="font-mono text-white font-bold tracking-widest text-sm">{upperCode}</code>
-          {status === "connected" ? (
-            <span className="flex items-center gap-1 text-xs text-emerald-400 font-medium">
-              <Wifi size={12} /> Live
-            </span>
-          ) : status === "waiting" ? (
-            <span className="flex items-center gap-1 text-xs text-amber-400 font-medium">
-              <Monitor size={12} /> Waiting for desktop…
-            </span>
-          ) : status === "disconnected" ? (
-            <span className="flex items-center gap-1 text-xs text-red-400 font-medium">
-              <WifiOff size={12} /> Disconnected
-            </span>
-          ) : (
-            <span className="text-xs text-white/35">Connecting…</span>
-          )}
-        </div>
-      </header>
+      {/* ── Top chrome: header + progress ── */}
+      <div className="flex-shrink-0">
+        <header className="flex items-center justify-between px-4 py-2.5 bg-black/70 border-b border-white/10">
+          <div className="flex items-center gap-2 min-w-0">
+            <GraduationCap size={14} className="text-white/40 shrink-0" />
+            <span className="text-white/50 text-xs font-medium truncate">CET Remote</span>
+          </div>
+          <div className="flex items-center gap-2.5 shrink-0">
+            <code className="font-mono text-white/80 font-bold tracking-[0.2em] text-xs">{upperCode}</code>
+            {status === "connected" ? (
+              <span className="flex items-center gap-1 text-[11px] text-emerald-400 font-semibold">
+                <Wifi size={11} /> Live
+              </span>
+            ) : status === "waiting" ? (
+              <span className="flex items-center gap-1 text-[11px] text-amber-400 font-semibold">
+                <Monitor size={11} /> Waiting…
+              </span>
+            ) : status === "disconnected" ? (
+              <span className="flex items-center gap-1 text-[11px] text-red-400 font-semibold">
+                <WifiOff size={11} /> Disconnected
+              </span>
+            ) : (
+              <span className="text-[11px] text-white/30">Connecting…</span>
+            )}
+          </div>
+        </header>
 
-      {/* ── Progress bar */}
-      <div className="h-1 bg-white/8 flex-shrink-0">
-        <div
-          className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 transition-all duration-500"
-          style={{ width: `${progress}%` }}
-        />
+        {/* Progress bar */}
+        <div className="h-[3px] bg-white/8">
+          <div
+            className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 transition-all duration-500"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
       </div>
 
-      {/* ── Main content (scrollable) */}
+      {/* ── Waiting / not-yet-connected state ── */}
       {!state ? (
-        /* Waiting state */
-        <div className="flex-1 flex flex-col items-center justify-center gap-4 px-6 text-center">
-          <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
-            <Monitor size={28} className="text-white/30" />
+        <div className="flex-1 min-h-0 flex flex-col items-center justify-center gap-4 px-6 text-center">
+          <div className="w-14 h-14 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+            <Monitor size={24} className="text-white/25" />
           </div>
-          <p className="text-white/50 text-base">
-            Waiting for the desktop presentation to connect…
-          </p>
-          <p className="text-white/25 text-sm">
-            Make sure the presenter has opened the presentation with code{" "}
-            <strong className="font-mono text-white/40">{upperCode}</strong>.
+          <p className="text-white/50 text-sm">Waiting for desktop presentation…</p>
+          <p className="text-white/25 text-xs max-w-[220px]">
+            Code: <strong className="font-mono text-white/40">{upperCode}</strong>
           </p>
         </div>
       ) : (
-        <div className="flex-1 overflow-y-auto overscroll-contain">
-          <div className="px-5 pt-5 pb-3">
-
-            {/* Slide meta */}
-            <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <>
+          {/* ── Sticky slide header (always visible, never scrolls away) ── */}
+          <div className="flex-shrink-0 px-4 pt-3 pb-2 border-b border-white/8 bg-gray-950">
+            <div className="flex items-center justify-between gap-2 mb-1.5">
               <TypeBadge type={state.type} />
-              <span className="text-white/35 text-xs tabular-nums font-mono">
+              <span className="text-white/30 text-xs tabular-nums font-mono shrink-0">
                 {state.index + 1} / {state.total}
               </span>
             </div>
-
-            {/* Session label */}
             {state.sessionLabel && (
-              <p className="text-indigo-400 text-xs uppercase tracking-widest font-semibold mb-2">
+              <p className="text-indigo-400 text-[11px] uppercase tracking-widest font-semibold mb-0.5">
                 {state.sessionLabel}
               </p>
             )}
-
-            {/* Slide title */}
-            <h1 className="text-2xl font-bold text-white leading-snug mb-1">
+            <h1 className="text-base font-bold text-white leading-snug">
               {state.title}
             </h1>
-
-            {/* Subtitle */}
             {state.subtitle && (
-              <p className="text-white/45 text-sm leading-snug mb-4">{state.subtitle}</p>
+              <p className="text-white/40 text-xs leading-snug mt-0.5">{state.subtitle}</p>
             )}
+          </div>
 
-            <hr className="border-white/8 mb-4" />
+          {/* ── Scrollable notes + extras ── */}
+          {/* min-h-0 is CRITICAL — without it flex-1 won't shrink and overflow-y-auto
+              never activates, making the page one tall non-scrolling column. */}
+          <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain">
+            <div className="px-4 pt-4 pb-4 space-y-3">
 
-            {/* Speaker notes section */}
-            {state.speakerNote ? (
-              <div className="mb-4">
-                <button
-                  onClick={() => setNotesExpanded((v) => !v)}
-                  className="flex items-center gap-2 mb-3 w-full"
-                >
-                  <ScrollText size={14} className="text-yellow-400 shrink-0" />
-                  <span className="text-yellow-400 text-xs font-semibold uppercase tracking-widest flex-1 text-left">
-                    Presenter Notes
-                  </span>
-                  <span className="text-white/25 text-xs">
-                    {notesExpanded ? "▲ hide" : "▼ show"}
-                  </span>
-                </button>
-
-                {notesExpanded && (
-                  <div className="bg-yellow-500/5 border border-yellow-500/20 rounded-xl px-4 py-3">
-                    <p className="text-white/80 text-sm leading-relaxed whitespace-pre-line">
+              {/* Speaker notes — always expanded, no toggle */}
+              {state.speakerNote ? (
+                <div>
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <ScrollText size={12} className="text-yellow-400 shrink-0" />
+                    <span className="text-yellow-400 text-[11px] font-semibold uppercase tracking-widest">
+                      Presenter Notes
+                    </span>
+                  </div>
+                  <div className="bg-yellow-500/6 border border-yellow-500/20 rounded-xl px-4 py-3">
+                    <p className="text-white/85 text-sm leading-relaxed whitespace-pre-line">
                       {state.speakerNote}
                     </p>
                   </div>
-                )}
-              </div>
-            ) : (
-              <p className="text-white/20 text-sm italic mb-4">No speaker notes for this slide.</p>
-            )}
+                </div>
+              ) : (
+                <p className="text-white/20 text-xs italic">No speaker notes for this slide.</p>
+              )}
 
-            {/* Quiz notice */}
-            {isQuiz && (
-              <div className="bg-purple-500/10 border border-purple-500/30 rounded-xl px-4 py-3 mb-4">
-                <p className="text-purple-300 text-sm font-medium">
-                  🎯 Knowledge Check — do not reveal the answer until learners have responded.
-                </p>
-              </div>
-            )}
+              {/* Quiz notice */}
+              {isQuiz && (
+                <div className="bg-purple-500/10 border border-purple-500/30 rounded-xl px-4 py-3">
+                  <p className="text-purple-300 text-sm font-medium">
+                    🎯 Knowledge Check — do not reveal the answer until learners have responded.
+                  </p>
+                </div>
+              )}
 
-            {/* Up next */}
-            {state.nextTitle && !isLast && (
-              <div className="bg-white/3 border border-white/8 rounded-xl px-4 py-3 mb-2">
-                <p className="text-white/30 text-xs uppercase tracking-widest mb-0.5">Up next</p>
-                <p className="text-white/55 text-sm leading-snug">{state.nextTitle}</p>
-              </div>
-            )}
+              {/* Up next */}
+              {state.nextTitle && !isLast && (
+                <div className="bg-white/3 border border-white/8 rounded-xl px-4 py-2.5">
+                  <p className="text-white/25 text-[11px] uppercase tracking-widest mb-0.5">Up next</p>
+                  <p className="text-white/50 text-sm leading-snug">{state.nextTitle}</p>
+                </div>
+              )}
 
-          </div>
-        </div>
-      )}
+              {/* Launch next unit */}
+              {state.isLastSlide && state.nextUnitId && (
+                <div>
+                  <p className="text-white/25 text-[11px] uppercase tracking-widest mb-2">Ready to continue?</p>
+                  <button
+                    onClick={() => send({ action: "launch-unit", unitId: state.nextUnitId! })}
+                    className="w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-emerald-500 active:bg-emerald-400 active:scale-[0.98] text-black font-bold text-sm transition-all"
+                  >
+                    {state.nextUnitLabel ?? "Open next unit"}
+                    <ArrowRight size={16} />
+                  </button>
+                  <p className="text-white/20 text-[11px] text-center mt-1.5">
+                    Launches on the presentation screen too
+                  </p>
+                </div>
+              )}
 
-      {/* ── Navigation controls (always visible, pinned to bottom) */}
-      <div className="flex-shrink-0 border-t border-white/10 bg-black/60 p-4">
-        <div className="flex gap-3">
-          {/* PREV */}
-          <button
-            onClick={() => send({ action: "prev" })}
-            disabled={isFirst || !state}
-            aria-label="Previous slide"
-            className="flex-1 flex items-center justify-center gap-2 py-5 rounded-xl bg-white/8 border border-white/12 text-white font-semibold text-base active:scale-95 transition-all duration-100 disabled:opacity-25 disabled:cursor-not-allowed"
-          >
-            <ChevronLeft size={22} />
-            Prev
-          </button>
-
-          {/* Slide counter pill */}
-          {state && (
-            <div className="flex flex-col items-center justify-center px-3 min-w-[52px]">
-              <span className="text-white font-bold text-lg leading-none tabular-nums">
-                {state.index + 1}
-              </span>
-              <span className="text-white/30 text-xs">of {state.total}</span>
             </div>
-          )}
+          </div>
 
-          {/* NEXT */}
-          <button
-            onClick={() => send({ action: "next" })}
-            disabled={isLast || !state || isQuiz}
-            aria-label="Next slide"
-            title={isQuiz ? "Quiz must be answered on the desktop first" : undefined}
-            className="flex-1 flex items-center justify-center gap-2 py-5 rounded-xl bg-white text-black font-semibold text-base active:scale-95 transition-all duration-100 disabled:opacity-25 disabled:cursor-not-allowed"
-          >
-            Next
-            <ChevronRight size={22} />
-          </button>
-        </div>
+          {/* ── Navigation bar — fixed to bottom, never scrolls ── */}
+          <div className="flex-shrink-0 border-t border-white/10 bg-black/80 px-3 pt-3 pb-4 safe-area-bottom">
+            <div className="flex gap-2 items-stretch">
 
-        {isQuiz && (
-          <p className="text-center text-white/30 text-xs mt-2">
-            Next locked — quiz must be answered on the presentation screen first.
-          </p>
-        )}
-      </div>
+              {/* PREV */}
+              <button
+                onClick={() => send({ action: "prev" })}
+                disabled={isFirst}
+                aria-label="Previous slide"
+                className="flex-1 flex flex-col items-center justify-center gap-0.5 py-4 rounded-2xl bg-white/8 border border-white/10 text-white active:bg-white/15 active:scale-95 transition-all duration-100 disabled:opacity-20 disabled:pointer-events-none"
+              >
+                <ChevronLeft size={26} />
+                <span className="text-[11px] font-semibold text-white/60">Prev</span>
+              </button>
+
+              {/* Centre counter */}
+              <div className="flex flex-col items-center justify-center px-2 min-w-[52px]">
+                <span className="text-white font-bold text-xl leading-none tabular-nums">
+                  {state.index + 1}
+                </span>
+                <span className="text-white/30 text-[11px]">of {state.total}</span>
+              </div>
+
+              {/* NEXT */}
+              <button
+                onClick={() => send({ action: "next" })}
+                disabled={isLast || isQuiz}
+                aria-label="Next slide"
+                className="flex-1 flex flex-col items-center justify-center gap-0.5 py-4 rounded-2xl bg-white text-gray-900 active:bg-white/80 active:scale-95 transition-all duration-100 disabled:opacity-20 disabled:pointer-events-none"
+              >
+                <ChevronRight size={26} />
+                <span className="text-[11px] font-bold">Next</span>
+              </button>
+
+            </div>
+
+            {isQuiz && (
+              <p className="text-center text-white/25 text-[11px] mt-2">
+                Next locked — answer the quiz on the presentation screen first.
+              </p>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }

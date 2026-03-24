@@ -67,6 +67,11 @@ export default function LoginPage() {
               required
               autoComplete="current-password"
             />
+            <div className="pt-1">
+              <Link to="/auth/forgot-password" className="text-xs text-primary hover:underline">
+                Forgot password?
+              </Link>
+            </div>
           </div>
 
           {error && <p className="text-sm text-destructive">{error}</p>}
@@ -82,6 +87,10 @@ export default function LoginPage() {
             Create account
           </Link>
         </p>
+
+        <div className="mt-4 flex justify-center">
+          <img src="/logos/dsa-logo.png" alt="The Data Science Academy" className="h-10 w-auto object-contain" />
+        </div>
       </div>
     </div>
   );

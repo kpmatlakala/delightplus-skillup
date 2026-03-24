@@ -17,6 +17,7 @@ import {
   ChevronsRight,
   Menu,
   X,
+  Cast,
 } from "lucide-react";
 
 interface NavItem {
@@ -40,8 +41,10 @@ const navItems: NavItem[] = [
   },
   { label: "Communications", icon: <MessageSquare size={18} />, href: "/communications" },
   { label: "Portfolio (PoE)", icon: <FolderOpen    size={18} />, href: "/poe" },
-  { label: "Assessments",    icon: <ClipboardList size={18} />, href: "/assessments" },
-  { label: "Compliance",     icon: <ShieldCheck  size={18} />, href: "/compliance" },
+  { label: "Assessments",        icon: <ClipboardList size={18} />, href: "/assessments" },
+  { label: "Block Assessments", icon: <ShieldCheck   size={18} />, href: "/assessments/blocks" },
+  { label: "Compliance",        icon: <ShieldCheck   size={18} />, href: "/compliance" },
+  { label: "Remote Launch",     icon: <Cast          size={18} />, href: "/present/launch" },
 ];
 
 const learnerNavItems: NavItem[] = [
@@ -56,7 +59,7 @@ export default function AppSidebar() {
   const [mobileOpen, setMobileOpen]       = useState(false);
   const [collapsed, setCollapsed]         = useState(false);
 
-  const items    = role === "user" ? learnerNavItems : navItems;
+  const items    = role === "learner" ? learnerNavItems : navItems;
   const isActive = (href: string) => location.pathname === href;
 
   const toggleGroup = (label: string) =>
@@ -107,18 +110,19 @@ export default function AppSidebar() {
           ${collapsed ? "flex items-center justify-center py-5" : "px-5 py-5"}`}
       >
         {collapsed ? (
-          <span className="font-display text-lg font-bold text-sidebar-primary-foreground">
-            D<span className="text-sidebar-primary">S</span>
-          </span>
+          <img src="/logos/dsa-logo.png" alt="DSA" className="h-8 w-8 rounded-sm object-contain" />
         ) : (
-          <>
-            <h1 className="font-display text-lg font-bold text-sidebar-primary-foreground tracking-tight">
-              DSA<span className="text-sidebar-primary"> Tracker</span>
-            </h1>
-            <p className="text-xs text-sidebar-muted mt-0.5">
-              {role === "user" ? "Learner Portal" : "Course Management System"}
-            </p>
-          </>
+          <div className="flex items-center gap-3">
+            <img src="/logos/dsa-logo.png" alt="DSA" className="h-9 w-9 rounded-sm object-contain" />
+            <div>
+              <h1 className="font-display text-lg font-bold text-sidebar-primary-foreground tracking-tight">
+                DSA<span className="text-sidebar-primary"> Tracker</span>
+              </h1>
+              <p className="text-xs text-sidebar-muted mt-0.5">
+                {role === "learner" ? "Learner Portal" : "Course Management System"}
+              </p>
+            </div>
+          </div>
         )}
       </div>
 
@@ -173,8 +177,16 @@ export default function AppSidebar() {
         <div className="px-5 py-3 border-t border-sidebar-border">
           <p className="text-xs text-sidebar-muted">SAQA 78965 · NQF Level 4</p>
           <p className="text-xs text-sidebar-muted mt-0.5">
-            {role === "user" ? "Learner Access" : "CET Venda · Block 1–3"}
+            {role === "learner" ? "Learner Access" : "CET Venda · Block 1–3"}
           </p>
+          <a
+            href="https://thedatascienceacademy.co.za/"
+            target="_blank"
+            rel="noreferrer"
+            className="text-xs text-sidebar-muted mt-1 inline-block hover:text-sidebar-foreground"
+          >
+            thedatascienceacademy.co.za
+          </a>
         </div>
       )}
 

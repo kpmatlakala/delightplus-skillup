@@ -57,7 +57,7 @@ export const modules: Module[] = [
   {
     id: "14920",
     code: "ITSD-14920",
-    title: "Team Collaboration and Problem Solving",
+    title: "Participate in Groups/Teams",
     type: "Practical",
     credits: 3,
     duration: 300,
@@ -100,7 +100,7 @@ export const modules: Module[] = [
   {
     id: "14918",
     code: "ITSD-14918",
-    title: "Programming Principles Introduction",
+    title: "Describe Principles of Computer Programming",
     type: "Knowledge",
     credits: 5,
     duration: 300,
@@ -230,7 +230,7 @@ export const modules: Module[] = [
   {
     id: "14910",
     code: "ITSD-14910",
-    title: "Apply Programming Principles",
+    title: "Apply Principles of Computer Programming",
     type: "Practical",
     credits: 8,
     duration: 600,
@@ -249,7 +249,7 @@ export const modules: Module[] = [
   {
     id: "14933",
     code: "ITSD-14933",
-    title: "Web Scripting",
+    title: "Create Web Applications with Scripting",
     type: "Practical",
     credits: 6,
     duration: 600,
@@ -287,7 +287,7 @@ export const modules: Module[] = [
   {
     id: "14919",
     code: "ITSD-14919",
-    title: "Resolve User Problems",
+    title: "Resolve Computer Users\' Problems",
     type: "Practical",
     credits: 5,
     duration: 300,

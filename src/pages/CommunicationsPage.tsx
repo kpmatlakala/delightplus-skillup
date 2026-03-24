@@ -1,6 +1,6 @@
 import AppLayout from "@/components/AppLayout";
 import { useState, useRef, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import {
   Bell, Mail, Megaphone, Pin, PinOff, Trash2, Plus, X, Send,
   ChevronDown, RefreshCw, Search, CheckCheck, Loader2, Users,
@@ -795,6 +795,15 @@ export default function CommunicationsPage() {
       title="Communications"
       subtitle={activeTab === "updates" ? "Announcements & updates" : "Direct messages"}
     >
+      {!isAdmin && (
+        <Link
+          to="/learner"
+          className="inline-flex items-center text-xs text-primary hover:underline mb-3"
+        >
+          ← Back to Learner Portal
+        </Link>
+      )}
+
       {/* Tab bar */}
       <div className="flex items-center gap-1 p-1 rounded-xl bg-muted/50 border border-border w-fit mb-5">
         <button

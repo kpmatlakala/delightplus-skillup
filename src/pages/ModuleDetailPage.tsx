@@ -10,7 +10,6 @@ import { useModuleFlow } from "@/hooks/useModuleFlow";
 import { useAuth } from "@/hooks/useAuth";
 import { useModuleProgress } from "@/hooks/useModuleProgress";
 import { supabase } from "@/integrations/supabase/client";
-import { useProfile } from "@/hooks/useProfile";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
@@ -25,7 +24,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { ArrowLeft, Clock, Award, BookOpen, Target, FileText, Download, CheckCircle2, Circle, ChevronRight, DatabaseZap, RefreshCw, Play } from "lucide-react";
 import { PresentationMode } from "@/components/PresentationMode";
-import { AssessmentForm, type AssessmentPayload } from "@/components/AssessmentForm";
 
 interface ContentLinks {
   modules?: Record<string, Array<{ label: string; href: string }>>;
@@ -71,7 +69,7 @@ function isLearnerGuideFile(fileName: string) {
 
 function getDocCategory(label: string) {
   const normalized = label.toLowerCase();
-  if (normalized.includes("learner guide")) return "Learner Guide";
+  if (normalized.includes("learner guide") || normalized.includes("leaner guide")) return "Learner Guide";
   if (normalized.includes("learner workbook")) return "Workbook";
   if (normalized.includes("assessment") || normalized.includes("summative")) return "Assessment";
   if (normalized.includes("facilitator")) return "Facilitator Guide";
@@ -79,7 +77,8 @@ function getDocCategory(label: string) {
 }
 
 function isLearnerGuideLabel(label: string) {
-  return label.toLowerCase().includes("learner guide");
+  const normalized = label.toLowerCase();
+  return normalized.includes("learner guide") || normalized.includes("leaner guide");
 }
 
 function isAssessmentTaskLabel(label: string) {
@@ -618,13 +617,10 @@ function hasDocForCategory(downloads: Array<{ label: string; href: string }>, ca
 export default function ModuleDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { role, user } = useAuth();
-  const { profile } = useProfile();
   const {
     progressMap,
     markGuideCompleted,
     markQuizPassed,
-    recordSubmission,
-    markAssessmentSubmitted,
   } = useModuleProgress();
   const {
     flow: moduleLessonFlow,
@@ -645,7 +641,7 @@ export default function ModuleDetailPage() {
   const [activeDocName, setActiveDocName] = useState<string>("");
   const [assessmentUnlocked, setAssessmentUnlocked] = useState(false);
   const [guideCompleted, setGuideCompleted] = useState(false);
-  const [workspaceView, setWorkspaceView] = useState<"guide" | "quiz" | "assessment">("guide");
+  const [workspaceView, setWorkspaceView] = useState<"guide" | "quiz">("guide");
   const [quizAnswers, setQuizAnswers] = useState<Record<number, string>>({});
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [quizScore, setQuizScore] = useState<number | null>(null);
@@ -657,16 +653,6 @@ export default function ModuleDetailPage() {
   const [sessionIndex, setSessionIndex] = useState(0);
   // Tracks the highest session index ever visited — never decrements when learner goes back
   const [highestSessionReached, setHighestSessionReached] = useState(-1);
-  const [submissionFile, setSubmissionFile] = useState<File | null>(null);
-  const [submissionPath, setSubmissionPath] = useState<string>("");
-  const [submissionUploadedAt, setSubmissionUploadedAt] = useState<string>("");
-  const [isUploadingSubmission, setIsUploadingSubmission] = useState(false);
-  const [isSubmittingAssessment, setIsSubmittingAssessment] = useState(false);
-  const [assessmentSubmitMessage, setAssessmentSubmitMessage] = useState<string>("");
-  const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
-  const [assessmentChecklist, setAssessmentChecklist] = useState({ read: false, criteria: false, own: false });
-  const [onlineAnswers, setOnlineAnswers] = useState<Record<number, string>>({});
-  const [pendingSubmissionText, setPendingSubmissionText] = useState("");
 
   useEffect(() => {
     const loadContentLinks = async () => {
@@ -792,7 +778,7 @@ export default function ModuleDetailPage() {
           selectedFiles.map(async (file) => {
             const extractedFilePath = file.file_name?.trim().length
               ? file.file_name
-              : `${file.source_path.replaceAll("/", "__")}.json`;
+              : `${file.source_path.split("/").join("__")}.json`;
             const fileResponse = await fetch(`/docs/SAQA_78965_CET_Training/_extracted/${encodePathSegments(extractedFilePath)}`);
             if (!fileResponse.ok) return null;
             const payload = (await fileResponse.json()) as ExtractedDoc;
@@ -833,15 +819,54 @@ export default function ModuleDetailPage() {
     setGuideMode("intro");
     setSessionIndex(0);
     setHighestSessionReached(-1);
-    setSubmissionFile(null);
-    setSubmissionPath("");
-    setSubmissionUploadedAt("");
-    setAssessmentSubmitMessage("");
-    setOnlineAnswers({});
-    setAssessmentChecklist({ read: false, criteria: false, own: false });
-    setPendingSubmissionText("");
     setAdminDocCategory("guide");
   }, [id]);
+
+  // ── Print submission ──────────────────────────────────────────────────────
+  const openPrintWindow = (text: string) => {
+    const mod = modules.find((m) => m.id === id);
+    const escaped = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Assessment — ${mod?.title ?? id}</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:Arial,sans-serif;font-size:11.5px;color:#111;padding:40px 48px}
+    .hdr{background:#111;color:#fff;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .hdr-logos{display:flex;align-items:center}
+    .hdr-logos img{height:64px;width:auto;object-fit:contain;filter:brightness(0) invert(1)}
+    .hdr-text{flex:1;text-align:center}
+    .hdr-text h1{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+    .hdr-text p{font-size:10px;margin-top:3px;opacity:.8}
+    pre{white-space:pre-wrap;word-break:break-word;line-height:1.75;font-family:Arial,sans-serif;font-size:11.5px}
+    .actions{display:flex;gap:10px;margin-bottom:20px}
+    button{padding:7px 20px;background:#111;color:#fff;border:none;cursor:pointer;font-size:11px;border-radius:4px}
+    button:hover{background:#333}
+    .note{font-size:10px;color:#666;margin-bottom:16px}
+    @media print{.actions{display:none!important}body{padding:20px}}
+  </style>
+</head>
+<body>
+  <div class="hdr">   
+    <div class="hdr-text">
+      <h1>Further Education and Training Certificate: IT Systems Development</h1>
+      <p>SAQA ID: 78965 &nbsp;·&nbsp; NQF Level 4 &nbsp;·&nbsp; 165 Credits</p>
+    </div>
+    <div class="hdr-logos"><img src="/logos/dsa-logo.png" alt="DSA"/></div>
+  </div>
+  <div class="actions">
+    <button onclick="window.print()">🖨&nbsp; Print / Save as PDF</button>
+    <button onclick="window.close()">✕&nbsp; Close</button>
+  </div>
+  <p class="note">Tip: In the print dialog choose <strong>Save as PDF</strong> to generate a PDF copy for your portfolio.</p>
+  <pre>${escaped}</pre>
+</body>
+</html>`;
+    const win = window.open("", "_blank", "width=900,height=700,scrollbars=yes");
+    if (win) { win.document.write(html); win.document.close(); }
+  };
 
   // Restore learner to their furthest-reached step after the reset above fires.
   // Declared AFTER the reset effect so it always runs second and wins.
@@ -850,9 +875,9 @@ export default function ModuleDetailPage() {
     const prog = progressMap[id];
     if (!prog) return; // no saved progress yet — reset defaults are fine
 
-    if (prog.assessment_unlocked || prog.quiz_passed) {
-      // Furthest confirmed step: assessment — mark all guide sessions as visited
-      setWorkspaceView("assessment");
+    if (prog.assessment_submitted || prog.assessment_unlocked || prog.quiz_passed) {
+      // Furthest confirmed step: quiz passed / assessment done — show quiz view
+      setWorkspaceView("quiz");
       setHighestSessionReached(999);
     } else if (prog.guide_completed) {
       // Guide done, quiz not yet passed — mark all guide sessions as visited
@@ -896,26 +921,11 @@ export default function ModuleDetailPage() {
     setActiveDocName((prev) => prev || (studyDocs[0]?.file_name ?? ""));
   }, [studyDocs]);
 
-  useEffect(() => {
-    if (!id || role !== "learner") return;
-
-    const prog = progressMap[id];
-    if (!prog?.submission_path) return;
-
-    setSubmissionPath(prog.submission_path);
-    if (prog.submission_uploaded_at) setSubmissionUploadedAt(prog.submission_uploaded_at);
-    if (prog.assessment_submitted) {
-      setAssessmentSubmitMessage("Assessment already submitted for this module.");
-    }
-  }, [id, role, progressMap]);
-
   const downloads = id ? jsonLinksByModule?.[id] ?? moduleDownloadsById[id] ?? [] : [];
   const learnerGuideDownloads = downloads.filter((doc) => isLearnerGuideLabel(doc.label));
-  const learnerWorkbookDownloads = downloads.filter((doc) => isWorkbookLabel(doc.label));
   const learnerAssessmentDownloads = downloads.filter((doc) => isAssessmentTaskLabel(doc.label));
   const learnerVisibleDownloads = [
     ...learnerGuideDownloads,
-    ...(guideCompleted ? learnerWorkbookDownloads : []),
     ...(assessmentUnlocked ? learnerAssessmentDownloads : []),
   ];
   const isLearnerView = role === "learner";
@@ -923,7 +933,8 @@ export default function ModuleDetailPage() {
   const backLabel = isLearnerView ? "Back to Learner Portal" : "Back to Modules";
   const visibleDownloads = isLearnerView ? learnerVisibleDownloads : downloads;
   const activeDoc = studyDocs.find((doc) => doc.file_name === activeDocName) ?? studyDocs[0] ?? null;
-  const learnerGuideDoc = studyDocs.find((doc) => isLearnerGuideFile(doc.file_name)) ?? activeDoc;
+  const learnerGuideDoc = studyDocs.find((doc) => isLearnerGuideFile(doc.file_name)) ?? null;
+  const learnerGuideDownloadHref = learnerGuideDownloads[0]?.href ?? learnerGuideDoc?.download_href;
   const assessmentDoc = studyDocs.find((doc) => isAssessmentTaskLabel(getDisplayDocName(doc.file_name))) ?? null;
   const workbookDoc = studyDocs.find((doc) => isWorkbookLabel(getDisplayDocName(doc.file_name))) ?? null;
   const facilitatorDoc = studyDocs.find((doc) => isFacilitatorLabel(getDisplayDocName(doc.file_name))) ?? null;
@@ -939,24 +950,11 @@ export default function ModuleDetailPage() {
       detail: "Read learner guide in Study Content",
       completed: hasDocForCategory(downloads, "guide"),
     },
-    {
-      key: "workbook",
-      label: "Practice",
-      detail: "Work through activities and workbook",
-      completed: hasDocForCategory(downloads, "workbook"),
-    },
-    {
-      key: "assessment",
-      label: "Validate",
-      detail: "Prepare assessment and memo review",
-      completed: isLearnerView ? assessmentUnlocked : hasDocForCategory(downloads, "assessment"),
-    },
   ];
   const missionCompleted = missionSteps.filter((step) => step.completed).length;
   const missionPercent = Math.round((missionCompleted / missionSteps.length) * 100);
   const quizPassed = quizScore !== null ? quizScore >= 2 : assessmentUnlocked;
   const quizStepAvailable = !isLearnerView || guideCompleted;
-  const assessmentStepAvailable = !isLearnerView || (guideCompleted && assessmentUnlocked);
   const guidePages = moduleLessonFlow
     ? [
         {
@@ -987,16 +985,10 @@ export default function ModuleDetailPage() {
 
   useEffect(() => {
     if (!isLearnerView) return;
-
     if (workspaceView === "quiz" && !guideCompleted) {
       setWorkspaceView("guide");
-      return;
     }
-
-    if (workspaceView === "assessment" && !assessmentStepAvailable) {
-      setWorkspaceView(guideCompleted ? "quiz" : "guide");
-    }
-  }, [isLearnerView, workspaceView, guideCompleted, assessmentStepAvailable]);
+  }, [isLearnerView, workspaceView, guideCompleted]);
 
   if (!mod) {
     return (
@@ -1058,6 +1050,11 @@ export default function ModuleDetailPage() {
           <span className="flex items-center gap-1.5 font-medium text-foreground/70">Block {mod.block} · {mod.days}</span>
           <span className="flex items-center gap-1.5"><BookOpen size={13} className="text-accent" /> {mod.activities.length} Activities</span>
           <span className="flex items-center gap-1.5"><FileText size={13} className="text-accent" /> {visibleDownloads.length} Documents</span>
+          {learnerGuideDownloadHref && (
+            <a href={learnerGuideDownloadHref} download className="flex items-center gap-1.5 text-primary hover:underline">
+              <Download size={13} /> Download Guide
+            </a>
+          )}
         </div>
       </div>
 
@@ -1144,6 +1141,18 @@ export default function ModuleDetailPage() {
                         <div>
                           {/* ── intro / about ─ */}
                           <div className="border-b border-border bg-muted/30 px-5 py-4">
+                            <div className="flex items-center justify-between gap-3 mb-3">
+                              <img src="/logos/dsa-logo.png" alt="DSA" className="h-16 w-auto object-contain shrink-0" />
+                              {learnerGuideDownloadHref && (
+                                <a
+                                  href={learnerGuideDownloadHref}
+                                  download
+                                  className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-2 text-xs text-primary hover:bg-secondary/30"
+                                >
+                                  <Download size={13} /> Download Learner Guide
+                                </a>
+                              )}
+                            </div>
                             <p className="text-[10px] font-semibold tracking-widest uppercase text-muted-foreground mb-1">Learner Guide Introduction</p>
                             <h2 className="text-base font-display font-semibold text-foreground mb-2">{moduleLessonFlow!.introTitle}</h2>
                             <p className="text-sm text-muted-foreground leading-relaxed">{moduleLessonFlow!.aboutGuide}</p>
@@ -1509,176 +1518,10 @@ export default function ModuleDetailPage() {
                           <p className={`text-xs font-semibold ${quizScore !== null && quizScore >= 2 ? "text-green-600 dark:text-green-400" : "text-red-500"}`}>
                             Score: {quizScore}/{quizItems.length} — {quizScore !== null && quizScore >= 2 ? "Passed ✓" : "Try again"}
                           </p>
-                          {quizPassed && (
-                            <button
-                              onClick={() => setWorkspaceView("assessment")}
-                              className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-xs font-medium hover:bg-primary/90"
-                            >
-                              Assessment <ChevronRight size={13} />
-                            </button>
-                          )}
                         </div>
                       )}
                     </div>
-                  ) : (
-                    <div className="flex justify-end pt-2 border-t border-border">
-                      <button
-                        onClick={() => setWorkspaceView("assessment")}
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-xs font-medium hover:bg-primary/90"
-                      >
-                        Continue to Assessment <ChevronRight size={13} />
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* ===== ASSESSMENT VIEW ===== */}
-              {workspaceView === "assessment" && (
-                <div className="rounded-xl border border-border bg-card p-6 space-y-5" id="assessment-view">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Final Step</p>
-                      <h2 className="text-base font-semibold text-foreground">
-                        {moduleLessonFlow?.assessmentPageTitle ?? "Assessment"}
-                      </h2>
-                    </div>
-                    <Badge variant={assessmentUnlocked ? "default" : "outline"} className="text-xs">
-                      {assessmentUnlocked ? "Unlocked" : "Locked"}
-                    </Badge>
-                  </div>
-
-                  {isLearnerView && !assessmentUnlocked ? (
-                    <div className="rounded-lg border border-border bg-muted/30 p-5 text-center space-y-2">
-                      <p className="text-sm font-medium text-foreground">Assessment Locked</p>
-                      <p className="text-xs text-muted-foreground">Complete and pass the quiz to unlock this assessment.</p>
-                      <button
-                        onClick={() => setWorkspaceView("quiz")}
-                        className="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-primary bg-primary/10 text-foreground px-4 py-2 text-xs font-medium hover:bg-primary/20"
-                      >
-                        Go to Quiz
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {moduleLessonFlow?.assessmentPageBody && (
-                        <p className="text-sm text-muted-foreground leading-relaxed">{moduleLessonFlow.assessmentPageBody}</p>
-                      )}
-
-                      {/* Assessment preview — admin only; learner gets the inline form below */}
-                      {assessmentDoc && !isLearnerView && (
-                        <details className="rounded-lg border border-border bg-background/40 p-4">
-                          <summary className="cursor-pointer text-sm font-medium text-foreground">Assessment Preview</summary>
-                          <div className="max-h-72 overflow-auto pr-1 mt-3">
-                            <article className={markdownArticleClass}>
-                              <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
-                                {toMarkdownBody(assessmentDoc)}
-                              </ReactMarkdown>
-                            </article>
-                          </div>
-                        </details>
-                      )}
-
-                      {!isLearnerView && lecturerNotes.length > 0 && (
-                        <div className="rounded-lg border border-amber-400/30 bg-amber-50/30 dark:bg-amber-900/10 p-4">
-                          <p className="text-sm font-medium text-foreground mb-2">Facilitator Notes</p>
-                          <ul className="space-y-1">
-                            {lecturerNotes.map((note) => (
-                              <li key={note} className="text-xs text-muted-foreground">• {note}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-
-                      {isLearnerView && (
-                      <>
-                        {/* ── Success state ── */}
-                        {assessmentSubmitMessage.includes("successfully") ? (
-                          <div className="rounded-lg border border-green-500/40 bg-green-50/40 dark:bg-green-900/10 p-5 flex items-start gap-4">
-                            <CheckCircle2 size={28} className="shrink-0 text-green-500 mt-0.5" />
-                            <div className="space-y-1">
-                              <p className="text-sm font-semibold text-green-700 dark:text-green-400">Assessment Submitted</p>
-                              <p className="text-xs text-muted-foreground">Your responses have been saved and submitted to your facilitator. Well done for completing this unit!</p>
-                              {submissionUploadedAt && (
-                                <p className="text-xs text-muted-foreground">Submitted: <span className="font-medium text-foreground">{new Date(submissionUploadedAt).toLocaleString()}</span></p>
-                              )}
-                            </div>
-                          </div>
-                        ) : (
-                          <AssessmentForm
-                            moduleId={id ?? ""}
-                            answers={onlineAnswers}
-                            onAnswerChange={(idx, val) => setOnlineAnswers((prev) => ({ ...prev, [idx]: val }))}
-                            downloadHref={assessmentDownloadHref}
-                            learnerName={
-                              profile?.display_name ??
-                              profile?.username ??
-                              user?.user_metadata?.display_name ??
-                              user?.user_metadata?.full_name ??
-                              user?.email ??
-                              ""
-                            }
-                            profile={profile ? {
-                              id_number: profile.id_number ?? undefined,
-                              phone: profile.phone ?? undefined,
-                              department: profile.department ?? undefined,
-                              school: profile.school ?? undefined,
-                            } : undefined}
-                            onRequestSubmit={(payload: AssessmentPayload) => {
-                              setPendingSubmissionText(payload.submissionText);
-                              setShowSubmitConfirm(true);
-                            }}
-                            isSubmitting={isSubmittingAssessment}
-                            submitError={
-                              assessmentSubmitMessage && !assessmentSubmitMessage.includes("successfully")
-                                ? assessmentSubmitMessage
-                                : undefined
-                            }
-                          />
-                        )}
-
-                        {/* ── Confirm dialog ── */}
-                        <AlertDialog open={showSubmitConfirm} onOpenChange={setShowSubmitConfirm}>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Confirm Submission</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Your answers will be saved and submitted to your facilitator for review. Make sure you have answered all required activities before confirming.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Go Back</AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={async () => {
-                                  if (!id || !user?.id) return;
-                                  setIsSubmittingAssessment(true);
-                                  const blob = new Blob([pendingSubmissionText], { type: "text/plain" });
-                                  const safeName = `${Date.now()}-online-assessment.txt`;
-                                  const path = `learner-${user.id}/module-${id}/${safeName}`;
-                                  const { error } = await supabase.storage.from("assessment-submissions").upload(path, blob, { upsert: true });
-                                  if (error) {
-                                    setAssessmentSubmitMessage(`Submission failed: ${error.message}`);
-                                    setIsSubmittingAssessment(false);
-                                    return;
-                                  }
-                                  const submittedAt = new Date().toISOString();
-                                  setSubmissionPath(path);
-                                  setSubmissionUploadedAt(submittedAt);
-                                  void recordSubmission(id, path, submittedAt);
-                                  await markAssessmentSubmitted(id, submittedAt);
-                                  setIsSubmittingAssessment(false);
-                                  setAssessmentSubmitMessage("Assessment submitted successfully.");
-                                }}
-                              >
-                                Confirm &amp; Submit
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </>
-                      )}{/* end isLearnerView submit wrapper */}
-                    </div>
-                  )}
+                  ) : null}
                 </div>
               )}
               </>)}
@@ -1700,15 +1543,13 @@ export default function ModuleDetailPage() {
                     <span>
                       {workspaceView === "guide"
                         ? guideMode === "intro" ? "Introduction" : `Session ${sessionIndex + 1}`
-                        : workspaceView === "quiz" ? "Quiz" : "Assessment"}
+                        : "Quiz"}
                     </span>
                     <span>
                       {workspaceView === "guide"
                         ? guideMode === "intro" ? 1 : sessionIndex + 2
-                        : workspaceView === "quiz"
-                          ? (hasStructuredFlow ? sessionLessons.length + 2 : 2)
-                          : (hasStructuredFlow ? sessionLessons.length + 3 : 3)}
-                      /{hasStructuredFlow ? sessionLessons.length + 3 : 3}
+                        : (hasStructuredFlow ? sessionLessons.length + 2 : 2)}
+                      /{hasStructuredFlow ? sessionLessons.length + 2 : 2}
                     </span>
                   </div>
                   <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
@@ -1717,8 +1558,7 @@ export default function ModuleDetailPage() {
                       style={{
                         width: `${
                           workspaceView === "guide"
-                            ? guideMode === "intro" ? 5 : Math.round(((sessionIndex + 1) / (hasStructuredFlow ? sessionLessons.length + 1 : 1)) * 75)
-                            : workspaceView === "quiz" ? 82
+                            ? guideMode === "intro" ? 5 : Math.round(((sessionIndex + 1) / (hasStructuredFlow ? sessionLessons.length + 1 : 1)) * 90)
                             : 100
                         }%`
                       }}
@@ -1786,24 +1626,6 @@ export default function ModuleDetailPage() {
                     </span>
                     Quiz
                   </button>
-
-                  {/* Assessment step */}
-                  <button
-                    onClick={() => (!isLearnerView || assessmentUnlocked) && setWorkspaceView("assessment")}
-                    disabled={isLearnerView && !assessmentUnlocked}
-                    className={`w-full flex items-center gap-2 rounded-lg px-3 py-2 text-xs text-left transition-colors ${
-                      workspaceView === "assessment" ? "bg-primary/10 text-primary font-medium" : "text-muted-foreground hover:bg-secondary/50"
-                    } disabled:opacity-40 disabled:cursor-not-allowed`}
-                  >
-                    <span className={`shrink-0 w-4 h-4 rounded-full border flex items-center justify-center text-[9px] font-bold ${
-                      progressMap[id ?? ""]?.assessment_submitted
-                        ? "bg-primary text-primary-foreground border-primary"
-                        : "border-border"
-                    }`}>
-                      {progressMap[id ?? ""]?.assessment_submitted ? "✓" : ""}
-                    </span>
-                    Assessment
-                  </button>
                 </div>
               </div>
               )}{/* end progress card */}
@@ -1829,9 +1651,6 @@ export default function ModuleDetailPage() {
                     <p className="text-[10px] text-muted-foreground pt-1">
                       Admin view — all documents visible.
                     </p>
-                  )}
-                  {isLearnerView && !guideCompleted && learnerWorkbookDownloads.length > 0 && (
-                    <p className="text-[10px] text-muted-foreground pt-1">Complete the guide to unlock the workbook.</p>
                   )}
                   {isLearnerView && !assessmentUnlocked && learnerAssessmentDownloads.length > 0 && (
                     <p className="text-[10px] text-muted-foreground">Pass the quiz to unlock the assessment.</p>
@@ -1915,11 +1734,11 @@ export default function ModuleDetailPage() {
         <PresentationMode
           module={mod}
           flow={moduleLessonFlow}
-          isAdmin={role === "admin" || role === "moderator"}
+          isAdmin={role === "admin" || role === "lecturer"}
           onClose={() => setIsPresenting(false)}
           nextUnitId={nextModule?.id}
           nextUnitTitle={nextModule?.title}
-          routePrefix={role === "user" ? "/learner/modules" : "/modules"}
+          routePrefix={role === "learner" ? "/learner/modules" : "/modules"}
         />
       )}
     </AppLayout>

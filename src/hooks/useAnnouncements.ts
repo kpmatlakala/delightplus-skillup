@@ -36,14 +36,6 @@ function mapRow(row: DbRow): Announcement {
   };
 }
 
-// Generic RPC helper type
-type Rpc = {
-  rpc: (
-    fn: string,
-    params?: Record<string, unknown>
-  ) => Promise<{ data: unknown; error: { message: string } | null }>;
-};
-
 // ── Hook ──────────────────────────────────────────────────────────────────────
 export function useAnnouncements() {
   const [items, setItems] = useState<Announcement[]>([]);
@@ -69,8 +61,9 @@ export function useAnnouncements() {
     }
 
     try {
-      const rpc = supabase as unknown as Rpc;
-      const { data, error } = await rpc.rpc("cet_get_announcements");
+      const supabaseAny = supabase as any;
+      const { data, error } = await supabaseAny.rpc("cet_get_announcements");
+      
       if (!error && Array.isArray(data)) {
         setItems((data as DbRow[]).map(mapRow));
         setError(null);
@@ -87,7 +80,8 @@ export function useAnnouncements() {
           setError(error.message);
         }
       }
-    } catch {
+    } catch (err) {
+      console.error("Error loading announcements:", err);
       setError("Unable to load announcements right now.");
     }
 
@@ -104,17 +98,17 @@ export function useAnnouncements() {
     }
 
     // Realtime: re-fetch whenever the cet.announcements table changes
-    const channel = supabase
+    const supabaseAny = supabase as any;
+    const channel = supabaseAny
       .channel("announcements-live")
       .on(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        "postgres_changes" as any,
+        "postgres_changes",
         { event: "*", schema: "cet", table: "announcements" },
         () => { void load(); }
       )
       .subscribe();
 
-    return () => { void supabase.removeChannel(channel); };
+    return () => { supabaseAny.removeChannel(channel); };
   }, [load, rpcUnavailable]);
 
   // ── Admin mutations ──────────────────────────────────────────────────────────
@@ -125,7 +119,7 @@ export function useAnnouncements() {
         return { error: { message: "Announcements RPC is missing in Supabase." } };
       }
 
-      const rpc = supabase as unknown as Rpc;
+      const supabaseAny = supabase as any;
       // Optimistic insert
       const tempId = `temp-${Date.now()}`;
       setItems((prev) => [
@@ -140,7 +134,8 @@ export function useAnnouncements() {
         },
         ...prev,
       ]);
-      const { error } = await rpc.rpc("cet_post_announcement", {
+      
+      const { error } = await supabaseAny.rpc("cet_post_announcement", {
         p_title: title,
         p_message: message,
         p_audience: audience,
@@ -164,10 +159,13 @@ export function useAnnouncements() {
       const current = items.find((a) => a.id === id);
       if (!current) return;
       const newPinned = !current.pinned;
+      
       // Optimistic update
       setItems((prev) => prev.map((a) => (a.id === id ? { ...a, pinned: newPinned } : a)));
-      const rpc = supabase as unknown as Rpc;
-      const { error } = await rpc.rpc("cet_pin_announcement", { p_id: id, p_pinned: newPinned });
+      
+      const supabaseAny = supabase as any;
+      const { error } = await supabaseAny.rpc("cet_pin_announcement", { p_id: id, p_pinned: newPinned });
+      
       if (error) {
         if (isRpcMissingError(error.message)) {
           setRpcUnavailable(true);
@@ -186,8 +184,10 @@ export function useAnnouncements() {
 
       // Optimistic remove
       setItems((prev) => prev.filter((a) => a.id !== id));
-      const rpc = supabase as unknown as Rpc;
-      const { error } = await rpc.rpc("cet_delete_announcement", { p_id: id });
+      
+      const supabaseAny = supabase as any;
+      const { error } = await supabaseAny.rpc("cet_delete_announcement", { p_id: id });
+      
       if (error) {
         if (isRpcMissingError(error.message)) {
           setRpcUnavailable(true);

@@ -27,6 +27,29 @@ import {
 import { Badge } from "@/components/ui/badge";
 import type { Module } from "@/types/course";
 import type { ModuleLessonFlow, LessonSection } from "@/data/moduleLessonFlows";
+import {
+  module14924SpeakerNotes,
+  module14924SlideList,
+  type Module14924SlideListItem,
+} from "@/data/module14924Presentation";
+import {
+  module14920SpeakerNotes,
+  module14920SlideList,
+  type Module14920SlideListItem,
+} from "@/data/module14920Presentation";
+import {
+  module14918SlideList,
+  type Module14918SlideListItem,
+} from "@/data/module14918Presentation";
+import {
+  module14927SlideList,
+  type Module14927SlideListItem,
+} from "@/data/module14927Presentation";
+import {
+  module14915SlideList,
+  type Module14915SlideListItem,
+} from "@/data/module14915Presentation";
+import { programmeBriefingSlides } from "@/data/programmeBriefing";
 import { supabase } from "@/integrations/supabase/client";
 import {
   generateSessionCode,
@@ -49,6 +72,11 @@ interface Slide {
   title: string;
   subtitle?: string;
   bullets?: string[];
+  diagram?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  cards?: string[];
+  phaseCards?: string[];
   body?: string;
   highlight?: string;
   speakerNote?: string;
@@ -220,6 +248,627 @@ function getQuizSlides(moduleId: string, moduleTitle: string): Slide[] {
   }));
 }
 
+function extractFacilitatorScript(notes: string): string {
+  const marker = "Facilitator notes:\n";
+  const markerIndex = notes.indexOf(marker);
+  if (markerIndex === -1) return notes.trim();
+  return notes.slice(markerIndex + marker.length).trim();
+}
+
+function toModule14924Slide(item: Module14924SlideListItem, quizIndexRef: { current: number }): Slide {
+  const subtitle = item.learnerView.subtitle;
+  const bullets = item.learnerView.onScreenContent;
+  const body = item.learnerView.body;
+  const speakerNote = extractFacilitatorScript(item.facilitatorNotes);
+  const cards = item.learnerView.cards;
+  const phaseCards = item.learnerView.phaseCards;
+
+  if (item.slideNumber === 1) {
+    return {
+      type: "title",
+      title: item.title,
+      subtitle,
+      body,
+      badge: item.learnerView.badges?.[item.learnerView.badges.length - 1],
+      speakerNote,
+    };
+  }
+
+  if (/^Session\s+\d+$/i.test(item.title)) {
+    return {
+      type: "objectives",
+      title: item.title,
+      subtitle,
+      bullets,
+      body,
+      speakerNote,
+      isSessionStart: true,
+      sessionLabel: item.title,
+    };
+  }
+
+  if (/^Knowledge Check\b/i.test(item.title)) {
+    const quiz = PRESENTATION_QUIZZES["14924"]?.[quizIndexRef.current++];
+    if (quiz) {
+      return {
+        type: "quiz",
+        title: item.title,
+        subtitle: subtitle ?? "Session Quiz · Information Systems Analysis",
+        quizQuestion: quiz.question,
+        quizOptions: quiz.options,
+        quizCorrect: quiz.correct,
+        quizExplanation: quiz.explanation,
+        speakerNote,
+      };
+    }
+  }
+
+  if (/^Session Wrap-Up$/i.test(item.title)) {
+    return {
+      type: "summary",
+      title: item.title,
+      subtitle,
+      bullets,
+      body,
+      speakerNote,
+    };
+  }
+
+  return {
+    type: "content",
+    title: item.title,
+    subtitle,
+    bullets,
+    cards,
+    body,
+    phaseCards,
+    speakerNote,
+  };
+}
+
+function buildModule14924SlidesFromJson(): Slide[] {
+  const quizIndexRef = { current: 0 };
+  return module14924SlideList
+    .slice()
+    .sort((a, b) => a.slideNumber - b.slideNumber)
+    .map((item) => toModule14924Slide(item, quizIndexRef));
+}
+
+function toModule14920Slide(item: Module14920SlideListItem, quizIndexRef: { current: number }): Slide {
+  const lines = item.content
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const bulletLines = lines.filter((line) => line.startsWith("• ")).map((line) => line.replace(/^•\s*/, ""));
+  const nonBulletLines = lines.filter((line) => !line.startsWith("• "));
+  const subtitle = nonBulletLines[0];
+  const body = nonBulletLines.slice(1).join("\n") || undefined;
+
+  if (item.type === "qa" || /^Knowledge Check\b/i.test(item.title)) {
+    const quiz = PRESENTATION_QUIZZES["14920"]?.[quizIndexRef.current++];
+    if (quiz) {
+      return {
+        type: "quiz",
+        title: item.title,
+        subtitle: subtitle ?? "Session Quiz · Participate in Groups and/or Teams",
+        quizQuestion: quiz.question,
+        quizOptions: quiz.options,
+        quizCorrect: quiz.correct,
+        quizExplanation: quiz.explanation,
+        speakerNote: item.notes,
+      };
+    }
+  }
+
+  const mappedType: SlideType =
+    item.type === "title"
+      ? "title"
+      : item.type === "summary"
+      ? "summary"
+      : item.type === "activity"
+      ? "activity"
+      : "content";
+
+  return {
+    type: mappedType,
+    title: item.title,
+    subtitle,
+    body,
+    bullets: bulletLines.length ? bulletLines : undefined,
+    imageUrl: (item as Record<string, unknown>).imageUrl as string | undefined,
+    imageAlt: (item as Record<string, unknown>).imageAlt as string | undefined,
+    cards: item.cards,
+    phaseCards: item.phaseCards,
+    speakerNote: item.notes,
+  };
+}
+
+function buildModule14920SlidesFromJson(): Slide[] {
+  const quizIndexRef = { current: 0 };
+  return module14920SlideList.map((item) => toModule14920Slide(item, quizIndexRef));
+}
+
+function toModule14918Slide(item: Module14918SlideListItem, quizIndexRef: { current: number }): Slide {
+  const lines = item.content
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const bulletLines = lines.filter((line) => line.startsWith("• ")).map((line) => line.replace(/^•\s*/, ""));
+  const nonBulletLines = lines.filter((line) => !line.startsWith("• "));
+  const subtitle = nonBulletLines[0];
+  const body = nonBulletLines.slice(1).join("\n") || undefined;
+
+  if (item.type === "qa" || /^Knowledge Check\b/i.test(item.title)) {
+    const quiz = PRESENTATION_QUIZZES["14918"]?.[quizIndexRef.current++];
+    if (quiz) {
+      return {
+        type: "quiz",
+        title: item.title,
+        subtitle: subtitle ?? "Session Quiz · Describe Principles of Computer Programming",
+        quizQuestion: quiz.question,
+        quizOptions: quiz.options,
+        quizCorrect: quiz.correct,
+        quizExplanation: quiz.explanation,
+        speakerNote: item.notes,
+      };
+    }
+  }
+
+  const mappedType: SlideType =
+    item.type === "title"
+      ? "title"
+      : item.type === "summary"
+      ? "summary"
+      : item.type === "activity"
+      ? "activity"
+      : "content";
+
+  return {
+    type: mappedType,
+    title: item.title,
+    subtitle,
+    body,
+    bullets: bulletLines.length ? bulletLines : undefined,
+    cards: item.cards,
+    phaseCards: item.phaseCards,
+    speakerNote: item.notes,
+  };
+}
+
+function buildModule14918SlidesFromJson(): Slide[] {
+  const quizIndexRef = { current: 0 };
+  return module14918SlideList.map((item) => toModule14918Slide(item, quizIndexRef));
+}
+
+function toModule14927Slide(item: Module14927SlideListItem, quizIndexRef: { current: number }): Slide {
+  const lines = item.content
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const bulletLines = lines.filter((line) => line.startsWith("• ")).map((line) => line.replace(/^•\s*/, ""));
+  const nonBulletLines = lines.filter((line) => !line.startsWith("• "));
+  const subtitle = nonBulletLines[0];
+  const body = nonBulletLines.slice(1).join("\n") || undefined;
+
+  if (item.type === "qa" || /^Knowledge Check\b/i.test(item.title)) {
+    const quiz = PRESENTATION_QUIZZES["14927"]?.[quizIndexRef.current++];
+    if (quiz) {
+      return {
+        type: "quiz",
+        title: item.title,
+        subtitle: subtitle ?? "Session Quiz · Apply Problem-Solving Strategies",
+        quizQuestion: quiz.question,
+        quizOptions: quiz.options,
+        quizCorrect: quiz.correct,
+        quizExplanation: quiz.explanation,
+        speakerNote: item.notes,
+      };
+    }
+  }
+
+  const mappedType: SlideType =
+    item.type === "title"
+      ? "title"
+      : item.type === "summary"
+      ? "summary"
+      : item.type === "activity"
+      ? "activity"
+      : "content";
+
+  return {
+    type: mappedType,
+    title: item.title,
+    subtitle,
+    body,
+    bullets: bulletLines.length ? bulletLines : undefined,
+    imageUrl: item.imageUrl,
+    imageAlt: item.imageAlt,
+    cards: item.cards,
+    phaseCards: item.phaseCards,
+    speakerNote: item.notes,
+  };
+}
+
+function buildModule14927SlidesFromJson(): Slide[] {
+  const quizIndexRef = { current: 0 };
+  return module14927SlideList.map((item) => toModule14927Slide(item, quizIndexRef));
+}
+
+function toModule14915Slide(item: Module14915SlideListItem, quizIndexRef: { current: number }): Slide {
+  const lines = item.content
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const bulletLines = lines.filter((line) => line.startsWith("• ")).map((line) => line.replace(/^•\s*/, ""));
+  const nonBulletLines = lines.filter((line) => !line.startsWith("• "));
+  const subtitle = nonBulletLines[0];
+  const body = nonBulletLines.slice(1).join("\n") || undefined;
+
+  if (item.type === "qa" || /^Knowledge Check\b/i.test(item.title)) {
+    const quiz = PRESENTATION_QUIZZES["14915"]?.[quizIndexRef.current++];
+    if (quiz) {
+      return {
+        type: "quiz",
+        title: item.title,
+        subtitle: subtitle ?? "Session Quiz · Design a Computer Program to Specification",
+        quizQuestion: quiz.question,
+        quizOptions: quiz.options,
+        quizCorrect: quiz.correct,
+        quizExplanation: quiz.explanation,
+        speakerNote: item.notes,
+      };
+    }
+  }
+
+  const mappedType: SlideType =
+    item.type === "title"
+      ? "title"
+      : item.type === "summary"
+      ? "summary"
+      : item.type === "activity"
+      ? "activity"
+      : "content";
+
+  return {
+    type: mappedType,
+    title: item.title,
+    subtitle,
+    body,
+    bullets: bulletLines.length ? bulletLines : undefined,
+    imageUrl: item.imageUrl,
+    imageAlt: item.imageAlt,
+    cards: item.cards,
+    phaseCards: item.phaseCards,
+    speakerNote: item.notes,
+  };
+}
+
+function buildModule14915SlidesFromJson(): Slide[] {
+  const quizIndexRef = { current: 0 };
+  return module14915SlideList.map((item) => toModule14915Slide(item, quizIndexRef));
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Per-module facilitator speaker notes
+   These are the talking-point scripts displayed on the mobile remote.
+───────────────────────────────────────────────────────────────────────────── */
+interface ModuleSpeakerNotes {
+  title: string;
+  objectives: string;
+  activityIndividual: string;
+  activityGroup: string;
+  summary: string;
+}
+
+const MODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes | Record<string, string>> = {
+  /* ── Block 1 ── */
+  "14924": module14924SpeakerNotes,
+  "14920": module14920SpeakerNotes,
+
+  "14918": {
+    title:
+      "Day 3 — Describe Principles of Computer Programming.\n\n" +
+      "Attendance register, then gauge the room: 'Who has written any code before, even a spreadsheet formula, a macro, or HTML?' This tells you your starting baseline.\n\n" +
+      "Set expectations clearly: 'Today is about DESCRIBING and DESIGNING programs — not running them. We will WRITE code in Block 2. Today we learn the grammar of the language before we speak it.'",
+    objectives:
+      "Walk through all 4 outcomes:\n\n" +
+      "• Outcome 2 (data types): Mention that most coding bugs are caused by type mismatches — understanding types prevents the most common class of errors.\n" +
+      "• Outcome 3 (algorithm structures): This is the heart of the day. Sequence → Selection → Iteration. Every program ever written uses only these three.\n" +
+      "• Outcome 4 (validation vs verification): Ask — 'What's the difference between checking whether data is correct and checking whether a system was built correctly?' Most learners conflate them.\n\n" +
+      "Confirm: workbooks open to the correct unit before proceeding.",
+    activityIndividual:
+      "Allow 8–10 minutes per activity. This is a concept-heavy unit — pacing matters.\n\n" +
+      "• Activity 2 (write pseudocode): The biggest hurdle. Do a LIVE demo on the whiteboard first. Write pseudocode for 'Calculate a learner's average mark for 3 tests.' Use IF/ELSE and a loop so both control structures appear.\n" +
+      "• Pair struggling learners with stronger ones for Activity 2 — not for the answer, but for coaching.\n" +
+      "• Activity 4 (arithmetic and logical operators): Remind them % is modulo (remainder), not percent. Walk through one example of each operator class.\n" +
+      "• Activity 7 (validation vs verification): Use medical analogy — validation checks the right medicine; verification checks the medicine was made correctly.",
+    activityGroup:
+      "There is no dedicated group task for this unit — channel group energy into peer desk-checking.\n\n" +
+      "After Activity 2: pair learners to swap pseudocode and trace each other's logic step by step. Each pair flags at least ONE logical error in their partner's code.\n\n" +
+      "Debrief: put one pair's pseudocode on the board. Workshop it together — what would it produce? Where does it break?",
+    summary:
+      "Challenge round — ask 3–4 learners:\n" +
+      "1. 'Give me an example of a Boolean expression in plain English.'\n" +
+      "2. 'What control structure would you use to check if a mark is above 50%?' (Selection / if-else)\n" +
+      "3. 'What control structure would you use to print all numbers from 1 to 10?' (Iteration / loop)\n" +
+      "4. 'What is the difference between validation and verification?'\n\n" +
+      "Remind:\n" +
+      "• Pseudocode work should be kept — feeds directly into Day 5 (Design) and Block 2 (Apply)\n" +
+      "• Tomorrow: Apply Problem-Solving Strategies (Day 4).",
+  },
+
+  "14927": {
+    title:
+      "Day 4 — Apply Problem-Solving Strategies.\n\n" +
+      "Attendance register, then opening question: 'Tell me about a genuine workplace problem you had to solve in the last month. What did you do first?'\n\n" +
+      "Take 2–3 answers. Write the steps they describe on the board. We'll compare them to the structured models at the end of the day.\n\n" +
+      "Key message: 'You already solve problems every day. This unit gives you tools to do it more systematically and to document it for your PoE.'",
+    objectives:
+      "Walk through all 3 outcomes:\n\n" +
+      "• Outcome 1 (define and analyse problems): Stress the word ANALYSE — most people jump to solutions before they've fully understood the problem.\n" +
+      "• Outcome 2 (evaluate solutions): The SFF matrix (Suitability, Feasibility, Fit) is the evaluation framework — introduce it early so learners can reference it during activities.\n" +
+      "• Outcome 3 (implement and monitor): Ask — 'What's the difference between implementing a solution and monitoring it?' Monitoring is the part most teams skip.",
+    activityIndividual:
+      "Allow 10 minutes per activity — this is the most activity-heavy unit (6 individual tasks).\n\n" +
+      "• Activity 1 (root causes): Push beyond surface answers. 'Equipment failure' → Why did the equipment fail? 'Staff didn't know' → Why didn't they know? Keep asking WHY.\n" +
+      "• Activity 3 (fishbone diagram): Model one live on the board BEFORE learners attempt it. Use this subject: 'Learners consistently submit workbook activities late.' Bones: People, Process, Environment, Technology, Resources, Communication.\n" +
+      "• Activity 4 (SFF matrix): Walk through each criterion with a concrete example. Suitability = does it solve the right problem? Feasibility = can we actually do it with what we have? Fit = does it match the organisation's culture and constraints?\n" +
+      "• Activity 6 (implementation plan): Must include: task, owner, deadline, resources needed, success measure.",
+    activityGroup:
+      "Group Problem Analysis and Implementation Plan — allow 25 minutes.\n\n" +
+      "Subject: a recurring CET lab issue (no power, booking conflicts, printer failures — let groups choose a real one they know).\n\n" +
+      "Deliverable: one A4 fishbone diagram + one implementation plan with at least 5 tasks, owners, and a timeline.\n\n" +
+      "Each group presents in 3 minutes. Class challenge: 'What's the highest-risk step in their implementation plan?'\n\n" +
+      "Collect these as PoE evidence — photograph or scan them.",
+    summary:
+      "Connect back to the opening answers: 'Look at what you said at the start. Did you follow a structured process or an intuitive one? What would the structured approach have changed?'\n\n" +
+      "Closing question: 'If you had to implement your group's solution first thing tomorrow, what is literally the first action you would take?'\n\n" +
+      "Remind:\n" +
+      "• Workbook activities + fishbone diagrams are PoE artefacts\n" +
+      "• Tomorrow is Day 5 (Design a Computer Program) — the final day of Block 1\n" +
+      "• Block 1 assessment date and OTP process reminder.",
+  },
+
+  "14915": {
+    title:
+      "Day 5 — Design a Computer Program to Specification. Final day of Block 1.\n\n" +
+      "Before we start: 'What happens when developers start coding without a design?' Take 2–3 answers.\n\n" +
+      "Expected answers: bugs discovered late, features missing, rework, missed deadlines. These are not hypothetical — the Standish CHAOS Report consistently shows that poor design is the #1 cause of IT project failure.\n\n" +
+      "8 credits today — the highest-credit unit in Block 1. The Group Task (Program Design Document) is a substantial PoE deliverable.",
+    objectives:
+      "Walk through all 4 outcomes:\n\n" +
+      "• Outcome 1 (structured design): Connect to yesterday's problem-solving. Design is structured thinking applied to software.\n" +
+      "• Outcome 3 (documentation tools): Emphasise that pseudocode written today is one step from real code. The investment in good pseudocode shrinks the coding effort in Block 2.\n" +
+      "• Outcome 4 (maintenance cycle): Ask — 'After you deploy software, are you done?' (Never.) Maintenance is the longest and most expensive phase of any system's life.\n\n" +
+      "Confirm: VS Code is installed and accessible for syntax checker exercises later.",
+    activityIndividual:
+      "This unit has the most activities (9). Prioritise Activities 8–9 (desk-checking & compile vs desk-check) — these are Assessment favourites.\n\n" +
+      "• Activity 2 (decision tree): Do a live example first. Business rule: 'If a learner's attendance is below 80% AND their assignment mark is below 50%, they are at risk.' Draw the tree live.\n" +
+      "• Activity 5 (syntax checker): Demo in VS Code live. Introduce a deliberate bug in a code snippet. Show how the syntax checker catches it — but remind them: syntax checkers don't catch LOGIC errors.\n" +
+      "• Activity 8 (desk-check): Pair learners. One writes a 10-line pseudocode snippet, the other manually traces it with sample inputs. The tracer writes down the state of all variables at each step.\n" +
+      "• Activity 9 (desk-check vs compile): Key distinction — desk-checking = manual logic trace, compiling = automated syntax check. You need BOTH.",
+    activityGroup:
+      "Program Design Document for a CET Lab Booking Tool — allow 30 minutes. Largest group task of Block 1.\n\n" +
+      "Deliverable must include:\n" +
+      "1. Module breakdown (structure diagram) showing at least 4 modules\n" +
+      "2. One decision table for a booking rule\n" +
+      "3. Pseudocode for at least one module\n" +
+      "4. Data dictionary: list at least 6 data items with type and description\n\n" +
+      "Quality check before presentations: Does the design have enough detail to actually code from? If not, it's not a design — it's just a list of ideas.\n\n" +
+      "Collect for PoE. Photograph the whiteboard/flip chart work.",
+    summary:
+      "Block 1 complete — CELEBRATE this milestone.\n\n" +
+      "Go round the room (quick round-robin): 'What is ONE thing from Block 1 that you need to revisit or practice before Block 2?'\n\n" +
+      "Write the answers on the board. This becomes your revision list and shows you where to spend extra support time.\n\n" +
+      "Reminders:\n" +
+      "• Block 1 assessment → OTP will be provided → submit via the portal\n" +
+      "• Block 2 starts [Date — insert here]. Location: [confirm venue].\n" +
+      "• Between now and Block 2: install Python and VS Code at home if possible\n" +
+      "• Ensure all workbook activities from Days 1–5 are complete.",
+  },
+
+  /* ── Block 2 ── */
+  "14910": {
+    title:
+      "Block 2, Day 1 — Apply Principles of Computer Programming. We move from designing to doing.\n\n" +
+      "Welcome back! Ask: 'What revision did you do between Block 1 and Block 2?'\n\n" +
+      "Then: 'Who feels nervous about coding today?' Normalise it — every developer was once a complete beginner. Learning to code is like learning a new language: you will feel lost at first, and then one day it clicks.\n\n" +
+      "TECH CHECK FIRST (10 minutes): Ensure Python + VS Code is working on every machine before loading the first slide. Do not skip this — one broken environment can derail the day.",
+    objectives:
+      "Walk through all 3 outcomes. Key messages:\n\n" +
+      "• Outcome 1 (write structured programs): We use Python as the primary language. JavaScript is the alternative. The concepts transfer to any language.\n" +
+      "• Outcome 2 (control structures and functions): This is where pseudocode from Day 3 becomes real code. Use their own pseudocode from the workbook as the starting point.\n" +
+      "• Outcome 3 (test and debug): Debugging is not optional. Every learner must be able to READ error messages. Run a deliberate error on screen — show how to read the traceback.\n\n" +
+      "Pair programming works best for this unit: one learner writes, one navigates. Switch every 30 minutes.",
+    activityIndividual:
+      "Guided coding sessions — keep all learners at roughly the same point. Use the projector to live-code alongside learners.\n\n" +
+      "• OOP section: Use the class diagram analogy — 'A class is a blueprint; an object is the building built from it.' Draw a simple class on the whiteboard: class Dog with attributes name, breed and method bark().\n" +
+      "• File I/O: Ask — 'Where does data go when your program closes?' (Nowhere — unless you save it.) Writing to a file = persistence. Read from file = data loading.\n" +
+      "• Error handling: Show the difference between a program that CRASHES with an unhandled exception and one that catches it and gives a meaningful user message. Learners should see both.\n\n" +
+      "Key principle: if learners are stuck for more than 5 minutes, they should ask. Sitting stuck silently is the fastest way to fall behind.",
+    activityGroup:
+      "Mini-project development — assign projects at the start of Day 6.\n\n" +
+      "Project options: simple student grade calculator, basic inventory tracker, or simple contact book. Each group picks one.\n\n" +
+      "Day 6 goal: have a working prototype with input, processing, and output.\n" +
+      "Day 7 goal: add file I/O and basic error handling.\n\n" +
+      "Code review workshop (Day 7 afternoon): Each group shares their screen. Class identifies:\n" +
+      "1. Something that works well\n" +
+      "2. One potential bug or improvement\n\n" +
+      "Celebrate working code — even small wins build confidence and momentum.",
+    summary:
+      "Live demo: ask one pair to project their code and walk the class through it.\n\n" +
+      "Closing questions:\n" +
+      "1. 'What was the hardest concept today?'\n" +
+      "2. 'What is one debugging technique you'll use tomorrow?'\n\n" +
+      "Reminders:\n" +
+      "• Save all code — it will be used in Block 3 testing unit\n" +
+      "• Mini-project must be complete by end of Day 7\n" +
+      "• Next: Create Web Applications with Scripting (Days 8–9).",
+  },
+
+  "14933": {
+    title:
+      "Days 8–9 — Create Web Applications with Scripting.\n\n" +
+      "Opening: 'Open your phone. Name the last app or website you used in the last 5 minutes.'\n\n" +
+      "Take 4–5 answers out loud. Then: 'By the end of tomorrow, you'll understand the technology behind every one of those things — and you'll have built a small one yourself.'\n\n" +
+      "Check: does everyone have a browser with DevTools accessible? In Chrome/Edge: F12 or right-click → Inspect. Do a 2-minute DevTools orientation before starting.",
+    objectives:
+      "Walk through all 3 outcomes:\n\n" +
+      "• Outcome 1 (interactive web pages): HTML = structure, CSS = styling, JavaScript = behaviour. Draw this on the board as three layers: house frame, paint, plumbing.\n" +
+      "• Outcome 2 (DOM manipulation): The DOM is the bridge between JavaScript and the HTML you see. Ask — 'Has anyone ever used inspect element to change something on a website?' Most learners have. That IS DOM manipulation.\n" +
+      "• Outcome 3 (responsive design): Ask — 'What happens to a website designed only for desktop when you open it on a phone?' Use a real example. This is why responsive design exists.\n\n" +
+      "IMPORTANT: The portfolio page they build is the PoE assessment artefact. They KEEP it. Ensure they save their work at the end of each session.",
+    activityIndividual:
+      "Build the portfolio page incrementally — add one section per activity slot.\n\n" +
+      "• Start with provided starter HTML file. Ask learners to name the page with their own name immediately — ownership increases engagement.\n" +
+      "• DOM manipulation demo: Open DevTools console. Type document.querySelector('h1').textContent = 'Hello World'; Learners see the change instantly. Magic moment. Then show it resets on refresh — that's why we link JavaScript files.\n" +
+      "• Responsive design challenge: give learners a non-responsive layout and ask them to make it mobile-friendly using media queries. Test by resizing the browser window.\n" +
+      "• Accessibility reminder: every image needs an alt attribute. Every form input needs a label. This is not optional — it's standard professional practice.\n\n" +
+      "Learners who finish early: add a contact form with JavaScript validation to their portfolio page.",
+    activityGroup:
+      "Interactive form validation group challenge — allow 30 minutes.\n\n" +
+      "Groups build a registration form with client-side validation:\n" +
+      "• Name: required, min 3 characters\n" +
+      "• Email: must contain @ and .\n" +
+      "• Password: at least 8 characters\n" +
+      "• Confirm password: must match\n\n" +
+      "Display a clear error message per field. On success: show a confirmation message.\n\n" +
+      "Presentations: each group demos their form. The class tries to break it by submitting invalid data.\n\n" +
+      "Observe: is error messaging friendly and specific, or just 'Error'? Professional UX starts here.",
+    summary:
+      "Display 3–4 learner portfolio pages on the projector (with permission). Celebrate diversity of designs.\n\n" +
+      "Close Block 2:\n" +
+      "1. 'What is one thing you built this week that you didn't think you could?'\n" +
+      "2. 'What technology question are you most curious about for Block 3?'\n\n" +
+      "Reminders:\n" +
+      "• Save all code from Block 2 — used in the Block 3 testing unit\n" +
+      "• Block 2 assessment OTP → submit via portal\n" +
+      "• Block 3 starts [Date — insert here].",
+  },
+
+  /* ── Block 3 ── */
+  "14908": {
+    title:
+      "Block 3, Day 11 — Testing IT Systems Against Specifications.\n\n" +
+      "Welcome back. Opening: 'How many of you have ever used software that crashed or gave a wrong result? What do you think caused it?'\n\n" +
+      "Take 3–4 answers. Most errors trace to insufficient testing — not bad code. Today we learn to test properly.\n\n" +
+      "Strong connection to Block 2 work: 'The programs you built in Block 2 will be your test subjects today.' If they brought their code, open it. If not, use the class starter file.",
+    objectives:
+      "Walk through all 3 outcomes:\n\n" +
+      "• Outcome 1 (testing methodologies): Distinguish the four levels — use a 2×2 on the whiteboard: unit / integration / system / acceptance. Ask: 'Which level would catch a bug where two modules pass correct data to each other but produce a wrong final result?' (Integration test.)\n" +
+      "• Outcome 2 (test case design): A test case is NOT just 'run the program and see what happens.' It has: ID, input description, expected output, actual output, pass/fail. Walk through the format explicitly.\n" +
+      "• Outcome 3 (QA principles): Quality Assurance is not the same as testing. QA is the PROCESS; testing is one ACTIVITY within it.\n\n" +
+      "Ask: 'Is it possible to test a program completely?' (No — you can't test every possible input. Discuss why.)",
+    activityIndividual:
+      "Test case writing workshop — give learners the starter code with 5 seeded bugs.\n\n" +
+      "• Step 1: Write test cases BEFORE running any code. Force the discipline.\n" +
+      "• Step 2: Run the tests. Mark each case pass or fail.\n" +
+      "• Step 3: Log each bug with: bug ID, severity (low/medium/high/critical), affected module, steps to reproduce, expected vs actual behaviour.\n\n" +
+      "Bug hunting game: keep a leaderboard on the whiteboard — who found the most bugs? This makes defect detection satisfying rather than intimidating.\n\n" +
+      "QA checklist creation: groups build a QA checklist for a simple login system. Categories: functionality, security, usability, performance, accessibility.",
+    activityGroup:
+      "Cross-team code review (connects to software craftsmanship).\n\n" +
+      "Each pair from Block 2 swaps their mini-project code with another pair.\n\n" +
+      "The reviewing pair must:\n" +
+      "1. Write at least 5 test cases covering key functions\n" +
+      "2. Run the tests\n" +
+      "3. Log any bugs found\n" +
+      "4. Write a 1-paragraph test report: overall quality, number of bugs found, recommendation\n\n" +
+      "Present findings back to the original authors. Ask the authors: 'Did your tester find bugs you didn't know about?'\n\n" +
+      "This is the most realistic real-world exercise in the qualification — treat it seriously.",
+    summary:
+      "Testing trivia close (rapid-fire, hands up wins):\n" +
+      "1. 'Which test type checks a single function in isolation?' (Unit test)\n" +
+      "2. 'Which test involves the actual end-users trying the system?' (UAT / Acceptance test)\n" +
+      "3. 'What does a test case need that just running the program doesn't give you?' (Expected output, documented result)\n\n" +
+      "Reminders:\n" +
+      "• Test reports are PoE artefacts — collect them now\n" +
+      "• Tomorrow: Resolve Computer Users' Problems (Day 12)\n" +
+      "• Day 13 is the final day — capstone project; come prepared.",
+  },
+
+  "14919": {
+    title:
+      "Day 12 — Resolve Computer Users' Problems.\n\n" +
+      "Opening: 'When a user phones IT and says: \"The computer is broken\" — what is the actual problem?'\n\n" +
+      "Take 3–4 answers. The answer is almost never the computer itself — it's usually: can't access a specific file, software won't open, printer not responding, forgotten password.\n\n" +
+      "Key message: 'IT support is 80% communication and 20% technical. The most important skill today is asking the right question.'",
+    objectives:
+      "Walk through all 3 outcomes:\n\n" +
+      "• Outcome 1 (diagnose and resolve): Frame the troubleshooting framework early — Ask → Reproduce → Isolate → Fix → Verify → Document. Write this on the board. It stays there all day.\n" +
+      "• Outcome 2 (troubleshooting methodologies): Distinguish Top-Down (start from the application layer) vs Bottom-Up (start from hardware/network). Experienced technicians develop intuition about which to use when.\n" +
+      "• Outcome 3 (communicate solutions): Ask — 'How do you explain a technical fix to someone who has never used a computer before?' This is a real skill. It requires translating — not talking down.",
+    activityIndividual:
+      "Troubleshooting simulations — pre-prepare 5 scenario cards (or use the workbook scenarios).\n\n" +
+      "Scenarios to include:\n" +
+      "• 'I can't send emails' — network connectivity vs email client vs account issue?\n" +
+      "• 'The program is running slowly' — RAM/CPU vs storage vs background processes?\n" +
+      "• 'My document disappeared' — save vs sync vs deleted?\n" +
+      "• 'I can see the Wi-Fi but can't connect' — password vs DNS vs firewall?\n\n" +
+      "Learners must write the troubleshooting steps they'd follow and the questions they'd ask the user. Do NOT let them jump to a solution without documenting their process.\n\n" +
+      "Documentation activity: after resolving each scenario, write a resolution note — this is what goes in the helpdesk ticket.",
+    activityGroup:
+      "Role-play user support exercise — the most important activity of this unit.\n\n" +
+      "Setup: Facilitator (or a volunteer learner) plays the user. 'Support agent' learner faces AWAY from the projector — must gather info only through questions.\n\n" +
+      "Rules:\n" +
+      "• No guessing. Every action must be based on information the user confirmed.\n" +
+      "• Class evaluates: did they ask clarifying questions? Did they communicate clearly? Did they document?\n\n" +
+      "Run at least 3 rounds with different 'agents'. Rotate.\n\n" +
+      "Debrief: 'What's the most common mistake we saw?' (Assuming they know the problem. Always listen first.)",
+    summary:
+      "Walk back through the framework on the board: Ask → Reproduce → Isolate → Fix → Verify → Document.\n\n" +
+      "Ask the group: 'Which of these 6 steps do most IT people skip?' (Verify and Document — and that's why the same problem recurs.)\n\n" +
+      "Closing question: 'What is one thing about user communication that you will do differently starting tomorrow?'\n\n" +
+      "Reminders:\n" +
+      "• Role-play documentation is a PoE artefact\n" +
+      "• Tomorrow is Day 13 — final day, capstone project, CELEBRATION\n" +
+      "• Ensure EVERYTHING in the workbook is complete before the Block 3 assessment.",
+  },
+
+  "120379": {
+    title:
+      "Final unit — Work as a Project Team Member. Day 13.\n\n" +
+      "Welcome to the last delivery day of this qualification (well done — 14 days in!). This is also the most integrative unit: everything from the previous 9 units feeds into this one.\n\n" +
+      "Opening: 'Think about this 15-day programme as a project. What has been well-managed? What would you have done differently as the project manager?'\n\n" +
+      "Take 3–4 answers. This exercise simultaneously reviews content from the whole qualification AND introduces the project lifecycle. Strong entry point.",
+    objectives:
+      "Walk through all 3 outcomes:\n\n" +
+      "• Outcome 1 (participate effectively): Participating effectively means contributing to DELIVERABLES, not just attending meetings. Ask: 'What is the difference between being PRESENT in a project team and being ENGAGED?'\n" +
+      "• Outcome 2 (project management fundamentals): PMBOK 5 process groups — Initiating, Planning, Executing, Monitoring/Controlling, Closing. Ask: 'Which phase do most IT projects underinvest in?' (Planning — they rush to start coding.)\n" +
+      "• Outcome 3 (deliver outputs within constraints): The triple constraint — Scope, Time, Cost. If any one increases, at least one of the others must flex. The client wants all three: fast, cheap, complete. They get to pick two.\n\n" +
+      "8 credits — significant weight. The capstone project kickoff IS the assessment deliverable.",
+    activityIndividual:
+      "Pre-capstone work:\n\n" +
+      "• Each learner individually identifies their role in their capstone project team using the RACI matrix (Responsible, Accountable, Consulted, Informed).\n" +
+      "• Each learner writes their 2 strongest contributions and 1 area they'll need team support on.\n\n" +
+      "Stakeholder communication exercise:\n" +
+      "• Given a project progress update, learners write TWO versions: one for the technical team, one for a non-technical client.\n" +
+      "• Compare the two in class — what changed? What must stay consistent? (The facts. What changes is the language and level of detail.)",
+    activityGroup:
+      "Sprint planning exercise (40 minutes).\n\n" +
+      "Groups receive a fictional product backlog for an 'IT Learning Management System'.\n\n" +
+      "Task: Prioritise the backlog and plan a 1-week sprint:\n" +
+      "1. Assign 5–7 user stories to the sprint\n" +
+      "2. Estimate each story in hours or story points\n" +
+      "3. Assign stories to team members by skill match\n" +
+      "4. Identify the biggest risk in the sprint\n" +
+      "5. Present a simple sprint board (To Do / In Progress / Done)\n\n" +
+      "Each group presents their sprint plan (3 minutes). Class question: 'What would you cut first if you were 2 days behind midway through the sprint?'\n\n" +
+      "Connect: this is how real development teams at CET, government and private sector work — daily standups, sprint reviews, retrospectives.",
+    summary:
+      "Programme complete — CELEBRATE!\n\n" +
+      "Full-circle moment: 'On Day 1 I asked you about an IT system that failed. Now you know where failures come from — and what to do about them.'\n\n" +
+      "Round-robin close — every person in the room states:\n" +
+      "1. ONE thing they will do differently at work because of this qualification\n" +
+      "2. ONE unit standard they'd like to explore further\n\n" +
+      "Final reminders:\n" +
+      "• Block 3 assessment OTP → submit via portal\n" +
+      "• All workbook activities must be complete for the full PoE\n" +
+      "• PoE submission deadline: confirm with your institution\n" +
+      "• Any questions about certification or RPL — email Kabelo: matlakalakabelo1@gmail.com",
+  },
+};
+
 /* ─────────────────────────────────────────────────────────────────────────────
    Flow-based (session-structured) slide builders
 ───────────────────────────────────────────────────────────────────────────── */
@@ -228,7 +877,10 @@ function getQuizSlides(moduleId: string, moduleTitle: string): Slide[] {
 function sectionToSlides(
   section: LessonSection,
   sessionLabel: string,
-  sessionShortTitle: string
+  sessionShortTitle: string,
+  moduleId?: string,
+  sessionOutcomes?: string[],
+  nextSectionTitle?: string
 ): Slide[] {
   const bullets: string[] = [];
   let body = "";
@@ -248,7 +900,7 @@ function sectionToSlides(
         if (!highlight) highlight = block.text;
         break;
       case "table": {
-        const rows = block.rows.slice(0, 5).map((row) =>
+        const rows = block.rows.slice(0, 4).map((row) =>
           block.headers.length === 2
             ? `${row[0] ?? ""}: ${row[1] ?? ""}`
             : row.join(" · ")
@@ -266,9 +918,76 @@ function sectionToSlides(
     }
   }
 
+  /* Build a contextual discussion prompt from the section title */
+  const topicDiscussionPrompts: Record<string, string> = {
+    "sdlc": "Ask: 'Which SDLC phase do you think is most commonly skipped by developers under pressure?' (Implementation / Testing.) Discuss the consequences.",
+    "analysis": "Ask: 'If you had to analyse a system you've never seen before, what is the first question you would ask?' Take 3 answers before presenting the content.",
+    "requirements": "Ask: 'What is the difference between what a user ASKS for and what they actually NEED?' Use a relatable example — an email system that sends perfectly but notifies the wrong person.",
+    "data flow": "Draw the DFD notation key on the whiteboard before explaining. Learners often confuse the symbols. Reference: circle=process, arrow=data flow, parallel lines=data store, rectangle=external entity.",
+    "team": "Ask: 'In your experience, what is the single biggest reason teams fail?' Collect answers and map them to the content points.",
+    "problem": "Emphasise: defining the problem correctly is more valuable than having the answer quickly. A well-defined problem is 50% solved.",
+    "pseudocode": "Write a simple pseudocode example live on the board before learners attempt any activity. Use real numbers. Trace through it step by step.",
+    "algorithm": "Use physical analogy — a recipe IS an algorithm. It has inputs (ingredients), sequence (steps), decisions (if crispy, add more time), and loops (stir every 2 minutes).",
+    "data type": "Ask: 'What goes wrong if you store a phone number as an integer?' (You lose the leading zero. That is a real data type bug with real consequences.)",
+    "validation": "Key distinction: Validation checks the DATA is correct. Verification checks the SYSTEM was built correctly. You need both — separately.",
+    "design": "Ask learners to critique a real design artefact (pseudocode or flowchart on the board). What is clear? What is ambiguous? Good design leaves no room for interpretation.",
+    "testing": "Ask: 'Can you test a program completely?' (No.) Then: 'So how do you know when testing is enough?' (When risk is acceptably low and all requirements are verified.)",
+    "function": "Ask: 'What is the benefit of breaking code into functions instead of writing one long block?' (Reusability, readability, easier testing, easier maintenance.)",
+    "project": "Connect to something they know: 'The organisation and planning we did for this 15-day programme — that IS project management. What would have gone wrong without it?'",
+    "web": "Open DevTools live in the browser (F12). Show the HTML structure of a real page. Learners immediately see the connection between code and the screen.",
+    "loop": "Ask: 'Without a loop, how would you write code to add up 100 numbers?' (100 lines.) 'With a loop? 3 lines.' That is why loops exist.",
+  };
+
+  const topicVisualPrompts: Record<string, string> = {
+    "sdlc": "Visual: draw the 6 SDLC phases as a looped timeline and place one real task under each phase.",
+    "analysis": "Visual: sketch an AS-IS vs TO-BE comparison with two columns on the board.",
+    "requirements": "Visual: create a simple user story map (actor → need → value) with sticky notes.",
+    "data flow": "Visual: draw a mini DFD live (external entity → process → data store → output).",
+    "team": "Visual: map team roles in a responsibility matrix (who decides / who executes / who approves).",
+    "problem": "Visual: use a fishbone diagram to break causes into People / Process / Tech / Environment.",
+    "pseudocode": "Visual: run a line-by-line trace table (step, variable values, expected output).",
+    "algorithm": "Visual: draw input → process → output blocks, then animate one example through the flow.",
+    "data type": "Visual: build a quick table: field name | data type | reason | validation rule.",
+    "validation": "Visual: compare validation vs verification in a two-column board chart.",
+    "design": "Visual: present one good and one bad design artefact and ask learners to critique both.",
+    "testing": "Visual: draw a test pyramid (unit, integration, system, acceptance) and place examples.",
+    "function": "Visual: box a large program into smaller functions and label each function responsibility.",
+    "project": "Visual: draw a simple Gantt strip for planning, execution, review.",
+    "web": "Visual: split the screen into HTML (structure), CSS (style), JS (behaviour) and map each change.",
+    "loop": "Visual: trace 3 loop iterations in a table so learners can see state changes clearly.",
+  };
+
+  /* Match section title keywords to a contextual prompt (case-insensitive) */
+  const titleLower = section.title.toLowerCase();
+  const matchedPrompt = Object.entries(topicDiscussionPrompts).find(([key]) =>
+    titleLower.includes(key)
+  )?.[1];
+  const matchedVisual = Object.entries(topicVisualPrompts).find(([key]) =>
+    titleLower.includes(key)
+  )?.[1];
+
+  const outcomeAnchor = sessionOutcomes?.[0]
+    ? `Outcome focus: ${sessionOutcomes[0]}`
+    : "Outcome focus: connect this concept directly to the session outcomes before moving on.";
+
+  const moduleName = moduleId ? `(Module ${moduleId}) ` : "";
+  const subTopicNote = speakerExtras.length > 0 ? `Sub-topics covered: ${speakerExtras.join(" | ")}.\n\n` : "";
+  const transitionLine = nextSectionTitle
+    ? `Transition line: \"Now that ${section.title} is clear, let's move into ${nextSectionTitle} so we can apply this practically.\"`
+    : 'Transition line: "We have completed the section flow. Next, we consolidate through recap and quiz checks."';
   const baseNote =
-    (speakerExtras.length > 0 ? `Sub-topics: ${speakerExtras.join(" | ")}. ` : "") +
-    "Expand on each point using the Learner Guide. Ask learners to annotate their workbooks as you present.";
+    `${subTopicNote}TOPIC: ${section.title}. ${moduleName}\n\n` +
+    `${outcomeAnchor}\n\n` +
+    "Facilitation flow:\n" +
+    "1) Explain the concept in plain language (no jargon first).\n" +
+    "2) Demonstrate one concrete example step-by-step.\n" +
+    "3) Check understanding with one short learner response.\n\n" +
+    "Teaching pointers:\n" +
+    `• ${matchedPrompt ?? `Ask: 'Can someone give a real-world example of "${section.title}" from their own workplace or study?'`}\n` +
+    `• ${matchedVisual ?? "Visual: sketch the concept structure on the board before discussing bullets (diagram, mini-table, or flow)."}\n` +
+    "• Ask learners to annotate their workbooks as you present and highlight one key term they must remember.\n" +
+    "• End by restating the practical workplace implication of this concept.\n\n" +
+    transitionLine;
 
   if (bullets.length === 0) {
     return [{
@@ -282,7 +1001,7 @@ function sectionToSlides(
     }];
   }
 
-  const CHUNK = 5;
+  const CHUNK = 4;
   const result: Slide[] = [];
   for (let i = 0; i < bullets.length; i += CHUNK) {
     const chunk = bullets.slice(i, i + CHUNK);
@@ -301,9 +1020,216 @@ function sectionToSlides(
   return result;
 }
 
+function getModuleAnchorConfig(moduleId: string): {
+  subtitle: string;
+  roadmapLead: string;
+  anchorTitle: string;
+  anchorDiagram: string;
+  anchorBullets: string[];
+  anchorHighlight: string;
+} {
+  const defaults = {
+    subtitle: "From foundation to application",
+    roadmapLead: "Follow this sequence to keep understanding and execution aligned.",
+    anchorTitle: "Learning Loop Visual Anchor",
+    anchorDiagram:
+      "Context -> Concepts -> Methods -> Practice -> Feedback -> Improve\n" +
+      "   |          |           |           |           |\n" +
+      "   v          v           v           v           v\n" +
+      "why it matters  what it means  how we do it  try it now  refine approach",
+    anchorBullets: [
+      "Every section should answer: Why this matters before How to do it",
+      "Practice and feedback are built into the flow, not left for the end",
+      "This loop helps learners connect theory to workplace execution",
+    ],
+    anchorHighlight:
+      "When a concept feels difficult, return to the loop: context first, then method, then guided practice.",
+  };
+
+  const moduleConfigs: Record<string, Partial<typeof defaults>> = {
+    "14910": {
+      subtitle: "Collaboration and communication progression",
+      roadmapLead: "We move from team principles to role execution and conflict handling.",
+      anchorTitle: "Team Collaboration Anchor",
+      anchorDiagram:
+        "Team Goal -> Roles -> Communication -> Coordination -> Review -> Improve\n" +
+        "    |          |            |              |           |\n" +
+        "    v          v            v              v           v\n" +
+        "shared purpose  clear ownership  quality handoffs  delivery check  team learning",
+      anchorBullets: [
+        "Clarity of roles and communication is the base of team performance",
+        "Coordination and review prevent avoidable delivery issues",
+        "Continuous improvement turns teams into reliable systems",
+      ],
+      anchorHighlight: "If collaboration weakens, return to role clarity and communication rhythm first.",
+    },
+    "14920": {
+      subtitle: "Problem-solving from definition to corrective action",
+      roadmapLead: "We define the problem first, then test solutions before scaling.",
+      anchorTitle: "Problem-Solving Anchor",
+      anchorDiagram:
+        "Define -> Analyse -> Generate Options -> Select -> Implement -> Review\n" +
+        "   |         |              |             |           |\n" +
+        "   v         v              v             v           v\n" +
+        "clear scope  root cause   evaluated choices  controlled action  learning loop",
+      anchorBullets: [
+        "Root-cause clarity matters more than speed to first answer",
+        "Option evaluation reduces risk before implementation",
+        "Review ensures solutions stay effective over time",
+      ],
+      anchorHighlight: "Do not skip root-cause analysis; quick fixes often recreate the same problem.",
+    },
+    "14918": {
+      subtitle: "Programming logic from concepts to reliable code",
+      roadmapLead: "We translate logic into code with validation at each step.",
+      anchorTitle: "Programming Logic Anchor",
+      anchorDiagram:
+        "Understand Problem -> Design Logic -> Write Code -> Test -> Refine\n" +
+        "       |               |            |         |\n" +
+        "       v               v            v         v\n" +
+        "requirements clarity  algorithm flow  implementation  correctness check",
+      anchorBullets: [
+        "Design before coding prevents avoidable implementation errors",
+        "Testing verifies behavior, validation confirms input/data quality",
+        "Refinement improves readability, maintainability and correctness",
+      ],
+      anchorHighlight: "Good code starts as clear logic, not as fast typing.",
+    },
+    "14927": {
+      subtitle: "Applied problem-solving and decision quality",
+      roadmapLead: "We structure reasoning so team decisions are evidence-based.",
+      anchorTitle: "Decision Quality Anchor",
+      anchorDiagram:
+        "Situation -> Evidence -> Options -> Decision -> Action -> Reflection\n" +
+        "    |          |           |           |          |\n" +
+        "    v          v           v           v          v\n" +
+        "context set   facts first  compare paths  commit plan  improve model",
+      anchorBullets: [
+        "Evidence should drive option selection, not assumptions",
+        "Action plans must include ownership and monitoring",
+        "Reflection improves future decision speed and quality",
+      ],
+      anchorHighlight: "Strong decisions come from structured thinking, not guesswork.",
+    },
+    "14915": {
+      subtitle: "Design discipline before implementation",
+      roadmapLead: "We move from design structure to quality checks before code finalization.",
+      anchorTitle: "Program Design Anchor",
+      anchorDiagram:
+        "Requirements -> Design Artefacts -> Desk Check -> Improve -> Build\n" +
+        "     |              |               |           |\n" +
+        "     v              v               v           v\n" +
+        "scope clarity     flow precision   logic validation  safer implementation",
+      anchorBullets: [
+        "Design artefacts reduce ambiguity before coding starts",
+        "Desk-checking catches logic faults early and cheaply",
+        "Improved design quality lowers downstream rework",
+      ],
+      anchorHighlight: "The cheapest bug is the one found in design, before code exists.",
+    },
+    "14908": {
+      subtitle: "Web scripting from structure to interaction",
+      roadmapLead: "We connect markup, style and behavior in a controlled build cycle.",
+      anchorTitle: "Web Development Anchor",
+      anchorDiagram:
+        "Structure (HTML) -> Style (CSS) -> Behaviour (JS) -> Test -> Iterate\n" +
+        "       |               |               |          |\n" +
+        "       v               v               v          v\n" +
+        "content map         visual clarity   user actions  usability gains",
+      anchorBullets: [
+        "Separate responsibilities make web systems easier to debug",
+        "Testing user interaction is as important as visual correctness",
+        "Iteration improves accessibility, usability and performance",
+      ],
+      anchorHighlight: "Reliable web pages come from clear separation of structure, style and behavior.",
+    },
+    "120379": {
+      subtitle: "Testing discipline from plan to evidence",
+      roadmapLead: "We define test intent early and collect evidence systematically.",
+      anchorTitle: "Testing Anchor",
+      anchorDiagram:
+        "Test Plan -> Test Cases -> Execute -> Log Defects -> Re-test -> Sign-off\n" +
+        "    |           |           |            |            |\n" +
+        "    v           v           v            v            v\n" +
+        "coverage scope  expected results  observed outcomes  fix tracking  quality confidence",
+      anchorBullets: [
+        "Strong test cases link directly to requirements and risks",
+        "Defect logging quality determines fix speed and re-test success",
+        "Sign-off should follow evidence, not deadlines",
+      ],
+      anchorHighlight: "Testing quality is measured by evidence traceability, not number of tests alone.",
+    },
+    "14930": {
+      subtitle: "User support from issue intake to closure",
+      roadmapLead: "We diagnose accurately, resolve efficiently, then prevent recurrence.",
+      anchorTitle: "User Support Anchor",
+      anchorDiagram:
+        "Receive Issue -> Diagnose -> Resolve -> Confirm -> Document -> Prevent\n" +
+        "     |            |          |          |           |\n" +
+        "     v            v          v          v           v\n" +
+        "clear intake    root cause  fix action  user validation  knowledge base",
+      anchorBullets: [
+        "Accurate issue intake shortens total resolution time",
+        "User confirmation is required before ticket closure",
+        "Documentation turns one-off fixes into organisational learning",
+      ],
+      anchorHighlight: "Support maturity means solving issues and reducing future repeats.",
+    },
+    "14919": {
+      subtitle: "Project teamwork from planning to delivery control",
+      roadmapLead: "We align scope, roles and timelines before execution pressure starts.",
+      anchorTitle: "Project Teamwork Anchor",
+      anchorDiagram:
+        "Scope -> Plan -> Roles -> Execute -> Track -> Adapt -> Close\n" +
+        "  |       |       |        |        |        |\n" +
+        "  v       v       v        v        v        v\n" +
+        "clear goals timeline tasks accountability progress control lessons captured",
+      anchorBullets: [
+        "Shared scope understanding reduces scope creep and confusion",
+        "Tracking and adaptation protect delivery under changing conditions",
+        "Closure and retrospectives improve the next project cycle",
+      ],
+      anchorHighlight: "Team projects succeed when planning discipline continues during execution.",
+    },
+  };
+
+  return { ...defaults, ...(moduleConfigs[moduleId] ?? {}) };
+}
+
 /** Build session-structured slides from a ModuleLessonFlow */
 export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
+  if (flow.moduleId === "14924") {
+    // Module 14924 is authored as a full deck in JSON; render directly from that source of truth.
+    return buildModule14924SlidesFromJson();
+  }
+
+  if (flow.moduleId === "14920") {
+    // Module 14920 follows the same dedicated data-source pattern as 14924.
+    return buildModule14920SlidesFromJson();
+  }
+
+  if (flow.moduleId === "14918") {
+    // Module 14918 now follows the same dedicated data-source pattern.
+    return buildModule14918SlidesFromJson();
+  }
+
+  if (flow.moduleId === "14927") {
+    // Module 14927 follows the dedicated editable data-source pattern.
+    return buildModule14927SlidesFromJson();
+  }
+
+  if (flow.moduleId === "14915") {
+    // Module 14915 follows the dedicated editable data-source pattern.
+    return buildModule14915SlidesFromJson();
+  }
+
   const slides: Slide[] = [];
+  const mn = MODULE_SPEAKER_NOTES[flow.moduleId];
+  const sessions = flow.lessons.filter((l) => /^session-\d/.test(l.id));
+  const firstSession = sessions[0];
+  const sectionTitles = (firstSession?.sections ?? [])
+    .map((section) => section.title?.trim())
+    .filter((title): title is string => Boolean(title));
 
   /* 1 — Title */
   if (mod) {
@@ -312,7 +1238,9 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
       title: mod.title,
       subtitle: `SAQA ${mod.id}  ·  Block ${mod.block}  ·  ${mod.days}  ·  ${mod.credits} Credits`,
       body: mod.type,
-      speakerNote: `Welcome to ${mod.title} (SAQA ${mod.id}). Remind learners to sign the attendance register and ensure workbooks are distributed before we begin.`,
+      speakerNote:
+        mn?.title ??
+        `Welcome to ${mod.title} (SAQA ${mod.id}). Remind learners to sign the attendance register and ensure workbooks are distributed before we begin.`,
       badge: mod.type,
     });
   }
@@ -324,13 +1252,49 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
     subtitle: flow.introTitle,
     body: flow.unitPurpose,
     bullets: mod?.objectives ?? [],
-    speakerNote: `Walk through the unit purpose and each learning outcome clearly. Ask: "Which of these topics do you already know something about?" This activates prior knowledge and shows where to pace more carefully.`,
+    speakerNote:
+      mn?.objectives ??
+      `Walk through the unit purpose and each learning outcome clearly. Ask: "Which of these topics do you already know something about?" This activates prior knowledge and shows where to pace more carefully.`,
+  });
+
+  /* 2.5 — Flow bridge (clear path before session deep-dive) */
+  const anchor = getModuleAnchorConfig(flow.moduleId);
+  const roadmapItems = sectionTitles.length
+    ? sectionTitles.slice(0, 5).map((title, idx) => `Step ${idx + 1}: ${title}`)
+    : [
+        "Step 1: Build core understanding of today's topic",
+        "Step 2: Connect concepts to practical workplace use",
+        "Step 3: Apply methods, tools, or frameworks",
+        "Step 4: Validate understanding through examples",
+        "Step 5: Consolidate and prepare for assessment tasks",
+      ];
+
+  slides.push({
+    type: "content",
+    title: "How This Unit Flows",
+    subtitle: anchor.subtitle,
+    bullets: roadmapItems,
+    highlight:
+      "This roadmap is our sequence contract: we move step-by-step so each section has context before complexity.",
+    speakerNote:
+      `${anchor.roadmapLead} Use this as a quick map before Session 1 starts. Tell learners where they are now, where they are going next, and what success looks like by the end of the day.`,
+  });
+
+  slides.push({
+    type: "content",
+    title: anchor.anchorTitle,
+    subtitle: "Keep this structure in mind across all sections",
+    diagram: anchor.anchorDiagram,
+    bullets: anchor.anchorBullets,
+    highlight: anchor.anchorHighlight,
+    speakerNote:
+      "Revisit this anchor whenever attention drops or a section feels dense. It recenters the class and keeps progression logical.",
   });
 
   /* 3 — Sessions */
-  const sessions = flow.lessons.filter((l) => /^session-\d/.test(l.id));
-
   for (const session of sessions) {
+    const sessionShortTitle = session.title.replace(/^Session\s*\d+\s*:\s*/i, "").trim();
+
     /* Session header slide */
     slides.push({
       type: "objectives",
@@ -340,12 +1304,36 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
       body: session.summary,
       isSessionStart: true,
       sessionLabel: session.label,
-      speakerNote: `Starting ${session.label}. ${session.summary}. Walk through the session outcomes before diving into content. Ask: "What do you already know about this topic?"`,
+      speakerNote:
+        `📍 ${session.label}: ${session.title}\n\n` +
+        (session.summary ? `${session.summary}\n\n` : "") +
+        "Session opening script:\n" +
+        "• Set context: what this session solves in the workplace.\n" +
+        "• Walk through outcomes and define success criteria clearly.\n" +
+        "• Prime participation: ask 2 learners to share prior experience.\n\n" +
+        `Ask: "What do you already know about ${sessionShortTitle || session.title}?"\n` +
+        "Visual-first strategy:\n" +
+        "• Start with a board map (concept map or process flow) before text-heavy explanation.\n" +
+        "• Keep referring back to the map so visual learners can anchor each new point.",
     });
 
     /* Sections → content slides */
-    for (const section of session.sections ?? []) {
-      slides.push(...sectionToSlides(section, session.label, session.label));
+    const sessionSections = session.sections ?? [];
+    for (let i = 0; i < sessionSections.length; i++) {
+      const section = sessionSections[i];
+      const nextSection = sessionSections[i + 1];
+      slides.push(
+        ...sectionToSlides(
+          section,
+          session.label,
+          sessionShortTitle || session.label,
+          flow.moduleId,
+          session.outcomes,
+          nextSection?.title
+        )
+      );
+
+      // Module-specific insertions are handled inside each module's own deck builder.
     }
   }
 
@@ -361,6 +1349,7 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
     bullets: allOutcomes.map((o) => `✓  ${o}`),
     highlight: "Before leaving: make sure you can address each outcome above. Flag anything unclear with the facilitator.",
     speakerNote:
+      mn?.summary ??
       "Quick verbal check — call on learners to summarise one concept each.\n" +
       "• Remind learners of their assessment task and workbook activities\n" +
       "• Ensure attendance sign-out is completed.",
@@ -373,145 +1362,7 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
    Programme briefing slides
 ───────────────────────────────────────────────────────────────────────────── */
 export function buildBriefingSlides(): Slide[] {
-  return [
-    {
-      type: "title",
-      title: "Welcome to Information Technology:\nSystems Development",
-      subtitle: "FETC · SAQA 78965 · NQF Level 4 · 165 Credits · 15 Days · 3 Blocks",
-      body: "Programme Briefing",
-      speakerNote:
-        "Welcome everyone to this programme. Before we open any unit standard content, we'll spend a few minutes orienting ourselves — what this qualification is, what you'll be able to do by the end, and why it matters. Ensure attendance registers are signed and PoE folders are distributed.",
-    },
-    {
-      type: "content",
-      title: "Meet Your Facilitator",
-      subtitle: "Who you'll be learning with",
-      bullets: [
-        "Kabelo Matlakala — Scrum Master & Systems Development Facilitator, Data Science Academy",
-        "BSc Mathematical Sciences, University of Limpopo",
-        "Software Developer background — mLab CodeTribe Academy (2024–2025)",
-        "Based in Limpopo Province, South Africa",
-        "Email: matlakalakabelo1@gmail.com  ·  Mobile: +27 72 713 8367",
-      ],
-      highlight:
-        "Kabelo will deliver all 3 blocks of this qualification. Reach out directly for support between sessions.",
-      speakerNote:
-        "Briefly introduce yourself. Mention your background in both software development and systems analysis. This builds credibility — learners need to see that systems development knowledge is grounded in real professional practice.",
-    },
-    {
-      type: "content",
-      title: "What is Information Technology?",
-      subtitle: "The invisible infrastructure every organisation depends on",
-      bullets: [
-        "IT is the combination of hardware and software products and services organisations use to manage, access, communicate, and share information",
-        "IT is not just computers — it underpins every business function: student records, payroll, logistics, customer service",
-        "Force 1 — Changes in the world: globalisation, remote work, digital transformation, real-time information demand",
-        "Force 2 — Changes in technology: cloud computing, AI, mobile platforms, exponential data growth (Moore's Law)",
-        "Force 3 — Changes in client demand: systems must be faster, more intuitive, more accessible, and more secure than ever before",
-      ],
-      highlight:
-        "As systems developers, learners will design, build and maintain the IT infrastructure organisations depend on. Understanding what IT is — and why it must be planned — is the foundation of every unit in this qualification.",
-      speakerNote:
-        "Ask: 'Name one IT system your organisation runs on that would cause serious disruption if it went down.' Use the answer to anchor the three forces. Stress that IT planning is not a technical problem — it is a business problem.",
-    },
-    {
-      type: "content",
-      title: "What is a System?",
-      subtitle: "The foundation of everything we build",
-      bullets: [
-        "A system is an organised set of interrelated components working together toward a defined goal",
-        "An information system collects, processes, stores and distributes data to support operations and decisions",
-        "Student registration portal — captures enrolment data, checks eligibility, generates student numbers and timetables",
-        "Attendance tracking tool — records sign-ins, flags patterns, produces DoE compliance reports",
-        "Results management system — stores marks, calculates averages, generates transcripts and certificates",
-        "Every information system follows one structural pattern: Input → Process → Storage → Output",
-      ],
-      highlight:
-        "Think of one IT system you interact with at your college every day. What does it take in? What does it produce? What happens to the data in between?",
-      speakerNote:
-        "Ask learners: 'Name one IT system you use at CET. What problem does it solve?' Collect 3–4 answers. Use their examples throughout the session — it grounds the theory in something they already know.",
-    },
-    {
-      type: "content",
-      title: "What is Systems Development?",
-      subtitle: "6 phases — coding is only phase 4",
-      bullets: [
-        "Investigation — Identify the business problem; establish whether a system project is justified before spending money",
-        "Analysis — Establish exactly WHAT the system must do: requirements, data flows, user needs, constraints",
-        "Design — Specify HOW it will work: architecture, data structures, module structure, user interfaces",
-        "Development — Write and unit-test the code based on the approved design documents",
-        "Implementation — Deploy, convert existing data, train users, manage the transition to live",
-        "Maintenance — Monitor for defects, apply fixes and enhancements, plan future iterations",
-      ],
-      highlight:
-        "Coding (phase 4) only appears more than halfway through. The analysis and design work before it determines whether what gets built is actually useful. A technically perfect system that solves the wrong problem is still a failure.",
-      speakerNote:
-        "Emphasise: most expensive IT failures happen in phases 1–2. The CHAOS Report consistently finds fewer than 30% of IT projects complete on time, on budget, to spec — the leading root cause is inadequate analysis, not bad code.",
-    },
-    {
-      type: "content",
-      title: "Systems Development vs Software Development",
-      subtitle: "Different scopes — deeply connected",
-      bullets: [
-        "Software Development — the coding subset: design, write, test, deploy software artefacts",
-        "Systems Development — end-to-end: people, process, data, technology AND code",
-        "Software development is a SUBSET that sits inside systems development",
-        "The analyst determines WHAT to build and WHY · The developer determines HOW to build it",
-        "In this qualification: you will think like an analyst AND write like a developer — both skills are required",
-      ],
-      highlight:
-        "SAQA 78965 is the recognised SA pathway to analyst, developer, business analyst support and project coordination roles across SA government and industry.",
-      speakerNote:
-        "Clear up this misconception early. Some learners arrive expecting a pure coding course. Frame the expectation: approximately 40% is analysis and design thinking; 60% is implementation. Both halves make you a complete professional.",
-    },
-    {
-      type: "content",
-      title: "Why Does This Qualification Matter?",
-      subtitle: "Four reasons anchored in South African IT",
-      bullets: [
-        "Organisations run on systems — every business function depends on reliable information systems",
-        "Poor analysis = expensive failures — most IT project failures trace to misunderstood requirements (Standish CHAOS Report)",
-        "NQF Level 4 opens careers — analyst, developer, BA support and project coordination roles are in high demand across SA",
-        "Professional practice modelling — structured thinking (analyse → design → build) is the standard the workplace expects",
-      ],
-      highlight:
-        "As CET lecturers, you model the standard your learners will carry into the field. Demonstrating structured systems thinking sets the bar for the next generation of SA IT professionals.",
-      speakerNote:
-        "This is the motivational slide. Pause and ask: 'Who here has experienced an IT system that didn't do what was expected?' Then: 'That is the problem this qualification trains you to prevent.'",
-    },
-    {
-      type: "content",
-      title: "Your 10-Module Roadmap",
-      subtitle: "15 days · 3 blocks · 56 credits delivered",
-      bullets: [
-        "Block 1 · Days 1–5 · Foundations (23 credits): Systems Analysis, Team Collaboration, Programming Principles, Problem Solving, Design",
-        "Block 2 · Days 6–9 · Applied Programming (14 credits): Apply Programming Principles, Web Scripting",
-        "Block 3 · Days 11–13 · Systems in Practice (19 credits): Testing IT Systems, Resolve User Problems, Work as Project Team Member",
-        "Each unit ends with a formative quiz (self-check) and an assessment task for your Portfolio of Evidence",
-      ],
-      highlight:
-        "56 credits are delivered across these 15 days. The remaining credits toward the full 165-credit qualification are achieved through workplace evidence in your PoE.",
-      speakerNote:
-        "Distribute the printed module roadmap now if available. Run through the colour-coded block overview briefly — this helps learners see the sequencing logic.",
-    },
-    {
-      type: "summary",
-      title: "Ready to Begin",
-      subtitle: "Orientation complete — Unit 1 awaits",
-      bullets: [
-        "✓  You understand what Information Technology is and the three forces shaping it",
-        "✓  You understand what an information system is and how it works",
-        "✓  You can describe the 6 phases of the Systems Development Life Cycle",
-        "✓  You can distinguish systems development from software development",
-        "✓  You know your 10-module roadmap across 3 blocks",
-        "✓  You know how to reach your facilitator for support",
-      ],
-      highlight:
-        "Any questions before we open Unit 1: Information Systems Analysis (ITSD-14924, Block 1 · Day 1)?",
-      speakerNote:
-        "Pause for genuine Q&A — 5 minutes now pays dividends throughout the programme. Then navigate to Unit 1 in the LMS and begin the session.",
-    },
-  ];
+  return programmeBriefingSlides as Slide[];
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -520,6 +1371,7 @@ export function buildBriefingSlides(): Slide[] {
 
 export function buildSlides(mod: Module): Slide[] {
   const slides: Slide[] = [];
+  const mn = MODULE_SPEAKER_NOTES[mod.id];
 
   /* 1 ── Title slide */
   slides.push({
@@ -528,6 +1380,7 @@ export function buildSlides(mod: Module): Slide[] {
     subtitle: `SAQA ${mod.id}  ·  Block ${mod.block}  ·  ${mod.days}  ·  ${mod.credits} Credits`,
     body: mod.type,
     speakerNote:
+      mn?.title ??
       `Welcome learners to ${mod.title}. ` +
       `Today covers SAQA unit standard ${mod.id}. ` +
       `Remind learners to sign the attendance register before the session starts. ` +
@@ -544,12 +1397,14 @@ export function buildSlides(mod: Module): Slide[] {
     highlight:
       "These outcomes align with the unit standard's specific outcomes. Learners will be assessed against these at the end of the block.",
     speakerNote:
+      mn?.objectives ??
       `Walk through each objective clearly. Ask learners: "Which of these do you already know something about?" ` +
       `This activates prior knowledge and gives you a sense of the group's baseline.`,
   });
 
   /* 3 ── Content slides — group into chunks of 3 items */
-  const chunkSize = 3;
+  // Projector-friendly pacing: fewer bullets per slide improves readability at distance.
+  const chunkSize = 2;
   for (let i = 0; i < mod.content.length; i += chunkSize) {
     const chunk = mod.content.slice(i, i + chunkSize);
     const isFirst = i === 0;
@@ -584,6 +1439,7 @@ export function buildSlides(mod: Module): Slide[] {
         highlight:
           "Allow 5–10 minutes per activity. Circulate the room. Do not give answers — ask leading questions.",
         speakerNote:
+          mn?.activityIndividual ??
           `Set a timer for each activity. ` +
           `While learners work, check understanding by asking: "Can you explain your reasoning?" ` +
           `Debrief each activity before moving to the next — do not rush.`,
@@ -599,6 +1455,7 @@ export function buildSlides(mod: Module): Slide[] {
         highlight:
           "Suggested roles: Scribe, Presenter, Timekeeper, Devil's Advocate. Groups should be 3–4 learners.",
         speakerNote:
+          mn?.activityGroup ??
           `Ensure group diversity — mix strong and developing learners. ` +
           `Group outputs should be presented to the class. ` +
           `Award marks or verbal recognition for strong group contributions.`,
@@ -631,6 +1488,7 @@ export function buildSlides(mod: Module): Slide[] {
     highlight:
       "Before leaving: make sure you understand each learning outcome. If unsure, flag it with the facilitator.",
     speakerNote:
+      mn?.summary ??
       `Run a quick verbal check: call on individual learners to summarise one concept each. ` +
       `Remind learners of:\n` +
       `• Any upcoming quiz or assessment\n` +
@@ -704,8 +1562,21 @@ interface PresentationModeProps {
   onClose: () => void;
   nextUnitId?: string;
   nextUnitTitle?: string;
+  /**
+   * When provided, tapping "Begin next unit" calls this instead of navigating.
+   * Use from AppLayout to swap the presentation inline so the remote
+   * connection stays alive (same session code, new module slides).
+   */
+  onLaunchUnit?: (unitId: string) => void;
   /** Route prefix: /modules (admin) or /learner/modules (learner) */
   routePrefix?: string;
+  /**
+   * When the presentation is launched remotely from the facilitator's phone,
+   * the phone pre-generates the session code and sends it via EV_LAUNCH so
+   * both sides use the same channel without extra coordination.
+   * If omitted, a random code is generated as usual.
+   */
+  initialSessionCode?: string;
 }
 
 export function PresentationMode({
@@ -716,7 +1587,9 @@ export function PresentationMode({
   onClose,
   nextUnitId,
   nextUnitTitle,
+  onLaunchUnit,
   routePrefix = "/modules",
+  initialSessionCode,
 }: PresentationModeProps) {
   const navigate = useNavigate();
   const slides = useMemo(
@@ -736,9 +1609,18 @@ export function PresentationMode({
   const [direction, setDirection] = useState<"next" | "prev">("next");
   const [sessionPickerOpen, setSessionPickerOpen] = useState(false);
 
-  /* ── Remote-control state */
+  /* Reset to slide 1 whenever the module/mode changes (e.g. inline unit swap) */
+  useEffect(() => {
+    setCurrent(0);
+    setQuizStates({});
+    setAnimating(null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const sessionCode = useMemo(() => generateSessionCode(), []);
+  }, [mode, flow?.moduleId, mod?.id]);
+
+  /* ── Remote-control state */
+  // If launched remotely the phone sends a pre-agreed code so both sides join the same channel
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const sessionCode = useMemo(() => initialSessionCode ?? generateSessionCode(), []);
   const remoteUrl =
     typeof window !== "undefined"
       ? `${window.location.origin}/present/remote/${sessionCode}`
@@ -755,15 +1637,21 @@ export function PresentationMode({
   // Initialised with typed no-ops; updated via useEffect once go/jumpTo are defined below
   const goRef = useRef<(dir: "next" | "prev") => void>(() => {});
   const jumpToRef = useRef<(i: number) => void>(() => {});
+  const launchUnitRef = useRef<() => void>(() => {});
+  const nextUnitIdRef = useRef(nextUnitId);
+  const nextUnitTitleRef = useRef(nextUnitTitle);
 
   useEffect(() => { currentRef.current = current; }, [current]);
   useEffect(() => { slidesRef.current = slides; }, [slides]);
-  // goRef and jumpToRef are synced after go/jumpTo are declared below
+  useEffect(() => { nextUnitIdRef.current = nextUnitId; nextUnitTitleRef.current = nextUnitTitle; }, [nextUnitId, nextUnitTitle]);
+  // goRef, jumpToRef, and launchUnitRef are synced after their functions are declared below
 
   const buildPayload = useCallback((): SlideStatePayload => {
     const ss = slidesRef.current;
     const i = currentRef.current;
     const s = ss[i];
+    const uid = nextUnitIdRef.current;
+    const utitle = nextUnitTitleRef.current;
     return {
       index: i,
       total: ss.length,
@@ -772,12 +1660,17 @@ export function PresentationMode({
       subtitle: s?.subtitle,
       badge: s?.badge,
       sessionLabel: s?.sessionLabel,
-      speakerNote: s?.speakerNote,
+      speakerNote: formatPresenterNote(s, i, ss.length),
       nextTitle: ss[i + 1]?.title,
       prevTitle: i > 0 ? ss[i - 1]?.title : undefined,
       isQuiz: s?.type === "quiz",
+      isLastSlide: i === ss.length - 1,
+      nextUnitId: uid,
+      nextUnitLabel: uid
+        ? (utitle ? `Begin: ${utitle}` : "Open next unit")
+        : undefined,
     };
-  }, []);
+  }, [])
 
   /* ── Supabase broadcast channel (set up once per session code) */
   useEffect(() => {
@@ -803,8 +1696,13 @@ export function PresentationMode({
         if (payload?.action === "next") goRef.current("next");
         else if (payload?.action === "prev") goRef.current("prev");
         else if (payload?.action === "goto") jumpToRef.current(payload.index);
+        else if (payload?.action === "launch-unit") launchUnitRef.current();
       })
-      .subscribe();
+      .subscribe((subStatus) => {
+        // Broadcast current state immediately so a waiting remote gets it
+        // as soon as this desktop channel becomes active.
+        if (subStatus === "SUBSCRIBED") sendState();
+      });
 
     channelRef.current = ch;
 
@@ -847,6 +1745,39 @@ export function PresentationMode({
   const slide = slides[current];
   const config = SLIDE_CONFIG[slide.type] ?? SLIDE_CONFIG["content"];
   const isLastSlide = current === total - 1;
+
+  const buildOnScreenSummary = (s?: Slide): string => {
+    if (!s) return "";
+    const lines: string[] = [];
+    if (s.subtitle) lines.push(`Subtitle: ${s.subtitle}`);
+    if (s.bullets && s.bullets.length > 0) {
+      lines.push("On-screen content:");
+      s.bullets.forEach((item, idx) => lines.push(`${idx + 1}. ${item}`));
+    }
+    if (s.phaseCards && s.phaseCards.length > 0) {
+      lines.push(`Phase cards: ${s.phaseCards.join(" | ")}`);
+    }
+    if (s.cards && s.cards.length > 0) {
+      lines.push(`Cards: ${s.cards.join(" | ")}`);
+    }
+    if (s.highlight) lines.push(`Highlight: ${s.highlight}`);
+    return lines.join("\n");
+  };
+
+  const formatPresenterNote = (s: Slide | undefined, index: number, totalSlides: number): string | undefined => {
+    if (!s) return undefined;
+    const header = `Slide ${index + 1} of ${totalSlides}\nTitle: ${s.title}`;
+    const facilitatorScript = s.speakerNote?.trim();
+
+    return [
+      header,
+      facilitatorScript ? `\nFacilitator notes:\n${facilitatorScript}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n");
+  };
+
+  const presenterNote = formatPresenterNote(slide, current, total);
 
   /* ── Quiz helpers */
   const qState = quizStates[current] ?? { selected: null, revealed: false };
@@ -896,9 +1827,17 @@ export function PresentationMode({
 
   const handleNavigateToUnit = () => {
     if (!nextUnitId) return;
-    onClose();
-    navigate(`${routePrefix}/${nextUnitId}`);
+    if (onLaunchUnit) {
+      // Stay in presentation mode — caller swaps the module inline
+      onLaunchUnit(nextUnitId);
+    } else {
+      onClose();
+      navigate(`${routePrefix}/${nextUnitId}`);
+    }
   };
+  // Keep launchUnitRef fresh so the channel handler can call it
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { launchUnitRef.current = handleNavigateToUnit; }, [nextUnitId, onLaunchUnit]);
 
   const nextLabel = nextUnitTitle
     ? `Begin: ${nextUnitTitle}`
@@ -1197,16 +2136,19 @@ export function PresentationMode({
           {slide.type === "title" && (
             /* ── Title slide layout */
             <div className="text-center max-w-3xl mx-auto">
+              <p className="text-white/70 text-sm md:text-base uppercase tracking-widest font-semibold mb-2">
+                Slide {current + 1}
+              </p>
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-white/70 text-sm mb-5">
                 {mode === "briefing" ? <GraduationCap size={14} /> : <Lightbulb size={14} />}
                 {mode === "briefing"
                   ? "Programme Orientation · SAQA 78965 · NQF Level 4"
                   : `SAQA ${mod?.id}  ·  NQF Level 4  ·  ${mod?.credits} Credits`}
               </div>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-4 whitespace-pre-line">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 whitespace-pre-line">
                 {slide.title}
               </h1>
-              <p className="text-white/50 text-base mb-5">{slide.subtitle}</p>
+              <p className="text-white/70 text-lg md:text-xl mb-5">{slide.subtitle}</p>
               {mode === "module" && mod && (
                 <div className="flex flex-wrap gap-3 justify-center">
                   <span className="px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white/80 text-sm font-medium">
@@ -1241,10 +2183,13 @@ export function PresentationMode({
           {/* ── Quiz slide layout */}
           {slide.type === "quiz" && slide.quizQuestion && slide.quizOptions && (
             <div className="max-w-3xl w-full mx-auto">
-              <p className="text-xs uppercase tracking-widest font-semibold mb-2 text-purple-300">
+              <p className="text-white/70 text-sm md:text-base uppercase tracking-widest font-semibold mb-2">
+                Slide {current + 1}
+              </p>
+              <p className="text-sm uppercase tracking-widest font-semibold mb-2 text-purple-300/90">
                 {slide.subtitle}
               </p>
-              <h2 className="text-xl md:text-2xl font-bold text-white mb-5 leading-snug">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-5 leading-snug">
                 {slide.quizQuestion}
               </h2>
 
@@ -1279,7 +2224,7 @@ export function PresentationMode({
                           ? isCorrect ? "✓" : isSelected ? "✗" : String.fromCharCode(65 + i)
                           : String.fromCharCode(65 + i)}
                       </span>
-                      <span className="text-sm md:text-base leading-relaxed">{opt}</span>
+                      <span className="text-base md:text-lg lg:text-xl leading-relaxed">{opt}</span>
                     </button>
                   );
                 })}
@@ -1288,11 +2233,11 @@ export function PresentationMode({
               {qState.revealed && slide.quizExplanation && (
                 <div className="flex gap-3 p-4 rounded-xl border border-purple-500/40 bg-purple-500/10">
                   <Lightbulb size={16} className="shrink-0 mt-0.5 text-purple-300" />
-                  <p className="text-sm text-white/80 leading-relaxed">{slide.quizExplanation}</p>
+                  <p className="text-base md:text-lg text-white/85 leading-relaxed">{slide.quizExplanation}</p>
                 </div>
               )}
               {!qState.revealed && (
-                <p className="text-white/30 text-xs mt-4">Select an answer to reveal the explanation.</p>
+                <p className="text-white/50 text-sm mt-4">Select an answer to reveal the explanation.</p>
               )}
             </div>
           )}
@@ -1300,17 +2245,20 @@ export function PresentationMode({
           {/* ── Regular content slides (objectives, content, activity, summary) */}
           {slide.type !== "title" && slide.type !== "quiz" && (
             <div className="max-w-4xl w-full mx-auto">
+              <p className="text-white/70 text-sm md:text-base uppercase tracking-widest font-semibold mb-2">
+                Slide {current + 1}
+              </p>
               {slide.subtitle && (
-                <p className={`text-xs uppercase tracking-widest font-semibold mb-2 ${config.accent.split(" ")[0]}`}>
+                <p className={`text-sm uppercase tracking-widest font-semibold mb-2 ${config.accent.split(" ")[0]}`}>
                   {slide.subtitle}
                 </p>
               )}
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-5 leading-snug">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-5 leading-snug">
                 {slide.title}
               </h2>
 
               {slide.bullets && slide.bullets.length > 0 && (
-                <ul className="space-y-2 mb-4">
+                <ul className="space-y-3 md:space-y-4 mb-4">
                   {slide.bullets.map((item, i) => {
                     const isCheckmark = item.startsWith("✓");
                     const cleaned = item.replace(/^✓\s*/, "");
@@ -1326,7 +2274,7 @@ export function PresentationMode({
                             </span>
                           )}
                         </span>
-                        <span className="text-white/90 text-base md:text-lg leading-relaxed">
+                        <span className="text-white/95 text-lg md:text-xl lg:text-2xl leading-snug">
                           {detail ? (
                             <>
                               <span className="font-semibold text-white">{label}</span>
@@ -1343,14 +2291,60 @@ export function PresentationMode({
                 </ul>
               )}
 
+              {slide.diagram && (
+                <div className="mb-4 p-5 rounded-xl border border-white/30 bg-black/40 overflow-x-auto">
+                  <pre className="text-sm md:text-base text-white/95 leading-relaxed whitespace-pre font-mono">
+                    {slide.diagram}
+                  </pre>
+                </div>
+              )}
+
+              {slide.imageUrl && (
+                <div className="mb-4 rounded-xl border border-white/30 bg-black/40 p-2">
+                  <img
+                    src={slide.imageUrl}
+                    alt={slide.imageAlt ?? slide.title}
+                    className="w-full max-h-[460px] object-contain rounded-lg"
+                    loading="lazy"
+                  />
+                </div>
+              )}
+
               {slide.body && (
-                <p className="text-white/70 text-sm md:text-base leading-relaxed mb-4">{slide.body}</p>
+                <p className="text-white/85 text-base md:text-lg lg:text-xl leading-relaxed mb-4">{slide.body}</p>
+              )}
+
+              {slide.cards && slide.cards.length > 0 && (
+                <div className="mb-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {slide.cards.map((card, i) => (
+                    <div
+                      key={`${card}-${i}`}
+                      className="rounded-xl border border-white/30 bg-white/10 px-4 py-4"
+                    >
+                      <p className="text-base md:text-lg font-semibold text-white">{card}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {!slide.cards && slide.phaseCards && slide.phaseCards.length > 0 && (
+                <div className="mb-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {slide.phaseCards.map((phase, i) => (
+                    <div
+                      key={`${phase}-${i}`}
+                      className="rounded-xl border border-white/30 bg-white/10 px-4 py-3"
+                    >
+                      <p className="text-sm uppercase tracking-wide text-white/60 mb-1">Step {i + 1}</p>
+                      <p className="text-base md:text-lg font-semibold text-white">{phase}</p>
+                    </div>
+                  ))}
+                </div>
               )}
 
               {slide.highlight && (
                 <div className={`flex gap-3 p-4 rounded-xl border bg-white/5 ${config.accent}`}>
                   <AlertCircle size={18} className="shrink-0 mt-0.5" />
-                  <p className="text-sm md:text-base leading-relaxed opacity-90">{slide.highlight}</p>
+                  <p className="text-base md:text-lg lg:text-xl leading-relaxed opacity-95">{slide.highlight}</p>
                 </div>
               )}
             </div>
@@ -1359,7 +2353,7 @@ export function PresentationMode({
       </div>
 
       {/* ── Speaker notes panel */}
-      {isAdmin && notesOpen && slide.speakerNote && (
+      {isAdmin && notesOpen && presenterNote && (
         <div className="flex-shrink-0 bg-black/90 border-t border-white/10 px-6 md:px-16 py-3 max-h-32 overflow-y-auto">
           <div className="flex items-center gap-2 mb-2">
             <Users size={13} className="text-yellow-400" />
@@ -1367,7 +2361,7 @@ export function PresentationMode({
               Facilitator Notes
             </span>
           </div>
-          <p className="text-white/70 text-sm leading-relaxed whitespace-pre-line">{slide.speakerNote}</p>
+          <p className="text-white/70 text-sm leading-relaxed whitespace-pre-line">{presenterNote}</p>
         </div>
       )}
 

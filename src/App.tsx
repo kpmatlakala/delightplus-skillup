@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./hooks/useAuth";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicOnlyRoute from "./components/PublicOnlyRoute";
+import LandingPage from "./pages/LandingPage";
 import Index from "./pages/Index";
 import ModulesPage from "./pages/ModulesPage";
 import ModuleDetailPage from "./pages/ModuleDetailPage";
@@ -21,9 +22,15 @@ import LearnerPortalPage from "./pages/LearnerPortalPage";
 import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/auth/LoginPage";
 import SignupPage from "./pages/auth/SignupPage";
+import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import NotFound from "./pages/NotFound";
 import PresentationRemotePage from "./pages/PresentationRemotePage";
+import PresentationLaunchPage from "./pages/PresentationLaunchPage";
+import PresentationDesktopPage from "./pages/PresentationDesktopPage";
 import PoEPage from "./pages/PoEPage";
+import BlockAssessmentPage from "./pages/BlockAssessmentPage";
+import BlockAssessmentAdminPage from "./pages/BlockAssessmentAdminPage";
 
 const queryClient = new QueryClient();
 
@@ -35,10 +42,16 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
+            {/* Public landing page */}
+            <Route path="/home" element={<LandingPage />} />
+
             <Route element={<PublicOnlyRoute />}>
               <Route path="/auth/login" element={<LoginPage />} />
               <Route path="/auth/signup" element={<SignupPage />} />
+              <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
             </Route>
+
+            <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
 
             <Route element={<ProtectedRoute allowedRoles={["admin", "lecturer"]} />}>
               <Route path="/" element={<Index />} />
@@ -47,6 +60,7 @@ const App = () => (
               <Route path="/learners" element={<LearnersPage />} />
               <Route path="/lesson-plans" element={<LessonPlansPage />} />
               <Route path="/assessments" element={<AssessmentsPage />} />
+              <Route path="/assessments/blocks" element={<BlockAssessmentAdminPage />} />
               <Route path="/programs" element={<ProgramsPage />} />
               <Route path="/compliance" element={<CompliancePage />} />
               <Route path="/announcements" element={<AnnouncementsPage />} />
@@ -56,6 +70,7 @@ const App = () => (
             <Route element={<ProtectedRoute allowedRoles={["learner"]} />}>
               <Route path="/learner" element={<LearnerPortalPage />} />
               <Route path="/learner/modules/:id" element={<ModuleDetailPage />} />
+              <Route path="/learner/assessment/block/:blockNum" element={<BlockAssessmentPage />} />
             </Route>
 
             <Route element={<ProtectedRoute />}>
@@ -66,6 +81,12 @@ const App = () => (
 
             {/* Public — no auth, session code is the shared secret */}
             <Route path="/present/remote/:code" element={<PresentationRemotePage />} />
+
+            {/* Remote launch + desktop projection — authenticated, admin/lecturer only */}
+            <Route element={<ProtectedRoute allowedRoles={["admin", "lecturer"]} />}>
+              <Route path="/present/launch" element={<PresentationLaunchPage />} />
+              <Route path="/present/desktop/:code/:moduleId" element={<PresentationDesktopPage />} />
+            </Route>
 
             <Route path="*" element={<NotFound />} />
           </Routes>

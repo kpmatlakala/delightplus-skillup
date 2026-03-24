@@ -1,9 +1,6 @@
--- Migration: Migrate all learner fields to public.users and drop cet.learners
+-- Migration: Migrate all learners to unified users table
 -- Date: 2026-03-17
 
-ALTER TABLE public.users
-  ADD COLUMN IF NOT EXISTS phone text,
-  ADD COLUMN IF NOT EXISTS learner_code text,
-  ADD COLUMN IF NOT EXISTS status text,
-  ADD COLUMN IF NOT EXISTS progress integer,
-  ADD COLUMN IF NOT EXISTS full_name text;
+-- This migration assumes all learner data is now in public.users
+-- Remove cet.learners table if it exists
+DROP TABLE IF EXISTS cet.learners CASCADE;
