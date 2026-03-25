@@ -28,7 +28,7 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: "Dashboard",      icon: <LayoutDashboard size={18} />, href: "/" },
+  { label: "Dashboard",      icon: <LayoutDashboard size={18} />, href: "/dashboard" },
   {
     label: "Academics",
     icon: <GraduationCap size={18} />,

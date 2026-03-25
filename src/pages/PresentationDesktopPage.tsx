@@ -38,7 +38,7 @@ export default function PresentationDesktopPage() {
     if (window.opener) {
       window.close();
     } else {
-      navigate("/");
+      navigate("/dashboard");
     }
   };
 

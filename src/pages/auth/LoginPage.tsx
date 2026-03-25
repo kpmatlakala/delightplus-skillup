@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ArrowLeft } from "lucide-react";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function LoginPage() {
       return;
     }
 
-    navigate("/", { replace: true });
+    navigate("/dashboard", { replace: true });
   };
 
   return (
@@ -41,8 +42,16 @@ export default function LoginPage() {
       <div className="absolute inset-0 bg-background/55" />
 
       <div className="relative z-10 w-full max-w-md rounded-lg border border-border bg-card/95 backdrop-blur-sm p-6 shadow-lg">
-        <h1 className="font-display text-2xl font-bold text-foreground">DSA Student Portal</h1>
-        <p className="text-sm text-muted-foreground mt-1">Sign in to continue your learning journey.</p>
+        <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-5">
+          <ArrowLeft className="h-4 w-4" /> Back to Home
+        </Link>
+
+        <div className="flex justify-center mb-5">
+          <img src="/logos/dsa-logo.png" alt="DSA" className="h-20 w-auto object-contain" />
+        </div>
+
+        <h1 className="font-display text-2xl font-bold text-foreground">Welcome Back</h1>
+        <p className="text-sm text-muted-foreground mt-1">Learner Management Information System</p>
 
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <div className="space-y-1.5">
@@ -88,9 +97,9 @@ export default function LoginPage() {
           </Link>
         </p>
 
-        <div className="mt-4 flex justify-center">
-          <img src="/logos/dsa-logo.png" alt="The Data Science Academy" className="h-10 w-auto object-contain" />
-        </div>
+        <footer className="mt-6 text-center text-xs text-muted-foreground">
+          © {new Date().getFullYear()} Learner Management Information System
+        </footer>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ArrowLeft } from "lucide-react";
 
 export default function SignupPage() {
   const [fullName, setFullName] = useState("");
@@ -75,10 +76,24 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="w-full max-w-md rounded-lg border border-border bg-card p-6">
+    <div className="relative min-h-screen flex items-center justify-center p-4 overflow-hidden">
+      <div
+        className="absolute inset-0 bg-cover bg-center [filter:blur(1px)] scale-110"
+        style={{ backgroundImage: "url('/auth/landing-bg.jpg')" }}
+      />
+      <div className="absolute inset-0 bg-background/55" />
+
+      <div className="relative z-10 w-full max-w-md rounded-lg border border-border bg-card/95 backdrop-blur-sm p-6 shadow-lg">
+        <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-5">
+          <ArrowLeft className="h-4 w-4" /> Back to Home
+        </Link>
+
+        <div className="flex justify-center mb-5">
+          <img src="/logos/dsa-logo.png" alt="DSA" className="h-20 w-auto object-contain" />
+        </div>
+
         <h1 className="font-display text-2xl font-bold text-foreground">Create Learner Account</h1>
-        <p className="text-sm text-muted-foreground mt-1">Learners can sign up to track progress and submit assessments.</p>
+        <p className="text-sm text-muted-foreground mt-1">Learner Management Information System</p>
 
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <div className="space-y-1.5">
@@ -142,6 +157,10 @@ export default function SignupPage() {
             Sign in
           </Link>
         </p>
+
+        <footer className="mt-6 text-center text-xs text-muted-foreground">
+          © {new Date().getFullYear()} Learner Management Information System
+        </footer>
       </div>
     </div>
   );

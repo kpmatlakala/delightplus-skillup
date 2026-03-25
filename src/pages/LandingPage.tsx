@@ -171,11 +171,8 @@ export default function LandingPage() {
       {/* ── Navbar ───────────────────────────────── */}
       <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link to="/home" className="flex items-center gap-3">
-            <img src="/logos/dsa-logo.png" alt="DSA" className="h-10 w-10 rounded-sm object-contain" />
-            <span className="font-display text-lg font-bold tracking-tight text-foreground">
-              The Data Science<span className="text-primary"> Academy</span>
-            </span>
+          <Link to="/" className="flex items-center gap-3">
+            <img src="/logos/dsa-logo.png" alt="DSA" className="h-12 w-auto object-contain" />
           </Link>
 
           <div className="hidden md:flex items-center gap-6 text-sm font-medium">
@@ -500,8 +497,7 @@ export default function LandingPage() {
             {/* About */}
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <img src="/logos/dsa-logo.png" alt="DSA" className="h-10 w-10 rounded-sm object-contain brightness-0 invert" />
-                <span className="font-display font-bold text-lg">The Data Science Academy</span>
+                <img src="/logos/dsa-logo.png" alt="DSA" className="h-14 w-auto object-contain brightness-0 invert" />
               </div>
               <p className="text-sm text-white/85 leading-relaxed max-w-xs">
                 A future-forward learning institution dedicated to equipping the next generation of African
@@ -516,7 +512,7 @@ export default function LandingPage() {
                 <span className="absolute bottom-0 left-0 w-11 h-0.5 bg-accent rounded" />
               </h4>
               <ul className="space-y-2.5 text-sm text-white/80">
-                <li><Link to="/home" className="hover:text-white hover:translate-x-1.5 transition-all inline-flex items-center gap-1.5"><ChevronRight className="h-3 w-3" /> Home</Link></li>
+                <li><Link to="/" className="hover:text-white hover:translate-x-1.5 transition-all inline-flex items-center gap-1.5"><ChevronRight className="h-3 w-3" /> Home</Link></li>
                 <li><a href="#programs" className="hover:text-white hover:translate-x-1.5 transition-all inline-flex items-center gap-1.5"><ChevronRight className="h-3 w-3" /> Explore Courses</a></li>
                 <li><a href="#accreditations" className="hover:text-white hover:translate-x-1.5 transition-all inline-flex items-center gap-1.5"><ChevronRight className="h-3 w-3" /> Accreditation</a></li>
                 <li><Link to="/auth/login" className="hover:text-white hover:translate-x-1.5 transition-all inline-flex items-center gap-1.5"><ChevronRight className="h-3 w-3" /> Student Portal</Link></li>
