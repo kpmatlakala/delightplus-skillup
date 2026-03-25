@@ -1,1 +1,19 @@
-# CET Testing Chat 12 - TODO&#10;&#10;## 1. Fix Frontend (LearnerPortalPage.tsx)&#10;- [ ] Remove duplicate JSX blocks causing Vite parse errors&#10;- [ ] Verify: bun run dev → /learner loads without 500s&#10;&#10;## 2. Fix Backend (Supabase)&#10;- [ ] supabase migration up (includes 20260227_015_messages.sql)&#10;- [ ] Verify: Supabase Studio → cet.messages/conversations tables exist&#10;- [ ] Test RPC: cet_get_my_conversations → 200 OK&#10;&#10;## 3. Test Chat Flows&#10;- [ ] Learner → Facilitator message → realtime unread&#10;- [ ] Admin → learner → receive/mark read&#10;- [ ] Learner search "Other"&#10;&#10;## 4. Learner Portal&#10;- [ ] Unread stat live (add useUnreadCount later)&#10;&#10;Progress: Starting Step 1
+# CET Testing Chat 12 - UX UPDATE PENDING
+
+**Current:**
+```
+Header: Always shows both docs (not conditional)
+Quiz pass → "Next: Summative Assessment" → Routes to AssessmentsPage (no module-specific)
+Mobile: Sidebar hidden → docs only in header
+
+**Requested Changes:**
+1. **Header doc count conditional:**
+   - Pre-quiz: "1 Document [Download Guide]"
+   - Post-quiz: "2 Documents [Download Guide] [Download Assessment]"
+   
+2. **Quiz CTA update (no assessment platform flow):**
+   - Replace "Next: Summative Assessment" → "Download Assessment" 
+   - OR: [← Back to Lessons] [Download Assessment] buttons
+
+**Next Step:** Update ModuleDetailPage.tsx header rendering + quiz footer CTAs
+
