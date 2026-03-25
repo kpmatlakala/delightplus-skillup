@@ -497,8 +497,7 @@ export default function LandingPage() {
             {/* About */}
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <img src="/logos/dsa-logo.png" alt="DSA" className="h-10 w-10 rounded-sm object-contain brightness-0 invert" />
-                <span className="font-display font-bold text-lg">The Data Science Academy</span>
+                <img src="/logos/dsa-logo.png" alt="DSA" className="h-14 w-auto object-contain brightness-0 invert" />
               </div>
               <p className="text-sm text-white/85 leading-relaxed max-w-xs">
                 A future-forward learning institution dedicated to equipping the next generation of African
