@@ -20,5 +20,5 @@ export default function PublicOnlyRoute() {
     return <Navigate to="/learner" replace />;
   }
 
-  return <Navigate to="/" replace />;
+  return <Navigate to="/dashboard" replace />;
 }

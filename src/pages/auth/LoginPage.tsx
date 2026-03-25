@@ -97,9 +97,9 @@ export default function LoginPage() {
           </Link>
         </p>
 
-        <div className="mt-4 flex justify-center">
-          <img src="/logos/dsa-logo.png" alt="The Data Science Academy" className="h-10 w-auto object-contain" />
-        </div>
+        <footer className="mt-6 text-center text-xs text-muted-foreground">
+          © {new Date().getFullYear()} Learner Management Information System
+        </footer>
       </div>
     </div>
   );

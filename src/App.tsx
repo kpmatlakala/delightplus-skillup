@@ -42,7 +42,8 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            {/* Public landing page */}
+            {/* Public landing page — default route */}
+            <Route path="/" element={<LandingPage />} />
             <Route path="/home" element={<LandingPage />} />
 
             <Route element={<PublicOnlyRoute />}>
@@ -54,7 +55,7 @@ const App = () => (
             <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
 
             <Route element={<ProtectedRoute allowedRoles={["admin", "lecturer"]} />}>
-              <Route path="/" element={<Index />} />
+              <Route path="/dashboard" element={<Index />} />
               <Route path="/modules" element={<ModulesPage />} />
               <Route path="/modules/:id" element={<ModuleDetailPage />} />
               <Route path="/learners" element={<LearnersPage />} />
