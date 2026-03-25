@@ -171,11 +171,8 @@ export default function LandingPage() {
       {/* ── Navbar ───────────────────────────────── */}
       <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link to="/home" className="flex items-center gap-3">
-            <img src="/logos/dsa-logo.png" alt="DSA" className="h-10 w-10 rounded-sm object-contain" />
-            <span className="font-display text-lg font-bold tracking-tight text-foreground">
-              The Data Science<span className="text-primary"> Academy</span>
-            </span>
+          <Link to="/" className="flex items-center gap-3">
+            <img src="/logos/dsa-logo.png" alt="DSA" className="h-12 w-auto object-contain" />
           </Link>
 
           <div className="hidden md:flex items-center gap-6 text-sm font-medium">
