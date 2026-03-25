@@ -42,8 +42,16 @@ export default function LoginPage() {
       <div className="absolute inset-0 bg-background/55" />
 
       <div className="relative z-10 w-full max-w-md rounded-lg border border-border bg-card/95 backdrop-blur-sm p-6 shadow-lg">
-        <h1 className="font-display text-2xl font-bold text-foreground">DSA Student Portal</h1>
-        <p className="text-sm text-muted-foreground mt-1">Sign in to continue your learning journey.</p>
+        <Link to="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-5">
+          <ArrowLeft className="h-4 w-4" /> Back to Home
+        </Link>
+
+        <div className="flex justify-center mb-5">
+          <img src="/logos/dsa-logo.png" alt="DSA" className="h-20 w-auto object-contain" />
+        </div>
+
+        <h1 className="font-display text-2xl font-bold text-foreground">Welcome Back</h1>
+        <p className="text-sm text-muted-foreground mt-1">Learner Management Information System</p>
 
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <div className="space-y-1.5">
