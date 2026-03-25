@@ -512,7 +512,7 @@ export default function LandingPage() {
                 <span className="absolute bottom-0 left-0 w-11 h-0.5 bg-accent rounded" />
               </h4>
               <ul className="space-y-2.5 text-sm text-white/80">
-                <li><Link to="/home" className="hover:text-white hover:translate-x-1.5 transition-all inline-flex items-center gap-1.5"><ChevronRight className="h-3 w-3" /> Home</Link></li>
+                <li><Link to="/" className="hover:text-white hover:translate-x-1.5 transition-all inline-flex items-center gap-1.5"><ChevronRight className="h-3 w-3" /> Home</Link></li>
                 <li><a href="#programs" className="hover:text-white hover:translate-x-1.5 transition-all inline-flex items-center gap-1.5"><ChevronRight className="h-3 w-3" /> Explore Courses</a></li>
                 <li><a href="#accreditations" className="hover:text-white hover:translate-x-1.5 transition-all inline-flex items-center gap-1.5"><ChevronRight className="h-3 w-3" /> Accreditation</a></li>
                 <li><Link to="/auth/login" className="hover:text-white hover:translate-x-1.5 transition-all inline-flex items-center gap-1.5"><ChevronRight className="h-3 w-3" /> Student Portal</Link></li>
