@@ -31,6 +31,7 @@ import PresentationDesktopPage from "./pages/PresentationDesktopPage";
 import PoEPage from "./pages/PoEPage";
 import BlockAssessmentPage from "./pages/BlockAssessmentPage";
 import BlockAssessmentAdminPage from "./pages/BlockAssessmentAdminPage";
+import UnitAssessmentPage from "./pages/UnitAssessmentPage";
 
 const queryClient = new QueryClient();
 
@@ -70,7 +71,8 @@ const App = () => (
             <Route element={<ProtectedRoute allowedRoles={["learner"]} />}>
               <Route path="/learner" element={<LearnerPortalPage />} />
               <Route path="/learner/modules/:id" element={<ModuleDetailPage />} />
-              <Route path="/learner/assessment/block/:blockNum" element={<BlockAssessmentPage />} />
+<Route path="/learner/assessment/block/:blockNum" element={<BlockAssessmentPage />} />
+              <Route path="/learner/assessment/unit/:id" element={<UnitAssessmentPage />} />
             </Route>
 
             <Route element={<ProtectedRoute />}>

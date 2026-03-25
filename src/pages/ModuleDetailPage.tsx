@@ -17,13 +17,14 @@ import {
   BookOpen,
   FileText,
   Download,
-  CheckCircle2,
   ChevronRight,
   DatabaseZap,
   RefreshCw,
   Play,
 } from "lucide-react";
 import { PresentationMode } from "@/components/PresentationMode";
+import { AssessmentForm, AssessmentPayload } from "@/components/AssessmentForm";
+import { useToast } from "@/hooks/use-toast";
 
 interface ContentLinks {
   modules?: Record<string, Array<{ label: string; href: string }>>;
@@ -660,6 +661,7 @@ export default function ModuleDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { role, user } = useAuth();
   const { progressMap, updateProgress } = useModuleProgress();
+  const { toast } = useToast();
   const {
     flow: moduleLessonFlow,
     source: flowSource,
@@ -686,7 +688,7 @@ export default function ModuleDetailPage() {
   const [activeDocName, setActiveDocName] = useState<string>("");
   const [assessmentUnlocked, setAssessmentUnlocked] = useState(false);
   const [guideCompleted, setGuideCompleted] = useState(false);
-  const [workspaceView, setWorkspaceView] = useState<"guide" | "quiz">("guide");
+  const [workspaceView, setWorkspaceView] = useState<"guide" | "quiz" | "assessment">("guide");
   const [quizAnswers, setQuizAnswers] = useState<Record<number, string>>({});
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [quizScore, setQuizScore] = useState<number | null>(null);
@@ -699,6 +701,39 @@ export default function ModuleDetailPage() {
   const [isPresenting, setIsPresenting] = useState(false);
   const [sessionIndex, setSessionIndex] = useState(0);
   const [highestSessionReached, setHighestSessionReached] = useState(-1);
+  
+  // Assessment form state
+  const [assessmentAnswers, setAssessmentAnswers] = useState<Record<number, string>>({});
+  const [assessmentSubmitting, setAssessmentSubmitting] = useState(false);
+  const [assessmentSubmitError, setAssessmentSubmitError] = useState<string | null>(null);
+
+  const handleAssessmentAnswerChange = (idx: number, value: string) => {
+    setAssessmentAnswers((prev) => ({ ...prev, [idx]: value }));
+  };
+
+  const handleAssessmentSubmit = async (payload: AssessmentPayload) => {
+    if (!id) return;
+    setAssessmentSubmitting(true);
+    setAssessmentSubmitError(null);
+    
+    try {
+      const success = await updateProgress(id, { assessment_submitted: true });
+      if (success) {
+        toast({
+          title: "Assessment Submitted",
+          description: "Your work has been saved for review.",
+        });
+        // Optionally navigate to POE page
+        // navigate(`/poe`);
+      } else {
+        setAssessmentSubmitError("Failed to submit assessment. Please try again.");
+      }
+    } catch (error) {
+      setAssessmentSubmitError("An error occurred while submitting.");
+    } finally {
+      setAssessmentSubmitting(false);
+    }
+  };
 
   useEffect(() => {
     const loadContentLinks = async () => {
@@ -1103,7 +1138,6 @@ export default function ModuleDetailPage() {
           </div>
         </div>
 
-        {/* Stats row with conditional document count */}
         <div className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-muted-foreground border-t border-border pt-3">
           <span className="flex items-center gap-1.5">
             <Award size={13} className="text-accent" /> {mod.credits} Credits
@@ -1123,7 +1157,6 @@ export default function ModuleDetailPage() {
             {assessmentUnlocked ? "2 Documents" : "1 Document"}
           </span>
 
-          {/* Guide Download - Always visible */}
           {learnerGuideDownloadHref && (
             <a
               href={learnerGuideDownloadHref}
@@ -1134,7 +1167,6 @@ export default function ModuleDetailPage() {
             </a>
           )}
 
-          {/* Assessment Download - Only visible after quiz is passed */}
           {assessmentUnlocked && assessmentDoc?.download_href && (
             <a
               href={assessmentDoc.download_href}
@@ -1321,9 +1353,6 @@ export default function ModuleDetailPage() {
                                       {sessionLessons[sessionIndex].label}
                                     </p>
                                     <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
-                                      {/* <span className="hidden sm:inline">
-                                        Session {sessionIndex + 1}
-                                      </span> */}
                                       <span>{sessionIndex + 1}</span>
                                       <span className="mx-1">/</span>
                                       <span>{sessionLessons.length}</span>
@@ -1749,7 +1778,7 @@ export default function ModuleDetailPage() {
                         ))}
                       </div>
 
-                      {isLearnerView ? (
+                      {isLearnerView && (
                         <>
                           <div className="flex items-center justify-between gap-3 pt-2 border-t border-border">
                             <div className="flex items-center gap-2">
@@ -1769,7 +1798,7 @@ export default function ModuleDetailPage() {
                                       const success = await updateProgress(id, {
                                         quiz_passed: true,
                                         assessment_unlocked: true,
-                                        guide_completed: true, // Ensure guide flow complete
+                                        guide_completed: true,
                                       });
                                       setAssessmentUnlocked(true);
                                       setGuideCompleted(true);
@@ -1811,31 +1840,55 @@ export default function ModuleDetailPage() {
                             )}
                           </div>
 
-                          {/* Navigation buttons after quiz completion */}
-                          {quizScore !== null &&
-                            quizScore >= 2 &&
-                            assessmentUnlocked && (
-                              <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-border mt-4">
-                                <button
-                                  onClick={() => setWorkspaceView("guide")}
-                                  className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-border text-muted-foreground py-2 px-4 text-xs font-medium hover:bg-secondary/50 transition-colors"
-                                >
-                                  ← Back to Lessons
-                                </button>
-                                <button
-                                  onClick={() =>
-assessmentDoc?.download_href && window.open(assessmentDoc.download_href, '_blank')
-                                    
-                                  }
-                                  className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg bg-success text-success-foreground py-2 px-4 text-xs font-semibold hover:bg-success/90 transition-colors shadow-sm"
-                                >
-                                  Next: Summative Assessment
-                                  <ChevronRight size={13} />
-                                </button>
-                              </div>
-                            )}
+                          {quizScore !== null && quizScore >= 2 && assessmentUnlocked && (
+                            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-border mt-4">
+                              <button
+                                onClick={() => setWorkspaceView("guide")}
+                                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-border text-muted-foreground py-2 px-4 text-xs font-medium hover:bg-secondary/50 transition-colors"
+                              >
+                                ← Back to Lessons
+                              </button>
+                              <button
+                                onClick={() => setWorkspaceView("assessment")}
+                                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg bg-success text-success-foreground py-2 px-4 text-xs font-semibold hover:bg-success/90 transition-colors shadow-sm"
+                              >
+                                Next: Summative Assessment
+                                <ChevronRight size={13} />
+                              </button>
+                            </div>
+                          )}
                         </>
-                      ) : null}
+                      )}
+                    </div>
+                  )}
+
+                  {workspaceView === "assessment" && assessmentUnlocked && (
+                    <div className="rounded-xl border border-border bg-card p-6 space-y-5">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="h-10 w-10 rounded-xl bg-gradient-to-r from-orange-400 to-red-500 flex items-center justify-center shrink-0">
+                          <Award className="w-5 h-5 text-white" />
+                        </div>
+                        <div>
+                          <h2 className="text-lg font-bold text-foreground">Summative Assessment</h2>
+                          <p className="text-sm text-muted-foreground">Complete the assessment and submit for review.</p>
+                        </div>
+                      </div>
+                      <AssessmentForm
+                        moduleId={id || ""}
+                        answers={assessmentAnswers}
+                        onAnswerChange={handleAssessmentAnswerChange}
+                        downloadHref={assessmentDoc?.download_href}
+                        learnerName={user?.user_metadata?.full_name || user?.email?.split('@')[0] || "Learner"}
+                        profile={{
+                          id_number: user?.user_metadata?.id_number,
+                          phone: user?.user_metadata?.phone,
+                          department: user?.user_metadata?.department,
+                          school: user?.user_metadata?.school,
+                        }}
+                        onRequestSubmit={handleAssessmentSubmit}
+                        isSubmitting={assessmentSubmitting}
+                        submitError={assessmentSubmitError}
+                      />
                     </div>
                   )}
                 </>
@@ -1857,24 +1910,30 @@ assessmentDoc?.download_href && window.open(assessmentDoc.download_href, '_blank
                       ? guideMode === "intro"
                         ? "Introduction"
                         : `Session ${sessionIndex + 1}`
-                      : "Quiz"}
+                      : workspaceView === "quiz"
+                      ? "Quiz"
+                      : "Assessment"}
                   </span>
                   <span>
                     {workspaceView === "guide"
                       ? guideMode === "intro"
                         ? 1
                         : sessionIndex + 2
-                      : hasStructuredFlow
+                      : workspaceView === "quiz"
+                      ? hasStructuredFlow
                         ? sessionLessons.length + 2
-                        : 2}
-                    /{hasStructuredFlow ? sessionLessons.length + 2 : 2}
+                        : 2
+                      : hasStructuredFlow
+                      ? sessionLessons.length + 3
+                      : 3}
+                    /{hasStructuredFlow ? sessionLessons.length + 3 : 3}
                   </span>
                 </div>
                 <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
                   <div
                     className="h-1.5 rounded-full bg-primary transition-all duration-500"
                     style={{
-                      width: `${workspaceView === "guide" ? (guideMode === "intro" ? 5 : Math.round(((sessionIndex + 1) / (hasStructuredFlow ? sessionLessons.length + 1 : 1)) * 90)) : 100}%`,
+                      width: `${workspaceView === "guide" ? (guideMode === "intro" ? 5 : Math.round(((sessionIndex + 1) / (hasStructuredFlow ? sessionLessons.length + 1 : 1)) * 90)) : workspaceView === "quiz" ? 95 : 100}%`,
                     }}
                   />
                 </div>
@@ -1938,6 +1997,20 @@ assessmentDoc?.download_href && window.open(assessmentDoc.download_href, '_blank
                   </span>
                   Quiz
                 </button>
+
+                {assessmentUnlocked && (
+                  <button
+                    onClick={() => setWorkspaceView("assessment")}
+                    className={`w-full flex items-center gap-2 rounded-lg px-3 py-2 text-xs text-left transition-colors ${workspaceView === "assessment" ? "bg-primary/10 text-primary font-medium" : "text-muted-foreground hover:bg-secondary/50"}`}
+                  >
+                    <span
+                      className={`shrink-0 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold ${workspaceView === "assessment" ? "bg-primary text-primary-foreground" : "border border-border"}`}
+                    >
+                      {assessmentUnlocked ? "✓" : ""}
+                    </span>
+                    Assessment
+                  </button>
+                )}
               </div>
             </div>
           )}
