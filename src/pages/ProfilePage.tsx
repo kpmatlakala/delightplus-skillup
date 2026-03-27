@@ -158,8 +158,6 @@ export default function ProfilePage() {
       await loadProfile();
       setSaving(false);
       setSuccess("Profile updated successfully.");
-
-      // Clear success message after 3 seconds
       setTimeout(() => setSuccess(null), 3000);
     }, 500);
   };
