@@ -7,6 +7,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { useAuth } from "@/hooks/useAuth";
 import { useModuleProgress } from "@/hooks/useModuleProgress";
 import { supabase } from "@/integrations/supabase/client";
+import { fileUploadService } from "@/services/fileUploadService";
 
 /* ─── Block metadata ─────────────────────────────────────────────────────── */
 const BLOCK_META: Record<string, {
@@ -270,24 +271,34 @@ export default function BlockAssessmentPage() {
                       setShowConfirm(false);
                       return;
                     }
+                    
                     setIsSubmitting(true);
-                    const blob = new Blob([pendingText], { type: "text/plain" });
-                    const path = `learner-${user.id}/block-${blockNum}/assessment-${Date.now()}.txt`;
-                    const { error } = await supabase.storage
-                      .from("assessment-submissions")
-                      .upload(path, blob, { upsert: true });
-                    if (error) {
+                    setSubmitError(undefined);
+                    
+                    try {
+                      // Use the new file upload service
+                      const result = await fileUploadService.submitAssessment(
+                        pendingText,
+                        blockKey,
+                        user.id
+                      );
+
+                      if (!result.success) {
+                        throw new Error(result.error?.message || "Upload failed");
+                      }
+
+                      const now = new Date().toISOString();
+                      setSubmissionPath(result.filePath || '');
+                      setSubmittedAt(now);
+                      setSubmittedText(pendingText);
+                      await markAssessmentSubmitted(blockKey, now);
+                      setShowConfirm(false);
+                    } catch (error: any) {
+                      console.error('[Block Assessment Upload] Error:', error);
                       setSubmitError(`Submission failed: ${error.message}`);
+                    } finally {
                       setIsSubmitting(false);
-                      return;
                     }
-                    const now = new Date().toISOString();
-                    setSubmissionPath(path);
-                    setSubmittedAt(now);
-                    setSubmittedText(pendingText);
-                    await markAssessmentSubmitted(blockKey, now);
-                    setIsSubmitting(false);
-                    setShowConfirm(false);
                   }}
                 >
                   Confirm &amp; Submit

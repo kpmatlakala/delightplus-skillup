@@ -1,7 +1,10 @@
 import AppLayout from "@/components/AppLayout";
 import { modules } from "@/data/courseData";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Link } from "react-router-dom";
+import { Eye, FileText } from "lucide-react";
 
 const assessments = modules.map((mod) => ({
   moduleId: mod.id,
@@ -25,6 +28,7 @@ export default function AssessmentsPage() {
               <TableHead className="hidden md:table-cell">Summative</TableHead>
               <TableHead className="w-20">Credits</TableHead>
               <TableHead className="w-24">Status</TableHead>
+              <TableHead className="w-32">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -41,6 +45,21 @@ export default function AssessmentsPage() {
                   <Badge variant="outline" className="text-success border-success/30 bg-success/10">
                     {a.status}
                   </Badge>
+                </TableCell>
+                <TableCell>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      asChild
+                      className="gap-1"
+                    >
+                      <Link to={`/assessments/grade/${a.moduleId}`}>
+                        <Eye size={12} />
+                        Grade
+                      </Link>
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
