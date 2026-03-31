@@ -86,22 +86,45 @@ const mapPublicRole = (rawRole: string | null | undefined): AppRole => {
 };
 
 /**
- * Fetch role from public.users — the authoritative role column.
+ * Fetch role from the appropriate table based on user type.
+ * First check public.users for admin role, then check cet.learners for learner role.
  * Falls back to "learner" on any error so the app never hangs.
  */
 async function fetchRoleForUser(userId: string): Promise<AppRole> {
   try {
-    const { data, error } = await db
+    // First, check if user is admin in public.users table
+    const { data: publicUserData, error: publicUserError } = await db
       .from("users")
       .select("role")
       .eq("id", userId)
       .maybeSingle();
 
-    if (error) {
-      console.warn("fetchRoleForUser:", error.message);
-      return "learner";
+    // If user exists in public.users and has admin role, return admin
+    if (!publicUserError && publicUserData?.role === "admin") {
+      return "admin";
     }
-    return mapPublicRole(data?.role);
+    
+    // If user exists in public.users and has moderator role, return lecturer
+    if (!publicUserError && publicUserData?.role === "moderator") {
+      return "lecturer";
+    }
+
+    // Otherwise, check cet.learners table for learner role
+    const { data: learnerData, error: learnerError } = await db
+      .from("learners")
+      .select("role")
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    if (!learnerError && learnerData?.role) {
+      // Map cet.learners.role to AppRole
+      if (learnerData.role === "learner") return "learner";
+      if (learnerData.role === "lecturer") return "lecturer";
+      if (learnerData.role === "admin") return "admin";
+    }
+
+    // Default fallback to learner
+    return "learner";
   } catch (err) {
     console.warn("fetchRoleForUser threw:", err);
     return "learner";

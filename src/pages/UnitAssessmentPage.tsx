@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ArrowLeft, Download, FileText, CheckCircle2 } from "lucide-react";
+import { fileUploadService } from "@/services/fileUploadService";
 
 export default function UnitAssessmentPage() {
   const { id } = useParams<{ id: string }>();
@@ -46,22 +47,32 @@ export default function UnitAssessmentPage() {
     setSubmitError(null);
 
     try {
+      if (!user?.id || !id) {
+        throw new Error("Missing user ID or module ID");
+      }
+
+      // Use the new file upload service
+      const result = await fileUploadService.submitAssessment(
+        payload.submissionText,
+        `unit-${id}`,
+        user.id
+      );
+
+      if (!result.success) {
+        throw new Error(result.error?.message || "Upload failed");
+      }
+
       // Mark as submitted in progress
-      await updateProgress(id, { assessment_submitted: true, assessment_submitted_at: new Date().toISOString() });
-
-      // Upload to storage
-      const path = `learner-${user.id}/assessments/unit-${id}/${Date.now()}-submission.txt`;
-      const { error } = await supabase.storage
-        .from("assessment-submissions")
-        .upload(path, new Blob([payload.submissionText], { type: "text/plain" }), {
-          upsert: true,
-        });
-
-      if (error) throw error;
+      await updateProgress(id, { 
+        assessment_submitted: true, 
+        assessment_submitted_at: new Date().toISOString(),
+        submission_path: result.filePath
+      });
 
       setSubmissionText(payload.submissionText);
       setSubmitted(true);
     } catch (error: any) {
+      console.error('[Assessment Upload] Error:', error);
       setSubmitError(error.message);
     } finally {
       setIsSubmitting(false);

@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { CheckCircle2 } from "lucide-react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -9,6 +11,8 @@ import { moduleDownloadsById } from "@/data/moduleDownloads";
 import { useModuleFlow } from "@/hooks/useModuleFlow";
 import { useAuth } from "@/hooks/useAuth";
 import { useModuleProgress } from "@/hooks/useModuleProgress";
+import { useQuizAnswers } from "@/hooks/useQuizAnswers";
+import { useAssessmentSubmissions } from "@/hooks/useAssessmentSubmissions";
 import { Badge } from "@/components/ui/badge";
 import {
   ArrowLeft,
@@ -24,7 +28,16 @@ import {
 } from "lucide-react";
 import { PresentationMode } from "@/components/PresentationMode";
 import { AssessmentForm, AssessmentPayload } from "@/components/AssessmentForm";
+import { QuizReviewMode } from "@/components/QuizReviewMode";
+import { AssessmentReviewMode } from "@/components/AssessmentReviewMode";
+import { AssessmentReview } from "@/components/AssessmentReview";
 import { useToast } from "@/hooks/use-toast";
+import { fileUploadService } from "@/services/fileUploadService";
+import { SubmissionSuccess } from "@/components/SubmissionSuccess";
+import { SubmissionSuccessHandler, SubmissionResult } from "@/services/submissionSuccessHandler";
+import { Quiz, QuizQuestion } from "@/components/Quiz";
+import { sessionQuizBankByModule } from "@/data/sessionQuizBank";
+import { MobileModuleNavigation } from "@/components/MobileModuleNavigation";
 
 interface ContentLinks {
   modules?: Record<string, Array<{ label: string; href: string }>>;
@@ -660,7 +673,9 @@ function hasDocForCategory(
 export default function ModuleDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { role, user } = useAuth();
-  const { progressMap, updateProgress } = useModuleProgress();
+  const { progressMap, updateProgress, fetchProgress } = useModuleProgress();
+  const { saveQuizAnswers, getAnswersForReview, hasCompletedQuiz, getQuizScore } = useQuizAnswers(id || '');
+  const { saveAssessmentSubmission, hasSubmittedAssessment, downloadSubmission, printSubmission } = useAssessmentSubmissions(id || '');
   const { toast } = useToast();
   const {
     flow: moduleLessonFlow,
@@ -692,6 +707,7 @@ export default function ModuleDetailPage() {
   const [quizAnswers, setQuizAnswers] = useState<Record<number, string>>({});
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [quizScore, setQuizScore] = useState<number | null>(null);
+  const [quizTotalQuestions, setQuizTotalQuestions] = useState<number | null>(null);
   const [quizEnabled, setQuizEnabled] = useState(true);
   const [guidePageIndex, setGuidePageIndex] = useState(0);
   const [guideMode, setGuideMode] = useState<"intro" | "sessions">("intro");
@@ -701,34 +717,196 @@ export default function ModuleDetailPage() {
   const [isPresenting, setIsPresenting] = useState(false);
   const [sessionIndex, setSessionIndex] = useState(0);
   const [highestSessionReached, setHighestSessionReached] = useState(-1);
-  
+
+  // Mobile navigation state
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+  // Mobile navigation handler
+  const handleMobileNavigation = (sectionId: string, sessionIdx?: number) => {
+    setMobileNavOpen(false); // Close mobile nav when selecting
+
+    switch (sectionId) {
+      case 'intro':
+        setWorkspaceView('guide');
+        setGuideMode('intro');
+        break;
+      case 'session':
+        setWorkspaceView('guide');
+        setGuideMode('sessions');
+        if (sessionIdx !== undefined) {
+          setSessionIndex(sessionIdx);
+        }
+        break;
+      case 'quiz':
+        setWorkspaceView('quiz');
+        break;
+      case 'assessment':
+        if (assessmentUnlocked) {
+          setWorkspaceView('assessment');
+        }
+        break;
+    }
+  };
+
+  // Generate navigation sections for mobile nav
+  const generateNavigationSections = () => {
+    const sections = [];
+
+    // Module Introduction
+    sections.push({
+      id: 'intro',
+      title: 'Module Introduction',
+      type: 'intro' as const,
+      isCompleted: guideCompleted,
+      isAccessible: true,
+      order: 1
+    });
+
+    // Learning Sessions
+    if (sessionLessons && sessionLessons.length > 0) {
+      sessionLessons.forEach((lesson, index) => {
+        sections.push({
+          id: `session-${index}`,
+          title: lesson.label || `Session ${index + 1}`,
+          type: 'session' as const,
+          isCompleted: index <= highestSessionReached,
+          isAccessible: true,
+          order: 2 + index,
+          sessionIndex: index
+        });
+      });
+    }
+
+    // Quiz
+    sections.push({
+      id: 'quiz',
+      title: 'Knowledge Quiz',
+      type: 'quiz' as const,
+      isCompleted: quizSubmitted && (quizScore !== null && quizScore >= 2),
+      isAccessible: true, // Allow access to quiz without rigid requirements
+      order: 100
+    });
+
+    // Assessment
+    sections.push({
+      id: 'assessment',
+      title: 'Final Assessment',
+      type: 'assessment' as const,
+      isCompleted: hasSubmittedAssessment,
+      isAccessible: assessmentUnlocked,
+      order: 101
+    });
+
+    return sections;
+  };
+
   // Assessment form state
   const [assessmentAnswers, setAssessmentAnswers] = useState<Record<number, string>>({});
   const [assessmentSubmitting, setAssessmentSubmitting] = useState(false);
   const [assessmentSubmitError, setAssessmentSubmitError] = useState<string | null>(null);
+  const [submissionResult, setSubmissionResult] = useState<SubmissionResult | null>(null);
+  const [showSubmissionSuccess, setShowSubmissionSuccess] = useState(false);
+  const [showAssessmentReview, setShowAssessmentReview] = useState(false);
 
   const handleAssessmentAnswerChange = (idx: number, value: string) => {
     setAssessmentAnswers((prev) => ({ ...prev, [idx]: value }));
   };
 
   const handleAssessmentSubmit = async (payload: AssessmentPayload) => {
-    if (!id) return;
+    if (!id || !user) return;
     setAssessmentSubmitting(true);
     setAssessmentSubmitError(null);
-    
+
     try {
-      const success = await updateProgress(id, { assessment_submitted: true });
-      if (success) {
-        toast({
-          title: "Assessment Submitted",
-          description: "Your work has been saved for review.",
-        });
-        // Optionally navigate to POE page
-        // navigate(`/poe`);
-      } else {
-        setAssessmentSubmitError("Failed to submit assessment. Please try again.");
+      // Save assessment to database first
+      const submissionId = await saveAssessmentSubmission(
+        payload.submissionText,
+        undefined, // No file path yet
+        `assessment-${id}-${new Date().toISOString().split('T')[0]}.txt`,
+        payload.submissionText.length,
+        {
+          module_id: id,
+          user_id: user.id,
+          submitted_at: new Date().toISOString()
+        },
+        assessmentAnswers
+      );
+
+      if (!submissionId) {
+        setAssessmentSubmitError("Failed to save assessment to database. Please try again.");
+        setAssessmentSubmitting(false);
+        return;
       }
-    } catch (error) {
+
+      // Use the new file upload service
+      const result = await fileUploadService.submitAssessment(
+        payload.submissionText,
+        id,
+        user.id
+      );
+
+      if (!result.success) {
+        console.error("[Assessment Upload] Error:", result.error);
+        setAssessmentSubmitError(
+          result.errorResponse?.userMessage ||
+          result.error?.message ||
+          "Failed to upload submission"
+        );
+        setAssessmentSubmitting(false);
+        return;
+      }
+
+      // Update the database submission with the file path
+      await saveAssessmentSubmission(
+        payload.submissionText,
+        result.filePath,
+        `assessment-${id}-${new Date().toISOString().split('T')[0]}.txt`,
+        payload.submissionText.length,
+        {
+          module_id: id,
+          user_id: user.id,
+          submitted_at: new Date().toISOString()
+        },
+        assessmentAnswers
+      );
+
+      // Create submission result for success flow
+      const submissionResult: SubmissionResult = {
+        submissionId: submissionId,
+        filePath: result.filePath!,
+        fileName: `assessment-${id}-${new Date().toISOString().split('T')[0]}.txt`,
+        timestamp: new Date(),
+        moduleId: id,
+        userId: user.id,
+        fileSize: payload.submissionText.length,
+        submissionText: payload.submissionText
+      };
+
+      // Update progress with the successful submission
+      const success = await updateProgress(id, {
+        assessment_submitted: true,
+        submission_path: result.filePath,
+        submission_uploaded_at: new Date().toISOString(),
+      });
+
+      if (success) {
+        // Log submission success
+        await SubmissionSuccessHandler.logSubmissionSuccess(submissionResult);
+
+        // Set submission result and show success UI
+        setSubmissionResult(submissionResult);
+        setShowSubmissionSuccess(true);
+
+        // Show success toast
+        toast({
+          title: "Assessment Submitted Successfully!",
+          description: "Your work has been saved for review. You can download your submission below.",
+        });
+      } else {
+        setAssessmentSubmitError("Failed to save submission progress. Please try again.");
+      }
+    } catch (error: any) {
+      console.error("[Assessment Upload] Unexpected error:", error);
       setAssessmentSubmitError("An error occurred while submitting.");
     } finally {
       setAssessmentSubmitting(false);
@@ -760,7 +938,47 @@ export default function ModuleDetailPage() {
     const prog = progressMap[id];
     setAssessmentUnlocked(prog?.assessment_unlocked ?? false);
     setGuideCompleted(prog?.guide_completed ?? false);
+
+    // Handle quiz review mode - populate previous answers if quiz was completed
+    if (prog?.quiz_passed) {
+      setQuizSubmitted(true);
+      // Load saved quiz answers from database
+      loadSavedQuizAnswers();
+    }
   }, [id, role, progressMap]);
+
+  // Function to load saved quiz answers
+  const loadSavedQuizAnswers = async () => {
+    if (!id) return;
+
+    try {
+      const savedAnswers = await getAnswersForReview();
+      if (savedAnswers && savedAnswers.length > 0) {
+        // Convert saved answers to quiz form format
+        const answersMap: Record<number, string> = {};
+        let correctCount = 0;
+
+        // Get unique question IDs to determine total questions
+        const uniqueQuestionIds = new Set(savedAnswers.map(answer => answer.question_id));
+        const totalQuestions = uniqueQuestionIds.size;
+
+        savedAnswers.forEach((answer) => {
+          answersMap[answer.question_id] = answer.selected_answer;
+          if (answer.is_correct) correctCount++;
+        });
+
+        setQuizAnswers(answersMap);
+        setQuizScore(correctCount);
+        setQuizTotalQuestions(totalQuestions);
+        setQuizSubmitted(true);
+
+        console.log('Loaded saved quiz answers:', answersMap);
+        console.log(`Quiz score: ${correctCount}/${totalQuestions}`);
+      }
+    } catch (error) {
+      console.error('Error loading saved quiz answers:', error);
+    }
+  };
 
   useEffect(() => {
     const loadStudyContent = async () => {
@@ -914,6 +1132,7 @@ export default function ModuleDetailPage() {
     setQuizAnswers({});
     setQuizSubmitted(false);
     setQuizScore(null);
+    setQuizTotalQuestions(null);
     setGuidePageIndex(0);
     setGuideMode("intro");
     setSessionIndex(0);
@@ -926,14 +1145,32 @@ export default function ModuleDetailPage() {
     const prog = progressMap[id];
     if (!prog) return;
 
-    if (
-      prog.assessment_submitted ||
-      prog.assessment_unlocked ||
-      prog.quiz_passed
-    ) {
-      setWorkspaceView("quiz");
+    // Check for view parameter to set workspace view
+    const urlParams = new URLSearchParams(window.location.search);
+    const forceView = urlParams.get('view');
+
+    if (forceView === 'guide') {
+      setWorkspaceView('guide');
+      return;
+    }
+
+    if (forceView === 'quiz') {
+      setWorkspaceView('quiz');
+      return;
+    }
+
+    // Default navigation logic based on progress - redirect to progress if assessment completed
+    if (prog.assessment_submitted) {
+      // If assessment is submitted, redirect to progress page to show completion
+      navigate(`/learner/modules/${id}/progress`);
+      return;
+    } else if (prog.assessment_unlocked || prog.quiz_passed) {
+      // If quiz passed but no assessment submitted, go to assessment
+      setWorkspaceView("assessment");
+      setAssessmentUnlocked(true);
       setHighestSessionReached(999);
     } else if (prog.guide_completed) {
+      // If guide completed but quiz not passed, go to quiz
       setWorkspaceView("quiz");
       setHighestSessionReached(999);
     } else {
@@ -954,7 +1191,7 @@ export default function ModuleDetailPage() {
             setGuideMode("sessions");
             setSessionIndex(parsed.sessionIdx);
           }
-        } catch {}
+        } catch { }
       }
     }
   }, [id, role, progressMap, user?.id]);
@@ -1026,30 +1263,30 @@ export default function ModuleDetailPage() {
     ) ?? null;
   const quizItems = mod
     ? (id && staticQuizByModule[id]) ||
-      buildModuleQuiz(mod.title, mod.objectives, mod.activities)
+    buildModuleQuiz(mod.title, mod.objectives, mod.activities)
     : [];
   const guidePages = moduleLessonFlow
     ? [
-        {
-          id: "intro",
-          label: "Intro",
-          title: moduleLessonFlow.introTitle,
-          summary: moduleLessonFlow.introSummary,
-          body: moduleLessonFlow.introBody,
-        },
-        ...moduleLessonFlow.lessons.map((lesson) => ({
-          id: lesson.id,
-          label: lesson.label,
-          title: lesson.title,
-          summary: lesson.summary,
-          body: lesson.body,
-        })),
-      ]
+      {
+        id: "intro",
+        label: "Intro",
+        title: moduleLessonFlow.introTitle,
+        summary: moduleLessonFlow.introSummary,
+        body: moduleLessonFlow.introBody,
+      },
+      ...moduleLessonFlow.lessons.map((lesson) => ({
+        id: lesson.id,
+        label: lesson.label,
+        title: lesson.title,
+        summary: lesson.summary,
+        body: lesson.body,
+      })),
+    ]
     : [];
   const sessionLessons = moduleLessonFlow
     ? moduleLessonFlow.lessons.filter((lesson) =>
-        lesson.label.toLowerCase().startsWith("session"),
-      )
+      lesson.label.toLowerCase().startsWith("session"),
+    )
     : [];
   const markdownArticleClass =
     "prose prose-sm max-w-none text-foreground dark:prose-invert prose-headings:font-display prose-pre:bg-muted prose-pre:text-foreground prose-pre:whitespace-pre-wrap prose-code:text-foreground prose-a:text-primary prose-li:my-1 prose-p:my-2 prose-table:w-full prose-table:border-collapse prose-table:text-xs prose-th:border prose-th:border-border prose-th:bg-muted/50 prose-th:px-2 prose-th:py-1 prose-th:text-left prose-td:border prose-td:border-border prose-td:px-2 prose-td:py-1";
@@ -1178,6 +1415,23 @@ export default function ModuleDetailPage() {
           )}
         </div>
       </div>
+
+      {/* Mobile Navigation - Only show for learners */}
+      {isLearnerView && (
+        <div className="lg:hidden mb-6">
+          <MobileModuleNavigation
+            sections={generateNavigationSections()}
+            currentSection={
+              workspaceView === 'guide'
+                ? (guideMode === 'intro' ? 'intro' : 'session')
+                : workspaceView
+            }
+            onSectionSelect={handleMobileNavigation}
+            isOpen={mobileNavOpen}
+            onToggle={() => setMobileNavOpen(!mobileNavOpen)}
+          />
+        </div>
+      )}
 
       <div className="grid gap-5 lg:grid-cols-[1fr_280px] items-start">
         <div className="space-y-4 max-w-[94vw]">
@@ -1792,20 +2046,79 @@ export default function ModuleDetailPage() {
                                           : total,
                                       0,
                                     );
+
+                                    const percentage = Math.round((score / quizItems.length) * 100);
                                     setQuizSubmitted(true);
                                     setQuizScore(score);
-                                    if (score >= 2 && id) {
-                                      const success = await updateProgress(id, {
-                                        quiz_passed: true,
-                                        assessment_unlocked: true,
-                                        guide_completed: true,
+                                    setQuizTotalQuestions(quizItems.length);
+
+                                    if (id && user) {
+                                      // Prepare correct answers for saving
+                                      const correctAnswers: Record<number, string> = {};
+                                      quizItems.forEach(q => {
+                                        correctAnswers[q.id] = q.answer;
                                       });
-                                      setAssessmentUnlocked(true);
-                                      setGuideCompleted(true);
+
+                                      // Save quiz answers to database
+                                      const quizSaved = await saveQuizAnswers(
+                                        quizAnswers,
+                                        correctAnswers,
+                                        score,
+                                        quizItems.length
+                                      );
+
+                                      if (quizSaved) {
+                                        toast({
+                                          title: "Quiz Completed!",
+                                          description: `You scored ${percentage}% (${score}/${quizItems.length}). ${score >= 2 ? 'Quiz answers saved! Assessment unlocked!' : 'Quiz answers saved! You need at least 2 correct answers to unlock the assessment.'}`
+                                        });
+                                      } else {
+                                        toast({
+                                          title: "Quiz Completed!",
+                                          description: `You scored ${percentage}% (${score}/${quizItems.length}). ${score >= 2 ? 'Assessment unlocked!' : 'You need at least 2 correct answers to unlock the assessment.'}`
+                                        });
+                                      }
+
+                                      // Update progress
+                                      const success = await updateProgress(id, {
+                                        quiz_passed: score >= 2,
+                                        assessment_unlocked: score >= 2,
+                                        guide_completed: true,
+                                        updated_at: new Date().toISOString()
+                                      });
+
                                       if (success) {
-                                        localStorage.removeItem(
-                                          `cet_sess_${user?.id}_${id}`,
-                                        );
+                                        setAssessmentUnlocked(score >= 2);
+                                        setGuideCompleted(true);
+                                        localStorage.removeItem(`cet_sess_${user?.id}_${id}`);
+
+                                        // Fetch updated progress and redirect based on result
+                                        setTimeout(async () => {
+                                          await fetchProgress();
+
+                                          // Auto-redirect based on quiz result
+                                          if (score >= 2) {
+                                            // If passed, redirect to progress page
+                                            navigate(`/module/${id}/progress`);
+                                            toast({
+                                              title: "Assessment Unlocked!",
+                                              description: "Great job! You can now proceed to the summative assessment.",
+                                            });
+                                          } else {
+                                            // If failed, stay on quiz for retry
+                                            toast({
+                                              title: "Quiz Complete",
+                                              description: "You need at least 2 correct answers to unlock the assessment. You can retry the quiz.",
+                                              variant: "destructive"
+                                            });
+                                          }
+                                        }, 1000);
+                                      } else {
+                                        toast({
+                                          title: "Warning",
+                                          description: "Quiz completed but progress update failed. Your answers are still saved.",
+                                          variant: "destructive"
+                                        });
                                       }
                                     }
                                   }}
@@ -1819,6 +2132,7 @@ export default function ModuleDetailPage() {
                                     setQuizAnswers({});
                                     setQuizSubmitted(false);
                                     setQuizScore(null);
+                                    setQuizTotalQuestions(null);
                                   }}
                                   className="inline-flex items-center gap-1.5 rounded-lg border border-border text-muted-foreground px-4 py-2 text-xs font-medium hover:bg-secondary/50"
                                 >
@@ -1831,7 +2145,7 @@ export default function ModuleDetailPage() {
                                 <p
                                   className={`text-xs font-semibold ${quizScore !== null && quizScore >= 2 ? "text-green-600 dark:text-green-400" : "text-red-500"}`}
                                 >
-                                  Score: {quizScore}/{quizItems.length} —{" "}
+                                  Score: {quizScore}/{quizTotalQuestions || quizItems?.length || 3} —{" "}
                                   {quizScore !== null && quizScore >= 2
                                     ? "Passed ✓"
                                     : "Try again"}
@@ -1839,24 +2153,6 @@ export default function ModuleDetailPage() {
                               </div>
                             )}
                           </div>
-
-                          {quizScore !== null && quizScore >= 2 && assessmentUnlocked && (
-                            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-border mt-4">
-                              <button
-                                onClick={() => setWorkspaceView("guide")}
-                                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-border text-muted-foreground py-2 px-4 text-xs font-medium hover:bg-secondary/50 transition-colors"
-                              >
-                                ← Back to Lessons
-                              </button>
-                              <button
-                                onClick={() => setWorkspaceView("assessment")}
-                                className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg bg-success text-success-foreground py-2 px-4 text-xs font-semibold hover:bg-success/90 transition-colors shadow-sm"
-                              >
-                                Next: Summative Assessment
-                                <ChevronRight size={13} />
-                              </button>
-                            </div>
-                          )}
                         </>
                       )}
                     </div>
@@ -1873,22 +2169,95 @@ export default function ModuleDetailPage() {
                           <p className="text-sm text-muted-foreground">Complete the assessment and submit for review.</p>
                         </div>
                       </div>
-                      <AssessmentForm
-                        moduleId={id || ""}
-                        answers={assessmentAnswers}
-                        onAnswerChange={handleAssessmentAnswerChange}
-                        downloadHref={assessmentDoc?.download_href}
-                        learnerName={user?.user_metadata?.full_name || user?.email?.split('@')[0] || "Learner"}
-                        profile={{
-                          id_number: user?.user_metadata?.id_number,
-                          phone: user?.user_metadata?.phone,
-                          department: user?.user_metadata?.department,
-                          school: user?.user_metadata?.school,
-                        }}
-                        onRequestSubmit={handleAssessmentSubmit}
-                        isSubmitting={assessmentSubmitting}
-                        submitError={assessmentSubmitError}
-                      />
+                      {showSubmissionSuccess && submissionResult ? (
+                        <SubmissionSuccess
+                          submission={submissionResult}
+                          onDownload={async () => {
+                            const downloadUrl = await SubmissionSuccessHandler.generateDownloadLink(submissionResult.filePath);
+                            if (downloadUrl) {
+                              window.open(downloadUrl, '_blank');
+                            } else {
+                              toast({
+                                title: "Download Error",
+                                description: "Unable to generate download link. Please try again.",
+                                variant: "destructive"
+                              });
+                            }
+                          }}
+                          onPrint={() => {
+                            SubmissionSuccessHandler.printSubmission(submissionResult);
+                          }}
+                          onSendReceipt={async () => {
+                            if (user?.email) {
+                              const success = await SubmissionSuccessHandler.sendEmailReceipt({
+                                userEmail: user.email,
+                                userName: user.user_metadata?.full_name || 'Student',
+                                submission: submissionResult,
+                                moduleTitle: mod?.title
+                              });
+
+                              if (success) {
+                                toast({
+                                  title: "Email Sent",
+                                  description: "Receipt has been sent to your email address.",
+                                });
+                              } else {
+                                toast({
+                                  title: "Email Error",
+                                  description: "Unable to send email receipt. Please try again.",
+                                  variant: "destructive"
+                                });
+                              }
+                            }
+                          }}
+                          showEmailOption={!!user?.email}
+                        />
+                      ) : showAssessmentReview ? (
+                        <AssessmentReview
+                          moduleId={id || ""}
+                          userId={user?.id || ""}
+                          submissionPath={progressMap[id]?.submission_path}
+                          onClose={() => setShowAssessmentReview(false)}
+                        />
+                      ) : progressMap[id]?.submission_path && progressMap[id]?.assessment_submitted ? (
+                        <div className="mb-4 space-y-4">
+                          <div className="flex items-center gap-2 text-green-700 dark:text-green-400 font-semibold">
+                            <CheckCircle2 size={18} /> Assessment submitted successfully!
+                          </div>
+
+                          <div className="flex flex-col sm:flex-row gap-3">
+                            <button
+                              onClick={() => setShowAssessmentReview(true)}
+                              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors"
+                            >
+                              <FileText size={14} /> Review Submission
+                            </button>
+
+                            <a
+                              href={supabase.storage.from("assessment-submissions").getPublicUrl(progressMap[id].submission_path).publicURL}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-border text-muted-foreground text-xs font-medium hover:bg-secondary/50 transition-colors"
+                            >
+                              <Download size={14} /> Download File
+                            </a>
+                          </div>
+
+                          <div className="text-xs text-muted-foreground">
+                            <p>Your assessment has been submitted for review. You can review your submission content above or download the original file.</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <AssessmentForm
+                          moduleId={id || ""}
+                          answers={assessmentAnswers}
+                          onAnswerChange={handleAssessmentAnswerChange}
+                          downloadHref={assessmentDoc?.download_href}
+                          onRequestSubmit={handleAssessmentSubmit}
+                          isSubmitting={assessmentSubmitting}
+                          submitError={assessmentSubmitError}
+                        />
+                      )}
                     </div>
                   )}
                 </>
@@ -1911,8 +2280,8 @@ export default function ModuleDetailPage() {
                         ? "Introduction"
                         : `Session ${sessionIndex + 1}`
                       : workspaceView === "quiz"
-                      ? "Quiz"
-                      : "Assessment"}
+                        ? "Quiz"
+                        : "Assessment"}
                   </span>
                   <span>
                     {workspaceView === "guide"
@@ -1920,12 +2289,12 @@ export default function ModuleDetailPage() {
                         ? 1
                         : sessionIndex + 2
                       : workspaceView === "quiz"
-                      ? hasStructuredFlow
-                        ? sessionLessons.length + 2
-                        : 2
-                      : hasStructuredFlow
-                      ? sessionLessons.length + 3
-                      : 3}
+                        ? hasStructuredFlow
+                          ? sessionLessons.length + 2
+                          : 2
+                        : hasStructuredFlow
+                          ? sessionLessons.length + 3
+                          : 3}
                     /{hasStructuredFlow ? sessionLessons.length + 3 : 3}
                   </span>
                 </div>
@@ -1984,11 +2353,9 @@ export default function ModuleDetailPage() {
 
                 <button
                   onClick={() =>
-                    (!isLearnerView || guideCompleted) &&
                     setWorkspaceView("quiz")
                   }
-                  disabled={isLearnerView && !guideCompleted}
-                  className={`w-full flex items-center gap-2 rounded-lg px-3 py-2 text-xs text-left transition-colors ${workspaceView === "quiz" ? "bg-primary/10 text-primary font-medium" : "text-muted-foreground hover:bg-secondary/50"} disabled:opacity-40 disabled:cursor-not-allowed`}
+                  className={`w-full flex items-center gap-2 rounded-lg px-3 py-2 text-xs text-left transition-colors ${workspaceView === "quiz" ? "bg-primary/10 text-primary font-medium" : "text-muted-foreground hover:bg-secondary/50"}`}
                 >
                   <span
                     className={`shrink-0 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold ${assessmentUnlocked ? "bg-primary text-primary-foreground" : "border border-border"}`}
