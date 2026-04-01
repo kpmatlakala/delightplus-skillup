@@ -36,8 +36,8 @@ export default function AssessmentGradingPage() {
 
   const openGradeDialog = (submission: any) => {
     setSelectedSubmission(submission);
-    setGrade(submission.grade?.toString() || "");
-    setFeedback(submission.feedback || "");
+    setGrade(submission.assessment_grade?.toString() || "");
+    setFeedback(submission.assessment_feedback || "");
     setGradeDialogOpen(true);
   };
 
@@ -57,7 +57,8 @@ export default function AssessmentGradingPage() {
     setIsGrading(true);
     try {
       const success = await gradeAssessment(
-        selectedSubmission.submission_id,
+        selectedSubmission.user_id,
+        selectedSubmission.module_unit_standard_id,
         gradeNum,
         feedback.trim() || undefined
       );
@@ -208,7 +209,7 @@ export default function AssessmentGradingPage() {
                   </TableHeader>
                   <TableBody>
                     {submissions.map((submission) => (
-                      <TableRow key={`${submission.learner_id}-${submission.unit_std_id}`}>
+                      <TableRow key={`${submission.user_id}-${submission.module_unit_standard_id}`}>
                         <TableCell className="font-medium">
                           {submission.learner_name}
                         </TableCell>
@@ -216,7 +217,7 @@ export default function AssessmentGradingPage() {
                           {new Date(submission.submitted_at).toLocaleDateString()}
                         </TableCell>
                         <TableCell>
-                          {submission.grade !== null ? (
+                          {submission.assessment_grade != null ? (
                             <Badge variant="default" className="gap-1">
                               <CheckCircle2 size={12} />
                               Graded
@@ -229,9 +230,9 @@ export default function AssessmentGradingPage() {
                           )}
                         </TableCell>
                         <TableCell>
-                          {submission.grade !== null ? (
-                            <Badge variant={submission.grade >= 50 ? "default" : "destructive"}>
-                              {submission.grade}%
+                          {submission.assessment_grade != null ? (
+                            <Badge variant={submission.assessment_grade >= 50 ? "default" : "destructive"}>
+                              {submission.assessment_grade}%
                             </Badge>
                           ) : (
                             <span className="text-muted-foreground">-</span>
@@ -242,7 +243,7 @@ export default function AssessmentGradingPage() {
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => downloadSubmission(submission.file_path, submission.learner_name)}
+                              onClick={() => downloadSubmission(submission.submission_path, submission.learner_name)}
                               className="gap-1"
                             >
                               <Download size={12} />
@@ -255,7 +256,7 @@ export default function AssessmentGradingPage() {
                               className="gap-1"
                             >
                               <Eye size={12} />
-                              {submission.grade !== null ? "Edit Grade" : "Grade"}
+                              {submission.assessment_grade != null ? "Edit Grade" : "Grade"}
                             </Button>
                           </div>
                         </TableCell>

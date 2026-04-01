@@ -46,6 +46,7 @@ export default function MobileAssessmentPage() {
   const module = modules.find(m => m.id === id);
   const progress = progressMap[id || ""];
   const isAlreadySubmitted = progress?.assessment_submitted || false;
+  const hasAssessmentAccess = Boolean(progress?.quiz_completed || progress?.quiz_passed || progress?.assessment_unlocked);
 
   // Show offline warning after 5 seconds if offline
   useEffect(() => {
@@ -68,12 +69,12 @@ export default function MobileAssessmentPage() {
 
     // If not on mobile, redirect to desktop version
     if (!isMobile) {
-      navigate(`/learner/modules/${id}/assessment`);
+      navigate(`/learner/assessment/${id}`);
       return;
     }
 
     // Check if assessment is unlocked
-    if (!progress?.quiz_completed && !progress?.assessment_unlocked) {
+    if (!hasAssessmentAccess) {
       navigate(`/learner/modules/${id}`);
       return;
     }

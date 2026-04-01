@@ -30,6 +30,8 @@ export default function ModuleProgressReviewPage() {
   
   const module = modules.find(m => m.id === id);
   const progress = id ? progressMap[id] : null;
+  const quizCompleted = Boolean(progress?.quiz_completed || progress?.quiz_passed || progress?.assessment_unlocked);
+  const quizPassed = Boolean(progress?.quiz_passed || progress?.assessment_unlocked || ((progress?.quiz_score ?? 0) >= 70 && progress?.quiz_score != null));
 
   if (!module || !id) {
     return (
@@ -63,7 +65,7 @@ export default function ModuleProgressReviewPage() {
     let total = 3; // Guide, Quiz, Assessment
     
     if (progress.guide_completed) completed++;
-    if (progress.quiz_completed) completed++;
+    if (quizCompleted) completed++;
     if (progress.assessment_submitted) completed++;
     
     return Math.round((completed / total) * 100);
@@ -80,7 +82,7 @@ export default function ModuleProgressReviewPage() {
       };
     }
     
-    if (!progress.quiz_completed) {
+    if (!quizCompleted) {
       return {
         action: 'Take Quiz',
         description: 'Complete the knowledge check to unlock assessment',
@@ -90,10 +92,10 @@ export default function ModuleProgressReviewPage() {
       };
     }
     
-    if (progress.quiz_completed && !progress.assessment_unlocked) {
+    if (quizCompleted && !progress.assessment_unlocked) {
       return {
         action: 'Retake Quiz',
-        description: `You scored ${progress.quiz_score}%. Need 70% to unlock assessment.`,
+        description: `You scored ${progress.quiz_score ?? 0}%. Need 70% to unlock assessment.`,
         path: `/learner/modules/${id}`,
         icon: RefreshCw,
         variant: 'outline' as const
@@ -104,7 +106,7 @@ export default function ModuleProgressReviewPage() {
       return {
         action: 'Submit Assessment',
         description: 'Complete your summative assessment',
-        path: `/learner/modules/${id}/assessment`,
+        path: `/learner/assessment/${id}`,
         icon: FileText,
         variant: 'default' as const
       };
@@ -229,7 +231,7 @@ export default function ModuleProgressReviewPage() {
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-base flex items-center gap-2">
-                {progress.quiz_completed ? (
+                {quizCompleted ? (
                   <CheckCircle2 size={20} className="text-green-600" />
                 ) : progress.guide_completed ? (
                   <Clock size={20} className="text-blue-600" />
@@ -241,17 +243,17 @@ export default function ModuleProgressReviewPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {progress.quiz_completed ? (
+                {quizCompleted ? (
                   <>
-                    <Badge variant={progress.quiz_score && progress.quiz_score >= 70 ? 'default' : 'destructive'}>
-                      {progress.quiz_score}% - {progress.quiz_score && progress.quiz_score >= 70 ? 'Passed' : 'Failed'}
+                    <Badge variant={quizPassed ? 'default' : 'destructive'}>
+                      {progress.quiz_score != null ? `${progress.quiz_score}% - ${quizPassed ? 'Passed' : 'Failed'}` : (quizPassed ? 'Passed' : 'Needs Retry')}
                     </Badge>
                     
                     <div className="text-sm text-muted-foreground">
                       {progress.quiz_completed_at && (
                         <p>Completed: {new Date(progress.quiz_completed_at).toLocaleDateString()}</p>
                       )}
-                      {progress.quiz_score && progress.quiz_score >= 70 ? (
+                      {quizPassed ? (
                         <p>✓ Assessment unlocked</p>
                       ) : (
                         <p>Need 70% to unlock assessment</p>
@@ -260,12 +262,12 @@ export default function ModuleProgressReviewPage() {
                     
                     <Button 
                       size="sm" 
-                      variant={progress.quiz_score && progress.quiz_score >= 70 ? 'outline' : 'default'}
+                      variant={quizPassed ? 'outline' : 'default'}
                       onClick={() => navigate(`/learner/modules/${id}`)}
                       className="w-full gap-2"
                       disabled={!progress.guide_completed}
                     >
-                      {progress.quiz_score && progress.quiz_score >= 70 ? (
+                      {quizPassed ? (
                         <>
                           <Eye size={14} />
                           Review Quiz
@@ -370,7 +372,7 @@ export default function ModuleProgressReviewPage() {
                     <Button 
                       size="sm" 
                       variant="default"
-                      onClick={() => navigate(`/learner/modules/${id}/assessment`)}
+                      onClick={() => navigate(`/learner/assessment/${id}`)}
                       className="w-full gap-2"
                     >
                       <FileText size={14} />
