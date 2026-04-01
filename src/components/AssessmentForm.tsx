@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Clock, Download, RefreshCw, AlertCircle } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { isValidPhoneNumber } from "@/utils/validation";
 import { PhoneValidator } from "@/utils/phoneValidation";
 import { useNavigationGuard } from "@/hooks/useNavigationGuard";
 
@@ -296,7 +297,27 @@ export function AssessmentForm({
       try {
         setLoadingProfile(true);
         setProfileError(null);
-        const { data, error } = await supabase
+
+        const supabaseAny = supabase as unknown as {
+          from: (table: string) => {
+            select: (columns: string) => {
+              eq: (column: string, value: string) => {
+                single: () => Promise<{
+                  data: {
+                    full_name: string | null;
+                    id_number: string | null;
+                    phone: string | null;
+                    department: string | null;
+                    school: string | null;
+                  } | null;
+                  error: { message?: string } | null;
+                }>;
+              };
+            };
+          };
+        };
+
+        const { data, error } = await supabaseAny
           .from('learners')
           .select('full_name, id_number, phone, department, school')
           .eq('user_id', user.id)
@@ -326,15 +347,23 @@ export function AssessmentForm({
         }
         
         if (data) {
-          setLearnerProfile(data);
+          const safePhone = isValidPhoneNumber(data.phone ?? '') ? (data.phone ?? '') : '';
+
+          setLearnerProfile({
+            full_name: data.full_name ?? "",
+            id_number: data.id_number ?? "",
+            phone: safePhone,
+            department: data.department ?? "",
+            school: data.school ?? "",
+          });
           setInfo({
-            name: data.full_name || "",
-            idNumber: data.id_number || "",
-            contactNumber: data.phone || "",
+            name: data.full_name ?? "",
+            idNumber: data.id_number ?? "",
+            contactNumber: safePhone,
             date: new Date().toLocaleDateString("en-ZA"),
             venue: "",
-            department: data.department || "",
-            school: data.school || "",
+            department: data.department ?? "",
+            school: data.school ?? "",
           });
         }
       } catch (err) {

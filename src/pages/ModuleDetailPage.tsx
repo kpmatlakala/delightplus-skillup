@@ -2099,7 +2099,7 @@ export default function ModuleDetailPage() {
                                           // Auto-redirect based on quiz result
                                           if (score >= 2) {
                                             // If passed, redirect to progress page
-                                            navigate(`/module/${id}/progress`);
+                                            navigate(`/learner/modules/${id}/progress`);
                                             toast({
                                               title: "Assessment Unlocked!",
                                               description: "Great job! You can now proceed to the summative assessment.",
@@ -2234,7 +2234,7 @@ export default function ModuleDetailPage() {
                             </button>
 
                             <a
-                              href={supabase.storage.from("assessment-submissions").getPublicUrl(progressMap[id].submission_path).publicURL}
+                              href={supabase.storage.from("assessment-submissions").getPublicUrl(progressMap[id].submission_path).data.publicUrl}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-border text-muted-foreground text-xs font-medium hover:bg-secondary/50 transition-colors"

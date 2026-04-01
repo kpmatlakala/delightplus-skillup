@@ -92,7 +92,7 @@ export class SubmissionService {
 
       if (submissionData && !submissionError) {
         return {
-          status: submissionData.grade !== null ? 'graded' : 'under_review',
+          status: submissionData.grade != null ? 'graded' : 'under_review',
           grade: submissionData.grade,
           feedback: submissionData.feedback,
           submittedAt: new Date(submissionData.submitted_at),
@@ -104,7 +104,7 @@ export class SubmissionService {
       const { data: progressData, error: progressError } = await supabase
         .from('learner_progress')
         .select('*')
-        .eq('learner_id', userId)
+        .eq('user_id', userId)
         .eq('assessment_submitted', true)
         .order('submission_uploaded_at', { ascending: false })
         .limit(1)
@@ -112,7 +112,7 @@ export class SubmissionService {
 
       if (progressData && !progressError) {
         return {
-          status: progressData.assessment_grade !== null ? 'graded' : 'under_review',
+          status: progressData.assessment_grade != null ? 'graded' : 'under_review',
           grade: progressData.assessment_grade,
           feedback: progressData.assessment_feedback,
           submittedAt: new Date(progressData.submission_uploaded_at),
@@ -214,8 +214,8 @@ export class SubmissionService {
     try {
       const { data, error } = await supabase
         .from('learner_progress')
-        .select('assessment_grade, submission_uploaded_at')
-        .eq('learner_id', userId)
+        .select('*')
+        .eq('user_id', userId)
         .eq('assessment_submitted', true);
 
       if (error || !data) {
@@ -228,8 +228,9 @@ export class SubmissionService {
       }
 
       const totalSubmissions = data.length;
-      const gradedSubmissions = data.filter(item => item.assessment_grade !== null).length;
-      const grades = data.filter(item => item.assessment_grade !== null).map(item => item.assessment_grade);
+      const gradedItems = data.filter(item => item.assessment_grade != null);
+      const gradedSubmissions = gradedItems.length;
+      const grades = gradedItems.map(item => Number(item.assessment_grade));
       const averageGrade = grades.length > 0 ? grades.reduce((sum, grade) => sum + grade, 0) / grades.length : null;
       const lastSubmission = data.length > 0 
         ? new Date(Math.max(...data.map(item => new Date(item.submission_uploaded_at).getTime())))

@@ -40,11 +40,12 @@ export default function AssessmentDetailPage() {
   );
 
   // Assessment status - use the new hook data if available, fallback to progress
-  const isSubmitted = assessmentStatus?.assessment_submitted || progress?.assessment_submitted || false;
-  const hasGrade = assessmentStatus?.assessment_grade !== null || (progress?.assessment_grade !== undefined && progress?.assessment_grade !== null);
-  const submissionPath = assessmentStatus?.submission_path || progress?.submission_path;
-  const assessmentGrade = assessmentStatus?.assessment_grade || progress?.assessment_grade;
-  const assessmentFeedback = assessmentStatus?.assessment_feedback || progress?.assessment_feedback;
+  const quizUnlocked = Boolean(progress?.quiz_completed || progress?.quiz_passed || progress?.assessment_unlocked);
+  const isSubmitted = Boolean(assessmentStatus?.assessment_submitted || progress?.assessment_submitted);
+  const hasGrade = assessmentStatus?.assessment_grade != null || progress?.assessment_grade != null;
+  const submissionPath = assessmentStatus?.submission_path ?? progress?.submission_path ?? null;
+  const assessmentGrade = assessmentStatus?.assessment_grade ?? progress?.assessment_grade ?? null;
+  const assessmentFeedback = assessmentStatus?.assessment_feedback ?? progress?.assessment_feedback ?? null;
 
   useEffect(() => {
     if (!module) {
@@ -52,8 +53,8 @@ export default function AssessmentDetailPage() {
       return;
     }
 
-    // Check if assessment is unlocked (quiz completed)
-    if (role === 'learner' && !progress?.quiz_completed) {
+    // Check if assessment is unlocked (quiz completed/passed)
+    if (role === 'learner' && !quizUnlocked) {
       toast({
         title: "Assessment Locked",
         description: "Please complete the quiz first to unlock the assessment.",
@@ -91,6 +92,12 @@ export default function AssessmentDetailPage() {
         setIsSubmitting(false);
         return;
       }
+
+      await updateProgress(id, {
+        assessment_submitted: true,
+        submission_path: result.filePath,
+        submission_uploaded_at: new Date().toISOString(),
+      });
 
       toast({
         title: "Assessment Submitted Successfully",
@@ -425,9 +432,9 @@ export default function AssessmentDetailPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => {
+                          onClick={async () => {
                             // Generate download URL for the submission
-                            const downloadUrl = fileUploadService.getDownloadUrl(submissionPath);
+                            const downloadUrl = await fileUploadService.getDownloadUrl(submissionPath);
                             if (downloadUrl) {
                               window.open(downloadUrl, '_blank');
                             }

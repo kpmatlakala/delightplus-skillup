@@ -222,9 +222,8 @@ When `otherUserId` is `null`, `cet_send_message` is NOT called — only local st
 ## What NOT To Do
 
 ### Migration / DB
-- **Do NOT run migrations 001–015 sequentially on a fresh DB.** Use `000_unified_schema.sql` only.
-- **Do NOT recreate `cet.announcements` table.** The live version (migration 013) includes `audience`, `pinned`, `author` columns. An older bare-bones version from migration 001 may appear in some references — it is superseded.
-- **Do NOT recreate `cet_list_learners_for_messaging` without `DROP FUNCTION IF EXISTS` first.** Migration 015 changed the return type by adding `user_id` column; re-running without dropping causes a Postgres type conflict.
+- **Use `000_unified_schema.sql` only for schema deployment.** Old migrations (001–015) have been archived; conflicting variants (016–024) have been deleted.
+- **Do NOT attempt to run migrations sequentially.** The schema is consolidated into a single idempotent file.
 - **Do NOT add new non-RPC DB access** (raw `.from('cet.*').insert()`) from the frontend.
 
 ### Frontend
@@ -235,12 +234,16 @@ When `otherUserId` is `null`, `cet_send_message` is NOT called — only local st
 
 ---
 
-## Unified Schema File
+## Unified Schema File (April 1, 2026 Consolidation)
 
+The migration architecture has been consolidated:
 ```
-supabase/migrations/000_unified_schema.sql
+supabase/migrations/000_unified_schema.sql       ← Use ONLY this
+supabase/migrations/archive/                    ← Historical reference only (001–015)
+supabase/sql/                                   ← Diagnostic scripts, never deploy
 ```
 
+### `000_unified_schema.sql` — Source of Truth
 This 872-line idempotent file:
 - Creates the `cet` schema + all 13 tables (all `IF NOT EXISTS`)
 - Creates all ENUMs, triggers, indexes
@@ -248,8 +251,24 @@ This 872-line idempotent file:
 - Registers all 3 realtime publications
 - Defines all 25 public RPCs (`CREATE OR REPLACE`)
 - Inserts seed data (`ON CONFLICT DO NOTHING`)
+- **Safe to re-run** on any Supabase instance
 
-To bootstrap a new Supabase instance: run this single file in the SQL Editor.
+### `archive/` — Old Sequential Migrations (001–015)
+- Preserved for git history and audit trail only
+- **Do NOT run** these sequentially
+- All functionality consolidated into `000_unified_schema.sql`
+
+### Deleted Files (016–024 Variants)
+- Conflicting overlapping migrations that had number collisions (016, 017, 018 appeared twice)
+- All duplicate definitions consolidated into `000`
+- See `supabase/migrations/README.md` for details
+
+### To Bootstrap a New Supabase Instance
+1. Create new Supabase project
+2. Go to SQL Editor
+3. Copy and paste full contents of `000_unified_schema.sql`
+4. Execute
+5. Done — schema is complete
 
 ---
 
@@ -310,7 +329,7 @@ Do NOT attempt to regenerate Supabase types (`supabase gen types`) without updat
 | RPCs only for DB writes | RLS blocks direct inserts from anon/user roles |
 | `role === 'user'` means Learner | not `'learner'` |
 | `/communications` = one page, two tabs | sidebar + header links point here |
-| `000_unified_schema.sql` for fresh DB | 001–015 are auditable history only |
+| `000_unified_schema.sql` for fresh DB | Old migrations archived; overlapping variants deleted (Apr 1) |
 | No mock data in hooks | Empty state = real empty data |
 | `other_role === 'user'` → `"Learner"` label | Fixed in session 5o |
 | Bell + Mail visible for all roles | Intentional — admin also uses messaging |

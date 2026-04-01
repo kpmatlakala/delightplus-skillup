@@ -161,37 +161,19 @@ export class FileUploadService {
         };
       }
 
-      // Get the learner ID from the cet.learners table
       try {
-        const { data: learnerData, error: learnerError } = await supabase
-          .from('learners')
-          .select('id')
-          .eq('user_id', userId)
-          .single();
-
-        if (learnerError || !learnerData) {
-          console.warn('Failed to get learner ID:', learnerError);
-          // Still return success for file upload, just warn about progress update
-          return {
-            success: true,
-            filePath: fileResult.filePath,
-            fileName: fileResult.fileName,
-            submissionId: `temp_${Date.now()}`
-          };
-        }
-
-        // Update learner progress table with correct learner_id
         const { error: progressError } = await supabase
           .from('learner_progress')
           .upsert({
-            learner_id: learnerData.id, // Use the learner ID, not the user ID
-            unit_std_id: moduleId,
+            user_id: userId,
+            module_unit_standard_id: moduleId,
             assessment_submitted: true,
+            assessment_unlocked: true,
             submission_path: fileResult.filePath,
             submission_uploaded_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
           }, {
-            onConflict: 'learner_id,unit_std_id'
+            onConflict: 'user_id,module_unit_standard_id'
           });
 
         if (progressError) {
