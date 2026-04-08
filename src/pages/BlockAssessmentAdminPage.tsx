@@ -2,7 +2,7 @@ import { useState } from "react";
 import {
   KeyRound, RefreshCw, Trash2, Copy, CheckCircle2, Circle, Users
 } from "lucide-react";
-import AppLayout from "@/components/AppLayout";
+import LmisLayout from "@/lmis/components/LmisLayout";
 import { useAuth } from "@/hooks/useAuth";
 import { useAssessmentControl } from "@/hooks/useAssessmentControl";
 

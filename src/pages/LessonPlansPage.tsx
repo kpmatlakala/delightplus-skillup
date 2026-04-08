@@ -1,4 +1,4 @@
-import AppLayout from "@/components/AppLayout";
+import LmisLayout from "@/lmis/components/LmisLayout";
 import { modules } from "@/data/courseData";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Clock, Award } from "lucide-react";

@@ -1,4 +1,4 @@
-import AppLayout from "@/components/AppLayout";
+import LmisLayout from "@/lmis/components/LmisLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";

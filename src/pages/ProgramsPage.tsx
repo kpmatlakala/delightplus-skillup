@@ -1,4 +1,4 @@
-import AppLayout from "@/components/AppLayout";
+import LmisLayout from "@/lmis/components/LmisLayout";
 import { program } from "@/data/courseData";
 import { Badge } from "@/components/ui/badge";
 import { Award, BookOpen, Building2, Calendar } from "lucide-react";

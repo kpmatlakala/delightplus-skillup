@@ -1,4 +1,4 @@
-import AppLayout from "@/components/AppLayout";
+import LmisLayout from "@/lmis/components/LmisLayout";
 import { useState } from "react";
 import { Megaphone, Pin, PinOff, Trash2, Plus, X, Send, ChevronDown, RefreshCw } from "lucide-react";
 import { Badge } from "@/components/ui/badge";

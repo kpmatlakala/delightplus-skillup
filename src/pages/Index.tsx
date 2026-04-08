@@ -1,4 +1,4 @@
-import AppLayout from "@/components/AppLayout";
+import LmisLayout from "@/lmis/components/LmisLayout";
 import StatCard from "@/components/StatCard";
 import ModuleCard from "@/components/ModuleCard";
 import { PresentationMode } from "@/components/PresentationMode";

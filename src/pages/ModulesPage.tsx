@@ -1,4 +1,4 @@
-import AppLayout from "@/components/AppLayout";
+import LmisLayout from "@/lmis/components/LmisLayout";
 import ModuleCard from "@/components/ModuleCard";
 import { modules } from "@/data/courseData";
 import { useState, useMemo } from "react";
