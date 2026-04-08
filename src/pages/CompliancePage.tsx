@@ -30,7 +30,7 @@ export default function CompliancePage() {
   const totalDone = items.filter((i) => i.checked).length;
 
   return (
-    <AppLayout title="Compliance" subtitle={`${totalDone}/${items.length} items complete`}>
+    <LmisLayout title="Compliance" subtitle={`${totalDone}/${items.length} items complete`}>
       <div className="space-y-6 max-w-2xl">
         {categories.map((cat) => (
           <div key={cat}>
@@ -51,6 +51,6 @@ export default function CompliancePage() {
           </div>
         ))}
       </div>
-    </AppLayout>
+    </LmisLayout>
   );
 }

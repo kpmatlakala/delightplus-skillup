@@ -242,7 +242,7 @@ export default function BlockAssessmentAdminPage() {
   const active = BLOCKS[activeIndex];
 
   return (
-    <AppLayout title="Block Assessments" subtitle="Manage OTPs and track submissions per block">
+    <LmisLayout title="Block Assessments" subtitle="Manage OTPs and track submissions per block">
       {/* Tab bar */}
       <div className="flex gap-2 mb-5">
         {BLOCKS.map((b, i) => (
@@ -272,6 +272,6 @@ export default function BlockAssessmentAdminPage() {
 
       {/* Panel — remount on tab switch so hook re-fetches */}
       <OtpPanel key={active.key} blockKey={active.key} role={role} />
-    </AppLayout>
+    </LmisLayout>
   );
 }

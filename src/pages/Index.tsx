@@ -34,7 +34,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <AppLayout title="Dashboard" subtitle="DSA Learning Management System">
+    <LmisLayout title="Dashboard" subtitle="DSA Learning Management System">
       {/* Program banner */}
       <div className="rounded-lg border border-accent/20 bg-accent/5 px-4 py-3 mb-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
@@ -430,6 +430,6 @@ export default function Dashboard() {
           routePrefix="/modules"
         />
       )}
-    </AppLayout>
+    </LmisLayout>
   );
 }

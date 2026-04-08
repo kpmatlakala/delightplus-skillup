@@ -93,7 +93,7 @@ export default function AnnouncementsPage() {
   };
 
   return (
-    <AppLayout
+    <LmisLayout
       title="Announcements"
       subtitle={loading ? "Loading…" : source === "db" ? "Live — synced with database" : "Important updates for facilitators and learners"}
     >
@@ -189,6 +189,6 @@ export default function AnnouncementsPage() {
           </div>
         )}
       </div>
-    </AppLayout>
+    </LmisLayout>
   );
 }

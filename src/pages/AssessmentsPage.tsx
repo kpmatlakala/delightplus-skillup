@@ -15,7 +15,7 @@ const assessments = modules.map((mod) => ({
 
 export default function AssessmentsPage() {
   return (
-    <AppLayout title="Assessments" subtitle="Formative & Summative Assessments per Module">
+    <LmisLayout title="Assessments" subtitle="Formative & Summative Assessments per Module">
       <div className="rounded-lg border border-border bg-card overflow-hidden">
         <Table>
           <TableHeader>
@@ -47,6 +47,6 @@ export default function AssessmentsPage() {
           </TableBody>
         </Table>
       </div>
-    </AppLayout>
+    </LmisLayout>
   );
 }
