@@ -993,10 +993,10 @@ export default function ModuleDetailPage() {
 
   if (!mod) {
     return (
-      <Layout title="Module Not Found">
+      <AdaptiveLayout title="Module Not Found">
         <p className="text-muted-foreground">Module not found.</p>
         <Link to={backHref} className="text-accent hover:underline mt-2 inline-block">← {backLabel}</Link>
-      </Layout>
+      </AdaptiveLayout>
     );
   }
 
@@ -1004,7 +1004,7 @@ export default function ModuleDetailPage() {
   const hasStructuredFlow = !!moduleLessonFlow;
 
   return (
-    <Layout title={mod.title} subtitle={`${mod.code} • Block ${mod.block} • ${mod.days}`}>
+    <AdaptiveLayout title={mod.title} subtitle={`${mod.code} • Block ${mod.block} • ${mod.days}`}>
       {/* ── back link ─────────────────────────────────────────────────────── */}
       <Link
         to={backHref}
@@ -1742,6 +1742,6 @@ export default function ModuleDetailPage() {
           routePrefix={role === "learner" ? "/learner/modules" : "/modules"}
         />
       )}
-    </Layout>
+    </AdaptiveLayout>
   );
 }
