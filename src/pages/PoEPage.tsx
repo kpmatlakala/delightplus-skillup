@@ -1,4 +1,4 @@
-import AppLayout from "@/components/AppLayout";
+import AdaptiveLayout from "@/components/AdaptiveLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Badge } from "@/components/ui/badge";
@@ -320,11 +320,11 @@ export default function PoEPage() {
   const isAdmin = role === "admin" || role === "lecturer";
 
   return (
-    <AppLayout
+    <AdaptiveLayout
       title="Portfolio of Evidence"
       subtitle={isAdmin ? "Manage learner PoE templates and track submission pipeline" : "Track your PoE readiness and download your template"}
     >
       {isAdmin ? <AdminPoEView /> : <LearnerPoEView />}
-    </AppLayout>
+    </AdaptiveLayout>
   );
 }

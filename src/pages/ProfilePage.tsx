@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AppLayout from "@/components/AppLayout";
+import AdaptiveLayout from "@/components/AdaptiveLayout";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
@@ -180,7 +180,7 @@ export default function ProfilePage() {
   const navigate = useNavigate();
 
   return (
-    <AppLayout title="My Profile" subtitle="Manage your account profile and security">
+    <AdaptiveLayout title="My Profile" subtitle="Manage your account profile and security">
       <button
         onClick={() => navigate(-1)}
         className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground mb-4 transition-colors"
@@ -305,6 +305,6 @@ export default function ProfilePage() {
           </form>
         </div>
       </div>
-    </AppLayout>
+    </AdaptiveLayout>
   );
 }
