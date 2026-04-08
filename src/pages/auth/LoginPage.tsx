@@ -30,7 +30,7 @@ export default function LoginPage() {
       return;
     }
 
-    navigate("/dashboard", { replace: true });
+    navigate("/lmis", { replace: true });
   };
 
   return (
