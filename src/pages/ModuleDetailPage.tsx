@@ -4,6 +4,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import AppLayout from "@/components/AppLayout";
+import LmisLayout from "@/lmis/components/LmisLayout";
 import { modules } from "@/data/courseData";
 import { moduleDownloadsById } from "@/data/moduleDownloads";
 import { useModuleFlow } from "@/hooks/useModuleFlow";
