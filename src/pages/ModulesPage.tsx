@@ -1,4 +1,4 @@
-import AppLayout from "@/components/AppLayout";
+import LmisLayout from "@/lmis/components/LmisLayout";
 import ModuleCard from "@/components/ModuleCard";
 import { modules } from "@/data/courseData";
 import { useState, useMemo } from "react";
@@ -21,7 +21,7 @@ export default function ModulesPage() {
   });
 
   return (
-    <AppLayout title="Modules" subtitle="10 Unit Standards • 56 Credits">
+    <LmisLayout title="Modules" subtitle="10 Unit Standards • 56 Credits">
       {/* Filters */}
       <div className="flex flex-wrap gap-2 mb-6">
         {(["All", "Knowledge", "Practical"] as const).map((f) => (
@@ -58,6 +58,6 @@ export default function ModulesPage() {
           <ModuleCard key={mod.id} module={mod} orderNumber={orderMap.get(mod.id)} />
         ))}
       </div>
-    </AppLayout>
+    </LmisLayout>
   );
 }

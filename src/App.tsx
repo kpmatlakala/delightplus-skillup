@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./hooks/useAuth";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicOnlyRoute from "./components/PublicOnlyRoute";
@@ -31,6 +31,7 @@ import PresentationDesktopPage from "./pages/PresentationDesktopPage";
 import PoEPage from "./pages/PoEPage";
 import BlockAssessmentPage from "./pages/BlockAssessmentPage";
 import BlockAssessmentAdminPage from "./pages/BlockAssessmentAdminPage";
+import AttendancePage from "./pages/AttendancePage";
 
 const queryClient = new QueryClient();
 
@@ -42,7 +43,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            {/* Public landing page — default route */}
+            {/* Public landing page */}
             <Route path="/" element={<LandingPage />} />
             <Route path="/home" element={<LandingPage />} />
 
@@ -54,39 +55,53 @@ const App = () => (
 
             <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
 
+            {/* ── LMIS — Admin / Lecturer portal ─────────────────────────── */}
             <Route element={<ProtectedRoute allowedRoles={["admin", "lecturer"]} />}>
-              <Route path="/dashboard" element={<Index />} />
-              <Route path="/modules" element={<ModulesPage />} />
-              <Route path="/modules/:id" element={<ModuleDetailPage />} />
-              <Route path="/learners" element={<LearnersPage />} />
-              <Route path="/lesson-plans" element={<LessonPlansPage />} />
-              <Route path="/assessments" element={<AssessmentsPage />} />
-              <Route path="/assessments/blocks" element={<BlockAssessmentAdminPage />} />
-              <Route path="/programs" element={<ProgramsPage />} />
-              <Route path="/compliance" element={<CompliancePage />} />
-              <Route path="/announcements" element={<AnnouncementsPage />} />
-              <Route path="/messages" element={<MessagesPage />} />
+              <Route path="/lmis" element={<Index />} />
+              <Route path="/lmis/modules" element={<ModulesPage />} />
+              <Route path="/lmis/modules/:id" element={<ModuleDetailPage />} />
+              <Route path="/lmis/learners" element={<LearnersPage />} />
+              <Route path="/lmis/lesson-plans" element={<LessonPlansPage />} />
+              <Route path="/lmis/assessments" element={<AssessmentsPage />} />
+              <Route path="/lmis/assessments/blocks" element={<BlockAssessmentAdminPage />} />
+              <Route path="/lmis/programs" element={<ProgramsPage />} />
+              <Route path="/lmis/compliance" element={<CompliancePage />} />
+              <Route path="/lmis/attendance" element={<AttendancePage />} />
+              <Route path="/lmis/announcements" element={<AnnouncementsPage />} />
+              <Route path="/lmis/messages" element={<MessagesPage />} />
             </Route>
 
+            {/* Legacy redirects → LMIS */}
+            <Route path="/dashboard" element={<Navigate to="/lmis" replace />} />
+            <Route path="/modules" element={<Navigate to="/lmis/modules" replace />} />
+            <Route path="/modules/:id" element={<Navigate to="/lmis/modules/:id" replace />} />
+            <Route path="/learners" element={<Navigate to="/lmis/learners" replace />} />
+            <Route path="/lesson-plans" element={<Navigate to="/lmis/lesson-plans" replace />} />
+            <Route path="/assessments" element={<Navigate to="/lmis/assessments" replace />} />
+            <Route path="/programs" element={<Navigate to="/lmis/programs" replace />} />
+            <Route path="/compliance" element={<Navigate to="/lmis/compliance" replace />} />
+
+            {/* ── Learner portal ─────────────────────────────────────────── */}
             <Route element={<ProtectedRoute allowedRoles={["learner"]} />}>
               <Route path="/learner" element={<LearnerPortalPage />} />
               <Route path="/learner/modules/:id" element={<ModuleDetailPage />} />
               <Route path="/learner/assessment/block/:blockNum" element={<BlockAssessmentPage />} />
             </Route>
 
+            {/* ── Shared (all authenticated) ─────────────────────────────── */}
             <Route element={<ProtectedRoute />}>
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/communications" element={<CommunicationsPage />} />
               <Route path="/poe" element={<PoEPage />} />
             </Route>
 
-            {/* Public — no auth, session code is the shared secret */}
+            {/* Public — presentation remote */}
             <Route path="/present/remote/:code" element={<PresentationRemotePage />} />
 
-            {/* Remote launch + desktop projection — authenticated, admin/lecturer only */}
+            {/* LMIS — presentation tools */}
             <Route element={<ProtectedRoute allowedRoles={["admin", "lecturer"]} />}>
-              <Route path="/present/launch" element={<PresentationLaunchPage />} />
-              <Route path="/present/desktop/:code/:moduleId" element={<PresentationDesktopPage />} />
+              <Route path="/lmis/present/launch" element={<PresentationLaunchPage />} />
+              <Route path="/lmis/present/desktop/:code/:moduleId" element={<PresentationDesktopPage />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />

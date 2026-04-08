@@ -1,11 +1,11 @@
-import AppLayout from "@/components/AppLayout";
+import LmisLayout from "@/lmis/components/LmisLayout";
 import { program } from "@/data/courseData";
 import { Badge } from "@/components/ui/badge";
 import { Award, BookOpen, Building2, Calendar } from "lucide-react";
 
 export default function ProgramsPage() {
   return (
-    <AppLayout title="Programs" subtitle="Registered Qualifications">
+    <LmisLayout title="Programs" subtitle="Registered Qualifications">
       <div className="rounded-lg border border-border bg-card p-6 max-w-2xl">
         <div className="flex items-start justify-between mb-4">
           <div>
@@ -29,6 +29,6 @@ export default function ProgramsPage() {
           </div>
         </div>
       </div>
-    </AppLayout>
+    </LmisLayout>
   );
 }

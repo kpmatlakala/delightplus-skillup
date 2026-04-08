@@ -36,7 +36,7 @@ export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
     if (role === "learner") {
       return <Navigate to="/learner" replace />;
     }
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/lmis" replace />;
   }
 
   return <Outlet />;

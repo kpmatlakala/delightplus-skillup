@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
-import AppLayout from "@/components/AppLayout";
+import AdaptiveLayout from "@/components/AdaptiveLayout";
 import { modules } from "@/data/courseData";
 import { moduleDownloadsById } from "@/data/moduleDownloads";
 import { useModuleFlow } from "@/hooks/useModuleFlow";
@@ -928,9 +928,10 @@ export default function ModuleDetailPage() {
     ...learnerGuideDownloads,
     ...(assessmentUnlocked ? learnerAssessmentDownloads : []),
   ];
-  const isLearnerView = role === "learner";
-  const backHref = isLearnerView ? "/learner" : "/modules";
-  const backLabel = isLearnerView ? "Back to Learner Portal" : "Back to Modules";
+ const isLearnerView = role === "learner";
+ const backHref = isLearnerView ? "/learner" : "/lmis/modules";
+ const backLabel = isLearnerView ? "Back to Learner Portal" : "Back to Modules";
+ 
   const visibleDownloads = isLearnerView ? learnerVisibleDownloads : downloads;
   const activeDoc = studyDocs.find((doc) => doc.file_name === activeDocName) ?? studyDocs[0] ?? null;
   const learnerGuideDoc = studyDocs.find((doc) => isLearnerGuideFile(doc.file_name)) ?? null;
@@ -992,10 +993,10 @@ export default function ModuleDetailPage() {
 
   if (!mod) {
     return (
-      <AppLayout title="Module Not Found">
+      <AdaptiveLayout title="Module Not Found">
         <p className="text-muted-foreground">Module not found.</p>
         <Link to={backHref} className="text-accent hover:underline mt-2 inline-block">← {backLabel}</Link>
-      </AppLayout>
+      </AdaptiveLayout>
     );
   }
 
@@ -1003,7 +1004,7 @@ export default function ModuleDetailPage() {
   const hasStructuredFlow = !!moduleLessonFlow;
 
   return (
-    <AppLayout title={mod.title} subtitle={`${mod.code} • Block ${mod.block} • ${mod.days}`}>
+    <AdaptiveLayout title={mod.title} subtitle={`${mod.code} • Block ${mod.block} • ${mod.days}`}>
       {/* ── back link ─────────────────────────────────────────────────────── */}
       <Link
         to={backHref}
@@ -1741,6 +1742,6 @@ export default function ModuleDetailPage() {
           routePrefix={role === "learner" ? "/learner/modules" : "/modules"}
         />
       )}
-    </AppLayout>
+    </AdaptiveLayout>
   );
 }

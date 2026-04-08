@@ -1,4 +1,4 @@
-import AppLayout from "@/components/AppLayout";
+import LmisLayout from "@/lmis/components/LmisLayout";
 import { modules } from "@/data/courseData";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -15,7 +15,7 @@ const assessments = modules.map((mod) => ({
 
 export default function AssessmentsPage() {
   return (
-    <AppLayout title="Assessments" subtitle="Formative & Summative Assessments per Module">
+    <LmisLayout title="Assessments" subtitle="Formative & Summative Assessments per Module">
       <div className="rounded-lg border border-border bg-card overflow-hidden">
         <Table>
           <TableHeader>
@@ -47,6 +47,6 @@ export default function AssessmentsPage() {
           </TableBody>
         </Table>
       </div>
-    </AppLayout>
+    </LmisLayout>
   );
 }

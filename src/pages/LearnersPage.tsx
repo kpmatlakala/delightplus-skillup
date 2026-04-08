@@ -1,4 +1,4 @@
-import AppLayout from "@/components/AppLayout";
+import LmisLayout from "@/lmis/components/LmisLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -52,7 +52,7 @@ export default function LearnersPage() {
   }, [learners.length, loading]);
 
   return (
-    <AppLayout title="Learners" subtitle={subtitle}>
+    <LmisLayout title="Learners" subtitle={subtitle}>
       {error && (
         <div className="rounded-lg border border-destructive/30 bg-destructive/10 text-destructive text-sm px-4 py-3 mb-4">
           Unable to load enrolled learners: {error}
@@ -108,6 +108,6 @@ export default function LearnersPage() {
           </TableBody>
         </Table>
       </div>
-    </AppLayout>
+    </LmisLayout>
   );
 }

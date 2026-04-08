@@ -1,4 +1,4 @@
-import AppLayout from "@/components/AppLayout";
+import AdaptiveLayout from "@/components/AdaptiveLayout";
 import { useState, useRef, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import {
@@ -791,7 +791,7 @@ export default function CommunicationsPage() {
   };
 
   return (
-    <AppLayout
+    <AdaptiveLayout
       title="Communications"
       subtitle={activeTab === "updates" ? "Announcements & updates" : "Direct messages"}
     >
@@ -849,6 +849,6 @@ export default function CommunicationsPage() {
       ) : (
         <MessagesPanel role={role} userName={userName} myUserId={user?.id ?? null} />
       )}
-    </AppLayout>
+    </AdaptiveLayout>
   );
 }

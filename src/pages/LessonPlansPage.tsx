@@ -1,4 +1,4 @@
-import AppLayout from "@/components/AppLayout";
+import LmisLayout from "@/lmis/components/LmisLayout";
 import { modules } from "@/data/courseData";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Clock, Award } from "lucide-react";
@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 export default function LessonPlansPage() {
   return (
-    <AppLayout title="Lesson Plans" subtitle="LMIS-Ready Lesson Plans for All 10 Unit Standards">
+    <LmisLayout title="Lesson Plans" subtitle="LMIS-Ready Lesson Plans for All 10 Unit Standards">
       <div className="space-y-3">
         {modules.map((mod, i) => (
           <Link
@@ -37,6 +37,6 @@ export default function LessonPlansPage() {
           </Link>
         ))}
       </div>
-    </AppLayout>
+    </LmisLayout>
   );
 }
