@@ -929,9 +929,10 @@ export default function ModuleDetailPage() {
     ...learnerGuideDownloads,
     ...(assessmentUnlocked ? learnerAssessmentDownloads : []),
   ];
-  const isLearnerView = role === "learner";
-  const backHref = isLearnerView ? "/learner" : "/modules";
-  const backLabel = isLearnerView ? "Back to Learner Portal" : "Back to Modules";
+ const isLearnerView = role === "learner";
+ const backHref = isLearnerView ? "/learner" : "/lmis/modules";
+ const backLabel = isLearnerView ? "Back to Learner Portal" : "Back to Modules";
+ const Layout = isLearnerView ? AppLayout : LmisLayout;
   const visibleDownloads = isLearnerView ? learnerVisibleDownloads : downloads;
   const activeDoc = studyDocs.find((doc) => doc.file_name === activeDocName) ?? studyDocs[0] ?? null;
   const learnerGuideDoc = studyDocs.find((doc) => isLearnerGuideFile(doc.file_name)) ?? null;
