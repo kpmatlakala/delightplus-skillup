@@ -3,8 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
-import AppLayout from "@/components/AppLayout";
-import LmisLayout from "@/lmis/components/LmisLayout";
+import AdaptiveLayout from "@/components/AdaptiveLayout";
 import { modules } from "@/data/courseData";
 import { moduleDownloadsById } from "@/data/moduleDownloads";
 import { useModuleFlow } from "@/hooks/useModuleFlow";
@@ -932,7 +931,7 @@ export default function ModuleDetailPage() {
  const isLearnerView = role === "learner";
  const backHref = isLearnerView ? "/learner" : "/lmis/modules";
  const backLabel = isLearnerView ? "Back to Learner Portal" : "Back to Modules";
- const Layout = isLearnerView ? AppLayout : LmisLayout;
+ 
   const visibleDownloads = isLearnerView ? learnerVisibleDownloads : downloads;
   const activeDoc = studyDocs.find((doc) => doc.file_name === activeDocName) ?? studyDocs[0] ?? null;
   const learnerGuideDoc = studyDocs.find((doc) => isLearnerGuideFile(doc.file_name)) ?? null;
