@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import AppLayout from "@/components/AppLayout";
+import LmisLayout from "@/lmis/components/LmisLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -227,7 +227,7 @@ export default function AttendancePage() {
     : `Track learner attendance per session • Present: ${presentCount}/${learners.length}`;
 
   return (
-    <AppLayout title="Attendance" subtitle={subtitle}>
+    <LmisLayout title="Attendance" subtitle={subtitle}>
       {error && (
         <div className="rounded-lg border border-destructive/30 bg-destructive/10 text-destructive text-sm px-4 py-3 mb-4">
           Attendance error: {error}
@@ -338,6 +338,6 @@ export default function AttendancePage() {
           </TableBody>
         </Table>
       </div>
-    </AppLayout>
+    </LmisLayout>
   );
 }
