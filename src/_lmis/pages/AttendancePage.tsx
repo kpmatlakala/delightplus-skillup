@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import LmisLayout from "@/lmis/components/LmisLayout";
+import LmisLayout from "@/_lmis/components/LmisLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";

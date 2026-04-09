@@ -1,4 +1,4 @@
-import LmisLayout from "@/lmis/components/LmisLayout";
+import LmisLayout from "@/_lmis/components/LmisLayout";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
 
