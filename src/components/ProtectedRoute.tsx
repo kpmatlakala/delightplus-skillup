@@ -33,10 +33,8 @@ export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
   }
 
   if (!allowedRoles.includes(role)) {
-    if (role === "learner") {
-      return <Navigate to="/learner" replace />;
-    }
-    return <Navigate to="/lmis" replace />;
+    // On the LMS branch, all roles default to learner portal
+    return <Navigate to="/learner" replace />;
   }
 
   return <Outlet />;

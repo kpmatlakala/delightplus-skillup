@@ -81,8 +81,8 @@ const App = () => (
             <Route path="/programs" element={<Navigate to="/lmis/programs" replace />} />
             <Route path="/compliance" element={<Navigate to="/lmis/compliance" replace />} />
 
-            {/* ── Learner portal ─────────────────────────────────────────── */}
-            <Route element={<ProtectedRoute allowedRoles={["learner"]} />}>
+            {/* ── Learner portal (all authenticated users) ────────────── */}
+            <Route element={<ProtectedRoute />}>
               <Route path="/learner" element={<LearnerPortalPage />} />
               <Route path="/learner/modules/:id" element={<ModuleDetailPage />} />
               <Route path="/learner/assessment/block/:blockNum" element={<BlockAssessmentPage />} />
