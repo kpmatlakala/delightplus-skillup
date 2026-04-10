@@ -16,9 +16,6 @@ export default function PublicOnlyRoute() {
     return <Outlet />;
   }
 
-  if (role === "learner") {
-    return <Navigate to="/learner" replace />;
-  }
-
-  return <Navigate to="/lmis" replace />;
+  // LMS-first: all roles go to learner portal
+  return <Navigate to="/learner" replace />;
 }
