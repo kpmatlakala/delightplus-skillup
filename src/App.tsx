@@ -25,6 +25,7 @@ import SignupPage from "./pages/auth/SignupPage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import NotFound from "./pages/NotFound";
+import LearnerRoot from "./learner/pages/LearnerRoot";
 import PresentationRemotePage from "./pages/PresentationRemotePage";
 import PresentationLaunchPage from "./_lmis/pages/PresentationLaunchPage";
 import PresentationDesktopPage from "./_lmis/pages/PresentationDesktopPage";
@@ -83,9 +84,11 @@ const App = () => (
 
             {/* ── Learner portal (all authenticated users) ────────────── */}
             <Route element={<ProtectedRoute />}>
-              <Route path="/learner" element={<LearnerPortalPage />} />
-              <Route path="/learner/modules/:id" element={<ModuleDetailPage />} />
-              <Route path="/learner/assessment/block/:blockNum" element={<BlockAssessmentPage />} />
+              <Route element={<LearnerRoot />}>
+                <Route path="/learner" element={<LearnerPortalPage />} />
+                <Route path="/learner/modules/:id" element={<ModuleDetailPage />} />
+                <Route path="/learner/assessment/block/:blockNum" element={<BlockAssessmentPage />} />
+              </Route>
             </Route>
 
             {/* ── Shared (all authenticated) ─────────────────────────────── */}

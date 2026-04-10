@@ -1,4 +1,4 @@
-import AppLayout from "@/components/AppLayout";
+import { modules, program } from "@/data/courseData";
 import { modules, program } from "@/data/courseData";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
