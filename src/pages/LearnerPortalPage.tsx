@@ -1,5 +1,4 @@
 import { modules, program } from "@/data/courseData";
-import { modules, program } from "@/data/courseData";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -35,7 +34,7 @@ export default function LearnerPortalPage() {
     .slice(0, 3);
 
   return (
-    <AppLayout title="Learner Portal" subtitle="Mission-based learning path">
+    <>
       <div className="rounded-lg border border-accent/20 bg-accent/5 p-4 mb-4">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
           <div>
@@ -632,6 +631,6 @@ export default function LearnerPortalPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </AppLayout>
+    </>
   );
 }
