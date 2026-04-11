@@ -29,7 +29,12 @@ export interface UploadResult {
 const DEFAULT_CONFIG: UploadConfig = {
   bucket: 'assessment-submissions',
   maxFileSize: 10 * 1024 * 1024, // 10MB
-  allowedMimeTypes: ['text/plain', 'application/pdf'],
+  allowedMimeTypes: [
+    'text/plain',
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  ],
   pathStructure: 'learner-{userId}/{moduleId}/{timestamp}-{filename}'
 };
 
@@ -139,15 +144,22 @@ export class FileUploadService {
    * For now, just does file upload until database function is implemented
    */
   async submitAssessment(
-    submissionText: string,
+    submissionContent: string | Blob,
     moduleId: string,
-    userId: string
+    userId: string,
+    options?: {
+      fileName?: string;
+      submissionText?: string;
+      metadata?: Record<string, unknown>;
+    }
   ): Promise<UploadResult & { submissionId?: string }> {
     try {
-      // Upload file to storage
-      const fileName = `assessment_${moduleId}_${Date.now()}.txt`;
+      const fallbackExtension = options?.fileName?.split('.').pop()
+        || (submissionContent instanceof Blob && submissionContent.type === 'application/pdf' ? 'pdf' : 'txt');
+      const fileName = options?.fileName || `assessment_${moduleId}_${Date.now()}.${fallbackExtension}`;
+
       const fileResult = await this.uploadAssessmentFile(
-        submissionText,
+        submissionContent,
         fileName,
         userId,
         moduleId
@@ -161,6 +173,17 @@ export class FileUploadService {
         };
       }
 
+      const submissionText = options?.submissionText
+        ?? (typeof submissionContent === 'string'
+          ? submissionContent
+          : `File upload submission: ${fileName}\nSubmitted: ${new Date().toISOString()}`);
+
+      const submissionId = `temp_${Date.now()}`;
+      const submittedAt = new Date().toISOString();
+
+      // The current supported path is storage upload + learner_progress update.
+      // Some deployed databases do not yet expose `cet_submit_assessment`, so we
+      // avoid calling it here to prevent noisy 400 errors during learner submission.
       try {
         const { error: progressError } = await supabase
           .from('learner_progress')
@@ -168,36 +191,35 @@ export class FileUploadService {
             user_id: userId,
             module_unit_standard_id: moduleId,
             assessment_submitted: true,
+            assessment_submitted_at: submittedAt,
             assessment_unlocked: true,
             submission_path: fileResult.filePath,
-            submission_uploaded_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
+            submission_uploaded_at: submittedAt,
+            updated_at: submittedAt
           }, {
             onConflict: 'user_id,module_unit_standard_id'
           });
 
         if (progressError) {
           console.warn('Failed to update learner progress:', progressError);
-          // Don't fail the whole submission if progress update fails
         }
       } catch (progressError) {
         console.warn('Failed to update learner progress:', progressError);
-        // Don't fail the whole submission if progress update fails
       }
 
       return {
         success: true,
         filePath: fileResult.filePath,
         fileName: fileResult.fileName,
-        submissionId: `temp_${Date.now()}` // Temporary ID until database function is implemented
+        submissionId
       };
 
     } catch (error) {
       const context: UploadContext = {
         userId,
         moduleId,
-        fileName: `assessment_${moduleId}.txt`,
-        fileSize: new Blob([submissionText]).size,
+        fileName: options?.fileName || `assessment_${moduleId}.txt`,
+        fileSize: this.getContentSize(submissionContent),
         timestamp: new Date(),
         userAgent: navigator.userAgent,
         filePath: 'unknown'

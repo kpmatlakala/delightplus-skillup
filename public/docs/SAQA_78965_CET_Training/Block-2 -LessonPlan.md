@@ -126,9 +126,13 @@ By the end of this module, learners will be able to:
 
 ## **Lesson Content**
 
-### **Session 1: Web Application Requirements**
+### **Session 1: Web Application Requirements / US 14930 Network Foundations**
 
--   HTTP as a stateless protocol and design implications
+-   **Introduction to Network Protocols (1–2 slides):** explain that a protocol is simply a set of rules or a language computers use to talk to one another
+-   Use the **diplomat / translator analogy** from the Learner Guide so even beginner or older learners can understand Figure 1.1
+-   Define **service** in simple terms: a shared function such as file services or print services
+-   Explain **TCP/IP** as the main family of internet protocols and briefly mention that the Internet uses standards such as **RFCs**, **ISO OSI**, and **ITU** guidance
+-   Explain **HTTP as a session-less (stateless) protocol** and what that means: the website does not automatically remember the user after each click
 -   Bandwidth constraints and performance considerations
 -   Client environment considerations (latency, reliability, platform diversity)  
     
@@ -160,6 +164,8 @@ By the end of this module, learners will be able to:
 ## **Facilitator Activities**
 
 -   Mini-lecture: Web architecture (Client → Server → Client).
+-   Show **Figure 1.1** using a very simple translator analogy before introducing technical words.
+-   Explain **protocol**, **service**, and **TCP/IP** slowly using familiar real-life examples.
 -   Live coding demonstration: Build a styled HTML form with JavaScript validation.
 -   Guided design activity: Create a CET lab booking form.
 -   Group discussion: Copyright implications in sharing teaching resources.
@@ -170,14 +176,15 @@ By the end of this module, learners will be able to:
 
 ## **Learner Activities**
 
--   Activity 1: Define network protocol and compare TCP/IP and OSI models.
--   Activity 2: Explain bandwidth implications for web applications.
--   Activity 3: Compare rich client vs browser-based systems.
--   Activity 4: Identify copyright considerations in web development.
--   Activity 5: Design a CET web form using HTML and CSS.
--   Activity 6: Implement JavaScript validation for required fields.
--   Activity 7: Discuss ownership and royalty implications.
--   Activity 8: Identify web security risks and mitigation strategies.  
+-   Activity 1: Define **network protocol** in simple words and compare **TCP/IP** and **ISO OSI** models.
+-   Activity 2: Explain why the Internet is **session-less / stateless** and what that means for web applications.
+-   Activity 3: Explain bandwidth implications for web applications.
+-   Activity 4: Compare rich client vs browser-based systems.
+-   Activity 5: Identify copyright considerations in web development.
+-   Activity 6: Design a CET web form using HTML and CSS.
+-   Activity 7: Implement JavaScript validation for required fields.
+-   Activity 8: Discuss ownership and royalty implications.
+-   Activity 9: Identify web security risks and mitigation strategies.  
     
 
 ## **Resources Required**

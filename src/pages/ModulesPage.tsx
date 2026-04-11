@@ -20,8 +20,10 @@ export default function ModulesPage() {
     return true;
   });
 
+  const totalCredits = useMemo(() => modules.reduce((sum, module) => sum + module.credits, 0), []);
+
   return (
-    <AppLayout title="Modules" subtitle="10 Unit Standards • 56 Credits">
+    <AppLayout title="Modules" subtitle={`${modules.length} Unit Standards • ${totalCredits} Credits`}>
       {/* Filters */}
       <div className="flex flex-wrap gap-2 mb-6">
         {(["All", "Knowledge", "Practical"] as const).map((f) => (

@@ -43,13 +43,16 @@ export function useAssessmentStatus(unitStdId: string) {
         setError(null);
 
         // Get assessment status from learner_progress table using user_id directly
-        const { data: progressData, error: progressError } = await supabase
+        const { data: progressData, error: progressError } = await (supabase as unknown as any)
           .from('learner_progress')
           .select(`
             module_unit_standard_id,
             assessment_submitted,
             submission_path,
-            submission_uploaded_at
+            submission_uploaded_at,
+            assessment_grade,
+            assessment_feedback,
+            assessment_graded_at
           `)
           .eq('user_id', user.id)
           .eq('module_unit_standard_id', unitStdId)
@@ -65,9 +68,9 @@ export function useAssessmentStatus(unitStdId: string) {
             assessment_submitted: progressData.assessment_submitted || false,
             submission_path: progressData.submission_path,
             submitted_at: progressData.submission_uploaded_at,
-            assessment_grade: null, // Not available in current schema
-            assessment_feedback: null, // Not available in current schema
-            graded_at: null // Not available in current schema
+            assessment_grade: progressData.assessment_grade ?? null,
+            assessment_feedback: progressData.assessment_feedback ?? null,
+            graded_at: progressData.assessment_graded_at ?? null
           });
         } else {
           // No progress record yet
@@ -108,13 +111,16 @@ export function useAssessmentStatus(unitStdId: string) {
 
     try {
       // Get updated status using user_id directly
-      const { data: progressData, error: progressError } = await supabase
+      const { data: progressData, error: progressError } = await (supabase as unknown as any)
         .from('learner_progress')
         .select(`
           module_unit_standard_id,
           assessment_submitted,
           submission_path,
-          submission_uploaded_at
+          submission_uploaded_at,
+          assessment_grade,
+          assessment_feedback,
+          assessment_graded_at
         `)
         .eq('user_id', user.id)
         .eq('module_unit_standard_id', unitStdId)
@@ -126,9 +132,9 @@ export function useAssessmentStatus(unitStdId: string) {
           assessment_submitted: progressData.assessment_submitted || false,
           submission_path: progressData.submission_path,
           submitted_at: progressData.submission_uploaded_at,
-          assessment_grade: null, // Not available in current schema
-          assessment_feedback: null, // Not available in current schema
-          graded_at: null // Not available in current schema
+          assessment_grade: progressData.assessment_grade ?? null,
+          assessment_feedback: progressData.assessment_feedback ?? null,
+          graded_at: progressData.assessment_graded_at ?? null
         });
       }
     } catch (err) {
@@ -162,16 +168,18 @@ export function useAssessmentSubmissions(unitStdId?: string) {
         setError(null);
 
         // Query learner_progress table directly using user_id
-        let query = supabase
+        let query = (supabase as unknown as any)
           .from('learner_progress')
           .select(`
             user_id,
             module_unit_standard_id,
             submission_path,
-            submission_uploaded_at
+            submission_uploaded_at,
+            assessment_grade,
+            assessment_feedback,
+            assessment_graded_at
           `)
-          .eq('assessment_submitted', true)
-          .not('submission_path', 'is', null);
+          .eq('assessment_submitted', true);
 
         if (unitStdId) {
           query = query.eq('module_unit_standard_id', unitStdId);
@@ -186,13 +194,13 @@ export function useAssessmentSubmissions(unitStdId?: string) {
         // Transform the data to match the expected format
         const transformedSubmissions: AssessmentSubmission[] = (data || []).map(item => ({
           user_id: item.user_id,
-          learner_name: 'Learner', // We don't have name in progress table
+          learner_name: item.user_id ? `Learner ${String(item.user_id).slice(0, 8)}` : 'Learner',
           module_unit_standard_id: item.module_unit_standard_id,
           submission_path: item.submission_path || '',
           submitted_at: item.submission_uploaded_at || '',
-          assessment_grade: null, // Not available in current schema
-          assessment_feedback: null, // Not available in current schema
-          graded_at: null, // Not available in current schema
+          assessment_grade: item.assessment_grade ?? null,
+          assessment_feedback: item.assessment_feedback ?? null,
+          graded_at: item.assessment_graded_at ?? null,
           graded_by: null, // Not available in current schema
           grader_name: null // Not available in current schema
         }));
@@ -216,10 +224,25 @@ export function useAssessmentSubmissions(unitStdId?: string) {
     feedback?: string
   ): Promise<boolean> => {
     try {
-      // Note: grading functionality not available with current schema
-      // The learner_progress table doesn't have assessment_grade, assessment_feedback, assessment_graded_at columns
-      console.warn('Grading functionality not available - missing columns in learner_progress table');
-      return false;
+      const updatePayload = {
+        assessment_grade: grade,
+        assessment_feedback: feedback ?? null,
+        assessment_graded_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+
+      const { error } = await (supabase as unknown as any)
+        .from('learner_progress')
+        .update(updatePayload)
+        .eq('user_id', userId)
+        .eq('module_unit_standard_id', unitStdId);
+
+      if (error) {
+        console.error('Error grading assessment:', error);
+        return false;
+      }
+
+      return true;
     } catch (err) {
       console.error('Error grading assessment:', err);
       throw err;
@@ -230,16 +253,18 @@ export function useAssessmentSubmissions(unitStdId?: string) {
     if (role !== 'admin' && role !== 'lecturer') return;
 
     try {
-      let query = supabase
+      let query = (supabase as unknown as any)
         .from('learner_progress')
         .select(`
           user_id,
           module_unit_standard_id,
           submission_path,
-          submission_uploaded_at
+          submission_uploaded_at,
+          assessment_grade,
+          assessment_feedback,
+          assessment_graded_at
         `)
-        .eq('assessment_submitted', true)
-        .not('submission_path', 'is', null);
+        .eq('assessment_submitted', true);
 
       if (unitStdId) {
         query = query.eq('module_unit_standard_id', unitStdId);
@@ -253,13 +278,13 @@ export function useAssessmentSubmissions(unitStdId?: string) {
 
       const transformedSubmissions: AssessmentSubmission[] = (data || []).map(item => ({
         user_id: item.user_id,
-        learner_name: 'Learner',
+        learner_name: item.user_id ? `Learner ${String(item.user_id).slice(0, 8)}` : 'Learner',
         module_unit_standard_id: item.module_unit_standard_id,
         submission_path: item.submission_path || '',
         submitted_at: item.submission_uploaded_at || '',
-        assessment_grade: null, // Not available in current schema
-        assessment_feedback: null, // Not available in current schema
-        graded_at: null, // Not available in current schema
+        assessment_grade: item.assessment_grade ?? null,
+        assessment_feedback: item.assessment_feedback ?? null,
+        graded_at: item.assessment_graded_at ?? null,
         graded_by: null,
         grader_name: null
       }));

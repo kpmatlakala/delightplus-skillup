@@ -448,70 +448,67 @@ const staticQuizByModule: Record<
     {
       id: 0,
       question:
-        "According to Learning Unit 1, what is the main purpose of Unit Standard 14910?",
+        "During the practical, which tool should a learner use to type and save program source code?",
       options: [
-        "To apply the principles of computer programming in systems development",
-        "To design and install computer hardware",
-        "To manage financial accounting systems for a company",
+        "An editor or code editor",
+        "A music player",
+        "The print settings window",
       ],
-      answer:
-        "To apply the principles of computer programming in systems development",
+      answer: "An editor or code editor",
     },
     {
       id: 1,
       question:
-        "Which prior learning is assumed before starting this unit standard?",
+        "If a line of code is missing a colon or bracket and the program will not run, what kind of problem is this?",
       options: [
-        "Fundamental mathematics and English at least NQF Level 2 plus basic PC competency and knowledge of programming principles",
-        "Advanced calculus and network engineering at university level",
-        "No prior knowledge is required; this unit is fully introductory",
+        "A syntax error",
+        "A battery problem",
+        "An internet connection problem",
       ],
-      answer:
-        "Fundamental mathematics and English at least NQF Level 2 plus basic PC competency and knowledge of programming principles",
+      answer: "A syntax error",
     },
     {
       id: 2,
       question:
-        "In the discussion of Boolean (logical) data, which of the following are mentioned as equivalent ways of showing TRUE and FALSE?",
+        "What best shows that a learner understands the first programming practical?",
       options: [
-        "YES / NO",
-        "ON / OFF",
-        "Ticked / unticked checkbox",
-        "All of the above",
+        "They can create or save a simple file, fix a small mistake, and explain what they changed",
+        "They can type faster than everyone else",
+        "They memorise many shortcuts without using them",
       ],
-      answer: "All of the above",
+      answer:
+        "They can create or save a simple file, fix a small mistake, and explain what they changed",
     },
   ],
   "14933": [
     {
       id: 0,
       question:
-        "Which language is responsible for the visual layout and styling of a web page?",
-      options: ["CSS (Cascading Style Sheets)", "HTML", "JavaScript"],
-      answer: "CSS (Cascading Style Sheets)",
+        "Before building a simple web page, what should the learner decide first?",
+      options: [
+        "The topic, purpose, and target audience of the page",
+        "Only the computer wallpaper colour",
+        "A random password for the browser",
+      ],
+      answer: "The topic, purpose, and target audience of the page",
     },
     {
       id: 1,
       question:
-        "What does the Document Object Model (DOM) allow JavaScript to do?",
-      options: [
-        "Dynamically access and manipulate the content, structure, and style of a web page",
-        "Compile web scripts into machine code",
-        "Connect the web page directly to a database",
-      ],
-      answer:
-        "Dynamically access and manipulate the content, structure, and style of a web page",
+        "If a learner creates headings, paragraphs, and sections for a page, which language are they mainly using?",
+      options: ["HTML", "CSS", "JavaScript"],
+      answer: "HTML",
     },
     {
       id: 2,
-      question: "What is the core principle of responsive web design?",
+      question:
+        "A learner adds a button that shows a message when clicked. What does this demonstrate?",
       options: [
-        "The page layout adapts automatically to different screen sizes and devices",
-        "A website that loads and responds quickly to user clicks",
-        "A design that requires no CSS styling",
+        "Basic scripting and page interaction",
+        "Printing the page automatically",
+        "Replacing the browser with a database",
       ],
-      answer:
-        "The page layout adapts automatically to different screen sizes and devices",
+      answer: "Basic scripting and page interaction",
     },
   ],
   "14908": [
@@ -990,12 +987,11 @@ export default function ModuleDetailPage() {
       setLoadingStudyDocs(true);
 
       try {
-        const mappedUnit = id === "14933" ? "14930" : id;
         const allModuleDownloads = (
           jsonLinksByModule?.[id] ??
           moduleDownloadsById[id] ??
           []
-        ).filter((item) => item.href.includes(`/US ${mappedUnit}/`));
+        ).filter((item) => item.href.includes(`/US ${id}/`));
 
         const learnerVisibleDownloads = allModuleDownloads.filter(
           (download) => {
@@ -1045,7 +1041,7 @@ export default function ModuleDetailPage() {
 
         const indexData = (await indexResponse.json()) as ExtractedIndex;
         const moduleFiles = (indexData.files ?? []).filter((file) => {
-          if (!file.source_path.includes(`US ${mappedUnit}/`)) return false;
+          if (!file.source_path.includes(`US ${id}/`)) return false;
           if (role !== "learner") return true;
           const sourcePath = file.source_path.toLowerCase();
           if (

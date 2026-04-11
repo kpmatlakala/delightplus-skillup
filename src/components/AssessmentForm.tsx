@@ -222,6 +222,10 @@ const COUNTDOWN_SECONDS = 120;
    ───────────────────────────────────────────────────────────── */
 export interface AssessmentPayload {
   submissionText: string;
+  uploadMode?: "online" | "upload";
+  uploadFile?: File | null;
+  fileName?: string;
+  metadata?: Record<string, unknown>;
 }
 
 /* ─────────────────────────────────────────────────────────────

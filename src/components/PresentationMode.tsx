@@ -49,6 +49,21 @@ import {
   module14915SlideList,
   type Module14915SlideListItem,
 } from "@/data/module14915Presentation";
+import {
+  module14910SpeakerNotes,
+  module14910SlideList,
+  type Module14910SlideListItem,
+} from "@/data/module14910Presentation";
+import {
+  module14930SpeakerNotes,
+  module14930SlideList,
+  type Module14930SlideListItem,
+} from "@/data/module14930Presentation";
+import {
+  module14933SpeakerNotes,
+  module14933SlideList,
+  type Module14933SlideListItem,
+} from "@/data/module14933Presentation";
 import { programmeBriefingSlides } from "@/data/programmeBriefing";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -228,6 +243,222 @@ const PRESENTATION_QUIZZES: Record<string, QuizQ[]> = {
       correct: 1,
       explanation:
         "Low coupling means modules can be developed and maintained independently. High coupling creates fragile systems.",
+    },
+  ],
+  "14910": [
+    {
+      question: "During the practical, which tool should a learner open to type and save code?",
+      options: [
+        "An editor or code editor",
+        "A music player",
+        "The printer settings window",
+        "A slideshow only",
+      ],
+      correct: 0,
+      explanation:
+        "The editor is the main workspace where a learner types, saves, and corrects source code.",
+    },
+    {
+      question: "A learner accidentally removes a word while typing code. Which shortcut helps undo that mistake?",
+      options: [
+        "Ctrl+Z",
+        "Ctrl+P",
+        "Alt+Tab",
+        "Esc only",
+      ],
+      correct: 0,
+      explanation:
+        "Ctrl+Z is the common undo shortcut. It helps learners recover quickly from small mistakes.",
+    },
+    {
+      question: "If the code is missing a colon or bracket, what kind of problem is it?",
+      options: [
+        "A syntax error",
+        "A screen brightness problem",
+        "A printer error",
+        "A network password issue",
+      ],
+      correct: 0,
+      explanation:
+        "A syntax error happens when the code breaks the language rules, such as missing punctuation or brackets.",
+    },
+    {
+      question: "What best shows understanding in this practical?",
+      options: [
+        "Explaining the mistake and correcting it step by step",
+        "Typing the fastest in the room",
+        "Memorising many shortcuts without using them",
+        "Skipping the activity and reading only",
+      ],
+      correct: 0,
+      explanation:
+        "For this session, understanding is shown by doing the small task and explaining what changed and why.",
+    },
+  ],
+  "14933": [
+    {
+      question: "Before building a simple web page, what should the learner decide first?",
+      options: [
+        "The topic, purpose, target audience, and objectives",
+        "Only the wallpaper colour of the lab",
+        "A random password for the site",
+        "Nothing — planning is not needed",
+      ],
+      correct: 0,
+      explanation:
+        "The facilitator guide starts with planning the audience and purpose before any design or coding begins.",
+    },
+    {
+      question: "If a learner sketches the page layout before coding, what are they doing?",
+      options: [
+        "Planning a simple storyboard or wireframe",
+        "Installing a new operating system",
+        "Deleting the browser",
+        "Compiling Java into HTML",
+      ],
+      correct: 0,
+      explanation:
+        "A simple wireframe or storyboard helps the learner think about layout and communication before building.",
+    },
+    {
+      question: "Which statement correctly explains HTML, CSS, and JavaScript?",
+      options: [
+        "HTML = structure, CSS = styling, JavaScript = behaviour",
+        "HTML = behaviour, CSS = database, JavaScript = printing",
+        "HTML = security, CSS = hosting, JavaScript = storage",
+        "HTML = testing, CSS = browser, JavaScript = keyboard",
+      ],
+      correct: 0,
+      explanation:
+        "HTML builds the structure, CSS improves the appearance, and JavaScript adds interaction.",
+    },
+    {
+      question: "A learner adds a button that shows a message when clicked. What does this demonstrate?",
+      options: [
+        "Basic scripting and page interaction",
+        "Replacing the browser completely",
+        "Saving passwords automatically",
+        "Turning the page into a PDF",
+      ],
+      correct: 0,
+      explanation:
+        "JavaScript adds behaviour such as button clicks, messages, and form validation.",
+    },
+    {
+      question: "Why do we resize the browser or test on another device during the practical?",
+      options: [
+        "To check whether the page still works on different screen sizes",
+        "To remove the need for CSS",
+        "To make the file size zero",
+        "To disconnect the internet",
+      ],
+      correct: 0,
+      explanation:
+        "Responsive design makes a page easier to use across phones, tablets, and desktops.",
+    },
+  ],
+  "14930": [
+    {
+      question: "Why is HTTP described as a stateless protocol?",
+      options: [
+        "Because it never sends data across the internet",
+        "Because the server does not automatically remember the user between requests",
+        "Because only images can be transferred over it",
+        "Because it works only when the browser is offline",
+      ],
+      correct: 1,
+      explanation:
+        "HTTP is stateless because each request is treated independently unless the application manages state using sessions, cookies, or other mechanisms.",
+    },
+    {
+      question: "Which security practice helps protect session IDs and login details while data is in transit?",
+      options: [
+        "Using HTTPS",
+        "Turning CSS off",
+        "Renaming the HTML file",
+        "Removing all passwords from the site",
+      ],
+      correct: 0,
+      explanation:
+        "HTTPS encrypts traffic so attackers cannot easily sniff credentials or session identifiers over the network.",
+    },
+  ],
+  "14908": [
+    {
+      question: "Which test type checks a single function or module in isolation?",
+      options: [
+        "Acceptance testing",
+        "System testing",
+        "Unit testing",
+        "User training",
+      ],
+      correct: 2,
+      explanation:
+        "Unit testing focuses on one small component at a time before broader integration or system checks.",
+    },
+    {
+      question: "What should a proper test case include besides the input?",
+      options: [
+        "Only the file name",
+        "Expected result and pass/fail evidence",
+        "The developer's lunch break",
+        "A random screenshot with no notes",
+      ],
+      correct: 1,
+      explanation:
+        "A useful test case records expected output, actual output, and whether the result passed or failed.",
+    },
+  ],
+  "14919": [
+    {
+      question: "What is usually the FIRST step when a user reports that 'the computer is broken'?",
+      options: [
+        "Replace the computer immediately",
+        "Ask clarifying questions and define the actual problem",
+        "Escalate without checking anything",
+        "Install new software straight away",
+      ],
+      correct: 1,
+      explanation:
+        "Support starts by understanding the real problem clearly before diagnosing or fixing anything.",
+    },
+    {
+      question: "Which troubleshooting sequence best reflects good support practice?",
+      options: [
+        "Guess -> Fix -> Hope",
+        "Ask -> Reproduce -> Isolate -> Fix -> Verify -> Document",
+        "Document -> Ignore -> Close",
+        "Reboot -> Escalate -> Leave",
+      ],
+      correct: 1,
+      explanation:
+        "A structured troubleshooting method improves accuracy, communication, and repeatability in user support work.",
+    },
+  ],
+  "120379": [
+    {
+      question: "What is the 'triple constraint' in project work?",
+      options: [
+        "Scope, time, and cost",
+        "Code, browser, and printer",
+        "Planning, lunch, and meetings",
+        "Testing, colour, and attendance",
+      ],
+      correct: 0,
+      explanation:
+        "Project delivery is usually balanced across scope, time, and cost — if one changes, the others are often affected.",
+    },
+    {
+      question: "What does effective participation in a project team mean most of all?",
+      options: [
+        "Just attending meetings quietly",
+        "Contributing to deliverables, communication, and agreed responsibilities",
+        "Waiting for others to finish the work",
+        "Changing the scope alone without agreement",
+      ],
+      correct: 1,
+      explanation:
+        "Good team participation means active contribution, clear communication, and accountability for agreed tasks.",
     },
   ],
 };
@@ -548,6 +779,151 @@ function buildModule14915SlidesFromJson(): Slide[] {
   return module14915SlideList.map((item) => toModule14915Slide(item, quizIndexRef));
 }
 
+function toModule14910Slide(item: Module14910SlideListItem): Slide {
+  const lines = item.content
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const bulletLines = lines.filter((line) => line.startsWith("• ")).map((line) => line.replace(/^•\s*/, ""));
+  const nonBulletLines = lines.filter((line) => !line.startsWith("• "));
+  const subtitle = nonBulletLines[0];
+  const body = nonBulletLines.slice(1).join("\n") || undefined;
+
+  if (item.type === "qa" && item.quiz) {
+    return {
+      type: "quiz",
+      title: item.title,
+      subtitle: subtitle ?? "Knowledge Check · Session 1",
+      quizQuestion: item.quiz.question,
+      quizOptions: item.quiz.options,
+      quizCorrect: item.quiz.answerIndex,
+      quizExplanation: item.quiz.explanation,
+      speakerNote: item.notes,
+    };
+  }
+
+  const mappedType: SlideType =
+    item.type === "title"
+      ? "title"
+      : item.type === "summary"
+      ? "summary"
+      : item.type === "activity"
+      ? "activity"
+      : "content";
+
+  return {
+    type: mappedType,
+    title: item.title,
+    subtitle,
+    body,
+    bullets: bulletLines.length ? bulletLines : undefined,
+    cards: item.cards,
+    phaseCards: item.phaseCards,
+    imageUrl: item.imageUrl,
+    imageAlt: item.imageAlt,
+    speakerNote: item.notes,
+  };
+}
+
+function buildModule14910SlidesFromData(): Slide[] {
+  const mapped = module14910SlideList.map((item) => toModule14910Slide(item));
+  const summarySlides = mapped.filter((slide) => slide.type === "summary");
+  const coreSlides = mapped.filter((slide) => slide.type !== "summary");
+  return [
+    ...coreSlides,
+    ...getQuizSlides("14910", "Apply the Principles of Computer Programming"),
+    ...summarySlides,
+  ];
+}
+
+function toModule14930Slide(item: Module14930SlideListItem): Slide {
+  const lines = item.content
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const bulletLines = lines.filter((line) => line.startsWith("• ")).map((line) => line.replace(/^•\s*/, ""));
+  const nonBulletLines = lines.filter((line) => !line.startsWith("• "));
+  const subtitle = nonBulletLines[0];
+  const body = nonBulletLines.slice(1).join("\n") || undefined;
+
+  const mappedType: SlideType =
+    item.type === "title"
+      ? "title"
+      : item.type === "summary"
+      ? "summary"
+      : item.type === "activity"
+      ? "activity"
+      : "content";
+
+  return {
+    type: mappedType,
+    title: item.title,
+    subtitle,
+    body,
+    bullets: bulletLines.length ? bulletLines : undefined,
+    cards: item.cards,
+    phaseCards: item.phaseCards,
+    imageUrl: item.imageUrl,
+    imageAlt: item.imageAlt,
+    speakerNote: item.notes,
+  };
+}
+
+function buildModule14930SlidesFromData(): Slide[] {
+  const mapped = module14930SlideList.map((item) => toModule14930Slide(item));
+  const summarySlides = mapped.filter((slide) => slide.type === "summary");
+  const coreSlides = mapped.filter((slide) => slide.type !== "summary");
+  return [
+    ...coreSlides,
+    ...getQuizSlides("14930", "Developing Software for the Internet"),
+    ...summarySlides,
+  ];
+}
+
+function toModule14933Slide(item: Module14933SlideListItem): Slide {
+  const lines = item.content
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const bulletLines = lines.filter((line) => line.startsWith("• ")).map((line) => line.replace(/^•\s*/, ""));
+  const nonBulletLines = lines.filter((line) => !line.startsWith("• "));
+  const subtitle = nonBulletLines[0];
+  const body = nonBulletLines.slice(1).join("\n") || undefined;
+
+  const mappedType: SlideType =
+    item.type === "title"
+      ? "title"
+      : item.type === "summary"
+      ? "summary"
+      : item.type === "activity"
+      ? "activity"
+      : "content";
+
+  return {
+    type: mappedType,
+    title: item.title,
+    subtitle,
+    body,
+    bullets: bulletLines.length ? bulletLines : undefined,
+    cards: item.cards,
+    phaseCards: item.phaseCards,
+    imageUrl: item.imageUrl,
+    imageAlt: item.imageAlt,
+    speakerNote: item.notes,
+  };
+}
+
+function buildModule14933SlidesFromData(): Slide[] {
+  const mapped = module14933SlideList.map((item) => toModule14933Slide(item));
+  const summarySlides = mapped.filter((slide) => slide.type === "summary");
+  const coreSlides = mapped.filter((slide) => slide.type !== "summary");
+  return [
+    ...coreSlides,
+    ...getQuizSlides("14933", "Create Web Pages with Scripting"),
+    ...summarySlides,
+  ];
+}
+
 /* ─────────────────────────────────────────────────────────────────────────────
    Per-module facilitator speaker notes
    These are the talking-point scripts displayed on the mobile remote.
@@ -668,84 +1044,11 @@ const MODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes | Record<string, s
   },
 
   /* ── Block 2 ── */
-  "14910": {
-    title:
-      "Block 2, Day 1 — Apply Principles of Computer Programming. We move from designing to doing.\n\n" +
-      "Welcome back! Ask: 'What revision did you do between Block 1 and Block 2?'\n\n" +
-      "Then: 'Who feels nervous about coding today?' Normalise it — every developer was once a complete beginner. Learning to code is like learning a new language: you will feel lost at first, and then one day it clicks.\n\n" +
-      "TECH CHECK FIRST (10 minutes): Ensure Python + VS Code is working on every machine before loading the first slide. Do not skip this — one broken environment can derail the day.",
-    objectives:
-      "Walk through all 3 outcomes. Key messages:\n\n" +
-      "• Outcome 1 (write structured programs): We use Python as the primary language. JavaScript is the alternative. The concepts transfer to any language.\n" +
-      "• Outcome 2 (control structures and functions): This is where pseudocode from Day 3 becomes real code. Use their own pseudocode from the workbook as the starting point.\n" +
-      "• Outcome 3 (test and debug): Debugging is not optional. Every learner must be able to READ error messages. Run a deliberate error on screen — show how to read the traceback.\n\n" +
-      "Pair programming works best for this unit: one learner writes, one navigates. Switch every 30 minutes.",
-    activityIndividual:
-      "Guided coding sessions — keep all learners at roughly the same point. Use the projector to live-code alongside learners.\n\n" +
-      "• OOP section: Use the class diagram analogy — 'A class is a blueprint; an object is the building built from it.' Draw a simple class on the whiteboard: class Dog with attributes name, breed and method bark().\n" +
-      "• File I/O: Ask — 'Where does data go when your program closes?' (Nowhere — unless you save it.) Writing to a file = persistence. Read from file = data loading.\n" +
-      "• Error handling: Show the difference between a program that CRASHES with an unhandled exception and one that catches it and gives a meaningful user message. Learners should see both.\n\n" +
-      "Key principle: if learners are stuck for more than 5 minutes, they should ask. Sitting stuck silently is the fastest way to fall behind.",
-    activityGroup:
-      "Mini-project development — assign projects at the start of Day 6.\n\n" +
-      "Project options: simple student grade calculator, basic inventory tracker, or simple contact book. Each group picks one.\n\n" +
-      "Day 6 goal: have a working prototype with input, processing, and output.\n" +
-      "Day 7 goal: add file I/O and basic error handling.\n\n" +
-      "Code review workshop (Day 7 afternoon): Each group shares their screen. Class identifies:\n" +
-      "1. Something that works well\n" +
-      "2. One potential bug or improvement\n\n" +
-      "Celebrate working code — even small wins build confidence and momentum.",
-    summary:
-      "Live demo: ask one pair to project their code and walk the class through it.\n\n" +
-      "Closing questions:\n" +
-      "1. 'What was the hardest concept today?'\n" +
-      "2. 'What is one debugging technique you'll use tomorrow?'\n\n" +
-      "Reminders:\n" +
-      "• Save all code — it will be used in Block 3 testing unit\n" +
-      "• Mini-project must be complete by end of Day 7\n" +
-      "• Next: Create Web Applications with Scripting (Days 8–9).",
-  },
+  "14910": module14910SpeakerNotes,
 
-  "14933": {
-    title:
-      "Days 8–9 — Create Web Applications with Scripting.\n\n" +
-      "Opening: 'Open your phone. Name the last app or website you used in the last 5 minutes.'\n\n" +
-      "Take 4–5 answers out loud. Then: 'By the end of tomorrow, you'll understand the technology behind every one of those things — and you'll have built a small one yourself.'\n\n" +
-      "Check: does everyone have a browser with DevTools accessible? In Chrome/Edge: F12 or right-click → Inspect. Do a 2-minute DevTools orientation before starting.",
-    objectives:
-      "Walk through all 3 outcomes:\n\n" +
-      "• Outcome 1 (interactive web pages): HTML = structure, CSS = styling, JavaScript = behaviour. Draw this on the board as three layers: house frame, paint, plumbing.\n" +
-      "• Outcome 2 (DOM manipulation): The DOM is the bridge between JavaScript and the HTML you see. Ask — 'Has anyone ever used inspect element to change something on a website?' Most learners have. That IS DOM manipulation.\n" +
-      "• Outcome 3 (responsive design): Ask — 'What happens to a website designed only for desktop when you open it on a phone?' Use a real example. This is why responsive design exists.\n\n" +
-      "IMPORTANT: The portfolio page they build is the PoE assessment artefact. They KEEP it. Ensure they save their work at the end of each session.",
-    activityIndividual:
-      "Build the portfolio page incrementally — add one section per activity slot.\n\n" +
-      "• Start with provided starter HTML file. Ask learners to name the page with their own name immediately — ownership increases engagement.\n" +
-      "• DOM manipulation demo: Open DevTools console. Type document.querySelector('h1').textContent = 'Hello World'; Learners see the change instantly. Magic moment. Then show it resets on refresh — that's why we link JavaScript files.\n" +
-      "• Responsive design challenge: give learners a non-responsive layout and ask them to make it mobile-friendly using media queries. Test by resizing the browser window.\n" +
-      "• Accessibility reminder: every image needs an alt attribute. Every form input needs a label. This is not optional — it's standard professional practice.\n\n" +
-      "Learners who finish early: add a contact form with JavaScript validation to their portfolio page.",
-    activityGroup:
-      "Interactive form validation group challenge — allow 30 minutes.\n\n" +
-      "Groups build a registration form with client-side validation:\n" +
-      "• Name: required, min 3 characters\n" +
-      "• Email: must contain @ and .\n" +
-      "• Password: at least 8 characters\n" +
-      "• Confirm password: must match\n\n" +
-      "Display a clear error message per field. On success: show a confirmation message.\n\n" +
-      "Presentations: each group demos their form. The class tries to break it by submitting invalid data.\n\n" +
-      "Observe: is error messaging friendly and specific, or just 'Error'? Professional UX starts here.",
-    summary:
-      "Display 3–4 learner portfolio pages on the projector (with permission). Celebrate diversity of designs.\n\n" +
-      "Close Block 2:\n" +
-      "1. 'What is one thing you built this week that you didn't think you could?'\n" +
-      "2. 'What technology question are you most curious about for Block 3?'\n\n" +
-      "Reminders:\n" +
-      "• Save all code from Block 2 — used in the Block 3 testing unit\n" +
-      "• Block 2 assessment OTP → submit via portal\n" +
-      "• Block 3 starts [Date — insert here].",
-  },
+  "14930": module14930SpeakerNotes,
 
+  "14933": module14933SpeakerNotes,
   /* ── Block 3 ── */
   "14908": {
     title:
@@ -1048,8 +1351,24 @@ function getModuleAnchorConfig(moduleId: string): {
 
   const moduleConfigs: Record<string, Partial<typeof defaults>> = {
     "14910": {
+      subtitle: "Programming practice from logic to working code",
+      roadmapLead: "We turn pseudocode, data handling, and control structures into runnable programs.",
+      anchorTitle: "Programming Practice Anchor",
+      anchorDiagram:
+        "Problem -> Pseudocode -> Code -> Test -> Debug -> Improve\n" +
+        "   |         |          |       |         |\n" +
+        "   v         v          v       v         v\n" +
+        "requirements logic flow  implementation correctness fixes  better version",
+      anchorBullets: [
+        "Structured logic becomes easier to code when the problem is broken down first",
+        "Testing and debugging are part of programming, not a separate afterthought",
+        "Each improvement cycle makes the program more reliable and maintainable",
+      ],
+      anchorHighlight: "Good programming is a cycle of logic, code, testing, and refinement.",
+    },
+    "14920": {
       subtitle: "Collaboration and communication progression",
-      roadmapLead: "We move from team principles to role execution and conflict handling.",
+      roadmapLead: "We move from team roles and communication to coordination, problem-solving, and review.",
       anchorTitle: "Team Collaboration Anchor",
       anchorDiagram:
         "Team Goal -> Roles -> Communication -> Coordination -> Review -> Improve\n" +
@@ -1062,22 +1381,6 @@ function getModuleAnchorConfig(moduleId: string): {
         "Continuous improvement turns teams into reliable systems",
       ],
       anchorHighlight: "If collaboration weakens, return to role clarity and communication rhythm first.",
-    },
-    "14920": {
-      subtitle: "Problem-solving from definition to corrective action",
-      roadmapLead: "We define the problem first, then test solutions before scaling.",
-      anchorTitle: "Problem-Solving Anchor",
-      anchorDiagram:
-        "Define -> Analyse -> Generate Options -> Select -> Implement -> Review\n" +
-        "   |         |              |             |           |\n" +
-        "   v         v              v             v           v\n" +
-        "clear scope  root cause   evaluated choices  controlled action  learning loop",
-      anchorBullets: [
-        "Root-cause clarity matters more than speed to first answer",
-        "Option evaluation reduces risk before implementation",
-        "Review ensures solutions stay effective over time",
-      ],
-      anchorHighlight: "Do not skip root-cause analysis; quick fixes often recreate the same problem.",
     },
     "14918": {
       subtitle: "Programming logic from concepts to reliable code",
@@ -1128,54 +1431,22 @@ function getModuleAnchorConfig(moduleId: string): {
       anchorHighlight: "The cheapest bug is the one found in design, before code exists.",
     },
     "14908": {
-      subtitle: "Web scripting from structure to interaction",
-      roadmapLead: "We connect markup, style and behavior in a controlled build cycle.",
-      anchorTitle: "Web Development Anchor",
-      anchorDiagram:
-        "Structure (HTML) -> Style (CSS) -> Behaviour (JS) -> Test -> Iterate\n" +
-        "       |               |               |          |\n" +
-        "       v               v               v          v\n" +
-        "content map         visual clarity   user actions  usability gains",
-      anchorBullets: [
-        "Separate responsibilities make web systems easier to debug",
-        "Testing user interaction is as important as visual correctness",
-        "Iteration improves accessibility, usability and performance",
-      ],
-      anchorHighlight: "Reliable web pages come from clear separation of structure, style and behavior.",
-    },
-    "120379": {
-      subtitle: "Testing discipline from plan to evidence",
+      subtitle: "Testing IT systems from plan to evidence",
       roadmapLead: "We define test intent early and collect evidence systematically.",
       anchorTitle: "Testing Anchor",
       anchorDiagram:
-        "Test Plan -> Test Cases -> Execute -> Log Defects -> Re-test -> Sign-off\n" +
-        "    |           |           |            |            |\n" +
-        "    v           v           v            v            v\n" +
-        "coverage scope  expected results  observed outcomes  fix tracking  quality confidence",
+        "Requirements -> Test Plan -> Test Cases -> Execute -> Log Defects -> Re-test\n" +
+        "      |             |            |             |              |\n" +
+        "      v             v            v             v              v\n" +
+        "scope clarity   expected results  coverage check  defect trace  quality confidence",
       anchorBullets: [
         "Strong test cases link directly to requirements and risks",
         "Defect logging quality determines fix speed and re-test success",
         "Sign-off should follow evidence, not deadlines",
       ],
-      anchorHighlight: "Testing quality is measured by evidence traceability, not number of tests alone.",
+      anchorHighlight: "Testing quality is measured by evidence traceability, not just the number of tests run.",
     },
-    "14930": {
-      subtitle: "User support from issue intake to closure",
-      roadmapLead: "We diagnose accurately, resolve efficiently, then prevent recurrence.",
-      anchorTitle: "User Support Anchor",
-      anchorDiagram:
-        "Receive Issue -> Diagnose -> Resolve -> Confirm -> Document -> Prevent\n" +
-        "     |            |          |          |           |\n" +
-        "     v            v          v          v           v\n" +
-        "clear intake    root cause  fix action  user validation  knowledge base",
-      anchorBullets: [
-        "Accurate issue intake shortens total resolution time",
-        "User confirmation is required before ticket closure",
-        "Documentation turns one-off fixes into organisational learning",
-      ],
-      anchorHighlight: "Support maturity means solving issues and reducing future repeats.",
-    },
-    "14919": {
+    "120379": {
       subtitle: "Project teamwork from planning to delivery control",
       roadmapLead: "We align scope, roles and timelines before execution pressure starts.",
       anchorTitle: "Project Teamwork Anchor",
@@ -1191,9 +1462,132 @@ function getModuleAnchorConfig(moduleId: string): {
       ],
       anchorHighlight: "Team projects succeed when planning discipline continues during execution.",
     },
+    "14930": {
+      subtitle: "Internet software from network principles to secure delivery",
+      roadmapLead: "We connect internet architecture, UI methods, ownership, and security before full web scripting begins.",
+      anchorTitle: "Internet Development Anchor",
+      anchorDiagram:
+        "Protocols -> Sessions -> UI Choice -> Security -> Ownership -> Release\n" +
+        "    |           |            |            |             |\n" +
+        "    v           v            v            v             v\n" +
+        "reliable links  state control  user experience  safe delivery  professional practice",
+      anchorBullets: [
+        "Stateless web protocols directly affect application design",
+        "Interface choices shape usability, speed, and accessibility",
+        "Security, ownership, and version control are part of professional web delivery",
+      ],
+      anchorHighlight: "Strong internet applications balance usability, performance, ownership, and security.",
+    },
+    "14919": {
+      subtitle: "User support from issue intake to closure",
+      roadmapLead: "We diagnose accurately, resolve efficiently, then prevent recurrence.",
+      anchorTitle: "User Support Anchor",
+      anchorDiagram:
+        "Receive Issue -> Diagnose -> Resolve -> Confirm -> Document -> Prevent\n" +
+        "     |            |          |          |           |\n" +
+        "     v            v          v          v           v\n" +
+        "clear intake    root cause  fix action  user validation  knowledge base",
+      anchorBullets: [
+        "Accurate issue intake shortens total resolution time",
+        "User confirmation is required before ticket closure",
+        "Documentation turns one-off fixes into organisational learning",
+      ],
+      anchorHighlight: "Support maturity means solving issues and reducing future repeats.",
+    },
   };
 
   return { ...defaults, ...(moduleConfigs[moduleId] ?? {}) };
+}
+
+function getModuleVisualExample(moduleId?: string): {
+  title: string;
+  subtitle: string;
+  cards: string[];
+  diagram?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  highlight?: string;
+} | null {
+  const examples: Record<string, {
+    title: string;
+    subtitle: string;
+    cards: string[];
+    diagram?: string;
+    imageUrl?: string;
+    imageAlt?: string;
+    highlight?: string;
+  }> = {
+    "14910": {
+      title: "Worked Example & Code Flow",
+      subtitle: "Example: learner marks calculator",
+      cards: [
+        "Input: capture three marks from the user",
+        "Process: calculate total and average, then use if/else for pass or support needed",
+        "Output: display the result clearly and optionally save it to a file",
+      ],
+      diagram: "Input Marks -> Calculate Average -> IF average >= 50 -> Pass / Else -> Support Needed",
+      imageUrl: "/docs/SAQA_78965_CET_Training/01_Core_UnitStandards/US 14910/14910 - Learner Workbook_images/image-003.jpeg",
+      imageAlt: "Programming discussion visual",
+      highlight: "Use one concrete program from start to finish so learners can see why each coding concept matters.",
+    },
+    "14930": {
+      title: "Internet Example in Practice",
+      subtitle: "Example: simple secure login request",
+      cards: [
+        "Browser sends username and password over HTTPS",
+        "Server validates details and creates a session ID",
+        "User interface choice affects speed, usability, and security",
+      ],
+      diagram: "Browser Request -> Server Validation -> Session ID -> Secure Response",
+      highlight: "This helps learners connect protocol theory to a real web interaction they already use every day.",
+    },
+    "14933": {
+      title: "Portfolio Page Example",
+      subtitle: "Example: plan, build, test, and present a small web page",
+      cards: [
+        "Plan: define the audience, purpose, and the sections the page must include",
+        "Build: use HTML for structure, CSS for layout, and JavaScript for one useful interaction",
+        "Test: check the page on different screen sizes and confirm links or form messages work",
+      ],
+      diagram: "Plan -> Storyboard -> Build Page -> Add Script -> Test -> Present",
+      highlight: "This keeps the presentation aligned to the facilitator guide by showing that web development is a practical process from planning through testing.",
+    },
+    "14908": {
+      title: "Testing Cycle Example",
+      subtitle: "Example: login form with seeded bugs",
+      cards: [
+        "Write a test case with expected and actual results",
+        "Run the test and log the bug clearly",
+        "Retest after the fix and record the evidence",
+      ],
+      diagram: "Test Case -> Execute -> Defect Log -> Fix -> Re-test -> Sign-off",
+      highlight: "Learners should see testing as a repeatable process, not a one-time guess.",
+    },
+    "14919": {
+      title: "Support Ticket Example",
+      subtitle: "Example: 'I can't print' troubleshooting flow",
+      cards: [
+        "Ask clarifying questions before guessing the problem",
+        "Isolate whether the issue is printer, network, driver, or user access",
+        "Fix, verify with the user, and document the resolution",
+      ],
+      diagram: "Ask -> Reproduce -> Isolate -> Fix -> Verify -> Document",
+      highlight: "This gives learners a script they can reuse in real support situations.",
+    },
+    "120379": {
+      title: "Project Board Example",
+      subtitle: "Example: sprint planning in action",
+      cards: [
+        "Break the work into To Do, In Progress, and Done",
+        "Assign owners and identify the main risk early",
+        "Review progress daily and adjust when blockers appear",
+      ],
+      diagram: "Scope -> Plan -> Assign -> Track -> Adapt -> Deliver",
+      highlight: "Make the project workflow visible so team roles and accountability are easy to understand.",
+    },
+  };
+
+  return moduleId ? examples[moduleId] ?? null : null;
 }
 
 /** Build session-structured slides from a ModuleLessonFlow */
@@ -1221,6 +1615,21 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
   if (flow.moduleId === "14915") {
     // Module 14915 follows the dedicated editable data-source pattern.
     return buildModule14915SlidesFromJson();
+  }
+
+  if (flow.moduleId === "14910") {
+    // Module 14910 now uses a dedicated authored presentation data file.
+    return buildModule14910SlidesFromData();
+  }
+
+  if (flow.moduleId === "14930") {
+    // Module 14930 now uses a dedicated authored presentation data file.
+    return buildModule14930SlidesFromData();
+  }
+
+  if (flow.moduleId === "14933") {
+    // Module 14933 now uses a dedicated authored presentation data file.
+    return buildModule14933SlidesFromData();
   }
 
   const slides: Slide[] = [];
@@ -1290,6 +1699,22 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
     speakerNote:
       "Revisit this anchor whenever attention drops or a section feels dense. It recenters the class and keeps progression logical.",
   });
+
+  const visualExample = getModuleVisualExample(flow.moduleId);
+  if (visualExample) {
+    slides.push({
+      type: "content",
+      title: visualExample.title,
+      subtitle: visualExample.subtitle,
+      cards: visualExample.cards,
+      diagram: visualExample.diagram,
+      imageUrl: visualExample.imageUrl,
+      imageAlt: visualExample.imageAlt,
+      highlight: visualExample.highlight,
+      speakerNote:
+        "Use this as the concrete classroom example before going deeper into the session content. Point to the diagram first, then connect each card back to the learner workbook.",
+    });
+  }
 
   /* 3 — Sessions */
   for (const session of sessions) {
@@ -1401,6 +1826,22 @@ export function buildSlides(mod: Module): Slide[] {
       `Walk through each objective clearly. Ask learners: "Which of these do you already know something about?" ` +
       `This activates prior knowledge and gives you a sense of the group's baseline.`,
   });
+
+  const visualExample = getModuleVisualExample(mod.id);
+  if (visualExample) {
+    slides.push({
+      type: "content",
+      title: visualExample.title,
+      subtitle: visualExample.subtitle,
+      cards: visualExample.cards,
+      diagram: visualExample.diagram,
+      imageUrl: visualExample.imageUrl,
+      imageAlt: visualExample.imageAlt,
+      highlight: visualExample.highlight,
+      speakerNote:
+        `Use this worked example to make the topic concrete before moving into the detailed content points.`,
+    });
+  }
 
   /* 3 ── Content slides — group into chunks of 3 items */
   // Projector-friendly pacing: fewer bullets per slide improves readability at distance.
@@ -2304,7 +2745,7 @@ export function PresentationMode({
                   <img
                     src={slide.imageUrl}
                     alt={slide.imageAlt ?? slide.title}
-                    className="w-full max-h-[460px] object-contain rounded-lg"
+                    className="w-full max-h-[360px] object-contain rounded-lg"
                     loading="lazy"
                   />
                 </div>

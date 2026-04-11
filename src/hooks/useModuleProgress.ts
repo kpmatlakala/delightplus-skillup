@@ -13,14 +13,31 @@ export interface LearnerProgress {
   quiz_completed_at?: string;
   assessment_unlocked?: boolean;
   assessment_submitted?: boolean;
-  submission_path?: string;
-  submission_uploaded_at?: string;
+  assessment_submitted_at?: string | null;
+  submission_path?: string | null;
+  submission_uploaded_at?: string | null;
   assessment_grade?: number;
   assessment_feedback?: string;
   assessment_graded_at?: string;
   updated_at?: string;
   created_at?: string;
 }
+
+const normalizeProgressEntry = (progress: LearnerProgress): LearnerProgress => {
+  const submittedAt = progress.assessment_submitted_at ?? progress.submission_uploaded_at ?? null;
+  const hasSubmissionEvidence = Boolean(
+    progress.assessment_submitted ||
+    submittedAt ||
+    progress.submission_path
+  );
+
+  return {
+    ...progress,
+    assessment_unlocked: Boolean(progress.assessment_unlocked || hasSubmissionEvidence),
+    assessment_submitted: hasSubmissionEvidence,
+    assessment_submitted_at: submittedAt,
+  };
+};
 
 export function useModuleProgress() {
   const { user } = useAuth();
@@ -51,7 +68,8 @@ export function useModuleProgress() {
       const map: Record<string, LearnerProgress> = {};
       if (progressData) {
         progressData.forEach((progress) => {
-          map[progress.module_unit_standard_id] = progress;
+          const normalized = normalizeProgressEntry(progress as LearnerProgress);
+          map[normalized.module_unit_standard_id] = normalized;
         });
       }
       
@@ -96,13 +114,20 @@ export function useModuleProgress() {
       console.log('Progress updated successfully:', data);
 
       // Update local state immediately
-      setProgressMap(prev => ({
-        ...prev,
-        [moduleId]: {
-          ...prev[moduleId],
-          ...updates
-        }
-      }));
+      setProgressMap((prev) => {
+        const nextEntry = normalizeProgressEntry({
+          ...(prev[moduleId] ?? {
+            user_id: user.id,
+            module_unit_standard_id: moduleId,
+          }),
+          ...updateData,
+        } as LearnerProgress);
+
+        return {
+          ...prev,
+          [moduleId]: nextEntry,
+        };
+      });
 
       // Refresh progress data from server
       setTimeout(() => {
@@ -116,6 +141,22 @@ export function useModuleProgress() {
     }
   }, [user, fetchProgress]);
 
+  const markAssessmentSubmitted = useCallback(async (
+    moduleId: string,
+    submittedAt?: string,
+    submissionPath?: string | null
+  ) => {
+    const timestamp = submittedAt ?? new Date().toISOString();
+
+    return updateProgress(moduleId, {
+      assessment_unlocked: true,
+      assessment_submitted: true,
+      assessment_submitted_at: timestamp,
+      submission_uploaded_at: timestamp,
+      submission_path: submissionPath ?? progressMap[moduleId]?.submission_path ?? null,
+    });
+  }, [updateProgress, progressMap]);
+
   const clearMyModuleProgress = useCallback(async (moduleId: string) => {
     // Clear all progress for a module
     return updateProgress(moduleId, {
@@ -127,6 +168,7 @@ export function useModuleProgress() {
       submission_path: null,
       submission_uploaded_at: null,
       assessment_submitted: false,
+      assessment_submitted_at: null,
     });
   }, [updateProgress]);
 
@@ -138,6 +180,7 @@ export function useModuleProgress() {
     progressMap,
     loading,
     updateProgress,
+    markAssessmentSubmitted,
     clearMyModuleProgress,
     fetchProgress,
   };

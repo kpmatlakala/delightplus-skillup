@@ -65,6 +65,7 @@ const App = () => (
               <Route path="/lesson-plans" element={<LessonPlansPage />} />
               <Route path="/assessments" element={<AssessmentsPage />} />
               <Route path="/assessments/blocks" element={<BlockAssessmentAdminPage />} />
+              <Route path="/assessments/blocks/:blockKey/capture/:learnerId" element={<BlockAssessmentAdminPage />} />
               <Route path="/assessments/grade/:id" element={<AssessmentGradingPage />} />
               <Route path="/programs" element={<ProgramsPage />} />
               <Route path="/compliance" element={<CompliancePage />} />

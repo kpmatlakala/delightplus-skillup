@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520" role="img" aria-labelledby="title desc">
+  <title id="title">Section 5 Figure A — Blank Structure Diagram</title>
+  <desc id="desc">Blank structure chart with numbered markers for learner completion.</desc>
+  <style>
+    .box{fill:#fff;stroke:#1f3c88;stroke-width:3}
+    .line{stroke:#1f3c88;stroke-width:3;fill:none}
+    .call{fill:#f97316;stroke:#fff;stroke-width:2}
+    .num{font:700 16px Arial,sans-serif;fill:#fff}
+    .tagFill{fill:#eef5ff;stroke:#8aa7d6;stroke-width:1.5}
+    .tagText{font:700 12px Arial,sans-serif;fill:#16325c;letter-spacing:.4px}
+  </style>
+  <rect width="900" height="520" fill="#fbfdff"/>
+  <rect x="700" y="18" width="150" height="28" rx="14" class="tagFill"/>
+  <text x="775" y="36" text-anchor="middle" class="tagText">Section 5 · B3 · Fig A</text>
+
+  <rect x="360" y="90" width="180" height="60" rx="8" class="box"/>
+  <line x1="450" y1="150" x2="450" y2="215" class="line"/>
+  <line x1="180" y1="215" x2="720" y2="215" class="line"/>
+  <line x1="220" y1="215" x2="220" y2="245" class="line"/>
+  <line x1="450" y1="215" x2="450" y2="245" class="line"/>
+  <line x1="680" y1="215" x2="680" y2="245" class="line"/>
+  <rect x="120" y="245" width="200" height="60" rx="8" class="box"/>
+  <rect x="350" y="245" width="200" height="60" rx="8" class="box"/>
+  <rect x="580" y="245" width="200" height="60" rx="8" class="box"/>
+
+  <circle cx="450" cy="120" r="18" class="call"/><text x="450" y="126" text-anchor="middle" class="num">1</text>
+  <circle cx="220" cy="275" r="18" class="call"/><text x="220" y="281" text-anchor="middle" class="num">2</text>
+  <circle cx="450" cy="275" r="18" class="call"/><text x="450" y="281" text-anchor="middle" class="num">3</text>
+  <circle cx="680" cy="275" r="18" class="call"/><text x="680" y="281" text-anchor="middle" class="num">4</text>
+</svg>

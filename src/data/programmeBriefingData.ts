@@ -64,6 +64,9 @@ const programmeBriefingData = {
       ],
       highlight:
         "Carry four words into Unit 1: Components, Input/Output, Processes, and Feedback.",
+      phaseCards: ["Input", "Process", "Storage", "Output"],
+      diagram:
+        "Capture learner data -> Apply rules -> Save record -> Produce useful result",
       speakerNotes: [
         "This slide is just introducing vocabulary. We are not doing full system analysis yet — that happens in Unit 1.",
 
@@ -177,16 +180,23 @@ const programmeBriefingData = {
     },
     {
       type: "content",
-      title: "Your 10-Module Roadmap",
-      subtitle: "15 days · 3 blocks · 56 credits delivered",
+      title: "Your 11-Module Roadmap",
+      subtitle: "15 days · 3 blocks · 59 credits delivered",
       bullets: [
         "Block 1 · Days 1–5 · Foundations (23 credits): Systems Analysis (today), Team Collaboration, Programming Principles, Problem Solving, Design",
-        "Block 2 · Days 6–9 · Applied Programming (14 credits): Apply Programming Principles, Web Scripting",
+        "Block 2 · Days 6–9 · Applied Programming & Web Development (17 credits): 14910, 14930 internet foundations, and 14933 web scripting across the 4-day block",
+        "Optional Block 2 flex: if 14910 + 14933 are completed in 3 days, one elective unit can be nominated for the remaining day",
         "Block 3 · Days 11–13 · Systems in Practice (19 credits): Testing IT Systems, Resolve User Problems, Work as Project Team Member",
-        "Each unit ends with a quiz, and each block ends with one combined assessment",
       ],
       highlight:
-        "You complete 56 credits across three blocks with quizzes per unit and one assessment per block.",
+        "You now complete 59 credits across 11 units, with Block 2 ready around 14910 + 14933 and a flexible elective option if pacing allows.",
+      phaseCards: [
+        "Block 1 · Foundations",
+        "Block 2 · Programming & Web",
+        "Block 3 · Systems in Practice",
+      ],
+      diagram:
+        "Block 1 -> Block 2 -> Block 3\nThink -> Build -> Apply & Support",
       speakerNotes: [
         "Each unit in the programme ends with a short quiz.",
         "— They help you check whether you understood the key concepts before moving forward.",
@@ -203,7 +213,7 @@ const programmeBriefingData = {
         "✓  You have the vocabulary frame for systems: components, input/output, processes, feedback",
         "✓  You can name the 6 phases of Systems Development and why coding is only phase 4",
         "✓  You understand the distinction between systems development and software development",
-        "✓  You know your 10-module roadmap across 3 blocks",
+        "✓  You know your 11-module roadmap across 3 blocks",
         "✓  You know how to reach your facilitator between sessions",
       ],
       highlight:
