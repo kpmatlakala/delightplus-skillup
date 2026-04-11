@@ -6,7 +6,7 @@ export const program: Program = {
   saqaId: "78965",
   nqfLevel: 4,
   totalCredits: 165,
-  coveredCredits: 56,
+  coveredCredits: 59,
   duration: "15 days (3 blocks)",
   provider: "Data Science Academy",
 };
@@ -245,6 +245,34 @@ export const modules: Module[] = [
     content: ["Python/JavaScript fundamentals", "OOP basics", "File I/O", "Error handling"],
     activities: ["Guided coding sessions", "Mini-project development", "Code review workshops"],
     resources: ["Facilitator Guide", "Learner Workbook", "Starter Code Pack"],
+  },
+  {
+    id: "14930",
+    code: "ITSD-14930",
+    title: "Developing Software for the Internet",
+    type: "Knowledge",
+    credits: 3,
+    duration: 300,
+    block: 2,
+    days: "Integrated Block 2 support",
+    status: "Ready",
+    objectives: [
+      "Review the requirements for a web-based computer application",
+      "Explain core internet software principles and audience considerations",
+      "Prepare learners for the scripting and multimedia application work in 14933",
+    ],
+    content: [
+      "Web-based application requirements and planning",
+      "Internet development principles and ownership issues",
+      "Basic website structure and application design thinking",
+      "Preparing for scripting and multimedia/web application work",
+    ],
+    activities: [
+      "Analyse a simple web application brief",
+      "Identify audience, content, and ownership considerations",
+      "Plan the structure of a small web-based solution before scripting begins",
+    ],
+    resources: ["Facilitator Guide (14930)", "Learner Workbook (14930)", "Internet Development Reference Pack"],
   },
   {
     id: "14933",

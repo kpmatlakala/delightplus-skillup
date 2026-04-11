@@ -1,57 +1,41 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2 } from "lucide-react";
+
+// Phone number validation
+const isValidPhoneNumber = (value: string): boolean => {
+  const trimmed = value.trim();
+  if (trimmed === '') return false;
+  if (trimmed.includes('@')) return false;
+  const digitsOnly = trimmed.replace(/[\s\-\(\)]/g, '');
+  return digitsOnly.length >= 8 && digitsOnly.length <= 15;
+};
 
 export default function SignupPage() {
-  const [fullName, setFullName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [idNumber, setIdNumber] = useState("");
-  const [department, setDepartment] = useState("");
-  const [school, setSchool] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const ensurePublicUserRow = async (
-    userId: string,
-    displayName: string,
-    userEmail: string,
-    phone: string,
-    idNumber: string,
-    department: string,
-    school: string
-  ) => {
-    const db = supabase as unknown as {
-      from: (table: string) => {
-        upsert: (payload: Record<string, unknown>, options?: { onConflict?: string }) => Promise<{ error: { message: string } | null }>;
-      };
-    };
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phoneNumber: "",
+    idNumber: "",
+    department: "",
+    school: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-    const usernameBase = userEmail.split("@")[0]?.replace(/[^a-zA-Z0-9_]/g, "") || "learner";
-    const username = `${usernameBase}_${userId.slice(0, 6)}`.toLowerCase();
-
-    const { error: upsertError } = await db.from("users").upsert(
-      {
-        id: userId,
-        username,
-        display_name: displayName,
-        role: "user",
-        phone: phone,
-        id_number: idNumber,
-        department: department,
-        school: school,
-      },
-      { onConflict: "id" }
-    );
-
-    if (upsertError) {
-      console.warn("Unable to seed public.users row from signup:", upsertError.message);
-    }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError(null);
   };
 
   const onSubmit = async (event: React.FormEvent) => {
@@ -60,76 +44,160 @@ export default function SignupPage() {
     setSuccessMessage(null);
     setLoading(true);
 
-    const { data, error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: fullName,
-          phone_number: phoneNumber,
-          id_number: idNumber,
-          department: department,
-          school: school,
-        },
-      },
-    });
-
-    if (signUpError) {
+    // Validation
+    if (!formData.fullName.trim()) {
+      setError("Full name is required");
       setLoading(false);
-      setError(signUpError.message);
       return;
     }
 
-    if (data.user) {
-      await ensurePublicUserRow(
-        data.user.id,
-        fullName,
-        email,
-        phoneNumber,
-        idNumber,
-        department,
-        school
-      );
+    if (!formData.email.trim()) {
+      setError("Email is required");
+      setLoading(false);
+      return;
     }
 
-    setLoading(false);
-    setSuccessMessage("Account created. If email confirmation is enabled, confirm your email before login.");
-    setFullName("");
-    setPhoneNumber("");
-    setIdNumber("");
-    setDepartment("");
-    setSchool("");
-    setEmail("");
-    setPassword("");
+    if (!formData.password) {
+      setError("Password is required");
+      setLoading(false);
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters");
+      setLoading(false);
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
+
+    if (formData.phoneNumber && !isValidPhoneNumber(formData.phoneNumber)) {
+      setError("Please enter a valid phone number (e.g., 0721234567 or +27721234567)");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // 1. Create auth user with metadata
+      const { data: authData, error: signUpError } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            full_name: formData.fullName,
+            phone: formData.phoneNumber,
+            id_number: formData.idNumber,
+            department: formData.department,
+            school: formData.school,
+          },
+        },
+      });
+
+      if (signUpError) {
+        setError(signUpError.message);
+        setLoading(false);
+        return;
+      }
+
+      if (authData.user) {
+        // 2. Call self-registration to create cet.learners record
+        const isValidPhone = formData.phoneNumber && isValidPhoneNumber(formData.phoneNumber);
+        
+        const { error: registerError } = await (supabase as any).rpc('cet_self_register_learner', {
+          p_full_name: formData.fullName,
+          p_email: formData.email,
+          p_phone: isValidPhone ? formData.phoneNumber : null,
+        });
+
+        if (registerError) {
+          console.error("Self-registration error:", registerError);
+          setError("Failed to create learner profile. Please contact support.");
+          setLoading(false);
+          return;
+        }
+      }
+
+      setLoading(false);
+      setSuccessMessage("Account created successfully! Please check your email to confirm your account, then sign in.");
+      
+      // Clear form
+      setFormData({
+        fullName: "",
+        email: "",
+        phoneNumber: "",
+        idNumber: "",
+        department: "",
+        school: "",
+        password: "",
+        confirmPassword: "",
+      });
+
+      // Redirect after 3 seconds
+      setTimeout(() => {
+        navigate("/login", { 
+          state: { message: "Account created! Please sign in." } 
+        });
+      }, 3000);
+      
+    } catch (err) {
+      console.error("Signup error:", err);
+      setError("An unexpected error occurred. Please try again.");
+      setLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <div className="w-full max-w-md rounded-lg border border-border bg-card p-6">
         <h1 className="font-display text-2xl font-bold text-foreground">Create Learner Account</h1>
-        <p className="text-sm text-muted-foreground mt-1">Learners can sign up to track progress and submit assessments.</p>
+        <p className="text-sm text-muted-foreground mt-1">
+          Sign up to track progress and submit assessments.
+        </p>
 
+        {error && (
+          <Alert variant="destructive" className="mt-4">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
+        {successMessage && (
+          <Alert className="mt-4 bg-green-50 border-green-200 dark:bg-green-950/20 dark:border-green-800">
+            <AlertDescription className="text-green-800 dark:text-green-300">
+              {successMessage}
+            </AlertDescription>
+          </Alert>
+        )}
 
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="fullName">Full Name</Label>
+            <Label htmlFor="fullName">Full Name *</Label>
             <Input
               id="fullName"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleChange}
+              placeholder="John Doe"
               required
+              disabled={loading}
             />
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Email *</Label>
             <Input
               id="email"
+              name="email"
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="john@example.com"
               required
               autoComplete="email"
+              disabled={loading}
             />
           </div>
 
@@ -137,68 +205,107 @@ export default function SignupPage() {
             <Label htmlFor="phoneNumber">Phone Number</Label>
             <Input
               id="phoneNumber"
+              name="phoneNumber"
               type="tel"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              required
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              placeholder="072 123 4567"
               autoComplete="tel"
+              disabled={loading}
             />
+            <p className="text-xs text-muted-foreground">
+              Format: 0721234567 or +27721234567
+            </p>
           </div>
 
           <div className="space-y-1.5">
             <Label htmlFor="idNumber">ID Number</Label>
             <Input
               id="idNumber"
-              value={idNumber}
-              onChange={(e) => setIdNumber(e.target.value)}
-              required
+              name="idNumber"
+              value={formData.idNumber}
+              onChange={handleChange}
+              placeholder="South African ID number"
+              disabled={loading}
             />
           </div>
 
-          <div className="space-y-1.5">
-            <Label htmlFor="department">Department</Label>
-            <Input
-              id="department"
-              value={department}
-              onChange={(e) => setDepartment(e.target.value)}
-              required
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="department">Department</Label>
+              <Input
+                id="department"
+                name="department"
+                value={formData.department}
+                onChange={handleChange}
+                placeholder="Department"
+                disabled={loading}
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="school">School/Institution</Label>
+              <Input
+                id="school"
+                name="school"
+                value={formData.school}
+                onChange={handleChange}
+                placeholder="School or Institution"
+                disabled={loading}
+              />
+            </div>
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="school">School/Institution</Label>
-            <Input
-              id="school"
-              value={school}
-              onChange={(e) => setSchool(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Password *</Label>
             <Input
               id="password"
+              name="password"
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="••••••"
               required
               autoComplete="new-password"
               minLength={6}
+              disabled={loading}
+            />
+            <p className="text-xs text-muted-foreground">
+              At least 6 characters
+            </p>
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="confirmPassword">Confirm Password *</Label>
+            <Input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              placeholder="••••••"
+              required
+              autoComplete="new-password"
+              minLength={6}
+              disabled={loading}
             />
           </div>
 
-          {error && <p className="text-sm text-destructive">{error}</p>}
-          {successMessage && <p className="text-sm text-success">{successMessage}</p>}
-
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Creating account..." : "Create Account"}
+            {loading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Creating account...
+              </>
+            ) : (
+              "Create Account"
+            )}
           </Button>
         </form>
 
-        <p className="mt-4 text-sm text-muted-foreground">
+        <p className="mt-4 text-sm text-muted-foreground text-center">
           Already have an account?{" "}
-          <Link to="/auth/login" className="text-primary hover:underline">
+          <Link to="/login" className="text-primary hover:underline">
             Sign in
           </Link>
         </p>

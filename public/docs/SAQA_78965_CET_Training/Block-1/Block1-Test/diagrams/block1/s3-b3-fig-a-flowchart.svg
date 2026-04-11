@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="680" viewBox="0 0 820 680" role="img" aria-labelledby="title desc">
+  <title id="title">Simple Flowchart Template</title>
+  <desc id="desc">Flowchart template for mark validation with Start, Process, Decision and End symbols.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1f3c88" />
+    </marker>
+    <style>
+      .title{font:700 26px Arial, sans-serif; fill:#16325c}
+      .label{font:700 17px Arial, sans-serif; fill:#1f2937}
+      .hint{font:14px Arial, sans-serif; fill:#4b5563}
+      .shape{fill:#fff; stroke:#1f3c88; stroke-width:3}
+      .line{stroke:#1f3c88; stroke-width:3; fill:none; marker-end:url(#arrow)}
+      .tagFill{fill:#eef5ff; stroke:#8aa7d6; stroke-width:1.5}
+      .tagText{font:700 12px Arial, sans-serif; fill:#16325c; letter-spacing:.4px}
+    </style>
+  </defs>
+  <rect width="820" height="680" fill="#fbfdff"/>
+  <rect x="610" y="18" width="150" height="28" rx="14" class="tagFill"/>
+  <text x="685" y="36" text-anchor="middle" class="tagText">Section 3 · B3 · Fig A</text>
+
+  <ellipse cx="410" cy="120" rx="90" ry="38" class="shape"/>
+  <text x="410" y="126" text-anchor="middle" class="label">Start</text>
+
+  <line x1="410" y1="158" x2="410" y2="210" class="line"/>
+
+  <rect x="310" y="210" width="200" height="70" rx="6" class="shape"/>
+  <text x="410" y="252" text-anchor="middle" class="label">Enter student mark</text>
+
+  <line x1="410" y1="280" x2="410" y2="340" class="line"/>
+
+  <polygon points="410,340 520,410 410,480 300,410" class="shape"/>
+  <text x="410" y="405" text-anchor="middle" class="label">Mark ≥ 50?</text>
+
+  <line x1="520" y1="410" x2="680" y2="410" class="line"/>
+  <rect x="620" y="375" width="130" height="70" rx="6" class="shape"/>
+  <text x="685" y="417" text-anchor="middle" class="label">Print PASS</text>
+  <text x="555" y="395" class="hint">Yes</text>
+
+  <line x1="300" y1="410" x2="140" y2="410" class="line"/>
+  <rect x="70" y="375" width="130" height="70" rx="6" class="shape"/>
+  <text x="135" y="417" text-anchor="middle" class="label">Print FAIL</text>
+  <text x="230" y="395" class="hint">No</text>
+
+  <line x1="685" y1="445" x2="685" y2="550" class="line"/>
+  <line x1="135" y1="445" x2="135" y2="550" class="line"/>
+  <line x1="135" y1="550" x2="410" y2="550" class="line"/>
+  <line x1="685" y1="550" x2="410" y2="550" class="line"/>
+  <line x1="410" y1="550" x2="410" y2="585" class="line"/>
+
+  <ellipse cx="410" cy="620" rx="90" ry="38" class="shape"/>
+  <text x="410" y="626" text-anchor="middle" class="label">End</text>
+</svg>

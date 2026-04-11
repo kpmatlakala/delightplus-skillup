@@ -183,7 +183,7 @@ export default function PresentationLaunchPage() {
         {/* Block 2 ── */}
         <section>
           <p className="text-white/35 text-xs uppercase tracking-widest font-semibold mb-3">
-            Block 2 · Applied Programming
+            Block 2 · Applied Programming & Web Development
           </p>
           <div className="space-y-2">
             {block2.map((m) => (

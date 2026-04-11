@@ -4,14 +4,14 @@ import { useState } from "react";
 
 const complianceItems = [
   { id: "1", category: "SAQA Alignment", label: "Program registered on NQF (SAQA 78965)", checked: true },
-  { id: "2", category: "SAQA Alignment", label: "All 10 unit standards mapped to modules", checked: true },
+  { id: "2", category: "SAQA Alignment", label: "All 11 unit standards mapped to modules", checked: true },
   { id: "3", category: "SAQA Alignment", label: "Credits total verified (56 of 165)", checked: true },
   { id: "4", category: "ETQA Readiness", label: "Lesson plans follow LMIS template format", checked: true },
   { id: "5", category: "ETQA Readiness", label: "Assessment criteria aligned to SOs", checked: true },
   { id: "6", category: "ETQA Readiness", label: "PoE structure prepared (5 folders)", checked: false },
   { id: "7", category: "ETQA Readiness", label: "Moderation submission cover letter drafted", checked: false },
-  { id: "8", category: "Facilitator Readiness", label: "Facilitator guides complete (all 10)", checked: true },
-  { id: "9", category: "Facilitator Readiness", label: "Learner workbooks complete (all 10)", checked: true },
+  { id: "8", category: "Facilitator Readiness", label: "Facilitator guides complete (all 11)", checked: true },
+  { id: "9", category: "Facilitator Readiness", label: "Learner workbooks complete (all 11)", checked: true },
   { id: "10", category: "Facilitator Readiness", label: "Facilitator credentials submitted", checked: false },
   { id: "11", category: "Logistics", label: "Venue confirmed (CET Venda)", checked: false },
   { id: "12", category: "Logistics", label: "Laptop/device availability confirmed", checked: false },

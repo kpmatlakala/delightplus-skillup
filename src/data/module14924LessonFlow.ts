@@ -5,7 +5,7 @@ export const module14924LessonFlow: ModuleLessonFlow = {
     saqa: "14924",
     introTitle: "Information Systems Analysis",
     introSummary: "Explore the systems development life cycle, the analyst's roles and responsibilities, information-gathering techniques, data flow diagrams, object-oriented analysis, and structured development approaches.",
-    introBody: "This module introduces the discipline of information systems analysis — establishing what systems are, how they are developed, who the analyst is, and how to gather and model requirements. You will work through feasibility studies, requirements analysis, data flow diagram construction, object-oriented analysis concepts, and development approaches including Agile, CASE tools, JAD, RAD, and structured methods. No prior systems analysis experience is required.",
+    introBody: "This module introduces the discipline of information systems analysis ï¿½ establishing what systems are, how they are developed, who the analyst is, and how to gather and model requirements. You will work through feasibility studies, requirements analysis, data flow diagram construction, object-oriented analysis concepts, and development approaches including Agile, CASE tools, JAD, RAD, and structured methods. No prior systems analysis experience is required.",
     aboutGuide: "This learner guide provides a structured overview of information systems analysis and forms part of the FETC: IT Systems Development qualification (SAQA 78965, NQF Level 4). It is designed to develop your ability to analyse systems and apply structured analysis techniques.",
     unitPurpose: "People credited with this unit standard are able to describe information systems analysis and explain different systems analysis techniques used in the industry.",
     quizPlacement: "end",
@@ -18,16 +18,16 @@ export const module14924LessonFlow: ModuleLessonFlow = {
       {
         id: "programme-intro",
         label: "Introduction",
-        title: "Programme Introduction — FETC: IT Systems Development",
-        summary: "A foundational orientation to the qualification — covering what information systems are, the SDLC, how systems development differs from software development, your full learning roadmap across all 10 modules, and how each lecture in this unit standard connects to the next. No assessed outcomes.",
-        body: "This opening lesson orients you to the qualification before any assessed content begins. It maps the full programme structure — positioning each unit standard in context — and establishes the analytical mindset that underpins every lesson that follows. Work through these sections at your own pace before your facilitator opens Session 1.",
+        title: "Programme Introduction ï¿½ FETC: IT Systems Development",
+        summary: "A foundational orientation to the qualification ï¿½ covering what information systems are, the SDLC, how systems development differs from software development, your full learning roadmap across all 11 modules, and how each lecture in this unit standard connects to the next. No assessed outcomes.",
+        body: "This opening lesson orients you to the qualification before any assessed content begins. It maps the full programme structure ï¿½ positioning each unit standard in context ï¿½ and establishes the analytical mindset that underpins every lesson that follows. Work through these sections at your own pace before your facilitator opens Session 1.",
         sections: [
           {
             title: "What is Information Technology?",
             blocks: [
               {
                 type: "paragraph" as const,
-                text: "Information Technology (IT) is the combination of hardware and software products and services that organisations use to manage, access, communicate, and share information. IT is not just computers — it is the invisible infrastructure that underpins every business function, from student records and payroll to logistics and customer service.",
+                text: "Information Technology (IT) is the combination of hardware and software products and services that organisations use to manage, access, communicate, and share information. IT is not just computers ï¿½ it is the invisible infrastructure that underpins every business function, from student records and payroll to logistics and customer service.",
               },
               {
                 type: "heading" as const,
@@ -36,15 +36,15 @@ export const module14924LessonFlow: ModuleLessonFlow = {
               {
                 type: "list" as const,
                 items: [
-                  "Changes in the world — globalisation, remote work, digital transformation, and the demand for real-time information access across every sector",
-                  "Changes in technology — faster processors, cloud computing, artificial intelligence, mobile platforms, and the exponential growth of available data (Moore's Law: processing power roughly doubles every two years)",
-                  "Changes in client demand — organisations and end users expect systems that are faster, more intuitive, more accessible, and more secure than ever before",
+                  "Changes in the world ï¿½ globalisation, remote work, digital transformation, and the demand for real-time information access across every sector",
+                  "Changes in technology ï¿½ faster processors, cloud computing, artificial intelligence, mobile platforms, and the exponential growth of available data (Moore's Law: processing power roughly doubles every two years)",
+                  "Changes in client demand ï¿½ organisations and end users expect systems that are faster, more intuitive, more accessible, and more secure than ever before",
                 ],
               },
               {
                 type: "callout" as const,
                 variant: "info" as const,
-                text: "As a systems developer, you will design, build and maintain the IT infrastructure that organisations depend on. Understanding what IT is — and why it must be carefully planned — is the foundation on which every other unit in this qualification rests.",
+                text: "As a systems developer, you will design, build and maintain the IT infrastructure that organisations depend on. Understanding what IT is ï¿½ and why it must be carefully planned ï¿½ is the foundation on which every other unit in this qualification rests.",
               },
             ],
           },
@@ -54,7 +54,7 @@ export const module14924LessonFlow: ModuleLessonFlow = {
               {
                 type: "callout" as const,
                 variant: "info" as const,
-                text: "Think of your college's student registration portal — it takes in learner data, processes it according to rules, stores records, and produces reports for the DoE. That is a real information system. Understanding how to build, analyse and improve systems like it is exactly what this qualification is about.",
+                text: "Think of your college's student registration portal ï¿½ it takes in learner data, processes it according to rules, stores records, and produces reports for the DoE. That is a real information system. Understanding how to build, analyse and improve systems like it is exactly what this qualification is about.",
               },
               {
                 type: "paragraph" as const,
@@ -67,16 +67,16 @@ export const module14924LessonFlow: ModuleLessonFlow = {
               {
                 type: "list" as const,
                 items: [
-                  "Student registration portal — captures enrolment data, checks eligibility, generates student numbers and timetables",
-                  "Attendance tracking tool — records daily sign-ins, flags patterns, produces reports for the Department of Education",
-                  "Results management system — stores marks, calculates averages, generates transcripts and certificates",
-                  "Leave management system — processes leave applications, checks available balances, notifies line managers",
-                  "Online banking portal — takes your transaction instruction, validates it, updates balances, sends a confirmation",
+                  "Student registration portal ï¿½ captures enrolment data, checks eligibility, generates student numbers and timetables",
+                  "Attendance tracking tool ï¿½ records daily sign-ins, flags patterns, produces reports for the Department of Education",
+                  "Results management system ï¿½ stores marks, calculates averages, generates transcripts and certificates",
+                  "Leave management system ï¿½ processes leave applications, checks available balances, notifies line managers",
+                  "Online banking portal ï¿½ takes your transaction instruction, validates it, updates balances, sends a confirmation",
                 ],
               },
               {
                 type: "paragraph" as const,
-                text: "Notice the pattern: every one of these systems takes in data (inputs), applies rules or calculations (processing), retains records (storage), and produces something people act on — a report, a balance, a certificate (outputs). This input–process–storage–output model is the structural DNA of every information system you will ever build or analyse.",
+                text: "Notice the pattern: every one of these systems takes in data (inputs), applies rules or calculations (processing), retains records (storage), and produces something people act on ï¿½ a report, a balance, a certificate (outputs). This inputï¿½processï¿½storageï¿½output model is the structural DNA of every information system you will ever build or analyse.",
               },
             ],
           },
@@ -85,7 +85,7 @@ export const module14924LessonFlow: ModuleLessonFlow = {
             blocks: [
               {
                 type: "paragraph" as const,
-                text: "Systems development is the end-to-end discipline of planning, analysing, designing, building, testing and maintaining information systems. It is not only about writing code — it is about ensuring the right system gets built in the first place, that it works correctly, and that it keeps working reliably after it is deployed.",
+                text: "Systems development is the end-to-end discipline of planning, analysing, designing, building, testing and maintaining information systems. It is not only about writing code ï¿½ it is about ensuring the right system gets built in the first place, that it works correctly, and that it keeps working reliably after it is deployed.",
               },
               {
                 type: "heading" as const,
@@ -94,43 +94,43 @@ export const module14924LessonFlow: ModuleLessonFlow = {
               {
                 type: "ordered-list" as const,
                 items: [
-                  "Investigation — Identify the business problem or opportunity; assess whether a new or improved system is justified before any money is committed",
-                  "Analysis — Establish in detail what the system must do: requirements, data flows, user needs, volume estimates, constraints",
-                  "Design — Specify how the system will work: architecture, data structures, user interfaces, program module structure",
-                  "Development (Coding) — Write and unit-test the program code based on the approved design documents",
-                  "Implementation — Deploy the system, convert existing data, train users, and manage the transition from the old system to the new one",
-                  "Maintenance — Monitor for defects, apply fixes and enhancements, and eventually plan the next iteration or replacement",
+                  "Investigation ï¿½ Identify the business problem or opportunity; assess whether a new or improved system is justified before any money is committed",
+                  "Analysis ï¿½ Establish in detail what the system must do: requirements, data flows, user needs, volume estimates, constraints",
+                  "Design ï¿½ Specify how the system will work: architecture, data structures, user interfaces, program module structure",
+                  "Development (Coding) ï¿½ Write and unit-test the program code based on the approved design documents",
+                  "Implementation ï¿½ Deploy the system, convert existing data, train users, and manage the transition from the old system to the new one",
+                  "Maintenance ï¿½ Monitor for defects, apply fixes and enhancements, and eventually plan the next iteration or replacement",
                 ],
               },
               {
                 type: "callout" as const,
                 variant: "tip" as const,
-                text: "Notice that coding (phase 4) only appears more than halfway through. The analysis and design work that precedes it determines whether what gets built is actually useful. A technically excellent system that solves the wrong problem is still a failure — and failures at this stage cost two to ten times more to fix than failures caught during analysis.",
+                text: "Notice that coding (phase 4) only appears more than halfway through. The analysis and design work that precedes it determines whether what gets built is actually useful. A technically excellent system that solves the wrong problem is still a failure ï¿½ and failures at this stage cost two to ten times more to fix than failures caught during analysis.",
               },
             ],
           },
           {
-            title: "C. Systems Development vs Software Development — Are They the Same?",
+            title: "C. Systems Development vs Software Development ï¿½ Are They the Same?",
             blocks: [
               {
                 type: "paragraph" as const,
-                text: "These terms are used interchangeably in everyday conversation, but they describe different scopes. Software development is a subset of systems development — it is the phase where programs are written and tested. Systems development is the broader discipline that frames why the software needs to exist and ensures the solution works for the organisation as a whole.",
+                text: "These terms are used interchangeably in everyday conversation, but they describe different scopes. Software development is a subset of systems development ï¿½ it is the phase where programs are written and tested. Systems development is the broader discipline that frames why the software needs to exist and ensures the solution works for the organisation as a whole.",
               },
               {
                 type: "table" as const,
                 headers: ["Aspect", "Systems Development", "Software Development"],
                 rows: [
-                  ["Scope", "End-to-end: people, process, data, technology and code", "Primarily code — design, write, test, deploy"],
+                  ["Scope", "End-to-end: people, process, data, technology and code", "Primarily code ï¿½ design, write, test, deploy"],
                   ["Starting point", "Business problem or organisational need", "Requirements specification handed to developers by an analyst"],
                   ["Who is involved", "Analysts, business users, managers, developers, QA, trainers", "Developers, testers, DevOps engineers"],
-                  ["Key output", "A working solution that solves the business problem", "A software artefact — an application, API, script or service"],
-                  ["SDLC position", "Spans all 6 phases from investigation to maintenance", "Primarily phases 4–5: development and implementation"],
+                  ["Key output", "A working solution that solves the business problem", "A software artefact ï¿½ an application, API, script or service"],
+                  ["SDLC position", "Spans all 6 phases from investigation to maintenance", "Primarily phases 4ï¿½5: development and implementation"],
                   ["SA NQF framing", "The recognised qualification framing (SAQA 78965, NQF Level 4)", "Usually vendor-specific certifications (e.g. AWS, Oracle, Microsoft)"],
                 ],
               },
               {
                 type: "paragraph" as const,
-                text: "How they connect: every piece of software exists inside a larger organisational system. The analyst's work — understanding the problem, gathering requirements, modelling data flows, designing before coding — determines whether the software that eventually gets written solves the right problem for the right people. In this qualification, you will learn to think like an analyst and write like a developer. Both skills are required to be fully effective in the IT workplace.",
+                text: "How they connect: every piece of software exists inside a larger organisational system. The analyst's work ï¿½ understanding the problem, gathering requirements, modelling data flows, designing before coding ï¿½ determines whether the software that eventually gets written solves the right problem for the right people. In this qualification, you will learn to think like an analyst and write like a developer. Both skills are required to be fully effective in the IT workplace.",
               },
             ],
           },
@@ -140,16 +140,16 @@ export const module14924LessonFlow: ModuleLessonFlow = {
               {
                 type: "list" as const,
                 items: [
-                  "Organisations run on systems: every business function — payroll, HR, logistics, student records — depends on reliable information systems. Understanding how they are built is foundational to any IT role, from junior developer to project manager.",
-                  "Poor analysis causes expensive failures: the Standish Group CHAOS Report consistently finds that fewer than 30% of IT projects are completed on time, within budget and to specification. The leading root causes are poor requirements gathering and inadequate analysis — not programming errors. This qualification addresses those root causes directly.",
-                  "NQF Level 4 opens careers: competence in systems development creates pathways into junior analyst, developer, business analyst support and project coordination roles — all in high demand across South African government and private sector.",
-                  "Professional practice modelling: as a CET lecturer delivering vocational IT training, demonstrating structured thinking — breaking a problem down before touching a keyboard, gathering requirements from users, designing before coding — is the professional standard your learners will carry into the workplace.",
+                  "Organisations run on systems: every business function ï¿½ payroll, HR, logistics, student records ï¿½ depends on reliable information systems. Understanding how they are built is foundational to any IT role, from junior developer to project manager.",
+                  "Poor analysis causes expensive failures: the Standish Group CHAOS Report consistently finds that fewer than 30% of IT projects are completed on time, within budget and to specification. The leading root causes are poor requirements gathering and inadequate analysis ï¿½ not programming errors. This qualification addresses those root causes directly.",
+                  "NQF Level 4 opens careers: competence in systems development creates pathways into junior analyst, developer, business analyst support and project coordination roles ï¿½ all in high demand across South African government and private sector.",
+                  "Professional practice modelling: as a CET lecturer delivering vocational IT training, demonstrating structured thinking ï¿½ breaking a problem down before touching a keyboard, gathering requirements from users, designing before coding ï¿½ is the professional standard your learners will carry into the workplace.",
                 ],
               },
               {
                 type: "callout" as const,
                 variant: "info" as const,
-                text: "Reflection activity: Name one IT system you interact with at your college. Write down one thing it does well and one thing it does poorly. When you reach Session 1 of ITSD-14924, you will have the vocabulary and the analytical tools to describe exactly why that problem exists — and how you would fix it.",
+                text: "Reflection activity: Name one IT system you interact with at your college. Write down one thing it does well and one thing it does poorly. When you reach Session 1 of ITSD-14924, you will have the vocabulary and the analytical tools to describe exactly why that problem exists ï¿½ and how you would fix it.",
               },
             ],
           },
@@ -158,28 +158,29 @@ export const module14924LessonFlow: ModuleLessonFlow = {
             blocks: [
               {
                 type: "paragraph" as const,
-                text: "This qualification is delivered across 15 days in 3 blocks. The 10 unit standards below build on each other — Block 1 establishes the thinking frameworks, Block 2 applies them in working code, and Block 3 brings everything together in a professional practice context.",
+                text: "This qualification is delivered across 15 days in 3 blocks. The 11 unit standards below build on each other ï¿½ Block 1 establishes the thinking frameworks, Block 2 applies them in working code, and Block 3 brings everything together in a professional practice context.",
               },
               {
                 type: "table" as const,
                 headers: ["#", "Code", "Title", "Block", "Credits", "What you will be able to do"],
                 rows: [
-                  ["1", "ITSD-14924", "Information Systems Analysis", "Block 1 · Day 1", "3", "Describe the SDLC, the analyst's role, information-gathering techniques, DFDs, decision tables and CASE tools"],
-                  ["2", "ITSD-14920", "Team Collaboration & Problem Solving", "Block 1 · Day 2", "3", "Contribute effectively to team problem-solving using structured techniques and identify qualities of effective team members"],
-                  ["3", "ITSD-14918", "Programming Principles Introduction", "Block 1 · Day 3", "5", "Explain data types, control structures and write pseudocode for simple problems"],
-                  ["4", "ITSD-14927", "Apply Problem-Solving Strategies", "Block 1 · Day 4", "4", "Analyse workplace problems, evaluate solutions against criteria, and develop an implementation plan"],
-                  ["5", "ITSD-14915", "Design a Computer Program to Specification", "Block 1 · Day 5", "8", "Design programs using structure diagrams, decision tables, pseudocode and desk-checking"],
-                  ["6", "ITSD-14910", "Apply Programming Principles", "Block 2 · Days 6–7", "8", "Write, test and debug structured programs applying data types, functions, control structures and error handling"],
-                  ["7", "ITSD-14933", "Web Scripting", "Block 2 · Days 8–9", "6", "Build interactive web pages using HTML5, CSS3 and JavaScript with DOM manipulation and responsive design"],
-                  ["8", "ITSD-14908", "Testing IT Systems", "Block 3 · Day 11", "6", "Design test cases, execute test plans, log defects and apply quality assurance principles"],
-                  ["9", "ITSD-14919", "Resolve User Problems", "Block 3 · Day 12", "5", "Diagnose and resolve common IT user problems using structured troubleshooting methodology"],
-                  ["10", "ITSD-120379", "Work as Project Team Member", "Block 3 · Day 13", "8", "Participate effectively in a project team, manage deliverables and communicate with stakeholders"],
+                  ["1", "ITSD-14924", "Information Systems Analysis", "Block 1 ï¿½ Day 1", "3", "Describe the SDLC, the analyst's role, information-gathering techniques, DFDs, decision tables and CASE tools"],
+                  ["2", "ITSD-14920", "Team Collaboration & Problem Solving", "Block 1 ï¿½ Day 2", "3", "Contribute effectively to team problem-solving using structured techniques and identify qualities of effective team members"],
+                  ["3", "ITSD-14918", "Programming Principles Introduction", "Block 1 ï¿½ Day 3", "5", "Explain data types, control structures and write pseudocode for simple problems"],
+                  ["4", "ITSD-14927", "Apply Problem-Solving Strategies", "Block 1 ï¿½ Day 4", "4", "Analyse workplace problems, evaluate solutions against criteria, and develop an implementation plan"],
+                  ["5", "ITSD-14915", "Design a Computer Program to Specification", "Block 1 ï¿½ Day 5", "8", "Design programs using structure diagrams, decision tables, pseudocode and desk-checking"],
+                  ["6", "ITSD-14910", "Apply Programming Principles", "Block 2 ï¿½ Days 6ï¿½7", "8", "Write, test and debug structured programs applying data types, functions, control structures and error handling"],
+                  ["7", "ITSD-14930", "Developing Software for the Internet", "Block 2 ï¿½ Integrated support", "3", "Explain network, interface, ownership and security principles that support the web-development work in Block 2"],
+                  ["8", "ITSD-14933", "Web Scripting", "Block 2 ï¿½ Days 8ï¿½9", "6", "Build interactive web pages using HTML5, CSS3 and JavaScript with DOM manipulation and responsive design"],
+                  ["9", "ITSD-14908", "Testing IT Systems", "Block 3 ï¿½ Day 11", "6", "Design test cases, execute test plans, log defects and apply quality assurance principles"],
+                  ["10", "ITSD-14919", "Resolve User Problems", "Block 3 ï¿½ Day 12", "5", "Diagnose and resolve common IT user problems using structured troubleshooting methodology"],
+                  ["11", "ITSD-120379", "Work as Project Team Member", "Block 3 ï¿½ Day 13", "8", "Participate effectively in a project team, manage deliverables and communicate with stakeholders"],
                 ],
               },
               {
                 type: "callout" as const,
                 variant: "tip" as const,
-                text: "Day 10 is a PoE consolidation day — no new unit standard content is delivered. Use this day to organise your portfolio evidence, complete any outstanding workbook activities, and prepare questions for the Block 3 sessions. Your facilitator will be available to provide guidance.",
+                text: "Day 10 is a PoE consolidation day ï¿½ no new unit standard content is delivered. Use this day to organise your portfolio evidence, complete any outstanding workbook activities, and prepare questions for the Block 3 sessions. Your facilitator will be available to provide guidance.",
               },
             ],
           },
@@ -188,13 +189,13 @@ export const module14924LessonFlow: ModuleLessonFlow = {
             blocks: [
               {
                 type: "paragraph" as const,
-                text: "The work you do in Session 1 today — understanding what a system is, who the analyst is, how to gather requirements — is not isolated. Every lecture in the Systems Analysis and Design course builds directly on the foundation you are establishing right now. Here is how:",
+                text: "The work you do in Session 1 today ï¿½ understanding what a system is, who the analyst is, how to gather requirements ï¿½ is not isolated. Every lecture in the Systems Analysis and Design course builds directly on the foundation you are establishing right now. Here is how:",
               },
               {
                 type: "table" as const,
                 headers: ["Lecture", "Topic", "SDLC Phase", "How it builds on Day 1"],
                 rows: [
-                  ["L1 — Today", "Introduction to Information Systems", "Analysis", "Establishes the analyst's role, the SDLC, IS components, and information-gathering techniques — the lens through which every other lecture is understood"],
+                  ["L1 ï¿½ Today", "Introduction to Information Systems", "Analysis", "Establishes the analyst's role, the SDLC, IS components, and information-gathering techniques ï¿½ the lens through which every other lecture is understood"],
                   ["L2", "Systems Project Management", "All phases", "Shows how the analyst's work is scoped, planned, and controlled. Feasibility, WBS, and scheduling begin where your Day 1 problem definition ends"],
                   ["L3", "Requirements Modelling", "Analysis", "Deepens requirements gathering: JAD workshops, RAD prototyping, and Agile iterations are the techniques analysts use after initial fact-finding"],
                   ["L4", "Data and Process Modelling", "Analysis ? Design", "The DFDs you learn today are expanded here: context diagrams ? Diagram 0 ? levelled diagrams. Logical models become physical design"],
@@ -216,10 +217,10 @@ export const module14924LessonFlow: ModuleLessonFlow = {
       },
       {
         id: "unit-1",
-        label: "Block 1 · Day 1",
+        label: "Block 1 ï¿½ Day 1",
         title: "Systems Analysis Foundations: SDLC, Roles and Techniques",
-        summary: "Lesson plan for ITSD-14924 Block 1, Day 1 — CET Lecturers Systems Development Training. Duration: 300 minutes (5 hours).",
-        body: "UNIT STANDARD: 14924 | NQF LEVEL: 4 | CREDITS: 3 | Block 1 — Day 1 of 5 | Duration: 300 min",
+        summary: "Lesson plan for ITSD-14924 Block 1, Day 1 ï¿½ CET Lecturers Systems Development Training. Duration: 300 minutes (5 hours).",
+        body: "UNIT STANDARD: 14924 | NQF LEVEL: 4 | CREDITS: 3 | Block 1 ï¿½ Day 1 of 5 | Duration: 300 min",
       },
       {
         id: "session-1",
@@ -274,7 +275,7 @@ export const module14924LessonFlow: ModuleLessonFlow = {
               { type: "ordered-list", items: [
                 "Every stage defines activities and responsibilities of the development team.",
                 "Each stage terminates in a milestone with defined deliverables (e.g., requirements specification).",
-                "The effort expended on development is often surpassed by maintenance — which may cost twice as much over time.",
+                "The effort expended on development is often surpassed by maintenance ï¿½ which may cost twice as much over time.",
                 "Extensive system documentation is necessary during development to support future maintenance.",
               ]},
               { type: "heading", text: "SDLC Stages and Deliverables" },
@@ -297,7 +298,7 @@ export const module14924LessonFlow: ModuleLessonFlow = {
                 ["Testing", "Run QA across functional, usability, security, and performance checks; fix defects.", "Test reports + bug fixes"],
                 ["Deployment & Maintenance", "Release to users, monitor incidents, patch bugs, improve features over time.", "Live system + updates"],
               ]},
-              { type: "callout", variant: "tip", text: "Teaching takeaway: the phase names may vary by model, but the core logic stays the same — plan, define, design, build, validate, release, improve." },
+              { type: "callout", variant: "tip", text: "Teaching takeaway: the phase names may vary by model, but the core logic stays the same ï¿½ plan, define, design, build, validate, release, improve." },
             ],
           },
           {
@@ -321,7 +322,7 @@ export const module14924LessonFlow: ModuleLessonFlow = {
           {
             title: "1.2 Systems Analysis",
             blocks: [
-              { type: "callout", variant: "info", text: "The task of systems analysis is to establish in detail WHAT the proposed system will do — as opposed to HOW it will be done technologically." },
+              { type: "callout", variant: "info", text: "The task of systems analysis is to establish in detail WHAT the proposed system will do ï¿½ as opposed to HOW it will be done technologically." },
               { type: "heading", text: "What Systems Analysis Establishes" },
               { type: "list", items: [
                 "The objectives of the new system, including costs and benefits analysis.",
@@ -355,7 +356,7 @@ export const module14924LessonFlow: ModuleLessonFlow = {
           {
             title: "1.4 Requirements Analysis",
             blocks: [
-              { type: "paragraph", text: "The principal objective of requirements analysis is to produce requirements specifications — a detailed description of WHAT the system will do, agreed upon by developers, users, management and other stakeholders." },
+              { type: "paragraph", text: "The principal objective of requirements analysis is to produce requirements specifications ï¿½ a detailed description of WHAT the system will do, agreed upon by developers, users, management and other stakeholders." },
               { type: "heading", text: "Information Gathering Techniques" },
               { type: "list", items: [
                 "Asking the users (interviews and questionnaires)",
@@ -373,14 +374,14 @@ export const module14924LessonFlow: ModuleLessonFlow = {
                 ["How?", "How is data currently captured and processed? How often? How many records? How does the current system handle exceptions?"],
                 ["Why?", "Why does the current system fall short? Why do users need new functionality? Why is this system strategically important?"],
               ]},
-              { type: "callout", variant: "tip", text: "Critical distinction: always ask what IS being done AND what SHOULD or COULD be done. Users often describe workarounds and manual fixes built around a broken system. Requirements analysis must surface both the current reality and the desired future state — they are rarely the same thing." },
+              { type: "callout", variant: "tip", text: "Critical distinction: always ask what IS being done AND what SHOULD or COULD be done. Users often describe workarounds and manual fixes built around a broken system. Requirements analysis must surface both the current reality and the desired future state ï¿½ they are rarely the same thing." },
               { type: "heading", text: "Five Fact-Finding Methods" },
               { type: "table", headers: ["Method", "Best Used When", "Key Advantage"], rows: [
                 ["Interviews", "Deep understanding of individual roles, complex processes, or sensitive issues is needed", "Allows follow-up questions; uncovers context and opinion that surveys miss"],
                 ["Document Review", "Existing forms, reports, policy documents, and data definitions exist", "Reveals what the system actually does vs what people think it does"],
-                ["Observation", "Users may not accurately describe their own work, or informal workarounds are suspected", "Shows the real process — including undocumented steps and inefficiencies"],
+                ["Observation", "Users may not accurately describe their own work, or informal workarounds are suspected", "Shows the real process ï¿½ including undocumented steps and inefficiencies"],
                 ["Questionnaires & Surveys", "Many respondents must be reached, or anonymity encourages honest answers", "Cost-effective at scale; statistical analysis of responses is possible"],
-                ["Research", "Industry standards, benchmarks, or similar systems from other organisations are relevant", "Establishes what is already known — avoids reinventing solutions"],
+                ["Research", "Industry standards, benchmarks, or similar systems from other organisations are relevant", "Establishes what is already known ï¿½ avoids reinventing solutions"],
               ]},
             ],
           },
@@ -396,10 +397,10 @@ export const module14924LessonFlow: ModuleLessonFlow = {
               ]},
               { type: "heading", text: "Four Qualities of an Effective Systems Analyst" },
               { type: "list", items: [
-                "Problem solver — breaks complex business problems into manageable parts, identifies root causes, and develops practical, systematic solutions",
-                "Communicator — translates technical concepts for non-technical users and business requirements for developers; writes clearly and listens actively",
-                "Strong personal and professional ethics — handles sensitive data and organisational information with integrity and confidentiality",
-                "Self-disciplined and self-motivated — manages time effectively, meets deadlines under pressure, and drives tasks to completion with minimal supervision",
+                "Problem solver ï¿½ breaks complex business problems into manageable parts, identifies root causes, and develops practical, systematic solutions",
+                "Communicator ï¿½ translates technical concepts for non-technical users and business requirements for developers; writes clearly and listens actively",
+                "Strong personal and professional ethics ï¿½ handles sensitive data and organisational information with integrity and confidentiality",
+                "Self-disciplined and self-motivated ï¿½ manages time effectively, meets deadlines under pressure, and drives tasks to completion with minimal supervision",
               ]},
               { type: "heading", text: "Key Responsibilities" },
               { type: "list", items: [
@@ -417,13 +418,13 @@ export const module14924LessonFlow: ModuleLessonFlow = {
             title: "1.6 Information System Components",
             blocks: [
               { type: "paragraph", text: "Every information system is made up of five interdependent components that must work together to produce useful results. Understanding these components helps analysts identify where problems occur and what must change when a system is redesigned." },
-              { type: "callout", variant: "tip", text: "A mission-critical system is one that is vital to an organisation's operations — if it fails, the organisation cannot function. Examples: a hospital's patient records system, a bank's transaction processing system, a college's student registration portal." },
+              { type: "callout", variant: "tip", text: "A mission-critical system is one that is vital to an organisation's operations ï¿½ if it fails, the organisation cannot function. Examples: a hospital's patient records system, a bank's transaction processing system, a college's student registration portal." },
               { type: "table", headers: ["Component", "Description"], rows: [
-                ["Hardware", "The physical layer of the information system — servers, workstations, network equipment, input/output devices. Hardware capacity follows Moore's Law: processing power roughly doubles every two years while cost falls, enabling ever-more powerful systems."],
+                ["Hardware", "The physical layer of the information system ï¿½ servers, workstations, network equipment, input/output devices. Hardware capacity follows Moore's Law: processing power roughly doubles every two years while cost falls, enabling ever-more powerful systems."],
                 ["Software", "System software (operating systems, utilities) manages hardware resources. Application software performs specific business tasks. Enterprise applications (ERP, CRM) span the whole organisation. Systems may be horizontal (generic, used across industries), vertical (industry-specific), or legacy (older systems still in production use)."],
                 ["Data", "The raw material of the system. Data is stored in tables; related tables are linked to supply information to processes and users. Data consists of basic facts; information is data that has been transformed into output that is valuable to users."],
                 ["Processes", "The tasks and business functions that users, managers, and IT staff perform to achieve specific results using the system. Processes define the rules for how data is captured, validated, transformed and reported."],
-                ["People", "All stakeholders who interact with or are affected by the system — end users, managers, IT staff, customers, and regulators. Identifying all people affected is a critical first step in any analysis project."],
+                ["People", "All stakeholders who interact with or are affected by the system ï¿½ end users, managers, IT staff, customers, and regulators. Identifying all people affected is a critical first step in any analysis project."],
               ]},
             ],
           },
@@ -434,7 +435,7 @@ export const module14924LessonFlow: ModuleLessonFlow = {
         label: "Session 2",
         title: "Systems Analysis Techniques",
         summary: "Apply DFDs, decision trees, decision tables, and CASE tools to model and document business systems.",
-        body: "Explore industry-standard systems analysis techniques for representing data flows, business logic, and processes — and understand how CASE tools support the analyst's work.",
+        body: "Explore industry-standard systems analysis techniques for representing data flows, business logic, and processes ï¿½ and understand how CASE tools support the analyst's work.",
         outcomes: [
           "Describe industry-standard systems analysis techniques.",
           "Apply Data Flow Diagrams (DFDs) to document system processes and data flows.",
@@ -450,38 +451,38 @@ export const module14924LessonFlow: ModuleLessonFlow = {
                 ["Cost", "Economical", "Less economical"],
                 ["Participants", "Many people simultaneously", "One person at a time"],
                 ["Error risk", "Fewer errors", "Depends on interviewer skill"],
-                ["Anonymity", "Maintained — honest opinions", "Not maintained"],
+                ["Anonymity", "Maintained ï¿½ honest opinions", "Not maintained"],
                 ["Reflection time", "Respondents can think carefully", "May not have enough time"],
               ]},
               { type: "heading", text: "Types of Interviews" },
               { type: "list", items: [
-                "Structured Interview — same wording and order for all interviewees.",
-                "Unstructured Interview — respondents answer freely; allows deeper exploration of complex topics.",
+                "Structured Interview ï¿½ same wording and order for all interviewees.",
+                "Unstructured Interview ï¿½ respondents answer freely; allows deeper exploration of complex topics.",
               ]},
             ],
           },
           {
             title: "2.2 Data Flow Diagrams (DFDs)",
             blocks: [
-              { type: "paragraph", text: "A Data Flow Diagram (DFD) shows how data moves through an information system. It graphically characterises data processes and flows in a business system — depicting system inputs, processes, and outputs — but does not show program logic or step-by-step processing detail. A set of DFDs provides a logical model that shows what the system does, not how it does it technically." },
+              { type: "paragraph", text: "A Data Flow Diagram (DFD) shows how data moves through an information system. It graphically characterises data processes and flows in a business system ï¿½ depicting system inputs, processes, and outputs ï¿½ but does not show program logic or step-by-step processing detail. A set of DFDs provides a logical model that shows what the system does, not how it does it technically." },
               { type: "heading", text: "The Four DFD Symbols" },
               { type: "table", headers: ["Symbol", "Shape", "Naming Convention", "What it Represents"], rows: [
                 ["External Entity", "Double square (rectangle with a shadow)", "Named with a noun (e.g. Student, Department, Bank)", "A person, department, organisation, or system outside the system boundary. Acts as a source (data enters the system) or a sink (data leaves the system). External entities are not controlled by the system being analysed."],
                 ["Data Flow", "Arrow (single or double arrowhead)", "Named with a noun describing the data (e.g. Enrolment Form, Payment Confirmation)", "The movement of data from one component to another. The arrowhead shows direction of flow. Represents data about a person, place, or thing."],
-                ["Process", "Rectangle with rounded corners (or circle)", "Named using verb-adjective-noun form (e.g. Validate Student Record, Calculate Final Mark)", "Work being performed — a transformation of input data into output data. Processes contain the business logic (business rules) of the system. They are described as a 'black box': what goes in and out is shown, but internal logic is hidden at this level."],
-                ["Data Store", "Open-ended rectangle (parallel lines)", "Named with a noun; given a unique reference number D1, D2, D3…", "A repository where data is held for later use. Represents a database, computerised file, or physical filing cabinet. At DFD level you are concerned only with the logical store — not its physical format."],
+                ["Process", "Rectangle with rounded corners (or circle)", "Named using verb-adjective-noun form (e.g. Validate Student Record, Calculate Final Mark)", "Work being performed ï¿½ a transformation of input data into output data. Processes contain the business logic (business rules) of the system. They are described as a 'black box': what goes in and out is shown, but internal logic is hidden at this level."],
+                ["Data Store", "Open-ended rectangle (parallel lines)", "Named with a noun; given a unique reference number D1, D2, D3ï¿½", "A repository where data is held for later use. Represents a database, computerised file, or physical filing cabinet. At DFD level you are concerned only with the logical store ï¿½ not its physical format."],
               ]},
               { type: "heading", text: "Context Diagram (Level 0)" },
               { type: "paragraph", text: "The context diagram is the highest-level DFD. It represents the entire system as a single process numbered 0 and shows all external entities that interact with the system, plus the major data flows between them and the system. No data stores appear at this level. The diagram must fit on one page and uses the name of the information system as the process name." },
               { type: "callout", variant: "info", text: "Context diagram rules: (1) Must have exactly one process. (2) No freestanding objects. (3) External entities may not connect directly to one another. (4) Every data flow must connect to or from the single process." },
               { type: "heading", text: "Diagram 0" },
-              { type: "paragraph", text: "Diagram 0 is the explosion of the context diagram — it expands the single process into up to nine numbered sub-processes. All major data stores and all external entities are included. Drawing starts from the input side (data flow from an entity) or works backward from an output data flow." },
+              { type: "paragraph", text: "Diagram 0 is the explosion of the context diagram ï¿½ it expands the single process into up to nine numbered sub-processes. All major data stores and all external entities are included. Drawing starts from the input side (data flow from an entity) or works backward from an output data flow." },
               { type: "heading", text: "Levelling and Balancing" },
               { type: "paragraph", text: "DFDs are built in layers (levels). Each process on Diagram 0 may be exploded into its own child diagram to show further detail. The child diagram is given the same number as the parent process (e.g. Process 3 on Diagram 0 explodes to Diagram 3). A process that is not exploded further is called a primitive process. Balancing means that a child diagram cannot produce output or receive input that its parent process does not also produce or receive." },
               { type: "heading", text: "Logical vs Physical DFDs" },
               { type: "table", headers: ["Type", "Focus", "Purpose"], rows: [
-                ["Logical DFD", "What the business does — the business events that take place and the data required and produced by each event", "Describes current or required business operations independently of any technology. Used during analysis to agree what the system must do."],
-                ["Physical DFD", "How the system will be implemented — names of programs, files, hardware, and people who perform each process", "Shows the specific technology solution. Used during design to specify how the logical model will be built."],
+                ["Logical DFD", "What the business does ï¿½ the business events that take place and the data required and produced by each event", "Describes current or required business operations independently of any technology. Used during analysis to agree what the system must do."],
+                ["Physical DFD", "How the system will be implemented ï¿½ names of programs, files, hardware, and people who perform each process", "Shows the specific technology solution. Used during design to specify how the logical model will be built."],
               ]},
             ],
           },
@@ -500,28 +501,28 @@ export const module14924LessonFlow: ModuleLessonFlow = {
           {
             title: "2.4 Object-Oriented Analysis",
             blocks: [
-              { type: "paragraph", text: "Object-oriented (OO) analysis is a widely-used approach that sees a system from the viewpoint of the objects themselves as they function and interact — rather than viewing the system as sequential processes transforming data. It works well where systems undergo continuous maintenance, adaptation, and redesign, because objects and classes are reusable across projects." },
+              { type: "paragraph", text: "Object-oriented (OO) analysis is a widely-used approach that sees a system from the viewpoint of the objects themselves as they function and interact ï¿½ rather than viewing the system as sequential processes transforming data. It works well where systems undergo continuous maintenance, adaptation, and redesign, because objects and classes are reusable across projects." },
               { type: "heading", text: "Core OO Concepts" },
               { type: "table", headers: ["Concept", "Definition"], rows: [
                 ["Object", "A person, place, or thing that is relevant to the system being analysed (e.g. Student, Course, Payment). An object belongs to a class and has specific attribute values and can perform methods."],
                 ["Class", "Defines the set of shared attributes and behaviours found in every object of that type. When an object is created from a class, it is said to be instantiated. A class has subclasses (more specific types) and a superclass (a more general parent type)."],
                 ["Attribute", "A property or characteristic shared by all objects in a class. If objects are nouns, attributes are the adjectives that describe them (e.g. Student has attributes: studentNumber, fullName, dateOfBirth)."],
-                ["Method", "An action that any object of the class can perform. Methods are the verbs — they describe what an object does (e.g. Student.calculateGPA(), Student.generateTranscript()). A method defines the specific task the object carries out."],
+                ["Method", "An action that any object of the class can perform. Methods are the verbs ï¿½ they describe what an object does (e.g. Student.calculateGPA(), Student.generateTranscript()). A method defines the specific task the object carries out."],
                 ["Message", "A request from one object asking another object to perform a specific behaviour or return information. Messages are the mechanism by which objects interact and collaborate."],
-                ["Inheritance", "A derived (child) class automatically inherits all the attributes and behaviours of its base (parent) class. This reduces programming labour — common features are defined once in the parent class and reused by all child classes. Inheritance is a feature unique to object-oriented systems."],
+                ["Inheritance", "A derived (child) class automatically inherits all the attributes and behaviours of its base (parent) class. This reduces programming labour ï¿½ common features are defined once in the parent class and reused by all child classes. Inheritance is a feature unique to object-oriented systems."],
               ]},
               { type: "heading", text: "The Unified Modeling Language (UML)" },
-              { type: "paragraph", text: "The UML is the industry-standard notation for modelling object-oriented systems. It uses a set of graphical symbols to represent components and relationships visually. A UML class diagram shows the static features of the system: each class appears as a rectangle with three compartments — the class name at the top, followed by its attributes, followed by its methods." },
-              { type: "callout", variant: "tip", text: "Key OO advantage — Encapsulation: each object is a 'black box'. Other parts of the system interact with it only through its defined methods. This means changing one object's internal logic has minimal impact on other objects, making systems far easier to maintain and extend over time." },
+              { type: "paragraph", text: "The UML is the industry-standard notation for modelling object-oriented systems. It uses a set of graphical symbols to represent components and relationships visually. A UML class diagram shows the static features of the system: each class appears as a rectangle with three compartments ï¿½ the class name at the top, followed by its attributes, followed by its methods." },
+              { type: "callout", variant: "tip", text: "Key OO advantage ï¿½ Encapsulation: each object is a 'black box'. Other parts of the system interact with it only through its defined methods. This means changing one object's internal logic has minimal impact on other objects, making systems far easier to maintain and extend over time." },
             ],
           },
           {
             title: "2.5 Systems Development Approaches",
             blocks: [
-              { type: "paragraph", text: "Systems analysts must understand several approaches to developing information systems. Each approach has strengths suited to different project types — project size, rate of change in requirements, available skills, and organisational context all influence which approach is most appropriate." },
+              { type: "paragraph", text: "Systems analysts must understand several approaches to developing information systems. Each approach has strengths suited to different project types ï¿½ project size, rate of change in requirements, available skills, and organisational context all influence which approach is most appropriate." },
               { type: "heading", text: "Comparison of Development Approaches" },
               { type: "table", headers: ["Approach", "Core Idea", "Best Suited For"], rows: [
-                ["Traditional SDLC (Structured)", "Sequential phases — each phase must be completed and signed off before the next begins. Heavy documentation emphasis.", "Large, well-defined projects with stable requirements where changes are costly (e.g. government systems, accounting systems)."],
+                ["Traditional SDLC (Structured)", "Sequential phases ï¿½ each phase must be completed and signed off before the next begins. Heavy documentation emphasis.", "Large, well-defined projects with stable requirements where changes are costly (e.g. government systems, accounting systems)."],
                 ["CASE-Supported Development", "Uses Computer-Aided Software Engineering tools to automate analyst tasks, generate code, maintain documentation and enforce consistency across the life cycle.", "Projects where productivity, consistency and integration of life cycle activities are priorities."],
                 ["Object-Oriented (OO)", "Analyses and designs in small iterative cycles, each covering analysis ? design ? implementation of a specific part. The system is viewed as a collection of interacting objects.", "Systems with rapidly changing requirements; modern application development; reuse-critical environments."],
                 ["Agile Methods", "Incremental, iterative development with continuous user feedback. Emphasises working software over documentation, collaboration over contracts, and responding to change over following a fixed plan.", "Smaller teams, projects with evolving requirements, and situations where early, frequent deliverables add value."],
@@ -529,7 +530,7 @@ export const module14924LessonFlow: ModuleLessonFlow = {
               { type: "heading", text: "Joint Application Development (JAD)" },
               { type: "list", items: [
                 "A team-based strategy that brings key business users and IT staff together in structured workshops to define system requirements jointly",
-                "Advantage: key users participate directly — resulting in more accurate requirements, better understanding of shared goals, and stronger commitment to the new system's success",
+                "Advantage: key users participate directly ï¿½ resulting in more accurate requirements, better understanding of shared goals, and stronger commitment to the new system's success",
                 "Advantage: reduces the back-and-forth between analysts and users that plagues traditional interview-based requirements gathering",
                 "Disadvantage: more expensive and time-intensive than individual interviews",
                 "Disadvantage: can be cumbersome if the group is too large relative to the scale of the project",
@@ -538,23 +539,23 @@ export const module14924LessonFlow: ModuleLessonFlow = {
               { type: "list", items: [
                 "A team-based technique that speeds up information systems development and produces a functioning system faster than traditional methods",
                 "Relies heavily on prototyping and active user involvement throughout every phase of development",
-                "Objective: cut development time and expense by involving users in every phase — not just at requirements stage",
+                "Objective: cut development time and expense by involving users in every phase ï¿½ not just at requirements stage",
                 "The interactive prototyping cycle continues until users are satisfied and the system is complete",
                 "Advantage: systems developed more quickly with significant cost savings; user interface-heavy systems benefit greatly",
-                "Disadvantage: may allow less time to develop quality, consistency, and design standards — emphasis is on the mechanics of the system, not strategic business alignment",
+                "Disadvantage: may allow less time to develop quality, consistency, and design standards ï¿½ emphasis is on the mechanics of the system, not strategic business alignment",
               ]},
-              { type: "heading", text: "Agile Methods — 12 Core Principles" },
+              { type: "heading", text: "Agile Methods ï¿½ 12 Core Principles" },
               { type: "ordered-list", items: [
                 "Satisfy the customer through early and continuous delivery of working software",
-                "Embrace changing requirements — even when introduced late in development",
+                "Embrace changing requirements ï¿½ even when introduced late in development",
                 "Deliver functioning software incrementally and frequently (weeks, not months)",
                 "Ensure customers and analysts work together daily throughout the project",
                 "Build projects around motivated individuals; trust them to get the job done",
                 "Promote face-to-face conversation as the most efficient form of communication",
                 "Working software is the primary measure of progress",
-                "Encourage continuous, regular, sustainable development — the team maintains a constant pace indefinitely",
+                "Encourage continuous, regular, sustainable development ï¿½ the team maintains a constant pace indefinitely",
                 "Maintain continuous attention to technical excellence and good design",
-                "Support self-organising teams — the best architectures and designs emerge from empowered teams",
+                "Support self-organising teams ï¿½ the best architectures and designs emerge from empowered teams",
                 "Provide rapid feedback and continuously encourage quality",
                 "At regular intervals, the team reflects on how to become more effective and adjusts accordingly",
               ]},
@@ -577,18 +578,18 @@ export const module14924LessonFlow: ModuleLessonFlow = {
           {
             title: "2.6 What Your Analysis Enables",
             blocks: [
-              { type: "paragraph", text: "The analysis work completed today — requirements, process models, data flows, stakeholder identification — is not an end in itself. It is the input that makes every downstream phase possible. Here is what each analysis output directly enables:" },
+              { type: "paragraph", text: "The analysis work completed today ï¿½ requirements, process models, data flows, stakeholder identification ï¿½ is not an end in itself. It is the input that makes every downstream phase possible. Here is what each analysis output directly enables:" },
               { type: "table", headers: ["Your Analysis Output", "Directly Enables", "Lecture / Phase"], rows: [
-                ["Requirements specification (what the system must do)", "Project plan, WBS, and effort estimates. You cannot schedule what you have not defined.", "L2 — Project Management"],
-                ["Stakeholder list and information needs", "JAD workshops and RAD prototype planning. You know who to include and what to validate with them.", "L3 — Requirements Modelling"],
-                ["Logical DFDs and process descriptions", "Physical DFD design and detailed process specifications. The logical model becomes the technical blueprint.", "L4 — Data and Process Modelling"],
-                ["Object identification and class relationships", "UML class diagrams, use case models, and sequence diagrams for the full system design.", "L5 & L6 — Object Modelling"],
-                ["Data store identification and entity list", "Entity-relationship diagrams, table normalisation (1NF ? 3NF), and referential integrity rules.", "L7 — Data Design"],
-                ["Analyst recommendation: build, buy, or adapt", "Acquisition process (RFP/RFQ), vendor evaluation, cost-benefit analysis, and changeover planning.", "L8 — Development Strategies"],
-                ["User requirements and process outputs", "Screen designs, report layouts, input forms, and validation rules — every UI element traces to a requirement.", "L9 — User Interface Design"],
-                ["Process documentation and data dictionary", "Maintenance procedures, security audit baseline, performance benchmarks, and the business continuity plan.", "L10 — System Support and Security"],
+                ["Requirements specification (what the system must do)", "Project plan, WBS, and effort estimates. You cannot schedule what you have not defined.", "L2 ï¿½ Project Management"],
+                ["Stakeholder list and information needs", "JAD workshops and RAD prototype planning. You know who to include and what to validate with them.", "L3 ï¿½ Requirements Modelling"],
+                ["Logical DFDs and process descriptions", "Physical DFD design and detailed process specifications. The logical model becomes the technical blueprint.", "L4 ï¿½ Data and Process Modelling"],
+                ["Object identification and class relationships", "UML class diagrams, use case models, and sequence diagrams for the full system design.", "L5 & L6 ï¿½ Object Modelling"],
+                ["Data store identification and entity list", "Entity-relationship diagrams, table normalisation (1NF ? 3NF), and referential integrity rules.", "L7 ï¿½ Data Design"],
+                ["Analyst recommendation: build, buy, or adapt", "Acquisition process (RFP/RFQ), vendor evaluation, cost-benefit analysis, and changeover planning.", "L8 ï¿½ Development Strategies"],
+                ["User requirements and process outputs", "Screen designs, report layouts, input forms, and validation rules ï¿½ every UI element traces to a requirement.", "L9 ï¿½ User Interface Design"],
+                ["Process documentation and data dictionary", "Maintenance procedures, security audit baseline, performance benchmarks, and the business continuity plan.", "L10 ï¿½ System Support and Security"],
               ]},
-              { type: "callout", variant: "warning", text: "The most common reason IT projects fail is not technical — it is analytical. Vague requirements, missed stakeholders, and undocumented processes at this stage cause rework, budget overruns, and sometimes total failure at implementation. The quality of your analysis today determines the quality of everything that follows." },
+              { type: "callout", variant: "warning", text: "The most common reason IT projects fail is not technical ï¿½ it is analytical. Vague requirements, missed stakeholders, and undocumented processes at this stage cause rework, budget overruns, and sometimes total failure at implementation. The quality of your analysis today determines the quality of everything that follows." },
             ],
           },
         ],
@@ -596,7 +597,7 @@ export const module14924LessonFlow: ModuleLessonFlow = {
       {
         id: "facilitator-activities",
         label: "Facilitator Notes",
-        title: "Facilitator Activities — Block 1, Day 1",
+        title: "Facilitator Activities ï¿½ Block 1, Day 1",
         summary: "Delivery guide, timing, and formative assessment for ITSD-14924 Block 1 Day 1.",
         body: "Total delivery time: 300 minutes (5 hours). Status: Active.",
         sections: [
@@ -619,7 +620,7 @@ export const module14924LessonFlow: ModuleLessonFlow = {
             blocks: [
               { type: "list", items: [
                 "Observation checklist: participation and stakeholder identification.",
-                "Completed worksheets: Activities 1–4.",
+                "Completed worksheets: Activities 1ï¿½4.",
                 "Peer feedback session at end of day.",
                 "Exit reflection ticket (one thing learned, one question remaining).",
                 "Evidence aligned to SAQA 14924 summative requirements.",
@@ -631,7 +632,7 @@ export const module14924LessonFlow: ModuleLessonFlow = {
       {
         id: "learner-activities",
         label: "Activities",
-        title: "Learner Activities — Block 1, Day 1",
+        title: "Learner Activities ï¿½ Block 1, Day 1",
         summary: "Structured activities mapped to SAQA 14924 assessment criteria.",
         body: "Complete all activities in your workbook. Submit as part of your Portfolio of Evidence.",
         sections: [
@@ -643,7 +644,7 @@ export const module14924LessonFlow: ModuleLessonFlow = {
                 ["Activity 2", "9", "Describe the functions of an Information Systems Analyst."],
                 ["Activity 3", "12", "Explain information-gathering techniques (interviews, questionnaires, observation, site visits, document review)."],
                 ["Activity 4", "15", "Describe systems analysis techniques: DFDs, Decision Trees, Decision Tables, and CASE tools."],
-                ["Group Task", "—", "Develop a stakeholder map for a CET lab booking system."],
+                ["Group Task", "ï¿½", "Develop a stakeholder map for a CET lab booking system."],
               ]},
             ],
           },
@@ -652,7 +653,7 @@ export const module14924LessonFlow: ModuleLessonFlow = {
       {
         id: "resources",
         label: "Resources",
-        title: "Resources — Block 1, Day 1",
+        title: "Resources ï¿½ Block 1, Day 1",
         summary: "Materials required for the Block 1 Day 1 session.",
         body: "Prepare and print all resources before the session begins.",
         sections: [

@@ -57,6 +57,29 @@ function AdminPoEView() {
 
   useEffect(() => {
     const fetch = async () => {
+      try {
+        const { data, error: directError } = await (supabase as unknown as any)
+          .from("learners")
+          .select("id, learner_code, full_name, email, progress")
+          .order("full_name", { ascending: true });
+
+        if (!directError && Array.isArray(data)) {
+          setLearners(
+            data.map((learner: any) => ({
+              id: learner.id,
+              learner_code: learner.learner_code,
+              full_name: learner.full_name || "Learner",
+              email: learner.email ?? null,
+              progress: Number(learner.progress ?? 0),
+            }))
+          );
+          setLoading(false);
+          return;
+        }
+      } catch (directReadError) {
+        console.warn("Direct PoE learner lookup failed, falling back to RPC:", directReadError);
+      }
+
       const rpc = supabase as unknown as RpcClient;
       const { data, error: e } = await rpc.rpc("cet_enrolled_learners");
       if (e) { setError(e.message); setLoading(false); return; }
@@ -110,7 +133,7 @@ function AdminPoEView() {
         <div>
           <div className="text-base font-semibold text-white">Blank PoE Template</div>
           <div className="text-sm text-white/55 mt-0.5">
-            All 10 unit standards pre-populated · Evidence checklists · Assessment decision blocks · Moderator section
+            All 11 unit standards pre-populated · Evidence checklists · Assessment decision blocks · Moderator section
           </div>
         </div>
         <a

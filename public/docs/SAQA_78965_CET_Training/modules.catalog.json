@@ -76,8 +76,8 @@
       "moduleId": "ITSD-14933",
       "unitStandardId": 14933,
       "type": "Core",
-      "status": "reference_pending",
-      "referenceModule": "ITSD-14930"
+      "folder": "/docs/SAQA_78965_CET_Training/01_Core_UnitStandards/US 14933",
+      "documentsFound": ["facilitator_guide", "learner_guide", "learner_workbook", "practical_assessment", "summative_assessment", "summative_memo", "assessment_guide"]
     }
   ]
 }

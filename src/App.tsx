@@ -10,6 +10,7 @@ import LandingPage from "./pages/LandingPage";
 import Index from "./pages/Index";
 import ModulesPage from "./pages/ModulesPage";
 import ModuleDetailPage from "./pages/ModuleDetailPage";
+import ModuleProgressReviewPage from "./pages/ModuleProgressReviewPage";
 import LearnersPage from "./pages/LearnersPage";
 import LessonPlansPage from "./pages/LessonPlansPage";
 import AssessmentsPage from "./pages/AssessmentsPage";
@@ -31,6 +32,9 @@ import PresentationDesktopPage from "./pages/PresentationDesktopPage";
 import PoEPage from "./pages/PoEPage";
 import BlockAssessmentPage from "./pages/BlockAssessmentPage";
 import BlockAssessmentAdminPage from "./pages/BlockAssessmentAdminPage";
+import UnitAssessmentPage from "./pages/UnitAssessmentPage";
+import AssessmentDetailPage from "./pages/AssessmentDetailPage";
+import AssessmentGradingPage from "./pages/AssessmentGradingPage";
 
 const queryClient = new QueryClient();
 
@@ -61,6 +65,8 @@ const App = () => (
               <Route path="/lesson-plans" element={<LessonPlansPage />} />
               <Route path="/assessments" element={<AssessmentsPage />} />
               <Route path="/assessments/blocks" element={<BlockAssessmentAdminPage />} />
+              <Route path="/assessments/blocks/:blockKey/capture/:learnerId" element={<BlockAssessmentAdminPage />} />
+              <Route path="/assessments/grade/:id" element={<AssessmentGradingPage />} />
               <Route path="/programs" element={<ProgramsPage />} />
               <Route path="/compliance" element={<CompliancePage />} />
               <Route path="/announcements" element={<AnnouncementsPage />} />
@@ -70,7 +76,10 @@ const App = () => (
             <Route element={<ProtectedRoute allowedRoles={["learner"]} />}>
               <Route path="/learner" element={<LearnerPortalPage />} />
               <Route path="/learner/modules/:id" element={<ModuleDetailPage />} />
+              <Route path="/learner/modules/:id/progress" element={<ModuleProgressReviewPage />} />
+              <Route path="/learner/assessment/:id" element={<AssessmentDetailPage />} />
               <Route path="/learner/assessment/block/:blockNum" element={<BlockAssessmentPage />} />
+              <Route path="/learner/assessment/unit/:id" element={<UnitAssessmentPage />} />
             </Route>
 
             <Route element={<ProtectedRoute />}>
