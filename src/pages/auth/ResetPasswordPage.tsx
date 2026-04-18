@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -13,21 +13,31 @@ export default function ResetPasswordPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [hasRecoverySession, setHasRecoverySession] = useState(false);
+  const [checkingRecovery, setCheckingRecovery] = useState(true);
+  const hasRecoveryHash = useMemo(() => {
+    const hashParams = new URLSearchParams(window.location.hash.split("#").join(""));
+    return hashParams.get("type") === "recovery";
+  }, []);
 
   useEffect(() => {
     let mounted = true;
 
-    supabase.auth.getSession().then(({ data }) => {
+    const syncRecoveryState = (sessionExists: boolean) => {
       if (!mounted) return;
-      setHasRecoverySession(!!data.session);
-    });
+      setHasRecoverySession(sessionExists);
+      setCheckingRecovery(false);
+    };
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "PASSWORD_RECOVERY" || (event === "SIGNED_IN" && session)) {
-        setHasRecoverySession(true);
+      if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN") {
+        syncRecoveryState(!!session);
       }
+    });
+
+    supabase.auth.getSession().then(({ data }) => {
+      syncRecoveryState(!!data.session);
     });
 
     return () => {
@@ -78,7 +88,13 @@ export default function ResetPasswordPage() {
         <h1 className="font-display text-2xl font-bold text-foreground">Reset Password</h1>
         <p className="text-sm text-muted-foreground mt-1">Create a new password for your account.</p>
 
-        {!hasRecoverySession && (
+        {checkingRecovery && hasRecoveryHash && (
+          <div className="mt-4 rounded-md border border-border bg-background/70 p-3">
+            <p className="text-xs text-muted-foreground">Verifying your reset link...</p>
+          </div>
+        )}
+
+        {!checkingRecovery && !hasRecoverySession && (
           <div className="mt-4 rounded-md border border-border bg-background/70 p-3">
             <p className="text-xs text-muted-foreground">
               Open this page from your email reset link. If your link expired, request a new one.
@@ -116,7 +132,7 @@ export default function ResetPasswordPage() {
           {error && <p className="text-sm text-destructive">{error}</p>}
           {success && <p className="text-sm text-muted-foreground">{success}</p>}
 
-          <Button type="submit" className="w-full" disabled={loading || !hasRecoverySession}>
+          <Button type="submit" className="w-full" disabled={loading || checkingRecovery || !hasRecoverySession}>
             {loading ? "Updating..." : "Update Password"}
           </Button>
         </form>
