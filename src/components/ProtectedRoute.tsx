@@ -6,7 +6,7 @@ interface ProtectedRouteProps {
 }
 
 export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
-  const { session, role, loading } = useAuth();
+  const { session, loading } = useAuth();
 
   if (loading) {
     return (
@@ -20,20 +20,9 @@ export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
     return <Navigate to="/auth/login" replace />;
   }
 
-  if (!allowedRoles || allowedRoles.length === 0) {
-    return <Outlet />;
-  }
-
-  if (!role) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background text-muted-foreground">
-        Resolving your permissions...
-      </div>
-    );
-  }
-
-  if (!allowedRoles.includes(role)) {
-    // On the LMS branch, all roles default to learner portal
+  // LMS-only branch: all authenticated users go to the learner portal,
+  // regardless of their role on other systems (e.g. LMIS admin/lecturer).
+  if (allowedRoles && allowedRoles.length > 0) {
     return <Navigate to="/learner" replace />;
   }
 
