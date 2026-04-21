@@ -56,31 +56,21 @@ const App = () => (
 
             <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
 
-            {/* ── LMIS — Admin / Lecturer portal ─────────────────────────── */}
-            <Route element={<ProtectedRoute allowedRoles={["admin", "lecturer"]} />}>
-              <Route path="/lmis" element={<Index />} />
-              <Route path="/lmis/modules" element={<ModulesPage />} />
-              <Route path="/lmis/modules/:id" element={<ModuleDetailPage />} />
-              <Route path="/lmis/learners" element={<LearnersPage />} />
-              <Route path="/lmis/lesson-plans" element={<LessonPlansPage />} />
-              <Route path="/lmis/assessments" element={<AssessmentsPage />} />
-              <Route path="/lmis/assessments/blocks" element={<BlockAssessmentAdminPage />} />
-              <Route path="/lmis/programs" element={<ProgramsPage />} />
-              <Route path="/lmis/compliance" element={<CompliancePage />} />
-              <Route path="/lmis/attendance" element={<AttendancePage />} />
-              <Route path="/lmis/announcements" element={<AnnouncementsPage />} />
-              <Route path="/lmis/messages" element={<MessagesPage />} />
-            </Route>
+            {/* ── LMIS portal is disabled on this branch ───────────────── */}
+            {/* All authenticated users (including admins/lecturers) are routed
+                to the learner portal. LMIS lives in a separate dedicated system. */}
+            <Route path="/lmis" element={<Navigate to="/learner" replace />} />
+            <Route path="/lmis/*" element={<Navigate to="/learner" replace />} />
 
-            {/* Legacy redirects → LMIS */}
-            <Route path="/dashboard" element={<Navigate to="/lmis" replace />} />
-            <Route path="/modules" element={<Navigate to="/lmis/modules" replace />} />
-            <Route path="/modules/:id" element={<Navigate to="/lmis/modules/:id" replace />} />
-            <Route path="/learners" element={<Navigate to="/lmis/learners" replace />} />
-            <Route path="/lesson-plans" element={<Navigate to="/lmis/lesson-plans" replace />} />
-            <Route path="/assessments" element={<Navigate to="/lmis/assessments" replace />} />
-            <Route path="/programs" element={<Navigate to="/lmis/programs" replace />} />
-            <Route path="/compliance" element={<Navigate to="/lmis/compliance" replace />} />
+            {/* Legacy redirects → learner portal */}
+            <Route path="/dashboard" element={<Navigate to="/learner" replace />} />
+            <Route path="/modules" element={<Navigate to="/learner" replace />} />
+            <Route path="/modules/:id" element={<Navigate to="/learner" replace />} />
+            <Route path="/learners" element={<Navigate to="/learner" replace />} />
+            <Route path="/lesson-plans" element={<Navigate to="/learner" replace />} />
+            <Route path="/assessments" element={<Navigate to="/learner" replace />} />
+            <Route path="/programs" element={<Navigate to="/learner" replace />} />
+            <Route path="/compliance" element={<Navigate to="/learner" replace />} />
 
             {/* ── Learner portal (all authenticated users) ────────────── */}
             <Route element={<ProtectedRoute />}>
