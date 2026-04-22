@@ -31,8 +31,9 @@ type ManualMarkItem = {
   sectionTitle: string;
   sectionModule: string;
   maxMarks: number;
-  markedCorrect: boolean | null;
   awarded: number;
+  isMarked: boolean;
+  optionHints?: string[];
 };
 
 /* ─── Block metadata ─────────────────────────────────────────────────────── */
@@ -100,9 +101,11 @@ function OtpPanel({
   const [feedback, setFeedback] = useState("");
   const [portfolioCaptured, setPortfolioCaptured] = useState(true);
   const [savingGrade, setSavingGrade] = useState(false);
+  const [gradeSaved, setGradeSaved] = useState(false);
   const [reviewItems, setReviewItems] = useState<ReviewItem[]>([]);
   const [answerbookFile, setAnswerbookFile] = useState<File | null>(null);
   const [attachedAnswerbookPath, setAttachedAnswerbookPath] = useState<string | null>(null);
+  const [capturedTotals, setCapturedTotals] = useState<Record<string, number | null>>({});
 
   const db = supabase as unknown as any;
   const supportsAutoMark = blockKey === "block-1";
@@ -111,18 +114,74 @@ function OtpPanel({
   const [manualMarkItems, setManualMarkItems] = useState<ManualMarkItem[]>([]);
 
   const seedManualMarkItems = useMemo<ManualMarkItem[]>(() => {
+    const roundToTwo = (value: number) => Math.round(value * 100) / 100;
+    const splitMarks = (totalMarks: number, parts: number): number[] => {
+      if (parts <= 1) return [totalMarks];
+      const base = Math.floor((totalMarks / parts) * 100) / 100;
+      const distributed = Array.from({ length: parts }, () => base);
+      const used = roundToTwo(base * parts);
+      distributed[parts - 1] = roundToTwo(totalMarks - (used - base));
+      return distributed;
+    };
+
     return manualSections.flatMap((section) =>
-      section.questions.map((question) => ({
-        questionId: question.id,
-        label: question.label,
-        prompt: question.prompt,
-        sectionId: section.id,
-        sectionTitle: section.title,
-        sectionModule: section.module,
-        maxMarks: question.marks,
-        markedCorrect: null,
-        awarded: 0,
-      }))
+      section.questions.flatMap((question) => {
+        const optionHints = question.options?.filter((opt) => !/^select\b/i.test(opt));
+
+        if (question.inputType === "textarea" && question.subFields?.length) {
+          const marksPerPart = splitMarks(question.marks, question.subFields.length);
+          return question.subFields.map((subField, index) => ({
+            questionId: `${question.id}::sub-${index + 1}`,
+            label: `${question.label}.${index + 1}`,
+            prompt: `${question.prompt} (${subField.label})`,
+            sectionId: section.id,
+            sectionTitle: section.title,
+            sectionModule: section.module,
+            maxMarks: marksPerPart[index],
+            awarded: 0,
+            isMarked: false,
+            optionHints: subField.options?.filter((opt) => !/^select\b/i.test(opt)),
+          }));
+        }
+
+        if (question.inputType === "table" && question.tableRows?.length && question.tableColumns?.length) {
+          const parts = question.tableRows.length * question.tableColumns.length;
+          const marksPerPart = splitMarks(question.marks, parts);
+          let partIndex = 0;
+
+          return question.tableRows.flatMap((rowLabel, rowIndex) =>
+            question.tableColumns!.map((columnLabel, colIndex) => {
+              const item: ManualMarkItem = {
+                questionId: `${question.id}::r${rowIndex + 1}c${colIndex + 1}`,
+                label: `${question.label}.${rowIndex + 1}.${colIndex + 1}`,
+                prompt: `${question.prompt} (Row ${rowLabel}, ${columnLabel})`,
+                sectionId: section.id,
+                sectionTitle: section.title,
+                sectionModule: section.module,
+                maxMarks: marksPerPart[partIndex],
+                awarded: 0,
+                isMarked: false,
+                optionHints: question.tableColumnOptions?.[colIndex]?.filter((opt) => !/^select\b/i.test(opt)),
+              };
+              partIndex += 1;
+              return item;
+            })
+          );
+        }
+
+        return [{
+          questionId: question.id,
+          label: question.label,
+          prompt: question.prompt,
+          sectionId: section.id,
+          sectionTitle: section.title,
+          sectionModule: section.module,
+          maxMarks: question.marks,
+          awarded: 0,
+          isMarked: false,
+          optionHints,
+        }];
+      })
     );
   }, [manualSections]);
 
@@ -143,11 +202,12 @@ function OtpPanel({
   }, [reviewItems]);
 
   const manualSummary = useMemo(() => {
-    const score = manualMarkItems.reduce((sum, item) => sum + item.awarded, 0);
+    const score = manualMarkItems.reduce((sum, item) => sum + (item.isMarked ? item.awarded : 0), 0);
     const maxScore = manualMarkItems.reduce((sum, item) => sum + item.maxMarks, 0);
-    const correct = manualMarkItems.filter((item) => item.markedCorrect === true).length;
-    const incorrect = manualMarkItems.filter((item) => item.markedCorrect === false).length;
-    const pending = manualMarkItems.filter((item) => item.markedCorrect === null).length;
+    const correct = manualMarkItems.filter((item) => item.isMarked && item.awarded === item.maxMarks).length;
+    const incorrect = manualMarkItems.filter((item) => item.isMarked && item.awarded === 0).length;
+    const pending = manualMarkItems.filter((item) => !item.isMarked).length;
+    const partial = manualMarkItems.filter((item) => item.isMarked && item.awarded > 0 && item.awarded < item.maxMarks).length;
     const percentage = maxScore > 0 ? Math.round((score / maxScore) * 100) : 0;
 
     return {
@@ -156,6 +216,7 @@ function OtpPanel({
       correct,
       incorrect,
       pending,
+      partial,
       percentage,
     };
   }, [manualMarkItems]);
@@ -170,6 +231,7 @@ function OtpPanel({
       max: number;
       correct: number;
       incorrect: number;
+      partial: number;
       pending: number;
     }>();
 
@@ -183,6 +245,7 @@ function OtpPanel({
           max: 0,
           correct: 0,
           incorrect: 0,
+          partial: 0,
           pending: 0,
         });
       }
@@ -190,9 +253,10 @@ function OtpPanel({
       const section = bySection.get(item.sectionId)!;
       section.awarded += item.awarded;
       section.max += item.maxMarks;
-      if (item.markedCorrect === true) section.correct += 1;
-      else if (item.markedCorrect === false) section.incorrect += 1;
-      else section.pending += 1;
+      if (!item.isMarked) section.pending += 1;
+      else if (item.awarded === item.maxMarks) section.correct += 1;
+      else if (item.awarded === 0) section.incorrect += 1;
+      else section.partial += 1;
     });
 
     return sectionOrder
@@ -235,6 +299,47 @@ function OtpPanel({
       void openAssessorDialog(learner);
     }
   }, [activeLearnerId, learnerStatuses, selectedLearner?.learner_id]);
+
+  useEffect(() => {
+    const loadCapturedTotals = async () => {
+      if (!learnerStatuses.length) {
+        setCapturedTotals({});
+        return;
+      }
+
+      try {
+        const learnerIdPairs = await Promise.all(
+          learnerStatuses.map(async (item) => ({
+            learnerId: item.learner_id,
+            learnerUserId: (await resolveLearnerIds(item.learner_id)).learnerUserId ?? item.learner_id,
+          }))
+        );
+
+        const { data: progressRows, error: progressError } = await db.rpc("cet_admin_get_module_capture_totals", {
+          p_module_unit_standard_id: blockKey,
+        });
+
+        if (progressError) throw progressError;
+
+        const gradeByUserId = new Map<string, number | null>();
+        (progressRows ?? []).forEach((row: { user_id: string; assessment_grade: number | null }) => {
+          gradeByUserId.set(row.user_id, row.assessment_grade ?? null);
+        });
+
+        const nextTotals: Record<string, number | null> = {};
+        learnerIdPairs.forEach(({ learnerId, learnerUserId }) => {
+          nextTotals[learnerId] = gradeByUserId.get(learnerUserId) ?? null;
+        });
+
+        setCapturedTotals(nextTotals);
+      } catch (error) {
+        console.error("Failed to load captured totals:", error);
+        setCapturedTotals({});
+      }
+    };
+
+    void loadCapturedTotals();
+  }, [blockKey, db, learnerStatuses]);
 
   const copyOtp = () => {
     if (!otp) return;
@@ -301,6 +406,36 @@ function OtpPanel({
     window.open(data.signedUrl, "_blank", "noopener,noreferrer");
   };
 
+  const resolveLearnerIds = async (incomingLearnerId: string) => {
+    // status RPC may return user_id; capture flows still need learners.id for storage paths
+    let learnerUserId: string | null = incomingLearnerId;
+    let learnerRecordId: string | null = null;
+
+    const { data: byUserId } = await db
+      .from("learners")
+      .select("id, user_id")
+      .eq("user_id", incomingLearnerId)
+      .maybeSingle();
+
+    if (byUserId?.user_id) {
+      learnerUserId = byUserId.user_id;
+      learnerRecordId = byUserId.id;
+    } else {
+      const { data: byLearnerId } = await db
+        .from("learners")
+        .select("id, user_id")
+        .eq("id", incomingLearnerId)
+        .maybeSingle();
+
+      if (byLearnerId?.id) {
+        learnerRecordId = byLearnerId.id;
+        learnerUserId = byLearnerId.user_id ?? incomingLearnerId;
+      }
+    }
+
+    return { learnerUserId, learnerRecordId };
+  };
+
   const openAssessorDialog = async (learner: (typeof learnerStatuses)[number]) => {
     setSelectedLearner(learner);
     setLoadingSubmission(true);
@@ -321,27 +456,42 @@ function OtpPanel({
     setAttachedAnswerbookPath(learner.submission_path ?? null);
 
     try {
-      const { data: learnerRow } = await db
-        .from("learners")
-        .select("user_id")
-        .eq("id", learner.learner_id)
-        .maybeSingle();
+      const { learnerUserId, learnerRecordId } = await resolveLearnerIds(learner.learner_id);
 
-      if (learnerRow?.user_id) {
-        const { data: progressRow } = await db
-          .from("learner_progress")
-          .select("assessment_grade, assessment_feedback")
-          .eq("user_id", learnerRow.user_id)
-          .eq("module_unit_standard_id", blockKey)
-          .maybeSingle();
+      if (learnerUserId) {
+        const { data: progressRows, error: progressError } = await db.rpc("cet_admin_get_learner_progress_capture", {
+          p_user_id: learnerUserId,
+          p_module_unit_standard_id: blockKey,
+        });
 
+        if (progressError) throw progressError;
+
+        const progressRow = Array.isArray(progressRows) ? progressRows[0] : progressRows;
         if (progressRow?.assessment_grade != null) {
           setGrade(String(progressRow.assessment_grade));
         }
         if (progressRow?.assessment_feedback) {
-          setFeedback(progressRow.assessment_feedback);
+          setFeedback(String(progressRow.assessment_feedback));
+        }
+
+        const savedAnswers = progressRow?.assessment_answers as Record<string, any> | null;
+        if (savedAnswers && typeof savedAnswers === "object") {
+          setManualMarkItems((prev) =>
+            prev.map((item) => {
+              const saved = savedAnswers[item.questionId];
+              if (!saved || typeof saved !== "object") return item;
+              const awarded = Number(saved.awarded);
+              return {
+                ...item,
+                isMarked: saved.isMarked === true || Number.isFinite(awarded),
+                awarded: Number.isFinite(awarded) ? Math.max(0, Math.min(item.maxMarks, awarded)) : item.awarded,
+              };
+            })
+          );
         }
       }
+
+      // No detailed-submissions table in this environment; capture persistence relies on learner_progress.
 
       const loadedText = await loadSubmissionText(learner.submission_path);
       setSubmissionText(loadedText);
@@ -378,14 +528,14 @@ function OtpPanel({
     applyAutoMarkResult(autoMarkBlock1Submission(submissionText));
   };
 
-  const markManualQuestion = (questionId: string, isCorrect: boolean) => {
+  const markManualQuestion = (questionId: string, marks: number) => {
     setManualMarkItems((prev) =>
       prev.map((item) =>
         item.questionId === questionId
           ? {
               ...item,
-              markedCorrect: isCorrect,
-              awarded: isCorrect ? item.maxMarks : 0,
+              isMarked: true,
+              awarded: Math.max(0, Math.min(item.maxMarks, marks)),
             }
           : item
       )
@@ -398,7 +548,7 @@ function OtpPanel({
         item.sectionId === sectionId
           ? {
               ...item,
-              markedCorrect: isCorrect,
+              isMarked: true,
               awarded: isCorrect ? item.maxMarks : 0,
             }
           : item
@@ -417,7 +567,7 @@ function OtpPanel({
             <tr>
               <td>${item.label}</td>
               <td>${item.prompt}</td>
-              <td>${item.markedCorrect === true ? "Correct" : item.markedCorrect === false ? "Incorrect" : "Pending"}</td>
+              <td>${!item.isMarked ? "Pending" : item.awarded === item.maxMarks ? "Correct" : item.awarded === 0 ? "Incorrect" : "Partial"}</td>
               <td>${item.awarded}/${item.maxMarks}</td>
             </tr>
           `)
@@ -497,18 +647,22 @@ function OtpPanel({
         });
         return;
       }
-
-      if (manualSummary.pending > 0) {
-        toast({
-          title: "Manual marking incomplete",
-          description: `Please mark all questions as correct or incorrect before saving. Pending: ${manualSummary.pending}.`,
-          variant: "destructive",
-        });
-        return;
-      }
     }
 
-    const derivedGrade = isManualCapture ? manualSummary.percentage : (reviewItems.length ? reviewSummary.percentage : undefined);
+    // Resolve mark items — auto-zero any still-pending questions before saving
+    const resolvedMarkItems = isManualCapture
+      ? manualMarkItems.map((item) => (!item.isMarked ? { ...item, isMarked: true, awarded: 0 } : item))
+      : [];
+    if (isManualCapture) {
+      setManualMarkItems(resolvedMarkItems);
+    }
+
+    // Compute resolved summary from the zeroed items (manualSummary may still be stale this render)
+    const resolvedScore = resolvedMarkItems.reduce((sum, item) => sum + item.awarded, 0);
+    const resolvedMaxScore = resolvedMarkItems.reduce((sum, item) => sum + item.maxMarks, 0);
+    const resolvedPercentage = resolvedMaxScore > 0 ? Math.round((resolvedScore / resolvedMaxScore) * 100) : 0;
+
+    const derivedGrade = isManualCapture ? resolvedPercentage : (reviewItems.length ? reviewSummary.percentage : undefined);
     const manualDerivedGrade = isManualCapture && !Number.isNaN(parsedCorrect) && !Number.isNaN(parsedWrong) && (parsedCorrect + parsedWrong) > 0
       ? Math.round(((parsedCorrect + (Number.isNaN(parsedBonusB3) ? 0 : parsedBonusB3)) / (parsedCorrect + parsedWrong)) * 100)
       : undefined;
@@ -525,20 +679,16 @@ function OtpPanel({
 
     setSavingGrade(true);
     try {
-      const { data: learnerRow, error: learnerError } = await db
-        .from("learners")
-        .select("user_id")
-        .eq("id", selectedLearner.learner_id)
-        .maybeSingle();
+      const { learnerUserId, learnerRecordId } = await resolveLearnerIds(selectedLearner.learner_id);
 
-      if (learnerError || !learnerRow?.user_id) {
+      if (!learnerUserId || !learnerRecordId) {
         throw new Error("Could not find the learner profile for grading.");
       }
 
       let resolvedSubmissionPath = selectedLearner.submission_path ?? null;
       if (answerbookFile) {
         const safeName = answerbookFile.name.replace(/[^a-zA-Z0-9._-]+/g, "-");
-        const uploadPath = `admin-reviewed/${blockKey}/${selectedLearner.learner_id}/${Date.now()}-${safeName}`;
+        const uploadPath = `admin-reviewed/${blockKey}/${learnerRecordId}/${Date.now()}-${safeName}`;
         const { error: uploadError } = await supabase.storage
           .from("assessment-submissions")
           .upload(uploadPath, answerbookFile, {
@@ -559,7 +709,7 @@ function OtpPanel({
         .map((item) => `- ${item.label}: ${item.reviewNote.trim()}`);
 
       const manualValidationNotes = [
-        isManualCapture ? `Manual marking score: ${manualSummary.score}/${manualSummary.maxScore}` : `B3 bonus marks: ${Number.isNaN(parsedBonusB3) ? 0 : parsedBonusB3}/5`,
+        isManualCapture ? `Manual marking score: ${resolvedScore}/${resolvedMaxScore}` : `B3 bonus marks: ${Number.isNaN(parsedBonusB3) ? 0 : parsedBonusB3}/5`,
         correctQuestionRefs.trim() ? `Correct question refs: ${correctQuestionRefs.trim()}` : "",
         incorrectQuestionRefs.trim() ? `Incorrect question refs: ${incorrectQuestionRefs.trim()}` : "",
       ].filter(Boolean);
@@ -569,7 +719,7 @@ function OtpPanel({
         "",
         "[Assessor Capture]",
         `Mode: ${isManualCapture ? "Manual question-by-question marking" : reviewItems.length ? "Item-by-item verified" : autoResult ? "Auto-mark verified" : submissionText ? "Digital submission manual review" : "Paper-based manual capture"}`,
-        `Verified score: ${isManualCapture ? `${manualSummary.score}/${manualSummary.maxScore} (${manualSummary.percentage}%)` : reviewItems.length ? `${reviewSummary.score}/${reviewSummary.maxScore} (${reviewSummary.percentage}%)` : `${gradeNum}%`}`,
+        `Verified score: ${isManualCapture ? `${resolvedScore}/${resolvedMaxScore} (${resolvedPercentage}%)` : reviewItems.length ? `${reviewSummary.score}/${reviewSummary.maxScore} (${reviewSummary.percentage}%)` : `${gradeNum}%`}`,
         `Correct checks: ${correctCount || "not recorded"}`,
         `Incorrect checks: ${wrongCount || "not recorded"}`,
         ...manualValidationNotes,
@@ -580,32 +730,13 @@ function OtpPanel({
       ].filter(Boolean).join("\n");
 
       const timestamp = new Date().toISOString();
-      const progressPayload = {
-        user_id: learnerRow.user_id,
-        module_unit_standard_id: blockKey,
-        assessment_unlocked: true,
-        assessment_submitted: true,
-        submission_path: resolvedSubmissionPath,
-        submission_uploaded_at: selectedLearner.assessment_submitted_at ?? timestamp,
-        assessment_grade: gradeNum,
-        assessment_feedback: compiledFeedback,
-        assessment_graded_at: timestamp,
-        updated_at: timestamp,
-      };
-
-      const { error: saveError } = await db
-        .from("learner_progress")
-        .upsert(progressPayload, { onConflict: "user_id,module_unit_standard_id" });
-
-      if (saveError) throw saveError;
-
       const assessmentAnswersPayload: Record<string, unknown> = isManualCapture
-        ? Object.fromEntries(manualMarkItems.map((item) => [item.questionId, {
+        ? Object.fromEntries(resolvedMarkItems.map((item) => [item.questionId, {
             label: item.label,
             prompt: item.prompt,
             sectionId: item.sectionId,
             sectionTitle: item.sectionTitle,
-            markedCorrect: item.markedCorrect,
+            isMarked: item.isMarked,
             awarded: item.awarded,
             maxMarks: item.maxMarks,
           }]))
@@ -625,48 +756,64 @@ function OtpPanel({
           correct_question_refs: correctQuestionRefs.trim() || null,
           incorrect_question_refs: incorrectQuestionRefs.trim() || null,
           b3_bonus_marks: Number.isNaN(parsedBonusB3) ? 0 : parsedBonusB3,
-          manual_score: isManualCapture ? manualSummary.score : null,
-          manual_max_score: isManualCapture ? manualSummary.maxScore : null,
+          manual_score: isManualCapture ? resolvedScore : null,
+          manual_max_score: isManualCapture ? resolvedMaxScore : null,
         };
       }
 
-      try {
-        await db
-          .from("assessment_submissions_detailed")
-          .upsert({
-            learner_id: selectedLearner.learner_id,
-            module_unit_standard_id: blockKey,
-            submission_content: submissionText || "Assessor-captured paper submission.",
-            submission_path: resolvedSubmissionPath,
-            file_name: answerbookFile?.name ?? resolvedSubmissionPath?.split("/").pop() ?? null,
-            learner_info: {
-              full_name: selectedLearner.full_name,
-              learner_code: selectedLearner.learner_code,
-              captured_by_admin: true,
-              portfolio_capture: {
-                correct_question_refs: correctQuestionRefs.trim() || null,
-                incorrect_question_refs: incorrectQuestionRefs.trim() || null,
-                b3_bonus_marks: Number.isNaN(parsedBonusB3) ? 0 : parsedBonusB3,
-              },
-            },
-            assessment_answers: assessmentAnswersPayload,
-            submitted_at: selectedLearner.assessment_submitted_at ?? timestamp,
-            assessment_grade: gradeNum,
-            assessment_feedback: compiledFeedback,
-            graded_at: timestamp,
-            graded_by: authUser?.id ?? null,
-            updated_at: timestamp,
-          }, { onConflict: "learner_id,module_unit_standard_id" });
-      } catch (detailError) {
-        console.warn("Detailed assessment update skipped:", detailError);
+      const progressPayload = {
+        user_id: learnerUserId,
+        module_unit_standard_id: blockKey,
+        assessment_unlocked: true,
+        assessment_submitted: true,
+        submission_path: resolvedSubmissionPath,
+        submission_uploaded_at: selectedLearner.assessment_submitted_at ?? timestamp,
+        assessment_grade: gradeNum,
+        assessment_feedback: compiledFeedback,
+        assessment_graded_at: timestamp,
+        assessment_answers: assessmentAnswersPayload,
+        updated_at: timestamp,
+      };
+
+      let progressSaved = false;
+      const { error: rpcSaveError } = await db.rpc("cet_admin_upsert_learner_progress", {
+        p_user_id: learnerUserId,
+        p_module_unit_standard_id: blockKey,
+        p_assessment_unlocked: true,
+        p_assessment_submitted: true,
+        p_submission_path: resolvedSubmissionPath,
+        p_submission_uploaded_at: selectedLearner.assessment_submitted_at ?? timestamp,
+        p_assessment_grade: gradeNum,
+        p_assessment_feedback: compiledFeedback,
+        p_assessment_graded_at: timestamp,
+        p_assessment_answers: assessmentAnswersPayload,
+      });
+
+      if (rpcSaveError) {
+        console.warn("Admin progress RPC failed, trying direct upsert fallback:", rpcSaveError);
+        const { error: saveError } = await db
+          .from("learner_progress")
+          .upsert(progressPayload, { onConflict: "user_id,module_unit_standard_id" });
+
+        if (saveError) {
+          console.warn("learner_progress upsert fallback blocked:", saveError);
+        } else {
+          progressSaved = true;
+        }
+      } else {
+        progressSaved = true;
+      }
+
+      if (!progressSaved) {
+        throw new Error("Could not save the capture. learner_progress write was blocked by policy. Please apply the admin/moderator RLS policy and try again.");
       }
 
       toast({
         title: "Assessment captured",
-        description: `${selectedLearner.full_name}'s Block assessment has been verified, captured, and the answerbook attachment has been saved.`,
+        description: `${selectedLearner.full_name}'s Block assessment has been verified and saved. You can continue editing below.`,
       });
 
-      onCloseCapture();
+      setGradeSaved(true);
       await refreshStatuses();
     } catch (error: any) {
       console.error("Failed to save assessor grade:", error);
@@ -783,7 +930,7 @@ function OtpPanel({
                       <th className="pb-2 pr-4 font-semibold text-muted-foreground uppercase tracking-wide text-[10px]">Learner</th>
                       <th className="pb-2 pr-4 font-semibold text-muted-foreground uppercase tracking-wide text-[10px]">Code</th>
                       <th className="pb-2 pr-4 font-semibold text-muted-foreground uppercase tracking-wide text-[10px]">Status</th>
-                      <th className="pb-2 pr-4 font-semibold text-muted-foreground uppercase tracking-wide text-[10px]">Submitted At</th>
+                      <th className="pb-2 pr-4 font-semibold text-muted-foreground uppercase tracking-wide text-[10px]">Captured Total</th>
                       <th className="pb-2 font-semibold text-muted-foreground uppercase tracking-wide text-[10px]">Actions</th>
                     </tr>
                   </thead>
@@ -803,10 +950,8 @@ function OtpPanel({
                             </span>
                           )}
                         </td>
-                        <td className="py-2 pr-4 text-muted-foreground">
-                          {l.assessment_submitted_at
-                            ? new Date(l.assessment_submitted_at).toLocaleString()
-                            : "—"}
+                        <td className="py-2 pr-4 text-muted-foreground font-semibold">
+                          {capturedTotals[l.learner_id] != null ? `${capturedTotals[l.learner_id]}/125` : "—"}
                         </td>
                         <td className="py-2">
                           <div className="flex flex-wrap gap-1.5">
@@ -898,7 +1043,7 @@ function OtpPanel({
               </div>
 
               <div className="grid gap-4 lg:grid-cols-[1.4fr_0.9fr]">
-                <div className="space-y-3">
+                <div className="flex min-h-[68vh] flex-col gap-3">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                     <Label>Answer review</Label>
                     <div className="flex flex-wrap gap-2">
@@ -933,7 +1078,7 @@ function OtpPanel({
                     </div>
                   </div>
 
-                  <div className="rounded-lg border border-border bg-background p-3 space-y-3">
+                  <div className="rounded-lg border border-border bg-background p-3 flex flex-1 min-h-0 flex-col gap-3">
                     <div className="space-y-1.5">
                       <Label htmlFor="answerbookUpload">Attach scanned answerbook</Label>
                       <Input
@@ -959,11 +1104,11 @@ function OtpPanel({
                       </details>
                     )}
 
-                    <div className="rounded-lg border border-border/70 bg-muted/20 p-3 text-xs text-muted-foreground min-h-[220px]">
+                    <div className="rounded-lg border border-border/70 bg-muted/20 p-3 text-xs text-muted-foreground flex-1 min-h-[320px] overflow-hidden">
                       {loadingSubmission ? (
                         <p>Loading submitted work…</p>
                       ) : assessmentMode === "manual" ? (
-                        <div className="space-y-3 max-h-[520px] overflow-y-auto pr-1">
+                        <div className="h-full space-y-3 overflow-y-auto pr-1">
                           {manualSectionSummaries.map((section) => {
                             const sectionItems = manualMarkItems.filter((item) => item.sectionId === section.sectionId);
                             return (
@@ -975,7 +1120,7 @@ function OtpPanel({
                                   </div>
                                   <div className="text-[11px] text-muted-foreground flex flex-col sm:items-end gap-1">
                                     <span className="font-semibold text-foreground">{section.awarded}/{section.max}</span>
-                                    <span className="ml-2">Correct: {section.correct} · Incorrect: {section.incorrect}</span>
+                                    <span className="ml-2">Full: {section.correct} · Partial: {section.partial} · Zero: {section.incorrect} · Pending: {section.pending}</span>
                                     <div className="flex gap-1.5">
                                       <button
                                         type="button"
@@ -1003,26 +1148,53 @@ function OtpPanel({
                                         <p className="text-[11px] text-muted-foreground">{item.prompt}</p>
                                       </div>
                                       <div className="mt-2 flex flex-wrap gap-3 text-[12px]">
-                                        <label className="inline-flex items-center gap-1.5 text-foreground">
-                                          <input
-                                            type="radio"
-                                            name={`manual-${item.questionId}`}
-                                            checked={item.markedCorrect === true}
-                                            onChange={() => markManualQuestion(item.questionId, true)}
+                                        <div className="w-full sm:w-28">
+                                          <Label className="text-[11px]">Awarded</Label>
+                                          <Input
+                                            type="number"
+                                            min="0"
+                                            max={item.maxMarks}
+                                            step="0.5"
+                                            value={item.awarded}
+                                            onChange={(e) => markManualQuestion(item.questionId, Number(e.target.value || 0))}
                                           />
-                                          <span className="leading-none">Correct</span>
-                                        </label>
-                                        <label className="inline-flex items-center gap-1.5 text-foreground">
-                                          <input
-                                            type="radio"
-                                            name={`manual-${item.questionId}`}
-                                            checked={item.markedCorrect === false}
-                                            onChange={() => markManualQuestion(item.questionId, false)}
-                                          />
-                                          <span className="leading-none">Incorrect</span>
-                                        </label>
+                                        </div>
+                                        <button
+                                          type="button"
+                                          onClick={() => markManualQuestion(item.questionId, item.maxMarks)}
+                                          className="rounded-md border border-border bg-secondary/50 px-2 py-1 text-[10px] text-foreground hover:bg-secondary h-fit self-end"
+                                        >
+                                          Full
+                                        </button>
+                                        <button
+                                          type="button"
+                                          onClick={() => markManualQuestion(item.questionId, 0)}
+                                          className="rounded-md border border-border bg-secondary/50 px-2 py-1 text-[10px] text-foreground hover:bg-secondary h-fit self-end"
+                                        >
+                                          Zero
+                                        </button>
+                                        <button
+                                          type="button"
+                                          onClick={() => setManualMarkItems((prev) => prev.map((row) => row.questionId === item.questionId ? { ...row, isMarked: false } : row))}
+                                          className="rounded-md border border-border bg-secondary/50 px-2 py-1 text-[10px] text-foreground hover:bg-secondary h-fit self-end"
+                                        >
+                                          Pending
+                                        </button>
                                         <span className="text-muted-foreground">Awarded: <span className="font-semibold text-foreground">{item.awarded}/{item.maxMarks}</span></span>
                                       </div>
+                                      {item.optionHints?.length ? (
+                                        <details className="mt-2 rounded-md border border-border/60 bg-background px-2 py-1.5">
+                                          <summary className="cursor-pointer select-none text-[10px] uppercase tracking-wide text-muted-foreground font-semibold list-none flex items-center gap-1">
+                                            <span className="inline-block transition-transform [details[open]>summary>&]:rotate-90">▶</span>
+                                            Options to check
+                                          </summary>
+                                          <ul className="mt-1 text-[11px] text-muted-foreground list-disc pl-4 space-y-0.5">
+                                            {item.optionHints.map((opt) => (
+                                              <li key={`${item.questionId}-${opt}`}>{opt}</li>
+                                            ))}
+                                          </ul>
+                                        </details>
+                                      ) : null}
                                     </div>
                                   ))}
                                 </div>
@@ -1031,7 +1203,7 @@ function OtpPanel({
                           })}
                         </div>
                       ) : reviewItems.length ? (
-                        <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1">
+                        <div className="h-full space-y-2 overflow-y-auto pr-1">
                           {reviewItems.map((item) => (
                             <div key={item.key} className="rounded-md border border-border bg-background px-3 py-2 space-y-2">
                               <div className="flex items-start justify-between gap-2">
@@ -1109,6 +1281,8 @@ function OtpPanel({
                       <span className="text-right font-medium text-foreground">{assessmentMode === "manual" ? manualSummary.incorrect : reviewSummary.needsAttention}</span>
                       {assessmentMode === "manual" && (
                         <>
+                          <span>Partial marks</span>
+                          <span className="text-right font-medium text-foreground">{manualSummary.partial}</span>
                           <span>Pending marks</span>
                           <span className="text-right font-medium text-foreground">{manualSummary.pending}</span>
                         </>
@@ -1120,56 +1294,71 @@ function OtpPanel({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-1.5">
-                      <Label htmlFor="correctCount">Correct items</Label>
-                      <Input id="correctCount" value={correctCount} onChange={(e) => setCorrectCount(e.target.value)} placeholder="e.g. 42" disabled={assessmentMode === "manual"} />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="wrongCount">Incorrect items</Label>
-                      <Input id="wrongCount" value={wrongCount} onChange={(e) => setWrongCount(e.target.value)} placeholder="e.g. 8" disabled={assessmentMode === "manual"} />
-                    </div>
-                  </div>
-
-                  {assessmentMode !== "manual" && (
-                    <>
-                      <div className="space-y-1.5">
-                        <Label htmlFor="bonusB3Marks">Section B3 bonus marks (0-5)</Label>
-                        <Input
-                          id="bonusB3Marks"
-                          type="number"
-                          min="0"
-                          max="5"
-                          step="1"
-                          value={bonusB3Marks}
-                          onChange={(e) => setBonusB3Marks(e.target.value)}
-                          placeholder="0 - 5"
-                        />
-                      </div>
-                      <p className="text-[11px] text-muted-foreground">
-                        Paper/manual flow: Section A + B1/B2 are base counts, and Section B3 is an optional bonus (/5). Grade is validated against counts plus bonus.
-                      </p>
-                    </>
-                  )}
-
+                  {/* Section marks breakdown table */}
                   <div className="space-y-1.5">
-                    <Label htmlFor="correctQuestionRefs">Correct question refs (optional)</Label>
-                    <Input
-                      id="correctQuestionRefs"
-                      value={correctQuestionRefs}
-                      onChange={(e) => setCorrectQuestionRefs(e.target.value)}
-                      placeholder="e.g. 1A1, 1A3, 2B2"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <Label htmlFor="incorrectQuestionRefs">Incorrect question refs (optional)</Label>
-                    <Input
-                      id="incorrectQuestionRefs"
-                      value={incorrectQuestionRefs}
-                      onChange={(e) => setIncorrectQuestionRefs(e.target.value)}
-                      placeholder="e.g. 1B1, 2A3"
-                    />
+                    <Label>Section marks breakdown</Label>
+                    <div className="rounded-md border text-sm overflow-hidden">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="bg-muted/50 text-muted-foreground text-xs uppercase">
+                            <th className="px-3 py-2 text-left font-medium">Section</th>
+                            <th className="px-3 py-2 text-left font-medium">Module</th>
+                            <th className="px-3 py-2 text-center font-medium">Total</th>
+                            <th className="px-3 py-2 text-center font-medium">Mark Awarded</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {assessmentMode === "manual" && manualSectionSummaries.length > 0 ? (
+                            manualSectionSummaries.map((sec, idx) => (
+                              <tr key={sec.sectionId} className="border-t">
+                                <td className="px-3 py-2 font-medium">{idx + 1}</td>
+                                <td className="px-3 py-2 text-muted-foreground text-xs">{sec.module || sec.sectionTitle}</td>
+                                <td className="px-3 py-2 text-center">25</td>
+                                <td className="px-3 py-2 text-center font-semibold">{sec.awarded > 0 ? sec.awarded : sec.pending > 0 ? "—" : 0}</td>
+                              </tr>
+                            ))
+                          ) : (
+                            [
+                              { num: 1, module: "14924 — Systems Analysis" },
+                              { num: 2, module: "14920 — Team Collaboration & Problem Solving" },
+                              { num: 3, module: "14918 — Programming Principles Introduction" },
+                              { num: 4, module: "14927 — Apply Problem-Solving Strategies" },
+                              { num: 5, module: "14915 — Design a Computer Program to Specification" },
+                            ].map((row) => (
+                              <tr key={row.num} className="border-t">
+                                <td className="px-3 py-2 font-medium">{row.num}</td>
+                                <td className="px-3 py-2 text-muted-foreground text-xs">{row.module}</td>
+                                <td className="px-3 py-2 text-center">25</td>
+                                <td className="px-3 py-2 text-center">
+                                  <Input
+                                    type="number"
+                                    min="0"
+                                    max="25"
+                                    step="0.5"
+                                    className="h-7 w-16 text-center mx-auto"
+                                    placeholder="0"
+                                    value={correctCount}
+                                    onChange={(e) => setCorrectCount(e.target.value)}
+                                  />
+                                </td>
+                              </tr>
+                            ))
+                          )}
+                          <tr className="border-t bg-muted/30 font-semibold">
+                            <td className="px-3 py-2" colSpan={2}>TOTAL</td>
+                            <td className="px-3 py-2 text-center">125</td>
+                            <td className="px-3 py-2 text-center">
+                              {assessmentMode === "manual"
+                                ? `${manualSummary.score}/${manualSummary.maxScore || 0}`
+                                : correctCount ? String(Number(correctCount) * 5) : "—"}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <p className="text-[11px] text-muted-foreground">
+                      Each section: A = 10 marks · B1+B2 = 10 marks · B3 (bonus) = 5 marks. Total = 125 max.
+                    </p>
                   </div>
 
                   <div className="space-y-1.5">
@@ -1190,9 +1379,11 @@ function OtpPanel({
               </div>
 
               <div className="flex justify-end gap-2 pt-2">
-                <Button type="button" variant="outline" onClick={onCloseCapture} disabled={savingGrade}>Cancel</Button>
-                <Button type="button" onClick={saveAssessorGrade} disabled={savingGrade || (assessmentMode === "manual" ? manualSummary.pending > 0 : (!grade.trim() && reviewItems.length === 0))}>
-                  {savingGrade ? "Saving…" : "Save grading capture"}
+                <Button type="button" variant="outline" onClick={onCloseCapture} disabled={savingGrade}>
+                  {gradeSaved ? "Close" : "Cancel"}
+                </Button>
+                <Button type="button" onClick={saveAssessorGrade} disabled={savingGrade || (!assessmentMode.length || (assessmentMode !== "manual" && !grade.trim() && reviewItems.length === 0))}>
+                  {savingGrade ? "Saving…" : gradeSaved ? "Update grading capture" : "Save grading capture"}
                 </Button>
               </div>
             </>

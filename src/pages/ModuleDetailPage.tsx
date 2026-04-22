@@ -670,7 +670,7 @@ function hasDocForCategory(
 export default function ModuleDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { role, user } = useAuth();
-  const { progressMap, updateProgress, fetchProgress } = useModuleProgress();
+  const { progressMap, updateProgress, fetchProgress, submitLearnerAssessment } = useModuleProgress();
   const { saveQuizAnswers, getAnswersForReview, hasCompletedQuiz, getQuizScore } = useQuizAnswers(id || '');
   const { saveAssessmentSubmission, hasSubmittedAssessment, downloadSubmission, printSubmission } = useAssessmentSubmissions(id || '');
   const { toast } = useToast();
@@ -880,12 +880,25 @@ export default function ModuleDetailPage() {
         submissionText: payload.submissionText
       };
 
-      // Update progress with the successful submission
-      const success = await updateProgress(id, {
-        assessment_submitted: true,
-        submission_path: result.filePath,
-        submission_uploaded_at: new Date().toISOString(),
-      });
+      const assessmentPayload = {
+        assessment_version: 1,
+        module_unit_standard_id: id,
+        module_code: module.code,
+        source: 'learner-self-submission',
+        submitted_at: new Date().toISOString(),
+        response_format: 'indexed-text',
+        responses: Object.entries(assessmentAnswers).map(([questionIndex, answer]) => ({
+          question_index: Number(questionIndex),
+          answer,
+        })),
+      };
+
+      // Persist learner submission via dedicated learner RPC.
+      const success = await submitLearnerAssessment(
+        id,
+        result.filePath,
+        assessmentPayload
+      );
 
       if (success) {
         // Log submission success

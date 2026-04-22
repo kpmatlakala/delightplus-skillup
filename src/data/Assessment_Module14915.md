@@ -37,6 +37,16 @@
 | 4        | List three architecture considerations for a CET lab booking tool | 7    |
 | 5        | Identify and explain the stages of the program maintenance cycle | 7    |
 
+
+## Matching Questions
+
+**Match the terms to their definitions (6 marks total):**
+
+| Question | Description | Mark |
+|----------|-------------|------|
+| 1 | Match programming concepts (decision tree, flowchart, pseudocode, etc.) to their definitions | 3 |
+| 2 | Match tools (syntax checker, compiler, debugger) to their functions | 3 |
+
 ---
 
 ## Practical Task (Assessor Observation)

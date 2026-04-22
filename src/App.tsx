@@ -33,10 +33,10 @@ import BlockAssessmentAdminPage from "./pages/BlockAssessmentAdminPage";
 import UnitAssessmentPage from "./pages/UnitAssessmentPage";
 import AssessmentDetailPage from "./pages/AssessmentDetailPage";
 import AssessmentGradingPage from "./pages/AssessmentGradingPage";
-import WorkbooksAdminPage from "@/pages/WorkbooksAdminPage";
-import SummativeAssessmentAdminPage from "@/pages/SummativeAssessmentAdminPage";
-import PracticalAssessmentAdminPage from "@/pages/PracticalAssessmentAdminPage";
-import QuizAssessmentAdminPage from "@/pages/QuizAssessmentAdminPage";
+import WorkbooksAdminPage from "./pages/WorkbooksAdminPage";
+import SummativeAssessmentAdminPage from "./pages/SummativeAssessmentAdminPage";
+import PracticalAssessmentAdminPage from "./pages/PracticalAssessmentAdminPage";
+import QuizAssessmentAdminPage from "./pages/QuizAssessmentAdminPage";
 
 const queryClient = new QueryClient();
 
@@ -77,6 +77,7 @@ const App = () => (
               <Route path="/assessments/practical/:unitId/capture/:userId" element={<PracticalAssessmentAdminPage />} />
               <Route path="/assessments/workbooks" element={<WorkbooksAdminPage />} />
               <Route path="/assessments/workbooks/:unitId" element={<WorkbooksAdminPage />} />
+              <Route path="/assessments/workbooks/:unitId/capture/:userId" element={<WorkbooksAdminPage />} />
               <Route path="/assessments/blocks" element={<BlockAssessmentAdminPage />} />
               <Route path="/assessments/blocks/:blockKey/capture/:learnerId" element={<BlockAssessmentAdminPage />} />
               <Route path="/assessments/grade/:id" element={<AssessmentGradingPage />} />

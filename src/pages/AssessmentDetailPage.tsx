@@ -20,7 +20,7 @@ export default function AssessmentDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user, role } = useAuth();
-  const { progressMap, updateProgress } = useModuleProgress();
+  const { progressMap, submitLearnerAssessment } = useModuleProgress();
   const { toast } = useToast();
   const { error: uploadError, showError, dismiss: dismissError } = useUploadError();
 
@@ -93,11 +93,29 @@ export default function AssessmentDetailPage() {
         return;
       }
 
-      await updateProgress(id, {
-        assessment_submitted: true,
-        submission_path: result.filePath,
-        submission_uploaded_at: new Date().toISOString(),
-      });
+      const assessmentPayload = {
+        assessment_version: 1,
+        module_unit_standard_id: id,
+        block: module.block,
+        source: 'learner-self-submission',
+        submitted_at: new Date().toISOString(),
+        response_format: 'indexed-text',
+        responses: Object.entries(assessmentAnswers).map(([questionIndex, answer]) => ({
+          question_index: Number(questionIndex),
+          answer,
+        })),
+      };
+
+      const saved = await submitLearnerAssessment(id, result.filePath, assessmentPayload);
+      if (!saved) {
+        toast({
+          title: "Submission Failed",
+          description: "Your file uploaded, but we could not save submission status. Please retry.",
+          variant: "destructive"
+        });
+        setIsSubmitting(false);
+        return;
+      }
 
       toast({
         title: "Assessment Submitted Successfully",
