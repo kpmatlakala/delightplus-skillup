@@ -1,4 +1,5 @@
 const BLOCK_1_DOC_BASE = "/docs/SAQA_78965_CET_Training/Block-1/Block1-Test";
+const BLOCK_2_DOC_BASE = "/docs/SAQA_78965_CET_Training/Block-2/Block2-Test";
 
 export type BlockAssessmentStatus = "ready" | "coming-soon";
 
@@ -50,11 +51,14 @@ export const BLOCK_ASSESSMENTS: BlockAssessmentMeta[] = [
     units: [
       "US 14910: Apply Principles of Computer Programming",
       "US 14933: Create Web Applications with Scripting",
+      "US 14930: Principles of Developing Software for the Internet",
     ],
-    totalMarks: 65,
-    status: "coming-soon",
-    ctaLabel: "Coming Soon",
-    paperMarkdown: `# Block 2 Summative Test\n\nBlock 2 planning is now aligned for readiness review.\n\n**Main 4-day focus:**\n- US 14910 — Apply Principles of Computer Programming\n- US 14933 — Create Web Applications with Scripting\n\n**Integrated support / reference:**\n- US 14930 — Principles of Developing Software for the Internet\n\n**Optional flex arrangement:**\n- If the two main units are completed in 3 days, one elective module can be nominated for the remaining day.\n\n> The in-app Block 2 paper is still being prepared.`,
+    totalMarks: 100,
+    status: "ready",
+    ctaLabel: "Open Block 2 Test",
+    paperMarkdown: `# Block 2 Summative Test\n\nThe Block 2 reference paper has been moved to the public docs folder.\n\n- Test paper: ${BLOCK_2_DOC_BASE}/Block2_Summative_Test.md\n- Memorandum: ${BLOCK_2_DOC_BASE}/Block2_Summative_Memorandum.md\n\n**Included unit standards:**\n- US 14910 — Apply Principles of Computer Programming\n- US 14933 — Create Web Applications with Scripting\n- US 14930 — Principles of Developing Software for the Internet (included for integrated competency evidence).`,
+    paperSourceHref: `${BLOCK_2_DOC_BASE}/Block2_Summative_Test.md`,
+    memorandumHref: `${BLOCK_2_DOC_BASE}/Block2_Summative_Memorandum.md`,
   },
   {
     blockNum: "3",

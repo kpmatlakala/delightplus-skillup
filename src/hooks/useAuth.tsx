@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
-export type AppRole = "admin" | "lecturer" | "learner";
+export type AppRole = "admin" | "moderator" | "user" | "lecturer" | "learner";
 
 export interface LearnerProfile {
   id: string;
@@ -81,7 +81,9 @@ const db = supabase as any;
 
 const mapPublicRole = (rawRole: string | null | undefined): AppRole => {
   if (rawRole === "admin") return "admin";
-  if (rawRole === "moderator") return "lecturer";
+  if (rawRole === "moderator") return "moderator";
+  if (rawRole === "user") return "user";
+  if (rawRole === "lecturer") return "lecturer";
   return "learner";
 };
 
@@ -106,7 +108,11 @@ async function fetchRoleForUser(userId: string): Promise<AppRole> {
     
     // If user exists in public.users and has moderator role, return lecturer
     if (!publicUserError && publicUserData?.role === "moderator") {
-      return "lecturer";
+      return "moderator";
+    }
+
+    if (!publicUserError && publicUserData?.role === "user") {
+      return "user";
     }
 
     // Otherwise, check cet.learners table for learner role
@@ -119,15 +125,17 @@ async function fetchRoleForUser(userId: string): Promise<AppRole> {
     if (!learnerError && learnerData?.role) {
       // Map cet.learners.role to AppRole
       if (learnerData.role === "learner") return "learner";
+      if (learnerData.role === "user") return "user";
       if (learnerData.role === "lecturer") return "lecturer";
+      if (learnerData.role === "moderator") return "moderator";
       if (learnerData.role === "admin") return "admin";
     }
 
     // Default fallback to learner
-    return "learner";
+    return "user";
   } catch (err) {
     console.warn("fetchRoleForUser threw:", err);
-    return "learner";
+    return "user";
   }
 }
 
@@ -184,7 +192,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setRole(resolvedRole);
 
     // Auto-register learners (fire-and-forget)
-    if (resolvedRole === "learner") {
+    if (resolvedRole === "learner" || resolvedRole === "user") {
       void ensureLearnerRegistration(activeUser);
     }
   };

@@ -1,6 +1,6 @@
 // --- Content block types -----------------------------------------------------
 
-import { module14924LessonFlow } from "./module14924LessonFlow";
+import { module14924LessonFlow } from "./block1/module14924LessonFlow";
 
 export type ContentBlock =
   | { type: "paragraph"; text: string }

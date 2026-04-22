@@ -684,6 +684,7 @@ export default function ModuleDetailPage() {
   const [seedStatus, setSeedStatus] = useState<string | null>(null);
   const [seeding, setSeeding] = useState(false);
   const mod = modules.find((m) => m.id === id);
+  const hasSummativeAssessment = mod?.block !== 3;
   const navigate = useNavigate();
   const modIndex = modules.findIndex((m) => m.id === id);
   const nextModule =
@@ -927,7 +928,7 @@ export default function ModuleDetailPage() {
   }, []);
 
   useEffect(() => {
-    if (!id || role !== "learner") {
+    if (!id || (role !== "learner" && role !== "user")) {
       setAssessmentUnlocked(false);
       setGuideCompleted(false);
       return;
@@ -1002,7 +1003,7 @@ export default function ModuleDetailPage() {
         );
 
         const moduleDownloads =
-          role === "learner" ? learnerVisibleDownloads : allModuleDownloads;
+          role === "learner" || role === "user" ? learnerVisibleDownloads : allModuleDownloads;
 
         const markdownDocs = await Promise.all(
           moduleDownloads.map(async (download) => {
@@ -1042,7 +1043,7 @@ export default function ModuleDetailPage() {
         const indexData = (await indexResponse.json()) as ExtractedIndex;
         const moduleFiles = (indexData.files ?? []).filter((file) => {
           if (!file.source_path.includes(`US ${id}/`)) return false;
-          if (role !== "learner") return true;
+          if (role !== "learner" && role !== "user") return true;
           const sourcePath = file.source_path.toLowerCase();
           if (
             sourcePath.includes("facilitator") ||
@@ -1137,7 +1138,23 @@ export default function ModuleDetailPage() {
   }, [id]);
 
   useEffect(() => {
-    if (!id || role !== "learner") return;
+    if (role === "learner" || role === "user") return;
+    const params = new URLSearchParams(window.location.search);
+    const forcedDoc = params.get("doc");
+    if (!forcedDoc) return;
+
+    if (
+      forcedDoc === "guide"
+      || forcedDoc === "workbook"
+      || forcedDoc === "facilitator"
+      || forcedDoc === "assessment"
+    ) {
+      setAdminDocCategory(forcedDoc);
+    }
+  }, [id, role]);
+
+  useEffect(() => {
+    if (!id || (role !== "learner" && role !== "user")) return;
     const prog = progressMap[id];
     if (!prog) return;
 
@@ -1155,9 +1172,17 @@ export default function ModuleDetailPage() {
       return;
     }
 
+    if (forceView === 'assessment' && !hasSummativeAssessment) {
+      setWorkspaceView('quiz');
+      return;
+    }
+
     // Default navigation logic based on progress - redirect to progress if assessment completed
     if (prog.assessment_submitted) {
       // If assessment is submitted, redirect to progress page to show completion
+      navigate(`/learner/modules/${id}/progress`);
+      return;
+    } else if (!hasSummativeAssessment && prog.quiz_passed) {
       navigate(`/learner/modules/${id}/progress`);
       return;
     } else if (prog.assessment_unlocked || prog.quiz_passed) {
@@ -1190,15 +1215,15 @@ export default function ModuleDetailPage() {
         } catch { }
       }
     }
-  }, [id, role, progressMap, user?.id]);
+  }, [id, role, progressMap, user?.id, hasSummativeAssessment]);
 
   useEffect(() => {
-    if (!id || role !== "learner" || guideMode !== "sessions") return;
+    if (!id || (role !== "learner" && role !== "user") || guideMode !== "sessions") return;
     setHighestSessionReached((prev) => Math.max(prev, sessionIndex));
   }, [id, role, guideMode, sessionIndex]);
 
   useEffect(() => {
-    if (!id || role !== "learner" || !user?.id || guideCompleted) return;
+    if (!id || (role !== "learner" && role !== "user") || !user?.id || guideCompleted) return;
     if (workspaceView !== "guide") return;
     localStorage.setItem(
       `cet_sess_${user.id}_${id}`,
@@ -1233,9 +1258,9 @@ export default function ModuleDetailPage() {
   );
   const learnerVisibleDownloads = [
     ...learnerGuideDownloads,
-    ...(assessmentUnlocked ? learnerAssessmentDownloads : []),
+    ...(hasSummativeAssessment && assessmentUnlocked ? learnerAssessmentDownloads : []),
   ];
-  const isLearnerView = role === "learner";
+  const isLearnerView = role === "learner" || role === "user";
   const backHref = isLearnerView ? "/learner" : "/modules";
   const backLabel = isLearnerView
     ? "Back to Learner Portal"
@@ -2066,25 +2091,25 @@ export default function ModuleDetailPage() {
                                       if (quizSaved) {
                                         toast({
                                           title: "Quiz Completed!",
-                                          description: `You scored ${percentage}% (${score}/${quizItems.length}). ${score >= 2 ? 'Quiz answers saved! Assessment unlocked!' : 'Quiz answers saved! You need at least 2 correct answers to unlock the assessment.'}`
+                                          description: `You scored ${percentage}% (${score}/${quizItems.length}). ${score >= 2 ? (hasSummativeAssessment ? 'Quiz answers saved! Assessment unlocked!' : 'Quiz answers saved! Workbook and quiz evidence complete for this module.') : (hasSummativeAssessment ? 'Quiz answers saved! You need at least 2 correct answers to unlock the assessment.' : 'Quiz answers saved! You need at least 2 correct answers to complete this module.')}`
                                         });
                                       } else {
                                         toast({
                                           title: "Quiz Completed!",
-                                          description: `You scored ${percentage}% (${score}/${quizItems.length}). ${score >= 2 ? 'Assessment unlocked!' : 'You need at least 2 correct answers to unlock the assessment.'}`
+                                          description: `You scored ${percentage}% (${score}/${quizItems.length}). ${score >= 2 ? (hasSummativeAssessment ? 'Assessment unlocked!' : 'Workbook and quiz evidence complete for this module.') : (hasSummativeAssessment ? 'You need at least 2 correct answers to unlock the assessment.' : 'You need at least 2 correct answers to complete this module.')}`
                                         });
                                       }
 
                                       // Update progress
                                       const success = await updateProgress(id, {
                                         quiz_passed: score >= 2,
-                                        assessment_unlocked: score >= 2,
+                                        assessment_unlocked: hasSummativeAssessment ? score >= 2 : false,
                                         guide_completed: true,
                                         updated_at: new Date().toISOString()
                                       });
 
                                       if (success) {
-                                        setAssessmentUnlocked(score >= 2);
+                                        setAssessmentUnlocked(hasSummativeAssessment ? score >= 2 : false);
                                         setGuideCompleted(true);
                                         localStorage.removeItem(`cet_sess_${user?.id}_${id}`);
 
@@ -2097,14 +2122,18 @@ export default function ModuleDetailPage() {
                                             // If passed, redirect to progress page
                                             navigate(`/learner/modules/${id}/progress`);
                                             toast({
-                                              title: "Assessment Unlocked!",
-                                              description: "Great job! You can now proceed to the summative assessment.",
+                                              title: hasSummativeAssessment ? "Assessment Unlocked!" : "Module Evidence Completed!",
+                                              description: hasSummativeAssessment
+                                                ? "Great job! You can now proceed to the summative assessment."
+                                                : "Great job! Workbook and quiz evidence are complete for this module.",
                                             });
                                           } else {
                                             // If failed, stay on quiz for retry
                                             toast({
                                               title: "Quiz Complete",
-                                              description: "You need at least 2 correct answers to unlock the assessment. You can retry the quiz.",
+                                              description: hasSummativeAssessment
+                                                ? "You need at least 2 correct answers to unlock the assessment. You can retry the quiz."
+                                                : "You need at least 2 correct answers to complete this module. You can retry the quiz.",
                                               variant: "destructive"
                                             });
                                           }
@@ -2154,7 +2183,7 @@ export default function ModuleDetailPage() {
                     </div>
                   )}
 
-                  {workspaceView === "assessment" && assessmentUnlocked && (
+                  {workspaceView === "assessment" && assessmentUnlocked && hasSummativeAssessment && (
                     <div className="rounded-xl border border-border bg-card p-6 space-y-5">
                       <div className="flex items-center gap-3 mb-6">
                         <div className="h-10 w-10 rounded-xl bg-gradient-to-r from-orange-400 to-red-500 flex items-center justify-center shrink-0">
@@ -2291,14 +2320,14 @@ export default function ModuleDetailPage() {
                         : hasStructuredFlow
                           ? sessionLessons.length + 3
                           : 3}
-                    /{hasStructuredFlow ? sessionLessons.length + 3 : 3}
+                    /{hasStructuredFlow ? sessionLessons.length + (hasSummativeAssessment ? 3 : 2) : (hasSummativeAssessment ? 3 : 2)}
                   </span>
                 </div>
                 <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
                   <div
                     className="h-1.5 rounded-full bg-primary transition-all duration-500"
                     style={{
-                      width: `${workspaceView === "guide" ? (guideMode === "intro" ? 5 : Math.round(((sessionIndex + 1) / (hasStructuredFlow ? sessionLessons.length + 1 : 1)) * 90)) : workspaceView === "quiz" ? 95 : 100}%`,
+                      width: `${workspaceView === "guide" ? (guideMode === "intro" ? 5 : Math.round(((sessionIndex + 1) / (hasStructuredFlow ? sessionLessons.length + 1 : 1)) * 90)) : workspaceView === "quiz" ? (hasSummativeAssessment ? 95 : 100) : 100}%`,
                     }}
                   />
                 </div>
@@ -2354,14 +2383,14 @@ export default function ModuleDetailPage() {
                   className={`w-full flex items-center gap-2 rounded-lg px-3 py-2 text-xs text-left transition-colors ${workspaceView === "quiz" ? "bg-primary/10 text-primary font-medium" : "text-muted-foreground hover:bg-secondary/50"}`}
                 >
                   <span
-                    className={`shrink-0 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold ${assessmentUnlocked ? "bg-primary text-primary-foreground" : "border border-border"}`}
+                    className={`shrink-0 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold ${(progressMap[id || ""]?.quiz_passed || assessmentUnlocked || (quizSubmitted && (quizScore ?? 0) >= 2)) ? "bg-primary text-primary-foreground" : "border border-border"}`}
                   >
-                    {assessmentUnlocked ? "✓" : ""}
+                    {(progressMap[id || ""]?.quiz_passed || assessmentUnlocked || (quizSubmitted && (quizScore ?? 0) >= 2)) ? "✓" : ""}
                   </span>
                   Quiz
                 </button>
 
-                {assessmentUnlocked && (
+                {assessmentUnlocked && hasSummativeAssessment && (
                   <button
                     onClick={() => setWorkspaceView("assessment")}
                     className={`w-full flex items-center gap-2 rounded-lg px-3 py-2 text-xs text-left transition-colors ${workspaceView === "assessment" ? "bg-primary/10 text-primary font-medium" : "text-muted-foreground hover:bg-secondary/50"}`}
@@ -2402,6 +2431,7 @@ export default function ModuleDetailPage() {
                 </p>
               )}
               {isLearnerView &&
+                hasSummativeAssessment &&
                 !assessmentUnlocked &&
                 learnerAssessmentDownloads.length > 0 && (
                   <p className="text-[10px] text-muted-foreground">
@@ -2492,11 +2522,11 @@ export default function ModuleDetailPage() {
         <PresentationMode
           module={mod}
           flow={moduleLessonFlow}
-          isAdmin={role === "admin" || role === "lecturer"}
+          isAdmin={role === "admin" || role === "lecturer" || role === "moderator"}
           onClose={() => setIsPresenting(false)}
           nextUnitId={nextModule?.id}
           nextUnitTitle={nextModule?.title}
-          routePrefix={role === "learner" ? "/learner/modules" : "/modules"}
+          routePrefix={role === "learner" || role === "user" ? "/learner/modules" : "/modules"}
         />
       )}
     </AppLayout>

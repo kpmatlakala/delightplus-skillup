@@ -19,7 +19,7 @@ function fmtDate(iso: string) {
 
 export default function AnnouncementsPage() {
   const { role } = useAuth();
-  const isAdmin = role !== "learner";
+  const isAdmin = role !== "learner" && role !== "user";
   const { items, loading, source, post: dbPost, togglePin, remove } = useAnnouncements();
   const [showForm, setShowForm] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);

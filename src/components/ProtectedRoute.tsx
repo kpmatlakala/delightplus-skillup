@@ -33,7 +33,7 @@ export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
   }
 
   if (!allowedRoles.includes(role)) {
-    if (role === "learner") {
+    if (role === "learner" || role === "user") {
       return <Navigate to="/learner" replace />;
     }
     return <Navigate to="/" replace />;

@@ -30,8 +30,11 @@ export default function ModuleProgressReviewPage() {
   
   const module = modules.find(m => m.id === id);
   const progress = id ? progressMap[id] : null;
-  const quizCompleted = Boolean(progress?.quiz_completed || progress?.quiz_passed || progress?.assessment_unlocked);
-  const quizPassed = Boolean(progress?.quiz_passed || progress?.assessment_unlocked || ((progress?.quiz_score ?? 0) >= 70 && progress?.quiz_score != null));
+  const hasSummativeRequirement = Boolean(module && module.block !== 3);
+  const quizCompleted = Boolean(progress?.quiz_completed || progress?.quiz_passed || (hasSummativeRequirement && progress?.assessment_unlocked));
+  const quizPassed = Boolean(progress?.quiz_passed || (hasSummativeRequirement && progress?.assessment_unlocked) || ((progress?.quiz_score ?? 0) >= 70 && progress?.quiz_score != null));
+  const usesWorkbookEvidence = Boolean(module && (module.block === 1 || module.block === 2));
+  const guideOrWorkbookLabel = usesWorkbookEvidence ? 'Learner Workbook' : 'Learner Guide';
 
   if (!module || !id) {
     return (
@@ -62,11 +65,11 @@ export default function ModuleProgressReviewPage() {
 
   const getProgressPercentage = () => {
     let completed = 0;
-    let total = 3; // Guide, Quiz, Assessment
+    let total = hasSummativeRequirement ? 3 : 2; // Workbook/Guide, Quiz, (+ optional Summative)
     
     if (progress.guide_completed) completed++;
     if (quizCompleted) completed++;
-    if (progress.assessment_submitted) completed++;
+    if (hasSummativeRequirement && progress.assessment_submitted) completed++;
     
     return Math.round((completed / total) * 100);
   };
@@ -74,8 +77,10 @@ export default function ModuleProgressReviewPage() {
   const getNextAction = () => {
     if (!progress.guide_completed) {
       return {
-        action: 'Continue Guide',
-        description: 'Complete the learner guide to unlock the quiz',
+        action: usesWorkbookEvidence ? 'Continue Workbook' : 'Continue Guide',
+        description: usesWorkbookEvidence
+          ? 'Complete the learner workbook to unlock the quiz'
+          : 'Complete the learner guide to unlock the quiz',
         path: `/learner/modules/${id}`,
         icon: FileText,
         variant: 'default' as const
@@ -85,10 +90,20 @@ export default function ModuleProgressReviewPage() {
     if (!quizCompleted) {
       return {
         action: 'Take Quiz',
-        description: 'Complete the knowledge check to unlock assessment',
+        description: hasSummativeRequirement ? 'Complete the knowledge check to unlock summative assessment' : 'Complete the knowledge check to finish this module evidence',
         path: `/learner/modules/${id}`,
         icon: Play,
         variant: 'default' as const
+      };
+    }
+
+    if (!hasSummativeRequirement) {
+      return {
+        action: 'Review Module',
+        description: 'Workbook and quiz evidence are complete for this module',
+        path: `/learner/modules/${id}`,
+        icon: Eye,
+        variant: 'outline' as const
       };
     }
     
@@ -105,7 +120,7 @@ export default function ModuleProgressReviewPage() {
     if (progress.assessment_unlocked && !progress.assessment_submitted) {
       return {
         action: 'Submit Assessment',
-        description: 'Complete your summative assessment',
+        description: 'Complete your summative assessment evidence',
         path: `/learner/assessment/${id}`,
         icon: FileText,
         variant: 'default' as const
@@ -184,7 +199,7 @@ export default function ModuleProgressReviewPage() {
 
         {/* Progress Details */}
         <div className="grid gap-4 md:grid-cols-3">
-          {/* Guide Progress */}
+          {/* Workbook/Guide Progress */}
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-base flex items-center gap-2">
@@ -193,7 +208,7 @@ export default function ModuleProgressReviewPage() {
                 ) : (
                   <Clock size={20} className="text-muted-foreground" />
                 )}
-                Learner Guide
+                {guideOrWorkbookLabel}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -204,13 +219,13 @@ export default function ModuleProgressReviewPage() {
                 
                 {progress.guide_completed ? (
                   <div className="text-sm text-muted-foreground">
-                    <p>✓ All sessions completed</p>
+                    <p>✓ {usesWorkbookEvidence ? 'Workbook evidence logged' : 'All guide sessions completed'}</p>
                     <p>✓ Ready for quiz</p>
                   </div>
                 ) : (
                   <div className="text-sm text-muted-foreground">
-                    <p>Complete all guide sessions</p>
-                    <p>Review learning objectives</p>
+                    <p>{usesWorkbookEvidence ? 'Complete workbook activities' : 'Complete all guide sessions'}</p>
+                    <p>{usesWorkbookEvidence ? 'Log workbook evidence for this module' : 'Review learning objectives'}</p>
                   </div>
                 )}
                 
@@ -221,7 +236,9 @@ export default function ModuleProgressReviewPage() {
                   className="w-full gap-2"
                 >
                   <FileText size={14} />
-                  {progress.guide_completed ? 'Review Guide' : 'Start Guide'}
+                  {progress.guide_completed
+                    ? (usesWorkbookEvidence ? 'Review Workbook' : 'Review Guide')
+                    : (usesWorkbookEvidence ? 'Start Workbook' : 'Start Guide')}
                 </Button>
               </div>
             </CardContent>
@@ -311,97 +328,116 @@ export default function ModuleProgressReviewPage() {
             </CardContent>
           </Card>
 
-          {/* Assessment Progress */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base flex items-center gap-2">
-                {progress.assessment_submitted ? (
-                  <CheckCircle2 size={20} className="text-green-600" />
-                ) : progress.assessment_unlocked ? (
-                  <Clock size={20} className="text-blue-600" />
-                ) : (
-                  <Clock size={20} className="text-muted-foreground" />
-                )}
-                Assessment
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {progress.assessment_submitted ? (
-                  <>
-                    <Badge variant="default">Submitted</Badge>
-                    
-                    <div className="text-sm text-muted-foreground">
-                      {progress.submission_uploaded_at && (
-                        <p>Submitted: {new Date(progress.submission_uploaded_at).toLocaleDateString()}</p>
+          {hasSummativeRequirement ? (
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  {progress.assessment_submitted ? (
+                    <CheckCircle2 size={20} className="text-green-600" />
+                  ) : progress.assessment_unlocked ? (
+                    <Clock size={20} className="text-blue-600" />
+                  ) : (
+                    <Clock size={20} className="text-muted-foreground" />
+                  )}
+                  Assessment
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {progress.assessment_submitted ? (
+                    <>
+                      <Badge variant="default">Submitted</Badge>
+
+                      <div className="text-sm text-muted-foreground">
+                        {progress.submission_uploaded_at && (
+                          <p>Submitted: {new Date(progress.submission_uploaded_at).toLocaleDateString()}</p>
+                        )}
+                        {assessmentStatus?.assessment_grade ? (
+                          <p>Grade: {assessmentStatus.assessment_grade}%</p>
+                        ) : (
+                          <p>Awaiting grading</p>
+                        )}
+                      </div>
+
+                      {progress.submission_path && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            // Create download link for submitted file
+                            const link = document.createElement('a');
+                            link.href = `https://ebzsvbbmahvqlshydkxg.supabase.co/storage/v1/object/public/assessment-submissions/${progress.submission_path}`;
+                            link.download = `${module.code}_assessment.txt`;
+                            link.click();
+                          }}
+                          className="w-full gap-2"
+                        >
+                          <Download size={14} />
+                          Download Submission
+                        </Button>
                       )}
-                      {assessmentStatus?.assessment_grade ? (
-                        <p>Grade: {assessmentStatus.assessment_grade}%</p>
-                      ) : (
-                        <p>Awaiting grading</p>
-                      )}
-                    </div>
-                    
-                    {progress.submission_path && (
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => {
-                          // Create download link for submitted file
-                          const link = document.createElement('a');
-                          link.href = `https://ebzsvbbmahvqlshydkxg.supabase.co/storage/v1/object/public/assessment-submissions/${progress.submission_path}`;
-                          link.download = `${module.code}_assessment.txt`;
-                          link.click();
-                        }}
+                    </>
+                  ) : progress.assessment_unlocked ? (
+                    <>
+                      <Badge variant="default">Ready</Badge>
+
+                      <div className="text-sm text-muted-foreground">
+                        <p>Quiz passed - assessment unlocked</p>
+                        <p>Submit your summative assessment</p>
+                      </div>
+
+                      <Button
+                        size="sm"
+                        variant="default"
+                        onClick={() => navigate(`/learner/assessment/${id}`)}
                         className="w-full gap-2"
                       >
-                        <Download size={14} />
-                        Download Submission
+                        <FileText size={14} />
+                        Submit Assessment
                       </Button>
-                    )}
-                  </>
-                ) : progress.assessment_unlocked ? (
-                  <>
-                    <Badge variant="default">Ready</Badge>
-                    
-                    <div className="text-sm text-muted-foreground">
-                      <p>Quiz passed - assessment unlocked</p>
-                      <p>Submit your summative assessment</p>
-                    </div>
-                    
-                    <Button 
-                      size="sm" 
-                      variant="default"
-                      onClick={() => navigate(`/learner/assessment/${id}`)}
-                      className="w-full gap-2"
-                    >
-                      <FileText size={14} />
-                      Submit Assessment
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Badge variant="secondary">Locked</Badge>
-                    
-                    <div className="text-sm text-muted-foreground">
-                      <p>Pass quiz to unlock</p>
-                      <p>Need 70% quiz score</p>
-                    </div>
-                    
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      disabled
-                      className="w-full gap-2"
-                    >
-                      <FileText size={14} />
-                      Assessment Locked
-                    </Button>
-                  </>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+                    </>
+                  ) : (
+                    <>
+                      <Badge variant="secondary">Locked</Badge>
+
+                      <div className="text-sm text-muted-foreground">
+                        <p>Pass quiz to unlock</p>
+                        <p>Need 70% quiz score</p>
+                      </div>
+
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        disabled
+                        className="w-full gap-2"
+                      >
+                        <FileText size={14} />
+                        Assessment Locked
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <CheckCircle2 size={20} className="text-green-600" />
+                  Summative Assessment
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <Badge variant="secondary">Not Required</Badge>
+                  <div className="text-sm text-muted-foreground">
+                    <p>Block 3 evidence uses workbook and quiz only.</p>
+                    <p>No summative submission is required for this block.</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         {/* Completion Status */}
@@ -414,7 +450,7 @@ export default function ModuleProgressReviewPage() {
                   <h3 className="text-lg font-semibold">Module Completed!</h3>
                 </div>
                 <p className="text-green-600">
-                  Congratulations! You have successfully completed all components of {module.title}.
+                  Congratulations! You have successfully completed the required evidence for {module.title}: {usesWorkbookEvidence ? 'workbook' : 'guide'}, quiz, and summative assessment.
                 </p>
                 <div className="flex gap-3 justify-center">
                   <Button 

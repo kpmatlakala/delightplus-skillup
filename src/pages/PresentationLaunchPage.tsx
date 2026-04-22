@@ -77,7 +77,7 @@ export default function PresentationLaunchPage() {
   };
 
   /* ── Guard ── */
-  if (!user || (role !== "admin" && role !== "lecturer")) {
+  if (!user || (role !== "admin" && role !== "lecturer" && role !== "moderator")) {
     return (
       <div className="min-h-dvh flex flex-col items-center justify-center gap-4 bg-gray-950 text-white px-6 text-center">
         <Lock size={36} className="text-white/20" />

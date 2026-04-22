@@ -53,8 +53,9 @@ interface RemoteLaunch {
 // Mobile navigation for learner portal
 const MobileNav = ({ role, announcements, unreadMessages }: { role: string | null; announcements: any[]; unreadMessages: number }) => {
   const [open, setOpen] = useState(false);
+  const isLearnerRole = role === "learner" || role === "user";
   
-  if (role !== "learner") return null;
+  if (!isLearnerRole) return null;
   
   const announcementCount = announcements.filter((a) => a.audience !== "Admin Only").length;
   
@@ -136,10 +137,11 @@ const MobileNav = ({ role, announcements, unreadMessages }: { role: string | nul
 export default function AppLayout({ children, title, subtitle }: AppLayoutProps) {
   const { user, role, signOut } = useAuth();
   const location = useLocation();
+  const isLearnerRole = role === "learner" || role === "user";
   const [profileDisplayName, setProfileDisplayName] = useState("");
   const [profileAvatarUrl, setProfileAvatarUrl] = useState("");
   const { items: announcements } = useAnnouncements();
-  const announcementCount = role === "learner"
+  const announcementCount = isLearnerRole
     ? announcements.filter((a) => a.audience !== "Admin Only").length
     : announcements.length;
   const unreadMessages = useUnreadCount(user?.id ?? null);
@@ -149,7 +151,7 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
   const { flow: remoteFlow } = useModuleFlow(remoteModuleId);
 
   useEffect(() => {
-    if (role !== "admin" && role !== "lecturer") return;
+    if (role !== "admin" && role !== "lecturer" && role !== "moderator") return;
 
     const ch = supabase.channel(LAUNCHER_CHANNEL, {
       config: { broadcast: { ack: false } },
@@ -209,11 +211,11 @@ export default function AppLayout({ children, title, subtitle }: AppLayoutProps)
   const avatarUrl = profileAvatarUrl || ((user?.user_metadata?.avatar_url as string | undefined) ?? "");
   const email = user?.email ?? "";
   const initials = getInitials(displayName, email);
-  const isLearnerRoute = role === "learner" && location.pathname.startsWith("/learner");
+  const isLearnerRoute = isLearnerRole && location.pathname.startsWith("/learner");
 
   return (
     <div className="flex min-h-screen">
-      {role !== "learner" && <AppSidebar />}
+      {!isLearnerRole && <AppSidebar />}
       <main className="flex-1 min-w-0">
         <header
           className={`sticky top-0 z-30 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border transition-all ${

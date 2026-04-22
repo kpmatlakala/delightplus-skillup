@@ -84,6 +84,44 @@ export default function Dashboard() {
         <StatCard label="Enrolled Learners" value={enrolledCount} icon={<Users size={16} />} variant="warning" />
       </div>
 
+      {/* Admin quick actions */}
+      <div className="rounded-lg border border-border bg-card px-4 py-3 mb-4">
+        <div className="flex items-center justify-between mb-2.5">
+          <h3 className="font-display font-semibold text-sm text-foreground">Admin Journey Quick Actions</h3>
+          <span className="text-[11px] text-muted-foreground">Most-used routes for daily ops</span>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+          <button
+            onClick={() => navigate("/learners")}
+            className="rounded-md border border-border px-3 py-2 text-left hover:bg-secondary/50 transition-colors"
+          >
+            <p className="text-xs font-semibold text-foreground">Learners</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">Manage learner list</p>
+          </button>
+          <button
+            onClick={() => navigate("/communications")}
+            className="rounded-md border border-border px-3 py-2 text-left hover:bg-secondary/50 transition-colors"
+          >
+            <p className="text-xs font-semibold text-foreground">Communications</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">Announcements and messages</p>
+          </button>
+          <button
+            onClick={() => navigate("/assessments/blocks")}
+            className="rounded-md border border-border px-3 py-2 text-left hover:bg-secondary/50 transition-colors"
+          >
+            <p className="text-xs font-semibold text-foreground">Block Assessments</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">Capture and grading flow</p>
+          </button>
+          <button
+            onClick={() => navigate("/poe")}
+            className="rounded-md border border-border px-3 py-2 text-left hover:bg-secondary/50 transition-colors"
+          >
+            <p className="text-xs font-semibold text-foreground">PoE</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">Readiness and templates</p>
+          </button>
+        </div>
+      </div>
+
       {/* Learner Portal QR Invite */}
       <div className="rounded-lg border border-border bg-card px-4 py-3 mb-4 flex flex-col sm:flex-row sm:items-center gap-4">
         <div className="shrink-0 p-1.5 bg-white rounded-xl">

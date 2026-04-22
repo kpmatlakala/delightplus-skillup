@@ -31,39 +31,51 @@ import {
   module14924SpeakerNotes,
   module14924SlideList,
   type Module14924SlideListItem,
-} from "@/data/module14924Presentation";
+} from "@/data/block1/module14924Presentation";
 import {
   module14920SpeakerNotes,
   module14920SlideList,
   type Module14920SlideListItem,
-} from "@/data/module14920Presentation";
+} from "@/data/block1/module14920Presentation";
 import {
   module14918SlideList,
   type Module14918SlideListItem,
-} from "@/data/module14918Presentation";
+} from "@/data/block1/module14918Presentation";
 import {
   module14927SlideList,
   type Module14927SlideListItem,
-} from "@/data/module14927Presentation";
+} from "@/data/block1/module14927Presentation";
 import {
   module14915SlideList,
   type Module14915SlideListItem,
-} from "@/data/module14915Presentation";
+} from "@/data/block1/module14915Presentation";
 import {
   module14910SpeakerNotes,
   module14910SlideList,
   type Module14910SlideListItem,
-} from "@/data/module14910Presentation";
+} from "@/data/block2/module14910Presentation";
 import {
   module14930SpeakerNotes,
   module14930SlideList,
   type Module14930SlideListItem,
-} from "@/data/module14930Presentation";
+} from "@/data/block2/module14930Presentation";
 import {
   module14933SpeakerNotes,
   module14933SlideList,
   type Module14933SlideListItem,
-} from "@/data/module14933Presentation";
+} from "@/data/block2/module14933Presentation";
+import {
+  module14908SlideList,
+  type Module14908SlideListItem,
+} from "@/data/block3/module14908Presentation";
+import {
+  module14919SlideList,
+  type Module14919SlideListItem,
+} from "@/data/block3/module14919Presentation";
+import {
+  module120379SlideList,
+  type Module120379SlideListItem,
+} from "@/data/block3/module120379Presentation";
 import { programmeBriefingSlides } from "@/data/programmeBriefing";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -924,6 +936,138 @@ function buildModule14933SlidesFromData(): Slide[] {
   ];
 }
 
+function toModule14908Slide(item: Module14908SlideListItem): Slide {
+  const lines = item.content
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const bulletLines = lines.filter((line) => line.startsWith("• ")).map((line) => line.replace(/^•\s*/, ""));
+  const nonBulletLines = lines.filter((line) => !line.startsWith("• "));
+  const subtitle = nonBulletLines[0];
+  const body = nonBulletLines.slice(1).join("\n") || undefined;
+
+  const mappedType: SlideType =
+    item.type === "title"
+      ? "title"
+      : item.type === "summary"
+      ? "summary"
+      : item.type === "activity"
+      ? "activity"
+      : "content";
+
+  return {
+    type: mappedType,
+    title: item.title,
+    subtitle,
+    body,
+    bullets: bulletLines.length ? bulletLines : undefined,
+    cards: item.cards,
+    phaseCards: item.phaseCards,
+    imageUrl: item.imageUrl,
+    imageAlt: item.imageAlt,
+    speakerNote: item.notes,
+  };
+}
+
+function buildModule14908SlidesFromData(): Slide[] {
+  const mapped = module14908SlideList.map((item) => toModule14908Slide(item));
+  const summarySlides = mapped.filter((slide) => slide.type === "summary");
+  const coreSlides = mapped.filter((slide) => slide.type !== "summary");
+  return [
+    ...coreSlides,
+    ...getQuizSlides("14908", "Testing IT Systems Against Specifications"),
+    ...summarySlides,
+  ];
+}
+
+function toModule14919Slide(item: Module14919SlideListItem): Slide {
+  const lines = item.content
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const bulletLines = lines.filter((line) => line.startsWith("• ")).map((line) => line.replace(/^•\s*/, ""));
+  const nonBulletLines = lines.filter((line) => !line.startsWith("• "));
+  const subtitle = nonBulletLines[0];
+  const body = nonBulletLines.slice(1).join("\n") || undefined;
+
+  const mappedType: SlideType =
+    item.type === "title"
+      ? "title"
+      : item.type === "summary"
+      ? "summary"
+      : item.type === "activity"
+      ? "activity"
+      : "content";
+
+  return {
+    type: mappedType,
+    title: item.title,
+    subtitle,
+    body,
+    bullets: bulletLines.length ? bulletLines : undefined,
+    cards: item.cards,
+    phaseCards: item.phaseCards,
+    imageUrl: item.imageUrl,
+    imageAlt: item.imageAlt,
+    speakerNote: item.notes,
+  };
+}
+
+function buildModule14919SlidesFromData(): Slide[] {
+  const mapped = module14919SlideList.map((item) => toModule14919Slide(item));
+  const summarySlides = mapped.filter((slide) => slide.type === "summary");
+  const coreSlides = mapped.filter((slide) => slide.type !== "summary");
+  return [
+    ...coreSlides,
+    ...getQuizSlides("14919", "Resolve Computer Users' Problems"),
+    ...summarySlides,
+  ];
+}
+
+function toModule120379Slide(item: Module120379SlideListItem): Slide {
+  const lines = item.content
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const bulletLines = lines.filter((line) => line.startsWith("• ")).map((line) => line.replace(/^•\s*/, ""));
+  const nonBulletLines = lines.filter((line) => !line.startsWith("• "));
+  const subtitle = nonBulletLines[0];
+  const body = nonBulletLines.slice(1).join("\n") || undefined;
+
+  const mappedType: SlideType =
+    item.type === "title"
+      ? "title"
+      : item.type === "summary"
+      ? "summary"
+      : item.type === "activity"
+      ? "activity"
+      : "content";
+
+  return {
+    type: mappedType,
+    title: item.title,
+    subtitle,
+    body,
+    bullets: bulletLines.length ? bulletLines : undefined,
+    cards: item.cards,
+    phaseCards: item.phaseCards,
+    imageUrl: item.imageUrl,
+    imageAlt: item.imageAlt,
+    speakerNote: item.notes,
+  };
+}
+
+function buildModule120379SlidesFromData(): Slide[] {
+  const mapped = module120379SlideList.map((item) => toModule120379Slide(item));
+  const summarySlides = mapped.filter((slide) => slide.type === "summary");
+  const coreSlides = mapped.filter((slide) => slide.type !== "summary");
+  return [
+    ...coreSlides,
+    ...getQuizSlides("120379", "Work as a Project Team Member"),
+    ...summarySlides,
+  ];
+}
+
 /* ─────────────────────────────────────────────────────────────────────────────
    Per-module facilitator speaker notes
    These are the talking-point scripts displayed on the mobile remote.
@@ -1630,6 +1774,21 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
   if (flow.moduleId === "14933") {
     // Module 14933 now uses a dedicated authored presentation data file.
     return buildModule14933SlidesFromData();
+  }
+
+  if (flow.moduleId === "14908") {
+    // Module 14908 now uses a dedicated authored presentation data file.
+    return buildModule14908SlidesFromData();
+  }
+
+  if (flow.moduleId === "14919") {
+    // Module 14919 now uses a dedicated authored presentation data file.
+    return buildModule14919SlidesFromData();
+  }
+
+  if (flow.moduleId === "120379") {
+    // Module 120379 now uses a dedicated authored presentation data file.
+    return buildModule120379SlidesFromData();
   }
 
   const slides: Slide[] = [];

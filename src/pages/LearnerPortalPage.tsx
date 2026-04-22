@@ -44,6 +44,8 @@ export default function LearnerPortalPage() {
   );
   const currentModuleIndex =
     firstUndoneIndex === -1 ? modulePath.length : firstUndoneIndex;
+  const currentModule =
+    modulePath[Math.min(currentModuleIndex, Math.max(modulePath.length - 1, 0))];
   const practicalModules = modules.filter((m) => m.type === "Practical").length;
   const knowledgeModules = modules.filter((m) => m.type === "Knowledge").length;
 
@@ -136,6 +138,49 @@ export default function LearnerPortalPage() {
             <p className="text-xs text-muted-foreground hidden sm:block">
               {completedModules} of {modules.length} completed
             </p>
+          </div>
+        </div>
+
+        {/* Journey quick actions */}
+        <div className="rounded-lg border border-border bg-card p-3 sm:p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-display font-semibold text-sm sm:text-base">Continue Your Journey</h3>
+            <Badge variant="outline" className="text-[10px] sm:text-xs">Next Best Actions</Badge>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+            <Link
+              to={currentModule ? `/learner/modules/${currentModule.id}` : "/learner"}
+              className="rounded-md border border-primary/30 bg-primary/10 px-3 py-3 hover:bg-primary/15 transition-colors"
+            >
+              <p className="text-[11px] uppercase tracking-wide text-primary/80">Continue Module</p>
+              <p className="text-sm font-semibold text-foreground mt-0.5 line-clamp-1">
+                {currentModule ? currentModule.title : "Start learning"}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1 inline-flex items-center gap-1">
+                Open workspace <ArrowRight size={12} />
+              </p>
+            </Link>
+
+            <Link
+              to="/communications?tab=messages"
+              className="rounded-md border border-border bg-secondary/30 px-3 py-3 hover:bg-secondary/50 transition-colors"
+            >
+              <p className="text-[11px] uppercase tracking-wide text-muted-foreground">Messages</p>
+              <p className="text-sm font-semibold text-foreground mt-0.5">
+                {unreadMessages > 0 ? `${unreadMessages} unread` : "All caught up"}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">Check facilitator updates</p>
+            </Link>
+
+            <Link
+              to="/poe"
+              className="rounded-md border border-border bg-secondary/30 px-3 py-3 hover:bg-secondary/50 transition-colors"
+            >
+              <p className="text-[11px] uppercase tracking-wide text-muted-foreground">Portfolio (PoE)</p>
+              <p className="text-sm font-semibold text-foreground mt-0.5">Track submission readiness</p>
+              <p className="text-xs text-muted-foreground mt-1">Review module evidence checklist</p>
+            </Link>
           </div>
         </div>
 
@@ -293,7 +338,7 @@ export default function LearnerPortalPage() {
                       isCurrent
                         ? "border-primary bg-primary/10"
                         : "border-border hover:bg-secondary/40"
-                    }`}
+                    } min-h-[46px]`}
                   >
                     <div className="min-w-0 flex items-center gap-2 sm:gap-2.5 flex-1">
                       <Avatar className="h-6 w-6 sm:h-7 sm:w-7 shrink-0">

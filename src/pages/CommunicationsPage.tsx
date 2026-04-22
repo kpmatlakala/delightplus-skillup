@@ -276,7 +276,7 @@ function MessagesPanel({
   userName: string;
   myUserId: string | null;
 }) {
-  const isLearner = role === "learner";
+  const isLearner = role === "learner" || role === "user";
   const {
     conversations,
     loadingConvs,
@@ -637,7 +637,7 @@ function MessagesPanel({
               <button
                 onClick={() => setShowCompose(true)}
                 title="New message"
-                className="shrink-0 p-1.5 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                className="shrink-0 p-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors min-h-[36px] min-w-[36px]"
               >
                 <Plus size={13} />
               </button>
@@ -659,7 +659,7 @@ function MessagesPanel({
                 <button
                   key={t.id}
                   onClick={() => { void selectThread(t.id); }}
-                  className={`w-full flex items-start gap-2.5 px-3 py-3 border-b border-border text-left transition-colors ${activeId === t.id ? "bg-primary/8" : "hover:bg-secondary/40"}`}
+                  className={`w-full flex items-start gap-2.5 px-3 py-3.5 border-b border-border text-left transition-colors min-h-[56px] ${activeId === t.id ? "bg-primary/8" : "hover:bg-secondary/40"}`}
                 >
                   <Avatar className="h-8 w-8 shrink-0 mt-0.5">
                     <AvatarFallback className="text-[10px] font-bold bg-muted text-muted-foreground">{t.initials}</AvatarFallback>
@@ -697,7 +697,7 @@ function MessagesPanel({
                 </div>
                 <button
                   onClick={() => setShowCompose(true)}
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-xs font-medium hover:bg-primary/90 transition-colors"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-primary-foreground px-4 py-2.5 min-h-[42px] text-xs font-medium hover:bg-primary/90 transition-colors"
                 >
                   <Plus size={12} /> New Message
                 </button>
@@ -744,7 +744,7 @@ function MessagesPanel({
               <div className="flex items-end gap-2">
                 <textarea
                   rows={1}
-                  className="flex-1 rounded-lg border border-border bg-card px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary resize-none"
+                  className="flex-1 rounded-lg border border-border bg-card px-3 py-2.5 min-h-[42px] text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary resize-none"
                   placeholder="Reply…"
                   value={reply}
                   onChange={(e) => setReply(e.target.value)}
@@ -753,7 +753,7 @@ function MessagesPanel({
                 <button
                   onClick={() => { void sendReply(); }}
                   disabled={!reply.trim()}
-                  className="shrink-0 p-2.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-colors"
+                  className="shrink-0 p-2.5 min-h-[42px] min-w-[42px] rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-colors"
                 >
                   <Send size={14} />
                 </button>
@@ -773,7 +773,7 @@ function MessagesPanel({
 
 export default function CommunicationsPage() {
   const { role, user } = useAuth();
-  const isAdmin = role !== "learner";
+  const isAdmin = role !== "learner" && role !== "user";
   const userName = (user?.user_metadata?.full_name as string | undefined) ?? (isAdmin ? "Admin" : "Me");
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -805,10 +805,10 @@ export default function CommunicationsPage() {
       )}
 
       {/* Tab bar */}
-      <div className="flex items-center gap-1 p-1 rounded-xl bg-muted/50 border border-border w-fit mb-5">
+      <div className="flex items-center gap-1 p-1 rounded-xl bg-muted/50 border border-border w-full sm:w-fit mb-5">
         <button
           onClick={() => switchTab("updates")}
-          className={`relative flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+          className={`relative flex-1 sm:flex-none justify-center sm:justify-start flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-lg text-sm font-medium transition-all min-h-[42px] ${
             activeTab === "updates"
               ? "bg-background text-foreground shadow-sm"
               : "text-muted-foreground hover:text-foreground"
@@ -825,7 +825,7 @@ export default function CommunicationsPage() {
 
         <button
           onClick={() => switchTab("messages")}
-          className={`relative flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+          className={`relative flex-1 sm:flex-none justify-center sm:justify-start flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-lg text-sm font-medium transition-all min-h-[42px] ${
             activeTab === "messages"
               ? "bg-background text-foreground shadow-sm"
               : "text-muted-foreground hover:text-foreground"

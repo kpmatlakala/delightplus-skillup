@@ -54,7 +54,7 @@ export default function AssessmentDetailPage() {
     }
 
     // Check if assessment is unlocked (quiz completed/passed)
-    if (role === 'learner' && !quizUnlocked) {
+    if ((role === 'learner' || role === 'user') && !quizUnlocked) {
       toast({
         title: "Assessment Locked",
         description: "Please complete the quiz first to unlock the assessment.",
@@ -143,22 +143,22 @@ export default function AssessmentDetailPage() {
     >
       <div className="space-y-6">
         {/* Header with back navigation */}
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => navigate(`/learner/modules/${id}`)}
-            className="gap-2"
+            className="gap-2 w-full sm:w-auto justify-start min-h-[42px]"
           >
             <ArrowLeft size={16} />
             Back to Module
           </Button>
           
-          <div className="flex-1">
+          <div className="flex-1 w-full">
             <div className="flex items-center gap-3">
               <FileText size={20} className="text-primary" />
               <div>
-                <h1 className="text-xl font-bold">Summative Assessment</h1>
+                <h1 className="text-lg sm:text-xl font-bold">Summative Assessment</h1>
                 <p className="text-sm text-muted-foreground">
                   Complete your assessment and submit for review
                 </p>
@@ -167,7 +167,7 @@ export default function AssessmentDetailPage() {
           </div>
 
           {/* Status badge */}
-          <div>
+          <div className="self-start sm:self-auto">
             {isSubmitted ? (
               hasGrade ? (
                 <Badge variant="default" className="gap-1">
@@ -203,8 +203,8 @@ export default function AssessmentDetailPage() {
 
         {/* Main content tabs */}
         <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)}>
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 h-auto">
+            <TabsTrigger value="overview" className="min-h-[42px] text-[11px] sm:text-sm">Overview</TabsTrigger>
             <TabsTrigger value="complete" disabled={isSubmitted}>
               Complete Assessment
             </TabsTrigger>
@@ -227,7 +227,7 @@ export default function AssessmentDetailPage() {
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Assessment options */}
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* In-app completion */}
                   <Card className="border-2 border-primary/20 bg-primary/5">
                     <CardHeader className="pb-3">
@@ -255,7 +255,7 @@ export default function AssessmentDetailPage() {
                         </li>
                       </ul>
                       <Button 
-                        className="w-full" 
+                        className="w-full min-h-[42px]" 
                         onClick={() => setActiveTab("complete")}
                         disabled={isSubmitted}
                       >
@@ -293,7 +293,7 @@ export default function AssessmentDetailPage() {
                       {assessmentDownload ? (
                         <Button 
                           variant="outline" 
-                          className="w-full" 
+                          className="w-full min-h-[42px]" 
                           asChild
                         >
                           <a href={assessmentDownload.href} download>

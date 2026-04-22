@@ -1,6 +1,6 @@
 import { buildFlowSlides } from "@/components/PresentationMode";
 import { modules } from "@/data/courseData";
-import { module14924LessonFlow } from "@/data/module14924LessonFlow";
+import { module14924LessonFlow } from "@/data/block1/module14924LessonFlow";
 
 export type Module14924SlideRunSheetItem = {
   slideNumber: number;

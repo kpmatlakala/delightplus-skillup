@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  ArrowLeft, KeyRound, RefreshCw, Trash2, Copy, CheckCircle2, Circle, Users, ClipboardCheck, Download
+  ArrowLeft, KeyRound, RefreshCw, Trash2, Copy, CheckCircle2, Circle, Users, ClipboardCheck, Download, Printer
 } from "lucide-react";
 import AppLayout from "@/components/AppLayout";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { BLOCK_INTERACTIVE_SECTIONS_MAP } from "@/data/blockAssessmentQuestions";
 import { autoMarkBlock1Submission, type AutoMarkItem, type AutoMarkResult } from "@/lib/blockAssessmentAutoMark";
 import { useAuth } from "@/hooks/useAuth";
 import { useAssessmentControl } from "@/hooks/useAssessmentControl";
@@ -18,6 +19,20 @@ type ReviewItem = AutoMarkItem & {
   confirmed: boolean;
   manualAwarded: number;
   reviewNote: string;
+};
+
+type AssessmentCaptureMode = "auto" | "manual";
+
+type ManualMarkItem = {
+  questionId: string;
+  label: string;
+  prompt: string;
+  sectionId: string;
+  sectionTitle: string;
+  sectionModule: string;
+  maxMarks: number;
+  markedCorrect: boolean | null;
+  awarded: number;
 };
 
 /* ─── Block metadata ─────────────────────────────────────────────────────── */
@@ -75,8 +90,12 @@ function OtpPanel({
   const [submissionText, setSubmissionText] = useState("");
   const [loadingSubmission, setLoadingSubmission] = useState(false);
   const [autoResult, setAutoResult] = useState<AutoMarkResult | null>(null);
+  const [assessmentMode, setAssessmentMode] = useState<AssessmentCaptureMode>("auto");
   const [correctCount, setCorrectCount] = useState("");
   const [wrongCount, setWrongCount] = useState("");
+  const [bonusB3Marks, setBonusB3Marks] = useState("0");
+  const [correctQuestionRefs, setCorrectQuestionRefs] = useState("");
+  const [incorrectQuestionRefs, setIncorrectQuestionRefs] = useState("");
   const [grade, setGrade] = useState("");
   const [feedback, setFeedback] = useState("");
   const [portfolioCaptured, setPortfolioCaptured] = useState(true);
@@ -87,6 +106,25 @@ function OtpPanel({
 
   const db = supabase as unknown as any;
   const supportsAutoMark = blockKey === "block-1";
+  const blockNumber = blockKey.replace("block-", "");
+  const manualSections = useMemo(() => BLOCK_INTERACTIVE_SECTIONS_MAP[blockNumber] ?? [], [blockNumber]);
+  const [manualMarkItems, setManualMarkItems] = useState<ManualMarkItem[]>([]);
+
+  const seedManualMarkItems = useMemo<ManualMarkItem[]>(() => {
+    return manualSections.flatMap((section) =>
+      section.questions.map((question) => ({
+        questionId: question.id,
+        label: question.label,
+        prompt: question.prompt,
+        sectionId: section.id,
+        sectionTitle: section.title,
+        sectionModule: section.module,
+        maxMarks: question.marks,
+        markedCorrect: null,
+        awarded: 0,
+      }))
+    );
+  }, [manualSections]);
 
   const reviewSummary = useMemo(() => {
     const score = reviewItems.reduce((sum, item) => sum + (Number.isFinite(item.manualAwarded) ? item.manualAwarded : 0), 0);
@@ -104,12 +142,87 @@ function OtpPanel({
     };
   }, [reviewItems]);
 
+  const manualSummary = useMemo(() => {
+    const score = manualMarkItems.reduce((sum, item) => sum + item.awarded, 0);
+    const maxScore = manualMarkItems.reduce((sum, item) => sum + item.maxMarks, 0);
+    const correct = manualMarkItems.filter((item) => item.markedCorrect === true).length;
+    const incorrect = manualMarkItems.filter((item) => item.markedCorrect === false).length;
+    const pending = manualMarkItems.filter((item) => item.markedCorrect === null).length;
+    const percentage = maxScore > 0 ? Math.round((score / maxScore) * 100) : 0;
+
+    return {
+      score,
+      maxScore,
+      correct,
+      incorrect,
+      pending,
+      percentage,
+    };
+  }, [manualMarkItems]);
+
+  const manualSectionSummaries = useMemo(() => {
+    const sectionOrder = manualSections.map((section) => section.id);
+    const bySection = new Map<string, {
+      sectionId: string;
+      sectionTitle: string;
+      module: string;
+      awarded: number;
+      max: number;
+      correct: number;
+      incorrect: number;
+      pending: number;
+    }>();
+
+    manualMarkItems.forEach((item) => {
+      if (!bySection.has(item.sectionId)) {
+        bySection.set(item.sectionId, {
+          sectionId: item.sectionId,
+          sectionTitle: item.sectionTitle,
+          module: item.sectionModule,
+          awarded: 0,
+          max: 0,
+          correct: 0,
+          incorrect: 0,
+          pending: 0,
+        });
+      }
+
+      const section = bySection.get(item.sectionId)!;
+      section.awarded += item.awarded;
+      section.max += item.maxMarks;
+      if (item.markedCorrect === true) section.correct += 1;
+      else if (item.markedCorrect === false) section.incorrect += 1;
+      else section.pending += 1;
+    });
+
+    return sectionOrder
+      .map((id) => bySection.get(id))
+      .filter((section): section is NonNullable<typeof section> => Boolean(section));
+  }, [manualMarkItems, manualSections]);
+
   useEffect(() => {
+    if (assessmentMode === "manual") {
+      if (!manualMarkItems.length) return;
+      setCorrectCount(String(manualSummary.correct));
+      setWrongCount(String(manualSummary.incorrect));
+      setGrade(String(manualSummary.percentage));
+      return;
+    }
+
     if (!reviewItems.length) return;
     setCorrectCount(String(reviewSummary.confirmedCorrect));
     setWrongCount(String(reviewSummary.needsAttention));
     setGrade(String(reviewSummary.percentage));
-  }, [reviewItems, reviewSummary.confirmedCorrect, reviewSummary.needsAttention, reviewSummary.percentage]);
+  }, [assessmentMode, manualMarkItems.length, manualSummary.correct, manualSummary.incorrect, manualSummary.percentage, reviewItems.length, reviewSummary.confirmedCorrect, reviewSummary.needsAttention, reviewSummary.percentage]);
+
+  useEffect(() => {
+    if (assessmentMode !== "manual") return;
+    setReviewItems([]);
+    setAutoResult(null);
+    if (!manualMarkItems.length && seedManualMarkItems.length) {
+      setManualMarkItems(seedManualMarkItems);
+    }
+  }, [assessmentMode, manualMarkItems.length, seedManualMarkItems]);
 
   useEffect(() => {
     if (!activeLearnerId) {
@@ -143,6 +256,7 @@ function OtpPanel({
 
   const applyAutoMarkResult = (result: AutoMarkResult) => {
     setAutoResult(result);
+    setAssessmentMode("auto");
     setReviewItems(
       result.results.map((item) => ({
         ...item,
@@ -192,9 +306,14 @@ function OtpPanel({
     setLoadingSubmission(true);
     setSubmissionText("");
     setAutoResult(null);
+    setAssessmentMode("manual");
     setReviewItems([]);
+    setManualMarkItems(seedManualMarkItems);
     setCorrectCount("");
     setWrongCount("");
+    setBonusB3Marks("0");
+    setCorrectQuestionRefs("");
+    setIncorrectQuestionRefs("");
     setGrade("");
     setFeedback("");
     setPortfolioCaptured(true);
@@ -226,6 +345,7 @@ function OtpPanel({
 
       const loadedText = await loadSubmissionText(learner.submission_path);
       setSubmissionText(loadedText);
+      setAssessmentMode(supportsAutoMark && loadedText.trim() ? "auto" : "manual");
 
       if (supportsAutoMark && loadedText.trim()) {
         applyAutoMarkResult(autoMarkBlock1Submission(loadedText));
@@ -258,16 +378,146 @@ function OtpPanel({
     applyAutoMarkResult(autoMarkBlock1Submission(submissionText));
   };
 
+  const markManualQuestion = (questionId: string, isCorrect: boolean) => {
+    setManualMarkItems((prev) =>
+      prev.map((item) =>
+        item.questionId === questionId
+          ? {
+              ...item,
+              markedCorrect: isCorrect,
+              awarded: isCorrect ? item.maxMarks : 0,
+            }
+          : item
+      )
+    );
+  };
+
+  const markManualSection = (sectionId: string, isCorrect: boolean) => {
+    setManualMarkItems((prev) =>
+      prev.map((item) =>
+        item.sectionId === sectionId
+          ? {
+              ...item,
+              markedCorrect: isCorrect,
+              awarded: isCorrect ? item.maxMarks : 0,
+            }
+          : item
+      )
+    );
+  };
+
+  const printManualMarkSheet = () => {
+    if (!selectedLearner || !manualSectionSummaries.length) return;
+
+    const sectionsHtml = manualSectionSummaries
+      .map((section) => {
+        const rows = manualMarkItems
+          .filter((item) => item.sectionId === section.sectionId)
+          .map((item) => `
+            <tr>
+              <td>${item.label}</td>
+              <td>${item.prompt}</td>
+              <td>${item.markedCorrect === true ? "Correct" : item.markedCorrect === false ? "Incorrect" : "Pending"}</td>
+              <td>${item.awarded}/${item.maxMarks}</td>
+            </tr>
+          `)
+          .join("");
+
+        return `
+          <h3>${section.sectionTitle} - ${section.module}</h3>
+          <p><strong>Section Total:</strong> ${section.awarded}/${section.max} | Correct: ${section.correct} | Incorrect: ${section.incorrect} | Pending: ${section.pending}</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Question</th>
+                <th>Prompt</th>
+                <th>Marking</th>
+                <th>Awarded</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows}
+            </tbody>
+          </table>
+        `;
+      })
+      .join("<hr />");
+
+    const win = window.open("", "_blank", "noopener,noreferrer,width=960,height=900");
+    if (!win) return;
+
+    win.document.write(`
+      <!doctype html>
+      <html>
+        <head>
+          <meta charset="utf-8" />
+          <title>Manual Mark Sheet - ${selectedLearner.full_name}</title>
+          <style>
+            body { font-family: Arial, sans-serif; padding: 24px; color: #1f2937; }
+            h1, h2, h3 { margin: 0 0 8px; }
+            p { margin: 4px 0 12px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 12px; }
+            th, td { border: 1px solid #d1d5db; padding: 6px; vertical-align: top; text-align: left; }
+            thead th { background: #f3f4f6; }
+            hr { border: none; border-top: 1px solid #e5e7eb; margin: 20px 0; }
+            @media print {
+              body { padding: 8px; }
+              hr { page-break-after: avoid; }
+            }
+          </style>
+        </head>
+        <body>
+          <h1>Block Assessment Manual Mark Sheet</h1>
+          <p><strong>Learner:</strong> ${selectedLearner.full_name} (${selectedLearner.learner_code})</p>
+          <p><strong>Block:</strong> ${blockKey}</p>
+          <p><strong>Overall:</strong> ${manualSummary.score}/${manualSummary.maxScore} (${manualSummary.percentage}%)</p>
+          ${sectionsHtml}
+        </body>
+      </html>
+    `);
+    win.document.close();
+    win.focus();
+    win.print();
+  };
+
   const saveAssessorGrade = async () => {
     if (!selectedLearner) return;
 
-    const derivedGrade = reviewItems.length ? reviewSummary.percentage : undefined;
-    const resolvedGrade = grade || (derivedGrade ?? "");
+    const isManualCapture = assessmentMode === "manual";
+    const parsedCorrect = Number(correctCount);
+    const parsedWrong = Number(wrongCount);
+    const parsedBonusB3 = Number(bonusB3Marks || "0");
+
+    if (isManualCapture) {
+      if (!manualMarkItems.length) {
+        toast({
+          title: "Manual paper not loaded",
+          description: "No manual question paper is available for this block yet.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (manualSummary.pending > 0) {
+        toast({
+          title: "Manual marking incomplete",
+          description: `Please mark all questions as correct or incorrect before saving. Pending: ${manualSummary.pending}.`,
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+
+    const derivedGrade = isManualCapture ? manualSummary.percentage : (reviewItems.length ? reviewSummary.percentage : undefined);
+    const manualDerivedGrade = isManualCapture && !Number.isNaN(parsedCorrect) && !Number.isNaN(parsedWrong) && (parsedCorrect + parsedWrong) > 0
+      ? Math.round(((parsedCorrect + (Number.isNaN(parsedBonusB3) ? 0 : parsedBonusB3)) / (parsedCorrect + parsedWrong)) * 100)
+      : undefined;
+    const resolvedGrade = grade || (derivedGrade ?? manualDerivedGrade ?? "");
     const gradeNum = Number(resolvedGrade);
-    if (Number.isNaN(gradeNum) || gradeNum < 0 || gradeNum > 100) {
+    if (Number.isNaN(gradeNum) || gradeNum < 0 || gradeNum > 125) {
       toast({
         title: "Invalid grade",
-        description: "Please enter or confirm a grade between 0 and 100.",
+        description: "Please enter or confirm a grade between 0 and 125.",
         variant: "destructive",
       });
       return;
@@ -308,14 +558,21 @@ function OtpPanel({
         .filter((item) => item.reviewNote.trim())
         .map((item) => `- ${item.label}: ${item.reviewNote.trim()}`);
 
+      const manualValidationNotes = [
+        isManualCapture ? `Manual marking score: ${manualSummary.score}/${manualSummary.maxScore}` : `B3 bonus marks: ${Number.isNaN(parsedBonusB3) ? 0 : parsedBonusB3}/5`,
+        correctQuestionRefs.trim() ? `Correct question refs: ${correctQuestionRefs.trim()}` : "",
+        incorrectQuestionRefs.trim() ? `Incorrect question refs: ${incorrectQuestionRefs.trim()}` : "",
+      ].filter(Boolean);
+
       const compiledFeedback = [
         feedback.trim(),
         "",
         "[Assessor Capture]",
-        `Mode: ${reviewItems.length ? "Item-by-item verified" : autoResult ? "Auto-mark verified" : submissionText ? "Digital submission manual review" : "Paper-based manual capture"}`,
-        `Verified score: ${reviewItems.length ? `${reviewSummary.score}/${reviewSummary.maxScore} (${reviewSummary.percentage}%)` : `${gradeNum}%`}`,
+        `Mode: ${isManualCapture ? "Manual question-by-question marking" : reviewItems.length ? "Item-by-item verified" : autoResult ? "Auto-mark verified" : submissionText ? "Digital submission manual review" : "Paper-based manual capture"}`,
+        `Verified score: ${isManualCapture ? `${manualSummary.score}/${manualSummary.maxScore} (${manualSummary.percentage}%)` : reviewItems.length ? `${reviewSummary.score}/${reviewSummary.maxScore} (${reviewSummary.percentage}%)` : `${gradeNum}%`}`,
         `Correct checks: ${correctCount || "not recorded"}`,
         `Incorrect checks: ${wrongCount || "not recorded"}`,
+        ...manualValidationNotes,
         `Answerbook attachment: ${resolvedSubmissionPath ?? "none attached"}`,
         `PoE capture: ${portfolioCaptured ? "Completed" : "Pending"}`,
         reviewNotes.length ? "Review notes:" : "",
@@ -342,6 +599,37 @@ function OtpPanel({
 
       if (saveError) throw saveError;
 
+      const assessmentAnswersPayload: Record<string, unknown> = isManualCapture
+        ? Object.fromEntries(manualMarkItems.map((item) => [item.questionId, {
+            label: item.label,
+            prompt: item.prompt,
+            sectionId: item.sectionId,
+            sectionTitle: item.sectionTitle,
+            markedCorrect: item.markedCorrect,
+            awarded: item.awarded,
+            maxMarks: item.maxMarks,
+          }]))
+        : reviewItems.length
+        ? Object.fromEntries(reviewItems.map((item) => [item.key, {
+            learnerAnswer: item.learnerAnswer,
+            expected: item.expected,
+            confirmed: item.confirmed,
+            awarded: item.manualAwarded,
+            maxMarks: item.maxMarks,
+            reviewNote: item.reviewNote,
+          }]))
+        : {};
+
+      if (isManualCapture || correctQuestionRefs.trim() || incorrectQuestionRefs.trim()) {
+        assessmentAnswersPayload.__assessor_validation = {
+          correct_question_refs: correctQuestionRefs.trim() || null,
+          incorrect_question_refs: incorrectQuestionRefs.trim() || null,
+          b3_bonus_marks: Number.isNaN(parsedBonusB3) ? 0 : parsedBonusB3,
+          manual_score: isManualCapture ? manualSummary.score : null,
+          manual_max_score: isManualCapture ? manualSummary.maxScore : null,
+        };
+      }
+
       try {
         await db
           .from("assessment_submissions_detailed")
@@ -355,17 +643,13 @@ function OtpPanel({
               full_name: selectedLearner.full_name,
               learner_code: selectedLearner.learner_code,
               captured_by_admin: true,
+              portfolio_capture: {
+                correct_question_refs: correctQuestionRefs.trim() || null,
+                incorrect_question_refs: incorrectQuestionRefs.trim() || null,
+                b3_bonus_marks: Number.isNaN(parsedBonusB3) ? 0 : parsedBonusB3,
+              },
             },
-            assessment_answers: reviewItems.length
-              ? Object.fromEntries(reviewItems.map((item) => [item.key, {
-                  learnerAnswer: item.learnerAnswer,
-                  expected: item.expected,
-                  confirmed: item.confirmed,
-                  awarded: item.manualAwarded,
-                  maxMarks: item.maxMarks,
-                  reviewNote: item.reviewNote,
-                }]))
-              : {},
+            assessment_answers: assessmentAnswersPayload,
             submitted_at: selectedLearner.assessment_submitted_at ?? timestamp,
             assessment_grade: gradeNum,
             assessment_feedback: compiledFeedback,
@@ -615,14 +899,34 @@ function OtpPanel({
 
               <div className="grid gap-4 lg:grid-cols-[1.4fr_0.9fr]">
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between gap-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                     <Label>Answer review</Label>
-                    <div className="flex gap-2">
-                      <Button type="button" variant="outline" size="sm" onClick={runAutoMark} disabled={loadingSubmission || !supportsAutoMark || !selectedLearner.assessment_submitted || !submissionText.trim()}>
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setAssessmentMode("manual")}
+                        className={`rounded-lg px-3 py-2 text-xs border transition-colors min-h-[40px] ${assessmentMode === "manual" ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border text-muted-foreground hover:text-foreground"}`}
+                      >
+                        Manual marking mode
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setAssessmentMode("auto")}
+                        className={`rounded-lg px-3 py-2 text-xs border transition-colors min-h-[40px] ${assessmentMode === "auto" ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border text-muted-foreground hover:text-foreground"}`}
+                        disabled={!supportsAutoMark || !selectedLearner.assessment_submitted || !submissionText.trim()}
+                      >
+                        Auto-assisted mode
+                      </button>
+                      <Button type="button" variant="outline" size="sm" className="min-h-[40px]" onClick={runAutoMark} disabled={loadingSubmission || !supportsAutoMark || !selectedLearner.assessment_submitted || !submissionText.trim()}>
                         Auto-mark online answers
                       </Button>
+                      {assessmentMode === "manual" && (
+                        <Button type="button" variant="outline" size="sm" className="min-h-[40px] gap-1.5" onClick={printManualMarkSheet}>
+                          <Printer size={12} /> Print mark sheet
+                        </Button>
+                      )}
                       {attachedAnswerbookPath && (
-                        <Button type="button" variant="outline" size="sm" onClick={() => openSubmissionFile(attachedAnswerbookPath)}>
+                        <Button type="button" variant="outline" size="sm" className="min-h-[40px]" onClick={() => openSubmissionFile(attachedAnswerbookPath)}>
                           Open attached answerbook
                         </Button>
                       )}
@@ -658,6 +962,74 @@ function OtpPanel({
                     <div className="rounded-lg border border-border/70 bg-muted/20 p-3 text-xs text-muted-foreground min-h-[220px]">
                       {loadingSubmission ? (
                         <p>Loading submitted work…</p>
+                      ) : assessmentMode === "manual" ? (
+                        <div className="space-y-3 max-h-[520px] overflow-y-auto pr-1">
+                          {manualSectionSummaries.map((section) => {
+                            const sectionItems = manualMarkItems.filter((item) => item.sectionId === section.sectionId);
+                            return (
+                              <div key={section.sectionId} className="rounded-md border border-border bg-background px-3 py-3 space-y-2.5">
+                                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                                  <div>
+                                    <p className="font-semibold text-foreground">{section.sectionTitle}</p>
+                                    <p className="text-[11px] text-muted-foreground">{section.module}</p>
+                                  </div>
+                                  <div className="text-[11px] text-muted-foreground flex flex-col sm:items-end gap-1">
+                                    <span className="font-semibold text-foreground">{section.awarded}/{section.max}</span>
+                                    <span className="ml-2">Correct: {section.correct} · Incorrect: {section.incorrect}</span>
+                                    <div className="flex gap-1.5">
+                                      <button
+                                        type="button"
+                                        onClick={() => markManualSection(section.sectionId, true)}
+                                        className="rounded-md border border-border bg-secondary/50 px-2 py-1 text-[10px] text-foreground hover:bg-secondary"
+                                      >
+                                        Mark all correct
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => markManualSection(section.sectionId, false)}
+                                        className="rounded-md border border-border bg-secondary/50 px-2 py-1 text-[10px] text-foreground hover:bg-secondary"
+                                      >
+                                        Mark all incorrect
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                  {sectionItems.map((item) => (
+                                    <div key={item.questionId} className="rounded-md border border-border/70 bg-muted/20 px-2.5 py-2.5">
+                                      <div className="flex flex-col gap-1">
+                                        <p className="text-foreground font-medium">{item.label} ({item.maxMarks} marks)</p>
+                                        <p className="text-[11px] text-muted-foreground">{item.prompt}</p>
+                                      </div>
+                                      <div className="mt-2 flex flex-wrap gap-3 text-[12px]">
+                                        <label className="inline-flex items-center gap-1.5 text-foreground">
+                                          <input
+                                            type="radio"
+                                            name={`manual-${item.questionId}`}
+                                            checked={item.markedCorrect === true}
+                                            onChange={() => markManualQuestion(item.questionId, true)}
+                                          />
+                                          <span className="leading-none">Correct</span>
+                                        </label>
+                                        <label className="inline-flex items-center gap-1.5 text-foreground">
+                                          <input
+                                            type="radio"
+                                            name={`manual-${item.questionId}`}
+                                            checked={item.markedCorrect === false}
+                                            onChange={() => markManualQuestion(item.questionId, false)}
+                                          />
+                                          <span className="leading-none">Incorrect</span>
+                                        </label>
+                                        <span className="text-muted-foreground">Awarded: <span className="font-semibold text-foreground">{item.awarded}/{item.maxMarks}</span></span>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
                       ) : reviewItems.length ? (
                         <div className="space-y-2 max-h-[420px] overflow-y-auto pr-1">
                           {reviewItems.map((item) => (
@@ -730,32 +1102,79 @@ function OtpPanel({
                     <p className="text-sm font-semibold text-foreground">Verification summary</p>
                     <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
                       <span>Items reviewed</span>
-                      <span className="text-right font-medium text-foreground">{reviewItems.length || 0}</span>
+                      <span className="text-right font-medium text-foreground">{assessmentMode === "manual" ? manualMarkItems.length : reviewItems.length || 0}</span>
                       <span>Confirmed correct</span>
-                      <span className="text-right font-medium text-foreground">{reviewSummary.confirmedCorrect}</span>
+                      <span className="text-right font-medium text-foreground">{assessmentMode === "manual" ? manualSummary.correct : reviewSummary.confirmedCorrect}</span>
                       <span>Needs attention</span>
-                      <span className="text-right font-medium text-foreground">{reviewSummary.needsAttention}</span>
+                      <span className="text-right font-medium text-foreground">{assessmentMode === "manual" ? manualSummary.incorrect : reviewSummary.needsAttention}</span>
+                      {assessmentMode === "manual" && (
+                        <>
+                          <span>Pending marks</span>
+                          <span className="text-right font-medium text-foreground">{manualSummary.pending}</span>
+                        </>
+                      )}
                       <span>Verified score</span>
-                      <span className="text-right font-medium text-foreground">{reviewSummary.score}/{reviewSummary.maxScore || 0}</span>
+                      <span className="text-right font-medium text-foreground">{assessmentMode === "manual" ? `${manualSummary.score}/${manualSummary.maxScore || 0}` : `${reviewSummary.score}/${reviewSummary.maxScore || 0}`}</span>
                       <span>Verified %</span>
-                      <span className="text-right font-medium text-foreground">{reviewSummary.percentage}%</span>
+                      <span className="text-right font-medium text-foreground">{assessmentMode === "manual" ? `${manualSummary.percentage}%` : `${reviewSummary.percentage}%`}</span>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1.5">
                       <Label htmlFor="correctCount">Correct items</Label>
-                      <Input id="correctCount" value={correctCount} onChange={(e) => setCorrectCount(e.target.value)} placeholder="e.g. 42" />
+                      <Input id="correctCount" value={correctCount} onChange={(e) => setCorrectCount(e.target.value)} placeholder="e.g. 42" disabled={assessmentMode === "manual"} />
                     </div>
                     <div className="space-y-1.5">
                       <Label htmlFor="wrongCount">Incorrect items</Label>
-                      <Input id="wrongCount" value={wrongCount} onChange={(e) => setWrongCount(e.target.value)} placeholder="e.g. 8" />
+                      <Input id="wrongCount" value={wrongCount} onChange={(e) => setWrongCount(e.target.value)} placeholder="e.g. 8" disabled={assessmentMode === "manual"} />
                     </div>
+                  </div>
+
+                  {assessmentMode !== "manual" && (
+                    <>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="bonusB3Marks">Section B3 bonus marks (0-5)</Label>
+                        <Input
+                          id="bonusB3Marks"
+                          type="number"
+                          min="0"
+                          max="5"
+                          step="1"
+                          value={bonusB3Marks}
+                          onChange={(e) => setBonusB3Marks(e.target.value)}
+                          placeholder="0 - 5"
+                        />
+                      </div>
+                      <p className="text-[11px] text-muted-foreground">
+                        Paper/manual flow: Section A + B1/B2 are base counts, and Section B3 is an optional bonus (/5). Grade is validated against counts plus bonus.
+                      </p>
+                    </>
+                  )}
+
+                  <div className="space-y-1.5">
+                    <Label htmlFor="correctQuestionRefs">Correct question refs (optional)</Label>
+                    <Input
+                      id="correctQuestionRefs"
+                      value={correctQuestionRefs}
+                      onChange={(e) => setCorrectQuestionRefs(e.target.value)}
+                      placeholder="e.g. 1A1, 1A3, 2B2"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label htmlFor="incorrectQuestionRefs">Incorrect question refs (optional)</Label>
+                    <Input
+                      id="incorrectQuestionRefs"
+                      value={incorrectQuestionRefs}
+                      onChange={(e) => setIncorrectQuestionRefs(e.target.value)}
+                      placeholder="e.g. 1B1, 2A3"
+                    />
                   </div>
 
                   <div className="space-y-1.5">
                     <Label htmlFor="grade">Final grade (%)</Label>
-                    <Input id="grade" type="number" min="0" max="100" value={grade} onChange={(e) => setGrade(e.target.value)} placeholder="0 - 100" />
+                    <Input id="grade" type="number" min="0" max="125" value={grade} onChange={(e) => setGrade(e.target.value)} placeholder="0 - 125" disabled={assessmentMode === "manual"} />
                   </div>
 
                   <label className="flex items-center gap-2 text-sm text-foreground">
@@ -772,7 +1191,7 @@ function OtpPanel({
 
               <div className="flex justify-end gap-2 pt-2">
                 <Button type="button" variant="outline" onClick={onCloseCapture} disabled={savingGrade}>Cancel</Button>
-                <Button type="button" onClick={saveAssessorGrade} disabled={savingGrade || (!grade.trim() && reviewItems.length === 0)}>
+                <Button type="button" onClick={saveAssessorGrade} disabled={savingGrade || (assessmentMode === "manual" ? manualSummary.pending > 0 : (!grade.trim() && reviewItems.length === 0))}>
                   {savingGrade ? "Saving…" : "Save grading capture"}
                 </Button>
               </div>
