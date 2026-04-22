@@ -317,15 +317,26 @@ All the sections of this document must be completed and signed where appropriate
 
 Remember to cover all range items!!!!!!. Assessor to write observations or make clear references to evidence attached in the spaces provided.
 
+### Beginner-Friendly Practical Guidance (for non-technical learners)
+
+Use short, visible, low-pressure tasks. Assess understanding through guided doing, not speed or memorisation.
+
+- **Task 1:** Ask the learner to open the editor, create a simple file, type one short line of code, save it, and correct one small syntax mistake.
+- **Task 2:** Ask the learner to show simple number or data representation understanding, for example decimal to binary, text vs number, or a basic logical operator example.
+- **Task 3:** Ask the learner to write or explain simple pseudocode using **sequence**, **selection**, and **looping** in an everyday scenario.
+- **Task 4:** Ask the learner to use a few variables or operators in a tiny example and explain one debugging step they would take if the code fails.
+
+> Recommended approach: demonstrate first, then let the learner try, then ask a few short follow-up questions.
+
 | **Practical Tasks** | **Task Type** | **Date Completed** | **Comments and initials of observer** |
 | --- | --- | --- | --- |
-| Task No. 1 | Operate computer programming development tools.   OUTCOME RANGE Editor, Syntax checking, Compiling. |  |  |
+| Task No. 1 | Use an editor to create a simple file, save it, and fix one syntax mistake. **Range:** editor use, syntax checking, simple run/compile. |  |  |
 | --- | --- | --- | --- |
-| Task No. 2 | Demonstrate an understanding of different data representations used in computer programs.   ASSESSMENT CRITERION RANGE Binary, Decimal, Hexadecimal, Octal. |  |  |
+| Task No. 2 | Show understanding of basic data representation using simple conversions and examples. **Range:** binary, decimal, hexadecimal, octal, ASCII, logical operators. |  |  |
 | --- | --- | --- | --- |
-| Task No. 3 | Demonstrate an understanding of fundamental programming principles.   ASSESSMENT CRITERION RANGE Sequential, Selection, Loops. |  |  |
+| Task No. 3 | Write or explain simple pseudocode that shows sequence, selection, and loops. |  |  |
 | --- | --- | --- | --- |
-| Task No. 4 | Demonstrate an understanding of high level programming language concepts.   OUTCOME RANGE High level language of choice or Structured use of language (Pseudo code) |  |  |
+| Task No. 4 | Use variables, operators, modular thinking, and one debugging technique in a short guided example or walkthrough. |  |  |
 | --- | --- | --- | --- |
 
 **FOR ASSESSOR**

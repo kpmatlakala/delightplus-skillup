@@ -2,7 +2,7 @@ import AppLayout from "@/components/AppLayout";
 import StatCard from "@/components/StatCard";
 import ModuleCard from "@/components/ModuleCard";
 import { PresentationMode } from "@/components/PresentationMode";
-import { modules, program, learners } from "@/data/courseData";
+import { modules, program } from "@/data/courseData";
 import { BookOpen, Users, Award, CheckCircle, GraduationCap, Play, CalendarCheck } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -12,7 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const [enrolledCount, setEnrolledCount] = useState<number>(learners.length);
+  const [enrolledCount, setEnrolledCount] = useState<number>(0);
   const [isPresentingBriefing, setIsPresentingBriefing] = useState(false);
   const totalModules = modules.length;
   const readyModules = modules.filter((m) => m.status === "Ready").length;
@@ -20,11 +20,30 @@ export default function Dashboard() {
 
   useEffect(() => {
     const loadEnrolledCount = async () => {
-      const rpc = supabase as unknown as {
+      const db = supabase as unknown as {
+        from: (table: string) => {
+          select: (columns: string, options?: Record<string, unknown>) => {
+            order?: (column: string, options?: Record<string, unknown>) => Promise<{ data: unknown[] | null; error: { message: string } | null }>;
+            then?: unknown;
+          };
+        };
         rpc: (fn: string, params?: Record<string, unknown>) => Promise<{ data: Array<{ id: string }> | null; error: { message: string } | null }>;
       };
 
-      const { data, error } = await rpc.rpc("cet_enrolled_learners");
+      try {
+        const { count, error } = await (supabase as unknown as any)
+          .from("learners")
+          .select("id", { count: "exact", head: true });
+
+        if (!error && typeof count === "number") {
+          setEnrolledCount(count);
+          return;
+        }
+      } catch (directError) {
+        console.warn("Direct learner count lookup failed, falling back to RPC:", directError);
+      }
+
+      const { data, error } = await db.rpc("cet_enrolled_learners");
       if (!error) {
         setEnrolledCount((data ?? []).length);
       }
@@ -63,6 +82,44 @@ export default function Dashboard() {
         <StatCard label="Modules Ready" value={readyModules} icon={<CheckCircle size={16} />} variant="success" />
         <StatCard label="Total Credits" value={totalCredits} icon={<Award size={16} />} />
         <StatCard label="Enrolled Learners" value={enrolledCount} icon={<Users size={16} />} variant="warning" />
+      </div>
+
+      {/* Admin quick actions */}
+      <div className="rounded-lg border border-border bg-card px-4 py-3 mb-4">
+        <div className="flex items-center justify-between mb-2.5">
+          <h3 className="font-display font-semibold text-sm text-foreground">Admin Journey Quick Actions</h3>
+          <span className="text-[11px] text-muted-foreground">Most-used routes for daily ops</span>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+          <button
+            onClick={() => navigate("/learners")}
+            className="rounded-md border border-border px-3 py-2 text-left hover:bg-secondary/50 transition-colors"
+          >
+            <p className="text-xs font-semibold text-foreground">Learners</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">Manage learner list</p>
+          </button>
+          <button
+            onClick={() => navigate("/communications")}
+            className="rounded-md border border-border px-3 py-2 text-left hover:bg-secondary/50 transition-colors"
+          >
+            <p className="text-xs font-semibold text-foreground">Communications</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">Announcements and messages</p>
+          </button>
+          <button
+            onClick={() => navigate("/assessments/blocks")}
+            className="rounded-md border border-border px-3 py-2 text-left hover:bg-secondary/50 transition-colors"
+          >
+            <p className="text-xs font-semibold text-foreground">Block Assessments</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">Capture and grading flow</p>
+          </button>
+          <button
+            onClick={() => navigate("/poe")}
+            className="rounded-md border border-border px-3 py-2 text-left hover:bg-secondary/50 transition-colors"
+          >
+            <p className="text-xs font-semibold text-foreground">PoE</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">Readiness and templates</p>
+          </button>
+        </div>
       </div>
 
       {/* Learner Portal QR Invite */}
@@ -135,7 +192,7 @@ export default function Dashboard() {
                       ["NQF Level", "4"],
                       ["Total credits", "165"],
                       ["Programme duration", "15 delivery days across 3 blocks"],
-                      ["Credits covered", `${totalCredits} credits across 10 modules (${Math.round((totalCredits / program.totalCredits) * 100)}% of qualification)`],
+                      ["Credits covered", `${totalCredits} credits across ${totalModules} modules (${Math.round((totalCredits / program.totalCredits) * 100)}% of qualification)`],
                       ["Provider", program.provider],
                     ] as [string, string][]).map(([label, value]) => (
                       <tr key={label} className="border-b last:border-0 odd:bg-muted/30">
@@ -308,7 +365,7 @@ export default function Dashboard() {
 
             {/* Module Roadmap */}
             <div>
-              <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground mb-2">Module Roadmap — All 10 Units</h4>
+              <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground mb-2">Module Roadmap — All 11 Units</h4>
               <div className="overflow-x-auto">
                 <table className="w-full text-xs border rounded-md overflow-hidden">
                   <thead>
@@ -329,10 +386,11 @@ export default function Dashboard() {
                       [4, "ITSD-14927", "Apply Problem-Solving Strategies", "Block 1 · Day 4", 4, "Analyse workplace problems, evaluate solutions against criteria, and develop an implementation plan"],
                       [5, "ITSD-14915", "Design a Computer Program to Specification", "Block 1 · Day 5", 8, "Design programs using structure diagrams, decision tables, pseudocode and desk-checking"],
                       [6, "ITSD-14910", "Apply Programming Principles", "Block 2 · Days 6–7", 8, "Write, test and debug structured programs applying data types, functions, control structures and error handling"],
-                      [7, "ITSD-14933", "Web Scripting", "Block 2 · Days 8–9", 6, "Build interactive web pages using HTML5, CSS3 and JavaScript with DOM manipulation and responsive design"],
-                      [8, "ITSD-14908", "Testing IT Systems", "Block 3 · Day 11", 6, "Design test cases, execute test plans, log defects and apply quality assurance principles"],
-                      [9, "ITSD-14919", "Resolve User Problems", "Block 3 · Day 12", 5, "Diagnose and resolve common IT user problems using structured troubleshooting methodology"],
-                      [10, "ITSD-120379", "Work as Project Team Member", "Block 3 · Day 13", 8, "Participate effectively in a project team, manage deliverables and communicate with stakeholders"],
+                      [7, "ITSD-14930", "Developing Software for the Internet", "Block 2 · Integrated support", 3, "Explain network, interface, ownership and security principles that support the web-development work in Block 2"],
+                      [8, "ITSD-14933", "Web Scripting", "Block 2 · Days 8–9", 6, "Build interactive web pages using HTML5, CSS3 and JavaScript with DOM manipulation and responsive design"],
+                      [9, "ITSD-14908", "Testing IT Systems", "Block 3 · Day 11", 6, "Design test cases, execute test plans, log defects and apply quality assurance principles"],
+                      [10, "ITSD-14919", "Resolve User Problems", "Block 3 · Day 12", 5, "Diagnose and resolve common IT user problems using structured troubleshooting methodology"],
+                      [11, "ITSD-120379", "Work as Project Team Member", "Block 3 · Day 13", 8, "Participate effectively in a project team, manage deliverables and communicate with stakeholders"],
                     ] as [number, string, string, string, number, string][]).map(([num, code, title, block, credits, purpose]) => (
                       <tr key={code} className="border-b last:border-0 odd:bg-muted/30">
                         <td className="py-1.5 px-3 text-muted-foreground">{num}</td>

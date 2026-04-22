@@ -57,6 +57,29 @@ function AdminPoEView() {
 
   useEffect(() => {
     const fetch = async () => {
+      try {
+        const { data, error: directError } = await (supabase as unknown as any)
+          .from("learners")
+          .select("id, learner_code, full_name, email, progress")
+          .order("full_name", { ascending: true });
+
+        if (!directError && Array.isArray(data)) {
+          setLearners(
+            data.map((learner: any) => ({
+              id: learner.id,
+              learner_code: learner.learner_code,
+              full_name: learner.full_name || "Learner",
+              email: learner.email ?? null,
+              progress: Number(learner.progress ?? 0),
+            }))
+          );
+          setLoading(false);
+          return;
+        }
+      } catch (directReadError) {
+        console.warn("Direct PoE learner lookup failed, falling back to RPC:", directReadError);
+      }
+
       const rpc = supabase as unknown as RpcClient;
       const { data, error: e } = await rpc.rpc("cet_enrolled_learners");
       if (e) { setError(e.message); setLoading(false); return; }
@@ -68,6 +91,26 @@ function AdminPoEView() {
 
   return (
     <div className="space-y-6">
+
+      {/* ── Admin overview */}
+      <div className="rounded-xl border border-blue-500/20 bg-gradient-to-r from-blue-500/15 via-cyan-500/10 to-transparent p-5">
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <h2 className="text-lg font-semibold text-white">PoE Control Center</h2>
+            <p className="text-sm text-white/65 mt-1">
+              Monitor learner readiness, template usage, and pipeline automation from one place.
+            </p>
+          </div>
+          <div className="flex items-center gap-2 text-xs">
+            <span className="px-2.5 py-1 rounded-full border border-white/15 bg-white/10 text-white/80">
+              {loading ? "Loading learners..." : `${learners.length} learners`}
+            </span>
+            <span className="px-2.5 py-1 rounded-full border border-emerald-400/30 bg-emerald-500/15 text-emerald-300">
+              Progress tracking active
+            </span>
+          </div>
+        </div>
+      </div>
 
       {/* ── Info card */}
       <div className="rounded-xl border border-white/10 bg-white/5 p-5 space-y-3">
@@ -110,7 +153,7 @@ function AdminPoEView() {
         <div>
           <div className="text-base font-semibold text-white">Blank PoE Template</div>
           <div className="text-sm text-white/55 mt-0.5">
-            All 10 unit standards pre-populated · Evidence checklists · Assessment decision blocks · Moderator section
+            All 11 unit standards pre-populated · Evidence checklists · Assessment decision blocks · Moderator section
           </div>
         </div>
         <a
@@ -208,12 +251,16 @@ function LearnerPoEView() {
       <div className={`rounded-xl border p-5 flex items-center justify-between gap-4 flex-wrap ${isReady ? "border-emerald-500/30 bg-emerald-500/10" : "border-white/10 bg-white/5"}`}>
         <div>
           <div className={`text-base font-semibold ${isReady ? "text-emerald-300" : "text-white"}`}>
-            {isReady ? "🎉 Your PoE is ready for submission!" : "PoE Readiness Status"}
+            {isReady ? "Your PoE is ready for submission" : "PoE Readiness Status"}
           </div>
           <div className="text-sm text-white/55 mt-0.5">
             {score.assessment} of {TOTAL_MODULES} assessments submitted &nbsp;·&nbsp;
             {score.quiz} quizzes passed &nbsp;·&nbsp;
             {score.guide} guides completed
+          </div>
+          <div className="mt-3 flex items-center gap-3">
+            <Progress value={score.percent} className="w-56 h-1.5" />
+            <span className="text-xs text-white/60">{score.percent}% complete</span>
           </div>
         </div>
         <a
@@ -227,7 +274,7 @@ function LearnerPoEView() {
       </div>
 
       {/* ── Three-pillar progress */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {[
           { label: "Study Guides", count: score.guide, color: "text-blue-400", bg: "bg-blue-400/10 border-blue-400/20" },
           { label: "Quizzes Passed", count: score.quiz, color: "text-amber-400", bg: "bg-amber-400/10 border-amber-400/20" },
@@ -317,7 +364,7 @@ function LearnerPoEView() {
 ═══════════════════════════════════════════════════════════ */
 export default function PoEPage() {
   const { role } = useAuth();
-  const isAdmin = role === "admin" || role === "lecturer";
+  const isAdmin = role === "admin" || role === "moderator";
 
   return (
     <AppLayout

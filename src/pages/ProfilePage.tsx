@@ -11,31 +11,36 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface UserProfile {
   id: string;
-  email: string;
   full_name: string | null;
-  display_name: string | null;
   phone: string | null;
   id_number: string | null;
   department: string | null;
   school: string | null;
-  bio: string | null;
-  avatar_url: string | null;
-  location: string | null;
-  website: string | null;
-  role: string | null;
+  learner_code: string | null;
+  status: string | null;
+  progress: number | null;
   created_at: string;
   updated_at: string;
 }
 
-const getInitials = (displayName: string | null, email: string) => {
-  const source = displayName || email;
+const isValidPhoneNumber = (value: string | null | undefined): boolean => {
+  if (!value || typeof value !== 'string') return false;
+  const trimmed = value.trim();
+  if (trimmed === '') return false;
+  if (trimmed.includes('@')) return false;
+  const digitsOnly = trimmed.replace(/[\s\-\(\)]/g, '');
+  return digitsOnly.length >= 8 && digitsOnly.length <= 15;
+};
+
+const getInitials = (fullName: string | null, email: string) => {
+  const source = fullName || email;
   if (!source) return "U";
   const parts = source.trim().split(/\s+/).slice(0, 2);
   return parts.map((part) => part[0]?.toUpperCase() ?? "").join("") || "U";
 };
 
 export default function ProfilePage() {
-  const { user, getUnifiedProfile, updateProfile, refreshProfile } = useAuth();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [changingPassword, setChangingPassword] = useState(false);
@@ -44,68 +49,71 @@ export default function ProfilePage() {
   const [securityError, setSecurityError] = useState<string | null>(null);
   const [securitySuccess, setSecuritySuccess] = useState<string | null>(null);
 
-  // Profile state
-  const [displayName, setDisplayName] = useState("");
+  // Profile state - all from cet.learners
   const [fullName, setFullName] = useState("");
   const [idNumber, setIdNumber] = useState("");
   const [department, setDepartment] = useState("");
   const [school, setSchool] = useState("");
-  const [bio, setBio] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
-  const [location, setLocation] = useState("");
-  const [website, setWebsite] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [learnerCode, setLearnerCode] = useState("");
+  const [status, setStatus] = useState("");
+  const [progress, setProgress] = useState<number | null>(null);
 
   // Password change state
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const rpc = supabase as unknown as {
-    rpc: (
-      fn: string,
-      params?: Record<string, unknown>,
-    ) => Promise<{ data: any; error: { message: string } | null }>;
-  };
-
   const loadProfile = async () => {
     setLoading(true);
     setError(null);
 
-    setLoading(true);
-    setError(null);
+    try {
+      // Fetch directly from cet.learners
+      const { data, error } = await supabase
+        .from('learners')
+        .select('full_name, phone, id_number, department, school, learner_code, status, progress')
+        .eq('user_id', user?.id)
+        .single();
 
-    const supabaseAny = supabase as any;
-    const { data, error } = await supabaseAny.rpc("cet_get_my_profile_v2");
+      if (error) {
+        console.error("Profile load error:", error);
+        setError(error.message);
+        setLoading(false);
+        return;
+      }
 
-    if (error) {
-      setError(error.message);
+      console.log("profile loaded:", data);
+
+      if (data) {
+        setFullName(data.full_name ?? "");
+        setIdNumber(data.id_number ?? "");
+        setDepartment(data.department ?? "");
+        setSchool(data.school ?? "");
+        setLearnerCode(data.learner_code ?? "");
+        setStatus(data.status ?? "");
+        setProgress(data.progress ?? 0);
+        
+        // Only set phone if valid
+        if (data.phone && isValidPhoneNumber(data.phone)) {
+          setPhoneNumber(data.phone);
+        } else {
+          setPhoneNumber("");
+        }
+      }
+    } catch (err) {
+      console.error("Unexpected error loading profile:", err);
+      setError("Failed to load profile");
+    } finally {
       setLoading(false);
-      return;
     }
-
-    const profile = ((data as UserProfile[] | null) ?? [])[0] ?? null;
-    console.log("profile loaded:", profile);
-
-    if (profile) {
-      setDisplayName(profile.display_name ?? "");
-      setFullName(profile.full_name ?? "");
-      setIdNumber(profile.id_number ?? "");
-      setDepartment(profile.department ?? "");
-      setSchool(profile.school ?? "");
-      setBio(profile.bio ?? "");
-      setAvatarUrl(profile.avatar_url ?? "");
-      setLocation(profile.location ?? "");
-      setWebsite(profile.website ?? "");
-      setPhoneNumber(profile.phone ?? "");
-    }
-
-    setLoading(false);
   };
 
   useEffect(() => {
-    loadProfile();
-  }, []);
+    if (user?.id) {
+      loadProfile();
+    }
+  }, [user?.id]);
 
   const onSave = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -113,55 +121,45 @@ export default function ProfilePage() {
     setError(null);
     setSuccess(null);
 
-    console.log("Saving profile with:", {
-      p_full_name: fullName,
-      p_display_name: displayName,
-      p_phone: phoneNumber,
-      p_id_number: idNumber,
-      p_department: department,
-      p_school: school,
-      p_bio: bio,
-      p_avatar_url: avatarUrl,
-      p_location: location,
-      p_website: website,
-    });
-
-    const supabaseAny = supabase as any;
-    const { error: updateError } = await supabaseAny.rpc(
-      "cet_update_my_profile_v2",
-      {
-        p_full_name: fullName,
-        p_display_name: displayName,
-        p_phone: phoneNumber,
-        p_id_number: idNumber,
-        p_department: department,
-        p_school: school,
-        p_bio: bio,
-        p_avatar_url: avatarUrl,
-        p_location: location,
-        p_website: website,
-        p_role: "learner",
-      },
-    );
-
-    if (updateError) {
-      console.error("Update error:", updateError);
-      setError(updateError.message);
+    // Validate phone number
+    if (phoneNumber && !isValidPhoneNumber(phoneNumber)) {
+      setError("Please enter a valid phone number (e.g., 0721234567 or +27721234567)");
       setSaving(false);
       return;
     }
 
-    console.log("Update successful, reloading profile...");
+    try {
+      // Update cet.learners directly
+      const { error: updateError } = await supabase
+        .from('learners')
+        .update({
+          full_name: fullName || null,
+          phone: phoneNumber || null,
+          id_number: idNumber || null,
+          department: department || null,
+          school: school || null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('user_id', user?.id);
 
-    // Wait a moment for the database to update, then reload
-    setTimeout(async () => {
+      if (updateError) {
+        console.error("Profile update error:", updateError);
+        setError(updateError.message);
+        setSaving(false);
+        return;
+      }
+
+      console.log("Update successful, reloading profile...");
       await loadProfile();
-      setSaving(false);
+      
       setSuccess("Profile updated successfully.");
-
-      // Clear success message after 3 seconds
       setTimeout(() => setSuccess(null), 3000);
-    }, 500);
+    } catch (err) {
+      console.error("Unexpected error saving profile:", err);
+      setError("An unexpected error occurred");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const onChangePassword = async (event: React.FormEvent) => {
@@ -222,14 +220,12 @@ export default function ProfilePage() {
     setNewPassword("");
     setConfirmPassword("");
     setSecuritySuccess("Password changed successfully.");
-
-    // Clear success message after 3 seconds
     setTimeout(() => setSecuritySuccess(null), 3000);
   };
 
-  const resolvedDisplayName = displayName || fullName || "My Profile";
+  const resolvedFullName = fullName || "My Profile";
   const resolvedEmail = user?.email ?? "";
-  const initials = getInitials(resolvedDisplayName, resolvedEmail);
+  const initials = getInitials(resolvedFullName, resolvedEmail);
   const navigate = useNavigate();
 
   if (loading) {
@@ -243,10 +239,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <AppLayout
-      title="My Profile"
-      subtitle="Manage your account profile and security"
-    >
+    <AppLayout title="My Profile" subtitle="Manage your learner profile">
       <button
         onClick={() => navigate(-1)}
         className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground mb-4 transition-colors"
@@ -257,41 +250,43 @@ export default function ProfilePage() {
         <div className="rounded-lg border border-border bg-card p-6">
           <div className="flex items-center gap-3 mb-6">
             <Avatar className="h-12 w-12">
-              <AvatarImage src={avatarUrl} alt={resolvedDisplayName} />
               <AvatarFallback>{initials}</AvatarFallback>
             </Avatar>
             <div>
-              <p className="font-medium text-foreground">
-                {resolvedDisplayName}
-              </p>
+              <p className="font-medium text-foreground">{resolvedFullName}</p>
               <p className="text-sm text-muted-foreground">{resolvedEmail}</p>
+              {learnerCode && (
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Learner Code: {learnerCode}
+                </p>
+              )}
+              {status && (
+                <p className="text-xs text-muted-foreground">
+                  Status: {status} {progress !== null && `• ${progress}% Complete`}
+                </p>
+              )}
             </div>
           </div>
 
           <form onSubmit={onSave} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" value={user?.email ?? ""} disabled />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="displayName">Display Name</Label>
-                <Input
-                  id="displayName"
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  placeholder="How you want to be seen"
-                />
-              </div>
+            {/* Email - Read Only */}
+            <div className="space-y-1.5">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" value={user?.email ?? ""} disabled />
+              <p className="text-xs text-muted-foreground">
+                Email cannot be changed. Contact support for assistance.
+              </p>
             </div>
 
+            {/* Editable Learner Fields */}
             <div className="space-y-1.5">
-              <Label htmlFor="fullName">Full Name</Label>
+              <Label htmlFor="fullName">Full Name *</Label>
               <Input
                 id="fullName"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Your full legal name"
+                required
               />
             </div>
 
@@ -305,7 +300,6 @@ export default function ProfilePage() {
                   placeholder="South African ID number"
                 />
               </div>
-
               <div className="space-y-1.5">
                 <Label htmlFor="phoneNumber">Phone Number</Label>
                 <Input
@@ -313,8 +307,11 @@ export default function ProfilePage() {
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   autoComplete="tel"
-                  placeholder="+27 123 456 789"
+                  placeholder="072 123 4567"
                 />
+                <p className="text-xs text-muted-foreground">
+                  Format: 0721234567 or +27721234567
+                </p>
               </div>
             </div>
 
@@ -328,7 +325,6 @@ export default function ProfilePage() {
                   placeholder="Your school/institution"
                 />
               </div>
-
               <div className="space-y-1.5">
                 <Label htmlFor="department">Department</Label>
                 <Input
@@ -338,48 +334,6 @@ export default function ProfilePage() {
                   placeholder="Your department"
                 />
               </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="bio">Bio</Label>
-              <Textarea
-                id="bio"
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
-                rows={4}
-                placeholder="Tell us a bit about yourself..."
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <Label htmlFor="location">Location</Label>
-                <Input
-                  id="location"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  placeholder="City, Country"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="website">Website</Label>
-                <Input
-                  id="website"
-                  value={website}
-                  onChange={(e) => setWebsite(e.target.value)}
-                  placeholder="https://..."
-                />
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="avatarUrl">Avatar URL</Label>
-              <Input
-                id="avatarUrl"
-                value={avatarUrl}
-                onChange={(e) => setAvatarUrl(e.target.value)}
-                placeholder="https://example.com/avatar.jpg"
-              />
             </div>
 
             {error && <p className="text-sm text-destructive">{error}</p>}
@@ -392,12 +346,8 @@ export default function ProfilePage() {
         </div>
 
         <div className="rounded-lg border border-border bg-card p-6">
-          <h2 className="font-display text-lg font-semibold text-foreground">
-            Security
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            Change your account password.
-          </p>
+          <h2 className="font-display text-lg font-semibold text-foreground">Security</h2>
+          <p className="text-sm text-muted-foreground mt-1">Change your account password.</p>
 
           <form onSubmit={onChangePassword} className="space-y-4 mt-4">
             <div className="space-y-1.5">
@@ -438,12 +388,8 @@ export default function ProfilePage() {
               />
             </div>
 
-            {securityError && (
-              <p className="text-sm text-destructive">{securityError}</p>
-            )}
-            {securitySuccess && (
-              <p className="text-sm text-green-600">{securitySuccess}</p>
-            )}
+            {securityError && <p className="text-sm text-destructive">{securityError}</p>}
+            {securitySuccess && <p className="text-sm text-green-600">{securitySuccess}</p>}
 
             <Button type="submit" disabled={changingPassword}>
               {changingPassword ? "Changing Password..." : "Change Password"}

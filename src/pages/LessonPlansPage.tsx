@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 export default function LessonPlansPage() {
   return (
-    <AppLayout title="Lesson Plans" subtitle="LMIS-Ready Lesson Plans for All 10 Unit Standards">
+    <AppLayout title="Lesson Plans" subtitle={`LMIS-Ready Lesson Plans for All ${modules.length} Unit Standards`}>
       <div className="space-y-3">
         {modules.map((mod, i) => (
           <Link

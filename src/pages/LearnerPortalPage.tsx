@@ -28,6 +28,7 @@ import {
 import { useModuleProgress } from "@/hooks/useModuleProgress";
 import { useAuth } from "@/hooks/useAuth";
 import { useUnreadCount } from "@/hooks/useUnreadCount";
+import { BLOCK_ASSESSMENTS } from "@/data/blockAssessments";
 
 export default function LearnerPortalPage() {
   const { user } = useAuth();
@@ -43,6 +44,8 @@ export default function LearnerPortalPage() {
   );
   const currentModuleIndex =
     firstUndoneIndex === -1 ? modulePath.length : firstUndoneIndex;
+  const currentModule =
+    modulePath[Math.min(currentModuleIndex, Math.max(modulePath.length - 1, 0))];
   const practicalModules = modules.filter((m) => m.type === "Practical").length;
   const knowledgeModules = modules.filter((m) => m.type === "Knowledge").length;
 
@@ -138,6 +141,130 @@ export default function LearnerPortalPage() {
           </div>
         </div>
 
+        {/* Journey quick actions */}
+        <div className="rounded-lg border border-border bg-card p-3 sm:p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-display font-semibold text-sm sm:text-base">Continue Your Journey</h3>
+            <Badge variant="outline" className="text-[10px] sm:text-xs">Next Best Actions</Badge>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+            <Link
+              to={currentModule ? `/learner/modules/${currentModule.id}` : "/learner"}
+              className="rounded-md border border-primary/30 bg-primary/10 px-3 py-3 hover:bg-primary/15 transition-colors"
+            >
+              <p className="text-[11px] uppercase tracking-wide text-primary/80">Continue Module</p>
+              <p className="text-sm font-semibold text-foreground mt-0.5 line-clamp-1">
+                {currentModule ? currentModule.title : "Start learning"}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1 inline-flex items-center gap-1">
+                Open workspace <ArrowRight size={12} />
+              </p>
+            </Link>
+
+            <Link
+              to="/communications?tab=messages"
+              className="rounded-md border border-border bg-secondary/30 px-3 py-3 hover:bg-secondary/50 transition-colors"
+            >
+              <p className="text-[11px] uppercase tracking-wide text-muted-foreground">Messages</p>
+              <p className="text-sm font-semibold text-foreground mt-0.5">
+                {unreadMessages > 0 ? `${unreadMessages} unread` : "All caught up"}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">Check facilitator updates</p>
+            </Link>
+
+            <Link
+              to="/poe"
+              className="rounded-md border border-border bg-secondary/30 px-3 py-3 hover:bg-secondary/50 transition-colors"
+            >
+              <p className="text-[11px] uppercase tracking-wide text-muted-foreground">Portfolio (PoE)</p>
+              <p className="text-sm font-semibold text-foreground mt-0.5">Track submission readiness</p>
+              <p className="text-xs text-muted-foreground mt-1">Review module evidence checklist</p>
+            </Link>
+          </div>
+        </div>
+
+        {/* Block Assessments */}
+        <div className="rounded-lg border border-border bg-card p-3 sm:p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Trophy size={18} className="text-accent" />
+              <h3 className="font-display font-semibold text-sm sm:text-base">
+                Block Assessments
+              </h3>
+            </div>
+          </div>
+
+          <p className="text-xs text-muted-foreground mb-3">
+            Access your summative block tests here. Block 1 is currently open for in-app testing.
+          </p>
+
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-2">
+            {BLOCK_ASSESSMENTS.map((block) => {
+              const isReady = block.status === "ready";
+              const blockProgress = progressMap[`block-${block.blockNum}`];
+              const isSubmitted = Boolean(
+                blockProgress?.assessment_submitted ||
+                blockProgress?.assessment_submitted_at ||
+                blockProgress?.submission_uploaded_at ||
+                blockProgress?.submission_path
+              );
+
+              return (
+                <div
+                  key={block.blockNum}
+                  className={`rounded-lg border p-3 ${
+                    isReady
+                      ? "border-primary/30 bg-primary/5"
+                      : "border-dashed border-border bg-muted/30"
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                        Block {block.blockNum}
+                      </p>
+                      <p className="text-sm font-semibold text-foreground leading-snug mt-1">
+                        {block.label.replace(/^Block\s\d+\s—\s/, "")}
+                      </p>
+                    </div>
+                    <Badge
+                      variant={isSubmitted ? "default" : "outline"}
+                      className="text-[10px] whitespace-nowrap"
+                    >
+                      {isSubmitted ? "Submitted" : isReady ? "Ready" : "Soon"}
+                    </Badge>
+                  </div>
+
+                  <p className="text-[11px] text-muted-foreground mt-2">
+                    {block.date}
+                  </p>
+                  <p className="text-[11px] text-muted-foreground">
+                    {block.units.length} units • {block.totalMarks} marks
+                  </p>
+                  <p className="text-[11px] text-muted-foreground mt-2 line-clamp-3">
+                    {block.units.join(" • ")}
+                  </p>
+
+                  {isReady ? (
+                    <Link
+                      to={block.route}
+                      className="mt-3 inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-[11px] font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
+                    >
+                      {isSubmitted ? "View Submission" : block.ctaLabel}
+                      <ArrowRight size={12} />
+                    </Link>
+                  ) : (
+                    <span className="mt-3 inline-flex items-center rounded-md border border-border px-3 py-1.5 text-[11px] font-medium text-muted-foreground">
+                      Placeholder for now
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Learning Path */}
         <div className="rounded-lg border border-border bg-card p-3 sm:p-4">
           <div className="flex items-center justify-between mb-3">
@@ -178,7 +305,7 @@ export default function LearnerPortalPage() {
                   </span>
                 </div>
                 <p className="text-[11px] sm:text-xs text-muted-foreground mt-1 leading-relaxed line-clamp-2 sm:line-clamp-none">
-                  Before you begin your 10-module journey — understand what a
+                  Before you begin your 11-module journey — understand what a
                   system is, what systems development means, and how this
                   qualification connects to your IT career.
                 </p>
@@ -211,7 +338,7 @@ export default function LearnerPortalPage() {
                       isCurrent
                         ? "border-primary bg-primary/10"
                         : "border-border hover:bg-secondary/40"
-                    }`}
+                    } min-h-[46px]`}
                   >
                     <div className="min-w-0 flex items-center gap-2 sm:gap-2.5 flex-1">
                       <Avatar className="h-6 w-6 sm:h-7 sm:w-7 shrink-0">
@@ -378,7 +505,7 @@ export default function LearnerPortalPage() {
               <section>
                 <h4 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground mb-3 flex items-center gap-2">
                   <span className="h-px flex-1 bg-border sm:hidden"></span>
-                  Module Roadmap — All 10 Units
+                  Module Roadmap — All 11 Units
                   <span className="h-px flex-1 bg-border sm:hidden"></span>
                 </h4>
 
@@ -421,11 +548,18 @@ export default function LearnerPortalPage() {
                       "B2 · D6-7",
                       8,
                     ],
-                    [7, "ITSD-14933", "Web Scripting", "B2 · D8-9", 6],
-                    [8, "ITSD-14908", "Testing IT Systems", "B3 · D11", 6],
-                    [9, "ITSD-14919", "Resolve User Problems", "B3 · D12", 5],
                     [
-                      10,
+                      7,
+                      "ITSD-14930",
+                      "Developing Software for the Internet",
+                      "B2 · Integrated",
+                      3,
+                    ],
+                    [8, "ITSD-14933", "Web Scripting", "B2 · D8-9", 6],
+                    [9, "ITSD-14908", "Testing IT Systems", "B3 · D11", 6],
+                    [10, "ITSD-14919", "Resolve User Problems", "B3 · D12", 5],
+                    [
+                      11,
                       "ITSD-120379",
                       "Work as Project Team Member",
                       "B3 · D13",
@@ -517,17 +651,24 @@ export default function LearnerPortalPage() {
                           "B2 · D6-7",
                           8,
                         ],
-                        [7, "ITSD-14933", "Web Scripting", "B2 · D8-9", 6],
-                        [8, "ITSD-14908", "Testing IT Systems", "B3 · D11", 6],
                         [
-                          9,
+                          7,
+                          "ITSD-14930",
+                          "Developing Software for the Internet",
+                          "B2 · Integrated",
+                          3,
+                        ],
+                        [8, "ITSD-14933", "Web Scripting", "B2 · D8-9", 6],
+                        [9, "ITSD-14908", "Testing IT Systems", "B3 · D11", 6],
+                        [
+                          10,
                           "ITSD-14919",
                           "Resolve User Problems",
                           "B3 · D12",
                           5,
                         ],
                         [
-                          10,
+                          11,
                           "ITSD-120379",
                           "Work as Project Team Member",
                           "B3 · D13",

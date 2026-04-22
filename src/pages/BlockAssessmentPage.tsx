@@ -1,71 +1,43 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { KeyRound, CheckCircle2, ArrowLeft, ShieldCheck } from "lucide-react";
+import { KeyRound, CheckCircle2, ArrowLeft, ShieldCheck, ExternalLink } from "lucide-react";
 import AppLayout from "@/components/AppLayout";
-import { AssessmentForm, type AssessmentPayload } from "@/components/AssessmentForm";
+import type { AssessmentPayload } from "@/components/AssessmentForm";
+import BlockMarkdownAssessment from "@/components/BlockMarkdownAssessment";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useAuth } from "@/hooks/useAuth";
 import { useModuleProgress } from "@/hooks/useModuleProgress";
 import { supabase } from "@/integrations/supabase/client";
-
-/* ─── Block metadata ─────────────────────────────────────────────────────── */
-const BLOCK_META: Record<string, {
-  label: string;
-  theme: string;
-  date: string;
-  units: string[];
-  totalMarks: number;
-}> = {
-  "1": {
-    label: "Block 1 — Foundations of Systems Development",
-    theme: "09–13 March 2026",
-    date: "Monday 06 April 2026 (AM)",
-    units: ["US 14924: Information Systems Analysis", "US 14920: Participate in Groups/Teams", "US 14918: Describe Principles of Computer Programming", "US 14927: Apply Problem-Solving Strategies", "US 14915: Design a Computer Program to Specification"],
-    totalMarks: 175,
-  },
-  "2": {
-    label: "Block 2 — Applied Programming and Systems Design",
-    theme: "06–10 April 2026",
-    date: "Monday 04 May 2026 (AM)",
-    units: ["US 14910: Apply Principles of Computer Programming", "US 14933: Create Web Applications with Scripting"],
-    totalMarks: 65,
-  },
-  "3": {
-    label: "Block 3 — Testing, Support and Integrated Assessment",
-    theme: "04–08 May 2026",
-    date: "Thursday 07 / Friday 08 May 2026 (AM)",
-    units: ["US 14908: Testing IT Systems Against Specifications", "US 14919: Resolve Computer Users' Problems", "US 120379: Work as a Project Team Member"],
-    totalMarks: 80,
-  },
-};
+import { fileUploadService } from "@/services/fileUploadService";
+import { BLOCK_ASSESSMENT_MAP } from "@/data/blockAssessments";
+import { BLOCK_INTERACTIVE_SECTIONS_MAP } from "@/data/blockAssessmentQuestions";
 
 /* ─── Typed RPC helper ───────────────────────────────────────────────────── */
 const rpc = supabase as unknown as {
   rpc: (fn: string, params?: Record<string, unknown>) => Promise<{ data: unknown; error: { message: string } | null }>;
 };
 
+const OTP_SUSPENDED = false;
+
 /* ─────────────────────────────────────────────────────────────────────────── */
 export default function BlockAssessmentPage() {
   const { blockNum } = useParams<{ blockNum: string }>();
   const { user } = useAuth();
-  const { progressMap, markAssessmentSubmitted } = useModuleProgress();
+  const { progressMap, markAssessmentSubmitted, loading } = useModuleProgress();
 
   const blockKey = `block-${blockNum}`;
-  const meta = blockNum ? BLOCK_META[blockNum] : undefined;
+  const meta = blockNum ? BLOCK_ASSESSMENT_MAP[blockNum] : undefined;
 
   /* OTP gate */
   const [otpValidated, setOtpValidated] = useState<boolean>(
-    () => sessionStorage.getItem(`block_otp_${blockNum}`) === "true"
+    () => OTP_SUSPENDED || sessionStorage.getItem(`block_otp_${blockNum}`) === "true"
   );
   const [otpInput, setOtpInput]     = useState("");
   const [otpValidating, setOtpValidating] = useState(false);
   const [otpError, setOtpError]     = useState("");
 
-  /* Assessment answers */
-  const [answers, setAnswers]       = useState<Record<number, string>>({});
-
   /* Submission state */
-  const [pendingText, setPendingText]       = useState("");
+  const [pendingSubmission, setPendingSubmission] = useState<AssessmentPayload | null>(null);
   const [showConfirm, setShowConfirm]       = useState(false);
   const [isSubmitting, setIsSubmitting]     = useState(false);
   const [submitError, setSubmitError]       = useState<string | undefined>();
@@ -77,15 +49,27 @@ export default function BlockAssessmentPage() {
   useEffect(() => {
     const prog = progressMap[blockKey];
     if (!prog) return;
-    if (prog.assessment_submitted && prog.assessment_submitted_at) {
-      setSubmittedAt(prog.assessment_submitted_at);
+
+    const submittedTimestamp =
+      prog.assessment_submitted_at ?? prog.submission_uploaded_at ?? "";
+    if (submittedTimestamp) {
+      setSubmittedAt(submittedTimestamp);
     }
-    if (prog.submission_path) setSubmissionPath(prog.submission_path);
+    if (prog.submission_path) {
+      setSubmissionPath(prog.submission_path);
+    }
   }, [blockKey, progressMap]);
 
   /* Hydrate submitted text from storage on revisit */
   useEffect(() => {
     if (!submissionPath || submittedText) return;
+
+    const lowerPath = submissionPath.toLowerCase();
+    if (!(lowerPath.endsWith(".txt") || lowerPath.endsWith(".md"))) {
+      setSubmittedText(`Assessment submitted via uploaded file: ${submissionPath.split("/").pop() ?? submissionPath}`);
+      return;
+    }
+
     supabase.storage
       .from("assessment-submissions")
       .download(submissionPath)
@@ -121,7 +105,14 @@ export default function BlockAssessmentPage() {
     );
   }
 
-  const alreadySubmitted = !!progressMap[blockKey]?.assessment_submitted;
+  const blockProgress = progressMap[blockKey];
+  const alreadySubmitted = Boolean(
+    blockProgress?.assessment_submitted ||
+    blockProgress?.assessment_submitted_at ||
+    blockProgress?.submission_uploaded_at ||
+    blockProgress?.submission_path
+  );
+  const isCheckingSubmission = loading && !blockProgress;
 
   return (
     <AppLayout
@@ -157,10 +148,44 @@ export default function BlockAssessmentPage() {
             <p key={u} className="text-[11px] text-muted-foreground">• {u}</p>
           ))}
         </div>
+        {(meta.paperSourceHref || meta.memorandumHref) && (
+          <div className="flex flex-wrap gap-2 pt-1">
+            {meta.paperSourceHref && (
+              <a
+                href={meta.paperSourceHref}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground hover:bg-secondary/50"
+              >
+                <ExternalLink size={12} /> Open reference paper
+              </a>
+            )}
+            {meta.memorandumHref && (
+              <a
+                href={meta.memorandumHref}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground hover:bg-secondary/50"
+              >
+                <ExternalLink size={12} /> Open memorandum
+              </a>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* ── Already submitted ── */}
-      {alreadySubmitted ? (
+      {OTP_SUSPENDED && !alreadySubmitted && (
+        <div className="rounded-lg border border-blue-300 bg-blue-50 px-4 py-3 text-sm text-blue-800 dark:border-blue-900 dark:bg-blue-950/30 dark:text-blue-300 mb-5">
+          OTP access is temporarily suspended for testing, so this block assessment is open directly until further notice.
+        </div>
+      )}
+
+      {/* ── Submission / access state ── */}
+      {isCheckingSubmission ? (
+        <div className="rounded-lg border border-border bg-card p-5 text-sm text-muted-foreground">
+          Checking your latest submission status…
+        </div>
+      ) : alreadySubmitted ? (
         <div className="space-y-4">
           <div className="rounded-lg border border-green-500/40 bg-green-50/40 dark:bg-green-900/10 p-5 flex items-start gap-4">
             <CheckCircle2 size={28} className="shrink-0 text-green-500 mt-0.5" />
@@ -233,23 +258,25 @@ export default function BlockAssessmentPage() {
       /* ── Assessment form ── */
       ) : (
         <>
-          <AssessmentForm
-            moduleId={blockKey}
-            answers={answers}
-            onAnswerChange={(idx, val) => setAnswers((prev) => ({ ...prev, [idx]: val }))}
-            learnerName={
-              user?.user_metadata?.display_name ??
-              user?.user_metadata?.full_name ??
-              user?.email ??
-              ""
-            }
+          <BlockMarkdownAssessment
+            title={`${meta.shortLabel} Interactive Test Paper`}
+            blockNum={blockNum}
+            markdown={meta.paperMarkdown}
+            sections={BLOCK_INTERACTIVE_SECTIONS_MAP[blockNum] ?? []}
             onRequestSubmit={(payload: AssessmentPayload) => {
-              setPendingText(payload.submissionText);
+              setPendingSubmission(payload);
               setShowConfirm(true);
             }}
             isSubmitting={isSubmitting}
             submitError={submitError}
+            disabled={meta.status !== "ready"}
           />
+
+          {meta.status !== "ready" && (
+            <div className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-300">
+              This block test is a placeholder for now. Block 1 is the active in-app assessment.
+            </div>
+          )}
 
           {/* Confirm dialog */}
           <AlertDialog open={showConfirm} onOpenChange={setShowConfirm}>
@@ -257,37 +284,56 @@ export default function BlockAssessmentPage() {
               <AlertDialogHeader>
                 <AlertDialogTitle>Confirm Submission</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Your answers for <strong>Block {blockNum}</strong> will be saved and submitted to your facilitator.
-                  Make sure you have answered all required activities before confirming.
+                  Your Block {blockNum} assessment will be linked to your learner profile and submitted to your facilitator.
+                  You can complete it directly on the platform or submit a PDF / Word file.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Go Back</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={async () => {
-                    if (!user?.id) return;
-                    if (progressMap[blockKey]?.assessment_submitted) {
+                    if (!user?.id || !pendingSubmission) return;
+                    if (alreadySubmitted || meta.status !== "ready") {
                       setShowConfirm(false);
                       return;
                     }
+
                     setIsSubmitting(true);
-                    const blob = new Blob([pendingText], { type: "text/plain" });
-                    const path = `learner-${user.id}/block-${blockNum}/assessment-${Date.now()}.txt`;
-                    const { error } = await supabase.storage
-                      .from("assessment-submissions")
-                      .upload(path, blob, { upsert: true });
-                    if (error) {
+                    setSubmitError(undefined);
+
+                    try {
+                      const result = await fileUploadService.submitAssessment(
+                        pendingSubmission.uploadFile ?? pendingSubmission.submissionText,
+                        blockKey,
+                        user.id,
+                        {
+                          fileName: pendingSubmission.fileName,
+                          submissionText: pendingSubmission.submissionText,
+                          metadata: pendingSubmission.metadata,
+                        }
+                      );
+
+                      if (!result.success) {
+                        throw new Error(result.error?.message || "Upload failed");
+                      }
+
+                      const now = new Date().toISOString();
+                      setSubmissionPath(result.filePath || "");
+                      setSubmittedAt(now);
+                      setSubmittedText(
+                        pendingSubmission.uploadMode === "upload"
+                          ? `Uploaded file: ${pendingSubmission.fileName || "assessment file"}`
+                          : pendingSubmission.submissionText
+                      );
+                      await markAssessmentSubmitted(blockKey, now, result.filePath || null);
+                      setShowConfirm(false);
+                      setPendingSubmission(null);
+                    } catch (error: any) {
+                      console.error("[Block Assessment Upload] Error:", error);
                       setSubmitError(`Submission failed: ${error.message}`);
+                    } finally {
                       setIsSubmitting(false);
-                      return;
                     }
-                    const now = new Date().toISOString();
-                    setSubmissionPath(path);
-                    setSubmittedAt(now);
-                    setSubmittedText(pendingText);
-                    await markAssessmentSubmitted(blockKey, now);
-                    setIsSubmitting(false);
-                    setShowConfirm(false);
                   }}
                 >
                   Confirm &amp; Submit

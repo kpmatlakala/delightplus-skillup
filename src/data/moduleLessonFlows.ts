@@ -1,6 +1,6 @@
 // --- Content block types -----------------------------------------------------
 
-import { module14924LessonFlow } from "./module14924LessonFlow";
+import { module14924LessonFlow } from "./block1/module14924LessonFlow";
 
 export type ContentBlock =
   | { type: "paragraph"; text: string }
@@ -62,9 +62,11 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
     unitPurpose:
       "The purpose of this Unit Standard is to apply the principles of computer programming in a systems development context, including problem analysis, data representation, fundamental programming principles and high-level language concepts.",
     quizPlacement: "end",
-    quizSummary: "After completing all four sessions you will take a checkpoint quiz to confirm your understanding across the full unit.",
-    quizPageTitle: "Quiz & Lab checkpoint",
-    quizPageBody: "The quiz focuses on applying programming principles, recognising correct data representations and choosing appropriate algorithm structures � not just memorising definitions.",
+    quizSummary:
+      "After completing the sessions you will take a practical knowledge-check quiz based on the same guided tasks done in class, such as editor use, syntax correction, data understanding, and simple pseudocode.",
+    quizPageTitle: "Practical Knowledge Check",
+    quizPageBody:
+      "This quiz checks whether you understand the practical steps from the learner guide and presentation. It focuses on explaining what you did and why it works, not on speed or memorising difficult terms.",
     assessmentPageTitle: "Summative assessment overview",
     assessmentPageBody: "The summative assessment draws together everything practised in this unit standard. You will complete a structured task, submit your work as evidence, and meet the criteria in the assessment brief. A registered assessor uses your portfolio to determine competence.",
 
@@ -82,8 +84,10 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
         id: "session-1",
         label: "Session 1",
         title: "Session 1: Operate programming development tools",
-        summary: "Use an editor to produce source code, use the syntax checker to find errors, and compile your program.",
-        body: "Learn how to use the key tools every programmer relies on.",
+        summary:
+          "Follow the beginner-friendly Write → Check → Build journey: use an editor, understand syntax errors, and see how code becomes a working program.",
+        body:
+          "This first session is about confidence and orientation. Learners explore the editor as a creative space, the syntax checker as a quality filter, and the compiler as the tool that helps turn source code into a runnable program.",
         outcomes: [
           "The operation demonstrates the use of the editor of the development tools to produce program source code.",
           "The operation includes the use of the syntax checker of the tools to check for syntax errors.",
@@ -91,60 +95,162 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
         ],
         sections: [
           {
-            title: "1.1 Programming Development Tools & The Editor",
+            title: "1.1 The Developer's Roadmap: Write → Check → Build",
             blocks: [
-              { type: "paragraph", text: "A programming tool or software development tool is a program or application that software developers use to create, debug, maintain, or otherwise support other programs. Sometimes called a text editor, it enables you to create and edit text files. There are two general categories of editor:" },
-              { type: "list", items: [
-                "Line editors � A primitive form where you must first specify the exact line number before making changes.",
-                "Screen-oriented editors (full-screen editors) � Enable you to modify any text visible on the display screen by moving the cursor to the desired location.",
-              ]},
-              { type: "callout", variant: "tip", text: "Modern IDEs like VS Code, IntelliJ and Eclipse are screen-oriented editors with many extra features built on top." },
-              { type: "heading", text: "Common Editor Keyboard Shortcuts" },
-              { type: "table", headers: ["Command", "Action"], rows: [
-                ["Ctrl-A / Home", "Move cursor to the beginning of the current line"],
-                ["Ctrl-B / Left Arrow", "Move cursor backwards one character"],
-                ["Ctrl-C", "Copy highlighted text to clipboard"],
-                ["Ctrl-D / Delete", "Delete the character to the right of the cursor"],
-                ["Ctrl-E / End", "Move cursor to the end of the current line"],
-                ["Ctrl-F", "Find a sequence of characters (Esc to cancel)"],
-                ["Ctrl-G", "Find the next occurrence of the last searched sequence"],
-              ]},
+              {
+                type: "paragraph",
+                text: "Think of programming as a three-stage journey. First you write the code, then you check for mistakes, and finally you build or run the program.",
+              },
+              {
+                type: "table",
+                headers: ["Phase", "Tool", "Purpose"],
+                rows: [
+                  ["Writing", "Editor", "Create source code"],
+                  ["Checking", "Syntax Checker", "Find and fix errors"],
+                  ["Building", "Compiler", "Turn code into something executable"],
+                ],
+              },
+              {
+                type: "callout",
+                variant: "info",
+                text: "This roadmap helps learners remember the order: Write → Check → Build.",
+              },
             ],
           },
           {
-            title: "1.2 The Syntax Checker",
+            title: "1.2 The Creative Space (Editor)",
             blocks: [
-              { type: "paragraph", text: "In computer science, a syntax error refers to an error in the syntax of a sequence of characters or tokens intended to be written in a particular programming language. For compiled languages, syntax errors occur strictly at compile-time � a program will not compile until all syntax errors are corrected." },
-              { type: "callout", variant: "info", text: "For interpreted languages, not all syntax errors can be reliably detected until run-time, making it harder to differentiate a syntax error from a semantic error." },
-              { type: "heading", text: "Syntax Error Severity Codes" },
-              { type: "table", headers: ["Code", "Severity", "Meaning"], rows: [
-                ["U", "Unrecoverable", "Stops the compiler system immediately."],
-                ["S", "Severe", "You must correct this � compiler cannot generate code."],
-                ["E", "Error", "Compiler makes an assumption; you should verify it."],
-                ["W", "Warning", "Possible error, but program is syntactically correct."],
-                ["I", "Information", "Draws your attention to something � not necessarily an error."],
-              ]},
-              { type: "callout", variant: "tip", text: "E-level, W-level and I-level messages can be suppressed. S-level errors must always be corrected before object code can be produced." },
+              {
+                type: "paragraph",
+                text: "A programming development tool is any software that helps a developer create, check, and improve programs. The editor is the place where your ideas become source code.",
+              },
+              {
+                type: "list",
+                items: [
+                  "Line editors are older and require line-by-line editing.",
+                  "Screen-oriented editors allow you to move the cursor freely and edit anywhere on screen.",
+                  "Modern tools like Visual Studio Code and IntelliJ IDEA are screen-oriented editors.",
+                ],
+              },
+              {
+                type: "callout",
+                variant: "tip",
+                text: "Think of the editor as your digital workbook for coding — open, type, save, and improve.",
+              },
             ],
           },
           {
-            title: "1.3 Compiling Source Code",
+            title: "1.3 Essential Commands and Writing Example",
             blocks: [
-              { type: "paragraph", text: "Compilation converts your source code into executable instructions the computer can run. Three categories of code are involved:" },
-              { type: "list", items: [
-                "User-written code � the statements you type yourself.",
-                "Library functions � pre-built functions provided by the language (e.g. LEFT$, LEN, MID$, ABS, SQR in Q-Basic).",
-                "User-defined functions � functions you create to encapsulate reusable logic and return a single value.",
-              ]},
-              { type: "heading", text: "User-Defined Functions in QBasic" },
-              { type: "code", text: "FUNCTION FunctionName(x, y, z)\n  REM body of function\n  FunctionName = x + y + z   ' return value\nEND FUNCTION" },
-              { type: "heading", text: "Subroutines (SUB � END SUB)" },
-              { type: "paragraph", text: "A subroutine (also called a module) is a mini-program inside your main program � a collection of commands that can be executed from anywhere. To add one in QBasic: go to Edit ? New Sub, name it, and place commands between SUB and END SUB. A function is the same as a subroutine except it returns a value." },
-              { type: "heading", text: "Local vs Global Variables" },
-              { type: "table", headers: ["Scope", "Declaration", "Accessible from"], rows: [
-                ["Local", "Inside a module/procedure without SHARED", "Only that module or procedure"],
-                ["Global", "In the main module with SHARED attribute", "Any SUB or FUNCTION in the whole module"],
-              ]},
+              {
+                type: "paragraph",
+                text: "You do not need dozens of shortcuts on Day 1. Focus on the few that save time and reduce mistakes.",
+              },
+              {
+                type: "table",
+                headers: ["Shortcut", "Use"],
+                rows: [
+                  ["Ctrl + C", "Copy"],
+                  ["Ctrl + X", "Cut"],
+                  ["Ctrl + V", "Paste"],
+                  ["Ctrl + S", "Save"],
+                ],
+              },
+              {
+                type: "code",
+                text: "INPUT \"Enter a number: \", num\nresult = SQR(num)\nPRINT \"The square root is: \"; result",
+              },
+              {
+                type: "paragraph",
+                text: "This is source code — human-readable instructions that tell the computer what to do.",
+              },
+            ],
+          },
+          {
+            title: "1.4 The Quality Filter (Syntax Checking)",
+            blocks: [
+              {
+                type: "paragraph",
+                text: "Programming languages follow strict rules called syntax. A syntax error happens when those rules are broken.",
+              },
+              {
+                type: "list",
+                items: [
+                  "Missing brackets or parentheses",
+                  "Incorrect keywords",
+                  "Wrong punctuation such as a missing colon",
+                ],
+              },
+              {
+                type: "table",
+                headers: ["Code", "Meaning", "Action"],
+                rows: [
+                  ["U", "Unrecoverable", "Program stops completely"],
+                  ["S", "Severe", "Must fix before compiling"],
+                  ["E", "Error", "Compiler may guess, but it is risky"],
+                  ["W", "Warning", "Not always wrong, but suspicious"],
+                  ["I", "Information", "Suggestion or note"],
+                ],
+              },
+              {
+                type: "callout",
+                variant: "warning",
+                text: "Start with S and E errors first. They usually stop the program from working properly.",
+              },
+            ],
+          },
+          {
+            title: "1.5 The Assembly Line (Compiling and Functions)",
+            blocks: [
+              {
+                type: "paragraph",
+                text: "After fixing errors, the compiler translates your source code into a form the computer can run.",
+              },
+              {
+                type: "ordered-list",
+                items: [
+                  "Read the code",
+                  "Check syntax",
+                  "Combine with libraries",
+                  "Produce an executable result",
+                ],
+              },
+              {
+                type: "table",
+                headers: ["Concept", "Simple Meaning", "Example"],
+                rows: [
+                  ["Library Function", "Built-in function provided by the language", "SQR(), LEN(), ABS()"],
+                  ["User-Defined Function", "Function created by the programmer", "CalculateAverage()"],
+                  ["Subroutine", "Performs an action but does not return a value", "DisplayMenu()"],
+                  ["Function", "Returns a result", "GetTotal()"],
+                  ["Local Variable", "Only exists inside one procedure or function", "tempMark"],
+                  ["Global Variable", "Can be accessed more widely", "schoolName"],
+                ],
+              },
+            ],
+          },
+          {
+            title: "1.6 Session 1 Checklist and Practice",
+            blocks: [
+              {
+                type: "list",
+                items: [
+                  "Can you write a simple line of code in the editor?",
+                  "Can you use Save, Copy, and Paste?",
+                  "Can you identify a syntax error?",
+                  "Can you explain the difference between a built-in function and one you create yourself?",
+                  "Can you describe what compiling does?",
+                ],
+              },
+              {
+                type: "code",
+                text: "result = SQR((num",
+              },
+              {
+                type: "callout",
+                variant: "info",
+                text: "Practice question: What error will appear, what severity might it have, and how would you fix it?",
+              },
             ],
           },
         ],
@@ -396,6 +502,107 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
               { type: "callout", variant: "tip", text: "Use a proper debugger (breakpoints, watch expressions, call stack) rather than print statements for systematic, efficient debugging." },
               { type: "heading", text: "ANWB Debugging � Explain It Out Loud" },
               { type: "paragraph", text: "Find a willing bystander (or even a rubber duck!) and explain out loud how your code works. This forces you to re-examine your assumptions and articulate what is really happening. Very often you discover the cause of the bug while explaining it to someone else." },
+            ],
+          },
+        ],
+      },
+      {
+        id: "facilitator-activities",
+        label: "Facilitator Notes",
+        title: "Facilitator Activities — 14910 Practical Track",
+        summary:
+          "Workbook-aligned practical delivery for editor use, data work, pseudocode, and debugging.",
+        body:
+          "The facilitator guide expects this unit to be taught practically, with short demonstrations followed by learner participation and evidence collection.",
+        sections: [
+          {
+            title: "Planned Practical Flow",
+            blocks: [
+              {
+                type: "ordered-list",
+                items: [
+                  "Activity 1: Define a text editor and syntax using simple everyday examples.",
+                  "Activity 2: Let learners create a file, use the syntax checker, and try one simple built-in function or output statement.",
+                  "Activity 3: Practise number conversion, data types, ASCII ideas, and logical operators with quick whiteboard or workbook tasks.",
+                  "Activity 5: Write short pseudocode for sequence, selection, and loop structures and desk-check it with a partner.",
+                  "Activity 6: Compare good and bad documentation using comments, pseudocode, and test notes.",
+                  "Activities 7–9: Use variables and operators, explain modular programming, and debug a small program with test data.",
+                ],
+              },
+              {
+                type: "callout",
+                variant: "tip",
+                text: "Keep the cycle practical: explain briefly, demonstrate live, let learners try, then review the output together.",
+              },
+            ],
+          },
+          {
+            title: "PoE Evidence to Collect",
+            blocks: [
+              {
+                type: "list",
+                items: [
+                  "Completed workbook answers for Activities 1–9.",
+                  "A saved sample code file or screenshot showing syntax correction.",
+                  "Short pseudocode or algorithm trace completed by the learner.",
+                  "Notes on one debugging example using test data.",
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "learner-activities",
+        label: "Activities",
+        title: "Learner Activities — 14910 Practical Workbook Tasks",
+        summary:
+          "Practical exercises aligned to the facilitator guide and presentation coverage.",
+        body:
+          "These activities help learners move from definitions to doing. Keep the completed work as part of the learner’s PoE evidence.",
+        sections: [
+          {
+            title: "Activity Schedule",
+            blocks: [
+              {
+                type: "table",
+                headers: ["Activity", "Focus"],
+                rows: [
+                  ["Activity 1", "Define a text editor and explain what syntax means in programming."],
+                  ["Activity 2", "Use the editor, syntax checker, and one simple built-in function or code statement."],
+                  ["Activity 3", "Convert values between number systems and compare data representations such as text, numeric, and ASCII."],
+                  ["Activity 4", "Differentiate logical data types and logical operators using short examples."],
+                  ["Activity 5", "Write pseudocode that demonstrates sequence, selection, and iteration."],
+                  ["Activity 6", "Identify good vs bad program documentation principles and QA habits."],
+                  ["Activity 7–9", "Use variables and expressions, explain modular programming, and demonstrate a simple debugging process."],
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "resources",
+        label: "Resources",
+        title: "Resources — Programming Principles Practical Session",
+        summary:
+          "Materials required to keep 14910 hands-on and visible.",
+        body:
+          "Prepare the environment before class so learners can practise immediately rather than wait for setup.",
+        sections: [
+          {
+            title: "Resource List",
+            blocks: [
+              {
+                type: "list",
+                items: [
+                  "VS Code and Python or the chosen language installed on all machines.",
+                  "Projector for live demos of the editor, syntax errors, and debugging steps.",
+                  "Learner Workbook and Facilitator Guide for activity references.",
+                  "Printed shortcut and pseudocode quick-reference sheets.",
+                  "Sample code snippets with one or two deliberate mistakes for correction practice.",
+                ],
+              },
             ],
           },
         ],
@@ -1562,34 +1769,490 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
       },
     ],
   },
+  "14933": {
+    moduleId: "14933",
+    saqa: "14933",
+    introTitle: "Create Multimedia / Web-Based Applications with Scripting",
+    introSummary:
+      "Use the SAQA 14933 learner guide to plan, design, script, and assemble a simple multimedia or web-based application from an outlined brief.",
+    introBody:
+      "This in-app learner guide follows the 14933 markdown material and takes learners through the full process: understand web-based multimedia, plan the application, design it for real users, choose and save suitable media, create scripts, and test the final assembled product.",
+    aboutGuide:
+      "This learner guide covers Unit Standard 14933 for the FETC: IT Systems Development qualification (SAQA 78965, NQF Level 4). It is designed to help learners create, test, and gain user approval for multimedia / web-based computer applications with scripting in a practical, evidence-based way.",
+    unitPurpose:
+      "People credited with this unit standard are able to plan the use of a multimedia/web-based authoring application with scripting, design the application, identify and save text/graphic/animation elements, create scripts, and assemble a multimedia/web-based application including scripts.",
+    quizPlacement: "end",
+    quizSummary:
+      "Use the quiz to check understanding of planning, design, multimedia elements, scripting, testing, and final assembly for a simple web-based application.",
+    quizPageTitle: "Module Quiz",
+    quizPageBody:
+      "Complete the learner guide sessions first, then use the quiz to confirm that you can explain and apply the main 14933 concepts clearly.",
+    assessmentPageTitle: "Portfolio of Evidence",
+    assessmentPageBody:
+      "Submit a design brief, storyboard/flowchart, saved media elements, simple script evidence, and the assembled application or screenshots as PoE evidence.",
+    lessons: [
+      {
+        id: "unit-1",
+        label: "Unit 1",
+        title: "Learning Unit 1: Create Multimedia / Web-Based Applications with Scripting",
+        summary:
+          "Overview of Unit Standard 14933, the purpose of the unit, and the end-to-end process from planning to testing and final assembly.",
+        body:
+          "UNIT STANDARD: 14933 | NQF LEVEL: 4 | CREDITS: 6. This unit focuses on creating, testing, and gaining user approval for multimedia / web-based computer applications with scripting from an outlined development brief.",
+      },
+      {
+        id: "session-1",
+        label: "Session 1",
+        title: "Session 1: Plan the use of a multimedia / web-based authoring application",
+        summary:
+          "Start with the brief: identify the topic, purpose, target audience, objectives, tools, and environment needed for the application.",
+        body:
+          "Session 1 focuses on planning. Learners first understand what web-based multimedia is, then think carefully about the audience, objectives, tools, hardware, software, and development plan before any design or coding begins.",
+        outcomes: [
+          "Identify the user-specified topic, purpose, target audience, and objectives of the application.",
+          "Justify the tools selected to create the multimedia / web-based application with scripting.",
+          "Identify the hardware, software, and configuration needed to create and run the application.",
+          "Outline a realistic plan for the creation of the application according to project planning principles.",
+        ],
+        sections: [
+          {
+            title: "1.1 What Web-Based Multimedia Means",
+            blocks: [
+              {
+                type: "paragraph",
+                text: "Web-based multimedia refers to websites or online applications that use more than one type of media — usually text, images, sound, video, or animation — and often allow the user to interact directly with the content.",
+              },
+              {
+                type: "list",
+                items: [
+                  "Hyperlinks help control the order in which information is viewed.",
+                  "Modern computers and faster internet connections make multimedia use more practical than in the past.",
+                  "Many multimedia sites are interactive, not only informational.",
+                ],
+              },
+            ],
+          },
+          {
+            title: "1.2 Advantages and Disadvantages of Multimedia",
+            blocks: [
+              {
+                type: "list",
+                items: [
+                  "Advantages: supports different learning styles, keeps users interested, and explains some ideas more clearly than text alone.",
+                  "Disadvantages: often costs more, takes longer to create, may load slowly, and may not work the same on all devices or browsers.",
+                ],
+              },
+              {
+                type: "callout",
+                variant: "tip",
+                text: "Good multimedia should support the message, not distract from it.",
+              },
+            ],
+          },
+          {
+            title: "1.3 Audience, Objectives, Tools, and Environment",
+            blocks: [
+              {
+                type: "ordered-list",
+                items: [
+                  "Identify the topic and overall purpose of the application.",
+                  "Describe the target audience and how they will access the site or application.",
+                  "Decide which tools, hardware, software, and plug-ins are realistic for that audience.",
+                  "Write clear objectives before moving forward to design.",
+                ],
+              },
+              {
+                type: "paragraph",
+                text: "If the audience and objectives are still unclear, the learner should not continue deeper into the design process until the application purpose makes sense.",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "session-2",
+        label: "Session 2",
+        title: "Session 2: Design a multimedia / web-based computer application",
+        summary:
+          "Translate the brief into a usable design using planning principles, flowcharts, page layouts, storyboards, navigation rules, and access considerations.",
+        body:
+          "Session 2 is about design thinking. Learners generate the application design from the user specification and use flowcharts, page layouts, and storyboards to communicate clearly between the developer and the user.",
+        outcomes: [
+          "Generate the multimedia / web-based application design according to user specifications.",
+          "Design a storyboard and flow-diagram that supports effective communication and shared understanding.",
+          "Apply effective multimedia communication principles so the design is interesting, usable, and clear.",
+        ],
+        sections: [
+          {
+            title: "2.1 Multimedia Web Site Design Principles",
+            blocks: [
+              {
+                type: "paragraph",
+                text: "Web site design is the process of planning what the application will look like and how it will work. Time spent planning on paper before development saves time and reduces redesign later.",
+              },
+              {
+                type: "list",
+                items: [
+                  "Make the application interesting and valuable to the target audience.",
+                  "Make the application easy to use, intuitive, and quick enough to load.",
+                  "Refresh content regularly so the site does not become stale or boring.",
+                ],
+              },
+            ],
+          },
+          {
+            title: "2.2 Performance, Devices, and Compatibility",
+            blocks: [
+              {
+                type: "table",
+                headers: ["Design Issue", "Good Practice"],
+                rows: [
+                  ["Large media files", "Optimise them, use thumbnails, and stream audio/video where possible"],
+                  ["Different devices", "Design for the intended device or optimise for multiple delivery methods"],
+                  ["Browser-specific features", "Avoid them unless they do not block basic functionality for other users"],
+                  ["Uncommon plug-ins", "Prefer widely used tools and avoid forcing unusual downloads"],
+                ],
+              },
+              {
+                type: "callout",
+                variant: "warning",
+                text: "High-bandwidth items should be used in moderation and only when they add real value to the application.",
+              },
+            ],
+          },
+          {
+            title: "2.3 Flowcharts, Page Layouts, and Storyboards",
+            blocks: [
+              {
+                type: "paragraph",
+                text: "After identifying the audience, objectives, and main content, the structure and layout of the site can be designed using planning tools such as flowcharts, page layouts, and storyboards.",
+              },
+              {
+                type: "list",
+                items: [
+                  "A flowchart shows how pages in the site relate to one another.",
+                  "A page layout shows where menus, text, images, and other elements will appear on the page.",
+                  "A storyboard shows the sequence of screens or scenes for a multimedia component.",
+                ],
+              },
+            ],
+          },
+          {
+            title: "2.4 Navigation and Access Considerations",
+            blocks: [
+              {
+                type: "list",
+                items: [
+                  "Users should be able to reach most pages within about three clicks.",
+                  "Use clear navigation bars, hyperlinks, site maps, search tools, and back-to-top aids where needed.",
+                  "Include identifying information and a route back to the home page on all pages.",
+                  "Consider both device compatibility and accessibility for users with disabilities.",
+                ],
+              },
+              {
+                type: "callout",
+                variant: "info",
+                text: "Accessible design includes alt text, meaningful links, and layouts that reduce unnecessary clicking and scrolling.",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "session-3",
+        label: "Session 3",
+        title: "Session 3: Identify and save text, graphic elements, and animation",
+        summary:
+          "Choose, prepare, and save multimedia elements in forms that suit the design, the user, and the legal requirements of the project.",
+        body:
+          "Session 3 focuses on the actual content elements that go into the application: text, graphics, animation, audio, and video. Learners also consider suitable file formats, compression, copyright, privacy, and practical saving choices.",
+        outcomes: [
+          "Use text that aligns with the agreed topic, purpose, and target audience.",
+          "Identify and save graphics and animation according to the design specification and legal requirements.",
+          "Save text and media in forms that can be integrated into the multimedia / web-based application.",
+        ],
+        sections: [
+          {
+            title: "3.1 Text and Readability",
+            blocks: [
+              {
+                type: "list",
+                items: [
+                  "Text is used for content, menus, instructions, buttons, and hyperlinks.",
+                  "Choose typefaces and font sizes that match the purpose and remain easy to read.",
+                  "High contrast between text and background improves readability.",
+                  "When a consistent text appearance is essential, text can be rendered as a graphic instead.",
+                ],
+              },
+            ],
+          },
+          {
+            title: "3.2 Graphics, Formats, and Thumbnails",
+            blocks: [
+              {
+                type: "table",
+                headers: ["Format", "Best Use"],
+                rows: [
+                  ["GIF / PNG", "Line art, logos, buttons, and simple graphics"],
+                  ["JPEG", "Photographs and rich images where compression is useful"],
+                  ["Thumbnail image", "Small preview linked to a larger full-size version"],
+                ],
+              },
+              {
+                type: "paragraph",
+                text: "Images should be saved at an appropriate display size before being inserted into a web page so that they do not make the page unnecessarily slow.",
+              },
+            ],
+          },
+          {
+            title: "3.3 Animation, Audio, Video, and Legal Care",
+            blocks: [
+              {
+                type: "list",
+                items: [
+                  "Animation can be created with animated GIFs, JavaScript, DHTML, Flash-style tools, or other development tools.",
+                  "Audio and video often need compression or streaming to reduce waiting time for the user.",
+                  "All selected media should support the agreed design and audience needs.",
+                  "Respect copyright and privacy when choosing text, images, audio, or video for the application.",
+                ],
+              },
+              {
+                type: "callout",
+                variant: "warning",
+                text: "Only use media that you are allowed to use, and save it in a format that the project can actually integrate and display.",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "session-4",
+        label: "Session 4",
+        title: "Session 4: Create multimedia / web-based application scripts",
+        summary:
+          "Move from design into development by using markup languages and scripting languages to create structure, behaviour, and interactivity.",
+        body:
+          "Session 4 introduces the development stage: create the page structure, insert the planned media, write scripts using standard language features, and test them under likely conditions.",
+        outcomes: [
+          "Demonstrate the logic of the scripts through a simple logic diagram or explanation.",
+          "Configure the working environment so the planned tools and software can be used correctly.",
+          "Write scripts using standard features of the scripting language.",
+          "Test the scripts and correct likely errors or failures.",
+        ],
+        sections: [
+          {
+            title: "4.1 Multimedia Web Site Development",
+            blocks: [
+              {
+                type: "ordered-list",
+                items: [
+                  "Create the multimedia elements needed by the application.",
+                  "Create the website or application pages themselves.",
+                  "Test and maintain the finished site or application.",
+                ],
+              },
+            ],
+          },
+          {
+            title: "4.2 Markup Languages for Web Development",
+            blocks: [
+              {
+                type: "list",
+                items: [
+                  "HTML is the most common markup language for web pages.",
+                  "Other markup options include DHTML, XML, XHTML, and WML for specific needs or devices.",
+                  "Markup tags identify headings, paragraphs, links, images, tables, frames, and other page elements.",
+                ],
+              },
+              {
+                type: "code",
+                text: "<h1>Welcome</h1>\n<p>This is my practice page.</p>\n<img src=\"photo.jpg\" alt=\"Photo description\">\n<a href=\"contact.html\">Contact Us</a>",
+              },
+            ],
+          },
+          {
+            title: "4.3 Scripting Languages and Testing Scripts",
+            blocks: [
+              {
+                type: "paragraph",
+                text: "Scripting languages add dynamic content and interactivity. Popular examples mentioned in the guide include JavaScript, VBScript, and Perl.",
+              },
+              {
+                type: "list",
+                items: [
+                  "JavaScript is commonly used to add interaction to web pages.",
+                  "Important scripted features should not depend on one browser only.",
+                  "Test scripts against the most likely conditions and correct identified errors.",
+                ],
+              },
+              {
+                type: "callout",
+                variant: "tip",
+                text: "Keep early scripts small and clear so the learner can explain what each one does.",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "session-5",
+        label: "Session 5",
+        title: "Session 5: Assemble the multimedia / web-based application including scripts",
+        summary:
+          "Bring all saved text, graphics, animation, and scripts together into one coherent application, then test and refine it.",
+        body:
+          "The final session is about assembly, testing, maintenance, and professionalism. The learner combines the planned content and scripts, checks that the result matches the specification, and improves it based on testing results.",
+        outcomes: [
+          "Assemble the multimedia / web-based application using the saved elements and planned specification.",
+          "Ensure that the function and content of the application remain consistent with the design specification and system environment.",
+        ],
+        sections: [
+          {
+            title: "5.1 Authoring Software and Final Build",
+            blocks: [
+              {
+                type: "paragraph",
+                text: "Web site authoring software can make the work easier by generating markup, managing navigation, applying consistent styles, and helping tie all elements together into one site.",
+              },
+              {
+                type: "list",
+                items: [
+                  "Authoring tools can speed up page creation and improve consistency.",
+                  "They often include support for forms, media, hyperlinks, and site-wide styling.",
+                  "Even when tools are used, the developer still needs to check quality carefully.",
+                ],
+              },
+            ],
+          },
+          {
+            title: "5.2 Testing and Maintaining the Site",
+            blocks: [
+              {
+                type: "ordered-list",
+                items: [
+                  "Click every hyperlink and test every likely user action.",
+                  "Check spelling, grammar, layout, readability, and general professionalism.",
+                  "Test on different browsers, devices, and screen sizes where possible.",
+                  "Update and maintain the site regularly so the content stays useful and current.",
+                ],
+              },
+              {
+                type: "callout",
+                variant: "warning",
+                text: "A multimedia site is not finished just because it is online; it must still be tested, monitored, and improved over time.",
+              },
+            ],
+          },
+          {
+            title: "5.3 Final Learner Checklist",
+            blocks: [
+              {
+                type: "list",
+                items: [
+                  "Does the final application still match the original topic, purpose, audience, and objectives?",
+                  "Are the text, graphics, and other media saved in suitable formats and used lawfully?",
+                  "Do the scripts work under normal conditions?",
+                  "Is the final result easy to use, readable, and consistent with the design plan?",
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "learner-activities",
+        label: "Activities",
+        title: "Learner Activities — 14933 Workbook Tasks",
+        summary:
+          "Practical learner activities mapped to the markdown guide and the main assessment criteria.",
+        body:
+          "Complete each activity stage and keep your notes, sketches, saved media, screenshots, and final files as part of your PoE evidence.",
+        sections: [
+          {
+            title: "Activity Schedule",
+            blocks: [
+              {
+                type: "table",
+                headers: ["Activity", "Focus"],
+                rows: [
+                  ["Activity 1", "Identify the topic, purpose, target audience, objectives, and tools for the application."],
+                  ["Activity 2", "Create a flowchart, page layout, or storyboard to communicate the design clearly."],
+                  ["Activity 3", "Select and save text, graphics, and animation elements in suitable formats while respecting copyright and privacy rules."],
+                  ["Activity 4", "Write and test a short script using standard features of the scripting language."],
+                  ["Activity 5", "Assemble the final application, test it, and present the result."],
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "resources",
+        label: "Resources",
+        title: "Resources — 14933 Learner Guide Support",
+        summary:
+          "Materials needed to teach and complete the 14933 in-app learner guide effectively.",
+        body:
+          "Prepare the design, build, and testing resources in advance so the session time stays practical and productive.",
+        sections: [
+          {
+            title: "Resource List",
+            blocks: [
+              {
+                type: "list",
+                items: [
+                  "Learner Guide, Learner Workbook, Practical Assessment, and Assessment Guide for SAQA 14933.",
+                  "VS Code or similar editor, plus a browser such as Chrome or Edge for previewing pages.",
+                  "Storyboard / wireframe sheets and planning templates.",
+                  "Copyright-safe sample images, audio, and video examples.",
+                  "A simple testing checklist for links, layout, browser/device compatibility, and accessibility.",
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
   "14908": {
     moduleId: "14908",
     saqa: "14908",
     introTitle: "Testing IT Systems",
-    introSummary: "Select, apply, and document test procedures to verify that IT systems meet given specifications.",
-    introBody: "This module covers the full testing lifecycle: selecting an appropriate test procedure, applying it, collecting and recording data, and preparing formal test documentation.",
-    aboutGuide: "This learner guide covers testing IT systems for the FETC: IT Systems Development qualification (SAQA 78965, NQF Level 4). It targets learners involved in software and hardware testing and quality assurance.",
-    unitPurpose: "Qualifying learners are able to: Select an appropriate test procedure; Apply the test procedure; Collect and record data; Prepare the testing.",
+    introSummary:
+      "Learn how testers plan checks, run them carefully, capture evidence, and report whether a system is ready for use.",
+    introBody:
+      "This unit introduces the full testing journey in a practical way: decide what must be tested, choose the right procedure, execute the test, record the evidence, and prepare the documents that prove what happened.",
+    aboutGuide:
+      "This learner guide covers testing IT systems for the FETC: IT Systems Development qualification (SAQA 78965, NQF Level 4). It supports learners entering software support, QA, or systems environments where evidence, accuracy, and clear reporting matter.",
+    unitPurpose:
+      "Qualifying learners are able to select an appropriate test procedure, apply the test procedure, collect and record data, and prepare the testing process in a structured way.",
     quizPlacement: "end",
-    quizSummary: "Test your understanding of test phases, test types, diagnostic tools, and test documentation.",
+    quizSummary:
+      "Test your understanding of test purpose, phases, evidence collection, defect logging, and the main documents used in a formal test cycle.",
     quizPageTitle: "Module Quiz",
-    quizPageBody: "Complete all session content before attempting this quiz.",
+    quizPageBody:
+      "Complete the sessions first, then use the quiz to check whether you can explain testing clearly and apply the ideas to a simple scenario.",
     assessmentPageTitle: "Portfolio of Evidence",
-    assessmentPageBody: "Submit a completed test plan and test results for a system tested against given specifications.",
+    assessmentPageBody:
+      "Submit a simple test plan, executed test cases, and clear test results for a system checked against a given specification.",
     lessons: [
       {
         id: "unit-1",
         label: "Unit 1",
         title: "Demonstrate an Understanding of Testing IT Systems Against Given Specifications",
-        summary: "Overview of IT systems testing principles and procedures.",
-        body: "UNIT STANDARD: 14908 | NQF LEVEL: 4 | CREDITS: 6 | FIELD: Physical, Mathematical, Computer and Life Sciences",
+        summary:
+          "Overview of why testing matters, what evidence testers collect, and how quality is checked against requirements.",
+        body:
+          "UNIT STANDARD: 14908 | NQF LEVEL: 4 | CREDITS: 6 | FIELD: Physical, Mathematical, Computer and Life Sciences",
       },
       {
         id: "session-1",
         label: "Session 1",
         title: "Select an Appropriate Test Procedure",
-        summary: "Understand the purpose of testing and identify the correct test procedure depending on the mode of testing required.",
-        body: "Testing is the process of exercising a product to identify differences between expected and actual behaviour. Learn how to select the right approach for hardware and software testing.",
+        summary:
+          "Start with the big idea of testing, then match the correct procedure to the system, risk, and environment.",
+        body:
+          "Testing compares what a system should do with what it actually does. In this session, learners see how to choose a sensible testing method for both hardware and software scenarios.",
         outcomes: [
           "Explain the purpose of testing an IT system.",
           "Identify the correct test procedure for a given hardware testing scenario.",
@@ -1598,56 +2261,106 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
         ],
         sections: [
           {
-            title: "1.1 Purpose of Testing",
+            title: "1.1 What Testing Really Means",
             blocks: [
-              { type: "paragraph", text: "Testing is the process of exercising a product to identify differences between expected and actual behaviour, commonly called bugs or defects. The fundamental purpose of testing is to find defects." },
-              { type: "callout", variant: "info", text: "Testing does not prove that no errors exist � it can only show that errors exist. A system that passes all tests may still contain defects not covered by test cases." },
-              { type: "heading", text: "Why Testing Matters" },
-              { type: "list", items: [
-                "Verifies the system meets its specification before users depend on it.",
-                "Reduces the cost of fixing defects (catching them early is cheaper than post-deployment fixes).",
-                "Builds confidence in the system being delivered.",
-                "Protects business reputation and supports contractual obligations.",
-              ]},
+              {
+                type: "paragraph",
+                text: "Testing is the disciplined process of checking whether a system behaves the way the specification says it should behave. The tester looks for gaps between the expected result and the actual result.",
+              },
+              {
+                type: "callout",
+                variant: "info",
+                text: "A passed test does not prove the whole system is perfect. It only proves that the system behaved correctly for that specific check at that time.",
+              },
+              {
+                type: "table",
+                headers: ["Term", "Simple meaning"],
+                rows: [
+                  ["Expected result", "What should happen according to the requirement"],
+                  ["Actual result", "What really happened when the test was run"],
+                  ["Defect / bug", "A problem where actual and expected results do not match"],
+                  ["Test evidence", "Notes, screenshots, logs, or data that prove what happened"],
+                ],
+              },
             ],
           },
           {
-            title: "1.2 Hardware Test Phases",
+            title: "1.2 Why Testing Matters in Real Life",
             blocks: [
-              { type: "paragraph", text: "Hardware goes through multiple test phases during development and deployment:" },
-              { type: "table", headers: ["Test Phase", "Description"], rows: [
-                ["Prototype Testing", "Testing of early hardware models to identify fundamental design issues."],
-                ["Development Acceptance Testing (DAT)", "Testing by the development team to validate the hardware meets design specifications."],
-                ["Factory Acceptance Testing (FAT)", "Formal testing at the factory before shipment to verify against customer requirements."],
-                ["Site Acceptance Testing", "Testing after delivery to the customer's site to verify hardware functions in its intended environment."],
-                ["Burn-In Testing", "Running hardware continuously for a period to detect early-life failures."],
-                ["Final Acceptance Testing", "Final verification by the customer that all requirements are met before going live."],
-              ]},
+              {
+                type: "list",
+                items: [
+                  "It protects users from broken or unsafe systems.",
+                  "It reduces expensive fixes after deployment.",
+                  "It builds trust that the solution meets the specification.",
+                  "It helps teams sign off work using evidence instead of guesswork.",
+                ],
+              },
+              {
+                type: "callout",
+                variant: "tip",
+                text: "A simple memory rule: test to protect the user, the business, and the quality of the system.",
+              },
             ],
           },
           {
-            title: "1.3 Software Test Procedures",
+            title: "1.3 Hardware Test Programmes",
             blocks: [
-              { type: "paragraph", text: "Software test procedures determine how software is exercised to find defects. The main types are:" },
-              { type: "list", items: [
-                "Black-box testing � tests functionality without knowledge of internal code structure.",
-                "White-box testing � uses knowledge of internal code to design test cases.",
-                "Grey-box testing � tests with partial knowledge of internals.",
-                "Regression testing � repeats previous tests after changes to confirm no existing functionality is broken.",
-              ]},
+              {
+                type: "paragraph",
+                text: "Physical equipment is usually tested in stages before it is trusted in the real environment.",
+              },
+              {
+                type: "table",
+                headers: ["Test phase", "Purpose", "Easy example"],
+                rows: [
+                  ["Prototype Testing", "Find early design problems", "Testing the first version of a device"],
+                  ["Development Acceptance Testing (DAT)", "Check the build meets design goals", "Engineers confirm the hardware works as planned"],
+                  ["Factory Acceptance Testing (FAT)", "Verify before shipping", "Customer checks the machine at the factory"],
+                  ["Site Acceptance Testing", "Check it works where it will actually be used", "Testing a server after installation on site"],
+                  ["Burn-In Testing", "Expose early-life failures by running continuously", "Leaving equipment on for hours or days"],
+                  ["Final Acceptance Testing", "Formal sign-off before go-live", "Customer confirms all agreed checks are complete"],
+                ],
+              },
             ],
           },
           {
-            title: "1.4 Factors Affecting Test Selection",
+            title: "1.4 Software Test Procedures",
             blocks: [
-              { type: "paragraph", text: "When selecting a test procedure, consider:" },
-              { type: "list", items: [
-                "Available time and resources.",
-                "Risk level: higher-risk components require more rigorous testing.",
-                "System complexity and size.",
-                "Whether the test environment mirrors the production environment.",
-                "Skills available in the testing team.",
-              ]},
+              {
+                type: "table",
+                headers: ["Procedure", "Meaning", "Simple example"],
+                rows: [
+                  ["Black-box testing", "Test from the user side without looking at the code", "Enter data in a login form and check the outcome"],
+                  ["White-box testing", "Design tests using knowledge of the internal logic", "Check whether all important code paths were executed"],
+                  ["Grey-box testing", "Test with partial knowledge of the internals", "Know the database exists, but test mainly through the interface"],
+                  ["Regression testing", "Repeat older tests after a change", "Re-test login after a password-reset feature was added"],
+                ],
+              },
+              {
+                type: "callout",
+                variant: "warning",
+                text: "Choose the procedure that fits the risk, time, and type of system. One method is rarely enough for every situation.",
+              },
+            ],
+          },
+          {
+            title: "1.5 Factors That Affect Test Selection",
+            blocks: [
+              {
+                type: "list",
+                items: [
+                  "Risk level of the feature or device being tested",
+                  "Available time, people, and test tools",
+                  "Size and complexity of the system",
+                  "How closely the test environment matches production",
+                  "Skills and experience of the testing team",
+                ],
+              },
+              {
+                type: "paragraph",
+                text: "High-risk areas such as security, payment, or large data handling normally need deeper and more formal testing than low-risk cosmetic changes.",
+              },
             ],
           },
         ],
@@ -1656,8 +2369,10 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
         id: "session-2",
         label: "Session 2",
         title: "Apply the Test Procedure",
-        summary: "Follow the steps of a test approach, understand test phases, and categorise testing types.",
-        body: "Learn to execute a structured test approach and apply the appropriate phase (SIT, parallel, load, model office) for a given scenario.",
+        summary:
+          "Turn the plan into action by following a clear test approach, using the right phase, and recording results properly.",
+        body:
+          "A good test is not random. It follows a planned sequence so that the team can explain what was checked, what failed, and what must happen next.",
         outcomes: [
           "Follow the steps of the test approach for a given scenario.",
           "Apply the appropriate test phase for a given scenario.",
@@ -1665,44 +2380,92 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
         ],
         sections: [
           {
-            title: "2.1 Test Approach Steps",
+            title: "2.1 A Structured Test Approach Description",
             blocks: [
-              { type: "paragraph", text: "A structured test approach ensures thorough coverage. The steps are:" },
-              { type: "ordered-list", items: [
-                "Define the test objectives and scope.",
-                "Design test cases that cover all requirements.",
-                "Prepare the test environment (hardware, software, test data).",
-                "Execute the test cases.",
-                "Record actual results and compare with expected results.",
-                "Log and track all defects found.",
-                "Retest fixed defects (regression testing).",
-                "Report test results and obtain sign-off.",
-              ]},
+              {
+                type: "paragraph",
+                text: "A structured Test Approach Description explains how testing will be carried out so that everyone on the project follows the same method.",
+              },
+              {
+                type: "table",
+                headers: ["Part of the approach", "What it explains"],
+                rows: [
+                  ["Methodology", "The testing method, phases, and order of work"],
+                  ["Scope", "What is included and excluded from testing"],
+                  ["Contacts and roles", "Who prepares, executes, reviews, and signs off"],
+                  ["Issue tracking", "How defects are logged, prioritised, and followed up"],
+                  ["Entry and exit criteria", "What must be true before testing starts and before it finishes"],
+                ],
+              },
             ],
           },
           {
-            title: "2.2 Test Phases",
+            title: "2.2 Test Approach Steps",
             blocks: [
-              { type: "table", headers: ["Test Phase", "Description"], rows: [
-                ["System Integration Test 1 (SIT1)", "Test individual components and modules in isolation."],
-                ["System Integration Test 2 (SIT2)", "Test how integrated components interact as a system."],
-                ["Parallel Testing", "Run the new system alongside the old system; compare outputs to validate."],
-                ["Load Testing", "Test the system under expected and peak load conditions."],
-                ["Model Office Testing", "Simulate real business environment with end users to validate usability and workflows."],
-              ]},
+              {
+                type: "ordered-list",
+                items: [
+                  "Define the test objective and scope.",
+                  "Design test cases from the requirements.",
+                  "Prepare the environment, users, and test data.",
+                  "Run the test cases carefully.",
+                  "Compare actual results with expected results.",
+                  "Log any defects with clear evidence.",
+                  "Retest fixes and run regression checks if needed.",
+                  "Summarise the findings and request sign-off.",
+                ],
+              },
+              {
+                type: "callout",
+                variant: "info",
+                text: "The order matters: plan first, execute second, report last. Skipping the plan usually creates confusion later.",
+              },
             ],
           },
           {
-            title: "2.3 Testing Types",
+            title: "2.3 Common Test Phases",
             blocks: [
-              { type: "table", headers: ["Test Type", "What It Checks"], rows: [
-                ["Functional Testing", "Whether the system performs its intended functions."],
-                ["Performance Testing", "System responsiveness, throughput, and scalability under load."],
-                ["Security Testing", "Vulnerabilities, unauthorised access, data exposure risks."],
-                ["Usability Testing", "Ease of use, learnability, and satisfaction from end-user perspective."],
-                ["Compatibility Testing", "Whether system works across different browsers, OS, devices."],
-                ["Regression Testing", "That previously working features still work after changes."],
-              ]},
+              {
+                type: "table",
+                headers: ["Phase", "What it checks", "When it helps most"],
+                rows: [
+                  ["SIT1", "Individual modules or components", "Early integration stage"],
+                  ["SIT2", "How integrated parts work together", "When the full process starts joining up"],
+                  ["Parallel Testing", "Compare old and new system outputs", "When replacing an existing system"],
+                  ["Load Testing", "Performance under expected or peak traffic", "When speed and volume matter"],
+                  ["Model Office Testing", "Real-world workflows with end users", "Before business sign-off"],
+                ],
+              },
+            ],
+          },
+          {
+            title: "2.4 Testing Types You Must Recognise",
+            blocks: [
+              {
+                type: "table",
+                headers: ["Test type", "What it checks", "Example"],
+                rows: [
+                  ["Functional", "Does the feature work correctly?", "Can a learner submit a form successfully?"],
+                  ["Performance", "Is it fast enough under load?", "How long does the page take to open with many users?"],
+                  ["Security", "Can unauthorised access or data leaks occur?", "Can one learner view another learner's record?"],
+                  ["Usability", "Is it easy for the user to understand and use?", "Can a new user follow the screen without help?"],
+                  ["Compatibility", "Does it work across devices and browsers?", "Does the page still work in Chrome and Edge?"],
+                  ["Regression", "Did a recent change break older features?", "After a fix, does the login still work?"],
+                ],
+              },
+            ],
+          },
+          {
+            title: "2.5 Mini Example: Pass or Fail?",
+            blocks: [
+              {
+                type: "table",
+                headers: ["Check", "Expected result", "Actual result", "Status"],
+                rows: [
+                  ["Login with correct password", "Dashboard opens", "Dashboard opens", "Pass"],
+                  ["Login with blank password", "Validation message appears", "Page freezes", "Fail"],
+                ],
+              },
             ],
           },
         ],
@@ -1711,8 +2474,10 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
         id: "session-3",
         label: "Session 3",
         title: "Collect and Record Data",
-        summary: "Use diagnostic tools and understand the resources needed to collect test data in a lab environment.",
-        body: "Learn about diagnostic data adapters and the resource types required to set up a controlled test environment.",
+        summary:
+          "Capture the right evidence so that defects can be understood, reproduced, and fixed.",
+        body:
+          "Good testers do more than say 'it failed'. They collect the information that explains what happened, where it happened, and how it can be repeated.",
         outcomes: [
           "Explain what a diagnostic data adapter is and how it is used.",
           "Identify the resource types used in test data collection.",
@@ -1720,42 +2485,81 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
         ],
         sections: [
           {
-            title: "3.1 Diagnostic Data Adapters",
+            title: "3.1 What Diagnostic Information Is",
             blocks: [
-              { type: "paragraph", text: "A diagnostic data adapter (DDA) attaches additional information to a test run in Microsoft Test Manager. A DDA can affect the performance of the machine being tested and collect data about the test environment." },
-              { type: "heading", text: "Common Diagnostic Data Adapters" },
-              { type: "list", items: [
-                "System Information � collects details about the test machine's hardware and OS.",
-                "IntelliTrace � records program execution steps for post-test analysis.",
-                "Event Log � captures Windows event log entries during the test.",
-                "Screen Recorder � records screen activity during the test run.",
-                "Code Coverage � measures which lines of code were executed by the tests.",
-              ]},
+              {
+                type: "paragraph",
+                text: "Diagnostic information is the technical evidence collected while a test is running. It helps the team understand why a problem happened and how to reproduce it.",
+              },
+              {
+                type: "list",
+                items: [
+                  "Error messages or event logs",
+                  "Screenshots or screen recordings",
+                  "System information such as OS, memory, or browser version",
+                  "Steps performed just before the failure happened",
+                ],
+              },
             ],
           },
           {
-            title: "3.2 Resource Types for Test Data Collection",
+            title: "3.2 Common Diagnostic Data Adapters and Tools",
             blocks: [
-              { type: "table", headers: ["Resource Type", "Description"], rows: [
-                ["Test Machines", "Physical or virtual machines matching the target environment specifications."],
-                ["Test Data", "Realistic input data sets including boundary values, invalid data, and production-like data."],
-                ["Test Tools", "Automated test runners, defect tracking systems, test management tools."],
-                ["Personnel", "Test engineers, business analysts, end users (for UAT)."],
-                ["Documentation", "Test plans, test cases, requirement specifications as reference."],
-              ]},
+              {
+                type: "table",
+                headers: ["Tool / adapter", "What it captures", "Why it helps"],
+                rows: [
+                  ["System Information", "Machine and operating-system details", "Shows the environment where the issue happened"],
+                  ["Event Log", "Important system events and errors", "Helps trace hidden technical failures"],
+                  ["Screen Recorder", "Video of the test run", "Shows exactly what the tester saw and clicked"],
+                  ["Code Coverage", "Which lines of code were executed", "Shows whether key logic was actually tested"],
+                  ["IntelliTrace / trace logs", "Execution steps and debugging detail", "Supports deeper analysis after a failure"],
+                ],
+              },
             ],
           },
           {
-            title: "3.3 Lab Testing Environment",
+            title: "3.3 Resource Types Needed for Testing",
             blocks: [
-              { type: "paragraph", text: "A lab environment is a controlled space dedicated to testing, separate from production. Key characteristics:" },
-              { type: "list", items: [
-                "Mirrors production hardware, OS, and network topology as closely as possible.",
-                "Can be reset to a known baseline state between test runs.",
-                "Access controlled to prevent unauthorised changes during testing.",
-                "Contains all required software versions (system under test + dependencies).",
-              ]},
-              { type: "callout", variant: "tip", text: "Always document the exact lab configuration used for each test run � this allows defects to be reliably reproduced." },
+              {
+                type: "table",
+                headers: ["Resource type", "Purpose"],
+                rows: [
+                  ["Test machines", "Computers or virtual machines that match the target environment"],
+                  ["Test data", "Realistic valid, invalid, and boundary input values"],
+                  ["Test tools", "Applications for running tests, tracking issues, or recording evidence"],
+                  ["People", "Testers, analysts, developers, and sometimes end users"],
+                  ["Documents", "Requirements, test plan, cases, logs, and defect reports"],
+                ],
+              },
+            ],
+          },
+          {
+            title: "3.4 Characteristics of a Good Lab Environment",
+            blocks: [
+              {
+                type: "list",
+                items: [
+                  "It is separate from live production work.",
+                  "It can be reset to a known starting state.",
+                  "It matches the real environment as closely as possible.",
+                  "It uses controlled access so unexpected changes do not spoil the test.",
+                ],
+              },
+              {
+                type: "callout",
+                variant: "tip",
+                text: "If the environment is not documented, the team may struggle to reproduce the same failure later.",
+              },
+            ],
+          },
+          {
+            title: "3.5 Example Defect Log Entry",
+            blocks: [
+              {
+                type: "code",
+                text: "Defect ID: BUG-014\nTitle: Blank password freezes login page\nEnvironment: Chrome on Windows 11\nSteps: Open login -> leave password blank -> click Sign In\nExpected: Validation message appears\nActual: Page freezes and no message is shown\nSeverity: High",
+              },
             ],
           },
         ],
@@ -1764,38 +2568,162 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
         id: "session-4",
         label: "Session 4",
         title: "Prepare the Testing",
-        summary: "Plan and document the testing process using appropriate testing documentation types.",
-        body: "Understand the planning categories and documentation required to prepare a formal test before execution.",
+        summary:
+          "Bring the whole module together by planning the work, organising documents, and getting ready for sign-off.",
+        body:
+          "Before a formal test begins, the team needs a clear plan, the right environment, the correct evidence templates, and an agreed way to report results.",
         outcomes: [
           "Identify the planning categories for preparing a test.",
           "Produce the appropriate test documentation for a given scenario.",
         ],
         sections: [
           {
-            title: "4.1 Planning Categories",
+            title: "4.1 Planning Categories for Formal Testing",
             blocks: [
-              { type: "table", headers: ["Planning Category", "What It Covers"], rows: [
-                ["Scope Definition", "What will and will not be tested; boundaries of the testing effort."],
-                ["Resource Planning", "Staff, hardware, software, and test tool requirements."],
-                ["Schedule Planning", "Timeline for each test phase; entry and exit criteria."],
-                ["Risk Management", "Identify testing risks and mitigation strategies."],
-                ["Environmental Planning", "Test lab setup, configurations, and access management."],
-              ]},
+              {
+                type: "table",
+                headers: ["Planning category", "What it covers"],
+                rows: [
+                  ["Scope definition", "What will and will not be tested"],
+                  ["Resource planning", "People, tools, devices, and data needed"],
+                  ["Schedule planning", "Dates, sequence, and timing for each phase"],
+                  ["Risk management", "Known testing risks and how they will be reduced"],
+                  ["Environment planning", "Lab setup, access, configuration, and reset process"],
+                ],
+              },
             ],
           },
           {
-            title: "4.2 Test Documentation Types",
+            title: "4.2 The Main Test Documents",
             blocks: [
-              { type: "paragraph", text: "The following documents are typically produced when preparing and conducting a formal test:" },
-              { type: "list", items: [
-                "Test Plan � master document describing scope, approach, resources, schedule, and responsibilities.",
-                "Test Case Specification � detailed inputs, execution steps, expected outputs, and pass/fail criteria for each test.",
-                "Test Script � step-by-step instructions for executing each test case.",
-                "Test Data � the specific data values to be used during test execution.",
-                "Test Log � a record of all test activities during execution (what ran, when, who ran it).",
-                "Defect Report � documents each defect found, its severity, steps to reproduce, and resolution status.",
-                "Test Summary Report � final document summarising test results, coverage, and sign-off recommendations.",
-              ]},
+              {
+                type: "list",
+                items: [
+                  "Test Plan - the master guide for scope, roles, schedule, and approach",
+                  "Test Case Specification - the exact steps, inputs, and expected results",
+                  "Test Script - step-by-step instructions followed during execution",
+                  "Test Data - the values used to run the checks",
+                  "Test Log - the running record of what happened during the test",
+                  "Defect Report - details of each problem found",
+                  "Test Summary Report - final view of coverage, failures, and sign-off recommendation",
+                ],
+              },
+            ],
+          },
+          {
+            title: "4.3 Preparing for System Integration Testing (SIT)",
+            blocks: [
+              {
+                type: "ordered-list",
+                items: [
+                  "Confirm the environment matches the intended system configuration.",
+                  "Check the test hierarchy and know whether you are in SIT1, SIT2, or a later phase.",
+                  "Prepare the required accounts, permissions, and test data.",
+                  "Review the test plan, cases, and defect-report template before execution starts.",
+                  "Make sure contacts and escalation paths are known if issues block progress.",
+                ],
+              },
+            ],
+          },
+          {
+            title: "4.4 Guided Practice: Write a Tiny Test Case",
+            blocks: [
+              {
+                type: "table",
+                headers: ["Field", "Example entry"],
+                rows: [
+                  ["Test Case ID", "TC-LOGIN-01"],
+                  ["Objective", "Check that valid user login opens the dashboard"],
+                  ["Steps", "Enter username and password, then click Sign In"],
+                  ["Expected Result", "Dashboard opens successfully"],
+                  ["Actual Result", "To be completed during testing"],
+                  ["Status", "Pass / Fail"],
+                ],
+              },
+              {
+                type: "callout",
+                variant: "info",
+                text: "This small format is enough to teach the discipline of testing: objective, steps, expected result, actual result, and status.",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "facilitator-activities",
+        label: "Facilitator Notes",
+        title: "Facilitator Activities - 14908 Testing Practice",
+        summary:
+          "Guide learners through short demonstrations that show how test evidence is planned, captured, and reported.",
+        body:
+          "The strongest delivery method for this unit is practical discussion around a simple system such as a login form, browser page, or support tool, rather than theory only.",
+        sections: [
+          {
+            title: "Suggested Class Flow",
+            blocks: [
+              {
+                type: "ordered-list",
+                items: [
+                  "Begin with one familiar example such as logging in to a portal or opening a form.",
+                  "Ask learners to state the expected result before anyone clicks the button.",
+                  "Run the test and compare the actual result with the expected result.",
+                  "Capture a simple defect log entry if the test fails.",
+                  "End by asking which test document should be updated and why.",
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "learner-activities",
+        label: "Activities",
+        title: "Learner Activities - Testing Workbook Tasks",
+        summary:
+          "Short tasks that help learners practise selecting procedures, running checks, and writing evidence clearly.",
+        body:
+          "Keep all notes, screenshots, and written answers as part of the learner's PoE evidence for this unit.",
+        sections: [
+          {
+            title: "Activity Schedule",
+            blocks: [
+              {
+                type: "table",
+                headers: ["Activity", "Focus"],
+                rows: [
+                  ["Activity 1", "Explain the purpose of testing and match a test procedure to a hardware or software scenario."],
+                  ["Activity 2", "Describe factors that affect the level of testing effort required in a project."],
+                  ["Activity 3", "Draft a simple Test Approach Description showing methodology, contacts, and issue tracking."],
+                  ["Activity 4", "Capture a small defect log with expected result, actual result, and severity."],
+                  ["Activity 5", "Prepare a basic test case and identify the documents needed before SIT begins."],
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "resources",
+        label: "Resources",
+        title: "Resources - Testing IT Systems Session",
+        summary:
+          "Materials that support a simple but realistic classroom testing exercise.",
+        body:
+          "Prepare the environment and templates before class so learners spend more time practising and less time waiting.",
+        sections: [
+          {
+            title: "Resource List",
+            blocks: [
+              {
+                type: "list",
+                items: [
+                  "A simple demo system to test, such as a login form or basic web page.",
+                  "Printed or digital test case templates.",
+                  "A defect log template with severity and reproduction steps.",
+                  "Sample screenshots or logs for evidence discussion.",
+                  "A checklist for environment setup and sign-off.",
+                ],
+              },
             ],
           },
         ],
@@ -1948,45 +2876,114 @@ export const moduleLessonFlows: Record<string, ModuleLessonFlow> = {
         ],
         sections: [
           {
-            title: "1.1 Network Protocols and TCP/IP",
+            title: "1.1 Introduction to Network Protocols",
             blocks: [
-              { type: "paragraph", text: "A protocol is a set of rules or language used by computers and networking devices to communicate. TCP/IP (Transmission Control Protocol/Internet Protocol) is the suite of communications protocols used to connect hosts on the Internet." },
-              { type: "table", headers: ["Protocol Model", "Layers", "Use"], rows: [
-                ["TCP/IP", "4 layers (Application, Transport, Internet, Network Access)", "Used for the Internet; de facto standard."],
-                ["ISO OSI", "7 layers (Application, Presentation, Session, Transport, Network, Data Link, Physical)", "International standard reference model."],
-              ]},
-              { type: "callout", variant: "info", text: "TCP/IP and ISO OSI are very similar at the Network and Transport layers. TCP/IP largely delegates the link and physical layers to ISO OSI protocols." },
+              {
+                type: "paragraph",
+                text: "Just as diplomats follow diplomatic protocol when they meet, computers also need agreed rules so that they can understand one another. In networking, those rules are called protocols.",
+              },
+              {
+                type: "callout",
+                variant: "info",
+                text: "Easy definition: a protocol is a set of rules or a language used by computers and network devices to communicate with one another.",
+              },
+              {
+                type: "table",
+                headers: ["Word", "Simple meaning", "Example"],
+                rows: [
+                  ["Protocol", "Rules for communication", "HTTP, TCP/IP"],
+                  ["Service", "A function shared over the network", "File service, print service"],
+                  ["TCP/IP", "The main family of internet communication protocols", "Used when websites and apps send data across the internet"],
+                ],
+              },
+              {
+                type: "paragraph",
+                text: "TCP/IP stands for Transmission Control Protocol / Internet Protocol. It is the best-known family of networking protocols used on the Internet, and the two main parts are TCP and IP.",
+              },
             ],
           },
           {
-            title: "1.2 Session-Less HTTP and Session Management",
+            title: "1.2 Internet Standards and Figure 1.1",
             blocks: [
-              { type: "paragraph", text: "HTTP is stateless � there is no built-in facility to identify or track a particular user between requests. Application developers must manage state explicitly using session IDs." },
-              { type: "heading", text: "Three Methods to Deliver Session IDs" },
-              { type: "table", headers: ["Method", "Advantage", "Risk"], rows: [
-                ["URL-embedded session ID", "Works even with cookies disabled; easy to share.", "Exposed in browser history, logs, and referrer headers."],
-                ["Hidden form POST field", "Less obvious than URL; safer to share URLs.", "Requires JavaScript; more complex pages."],
-                ["Cookie", "Broad timeout control; not logged by intermediaries.", "Users can disable cookies; persistent cookies can be copied."],
-              ]},
-              { type: "heading", text: "Session ID Requirements" },
-              { type: "list", items: [
-                "Must look random and pass statistical tests of randomness.",
-                "Must be unpredictable � cannot be derived from time, date, or IP address.",
-                "Should be at least 50 characters long to resist brute-force attacks.",
-              ]},
+              {
+                type: "paragraph",
+                text: "The learner guide explains that network rules are written down as standards. Internet standards are often called RFCs (Requests for Comment). Other important standards bodies include ISO, which standardised the ISO OSI model, and the ITU in Geneva, which also issues communication standards.",
+              },
+              {
+                type: "table",
+                headers: ["Standard / body", "What learners should know"],
+                rows: [
+                  ["RFC", "Written internet standards used to describe how internet protocols should work"],
+                  ["ISO OSI", "A 7-layer reference model used to explain network communication"],
+                  ["ITU", "An international body that also publishes communication standards"],
+                ],
+              },
+              {
+                type: "code",
+                text: "Figure 1.1 idea (easy version)\nPerson A -> Translator -> Message travels -> Translator -> Person B\nComputer A -> Protocol layers -> Network media -> Protocol layers -> Computer B",
+              },
+              {
+                type: "callout",
+                variant: "tip",
+                text: "Use the translator picture when teaching: people need interpreters to understand each other, and computers use protocol layers for the same reason.",
+              },
             ],
           },
           {
-            title: "1.3 Bandwidth and Application Design",
+            title: "1.3 Session-Less HTTP and Session Management",
             blocks: [
-              { type: "paragraph", text: "Bandwidth is the amount of data that passes through a network connection over time, measured in bits per second (bps). It directly affects perceived application performance." },
-              { type: "heading", text: "Implications of Limited Bandwidth" },
-              { type: "list", items: [
-                "Large images and pages cause long load times, especially for dial-up users.",
-                "Pages with large amounts of code have bigger file sizes � reduce code where possible.",
-                "Some browsers on slower hardware can struggle to process heavy pages.",
-                "User perceived performance suffers � design for acceptable experience on slow connections.",
-              ]},
+              {
+                type: "paragraph",
+                text: "The Internet mainly uses HTTP for web pages, and HTTP is session-less (also called stateless). This means the server treats each request as new and does not automatically remember the user from the previous click.",
+              },
+              {
+                type: "callout",
+                variant: "warning",
+                text: "Simple idea: when you click one page and then another, the website must use extra methods to remember who you are.",
+              },
+              {
+                type: "heading",
+                text: "Why this matters in web development",
+              },
+              {
+                type: "list",
+                items: [
+                  "The system must find a way to remember the user between requests.",
+                  "Developers often use session IDs to keep track of a visitor safely.",
+                  "If session handling is weak, the site can become confusing or insecure.",
+                ],
+              },
+              {
+                type: "table",
+                headers: ["Method", "Simple meaning", "Risk to remember"],
+                rows: [
+                  ["Cookie", "A small piece of data stored by the browser", "Can be disabled or stolen if security is poor"],
+                  ["URL session ID", "The session code appears in the web address", "Can leak in history or shared links"],
+                  ["Hidden form field", "The session code is passed quietly in a form", "Needs careful implementation"],
+                ],
+              },
+            ],
+          },
+          {
+            title: "1.4 Bandwidth and Application Design",
+            blocks: [
+              {
+                type: "paragraph",
+                text: "Bandwidth is the amount of data that can move through the network in a certain time. Slow bandwidth means the user waits longer for pages, images, and scripts to load.",
+              },
+              {
+                type: "heading",
+                text: "Implications of limited bandwidth",
+              },
+              {
+                type: "list",
+                items: [
+                  "Large pictures and heavy pages take longer to load.",
+                  "Too much code can make the page slow on older computers and phones.",
+                  "Users may leave the page if it feels too slow or confusing.",
+                  "Good web design keeps pages light, clear, and easy to open.",
+                ],
+              },
             ],
           },
         ],

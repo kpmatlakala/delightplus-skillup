@@ -41,8 +41,18 @@ const navItems: NavItem[] = [
   },
   { label: "Communications", icon: <MessageSquare size={18} />, href: "/communications" },
   { label: "Portfolio (PoE)", icon: <FolderOpen    size={18} />, href: "/poe" },
-  { label: "Assessments",        icon: <ClipboardList size={18} />, href: "/assessments" },
-  { label: "Block Assessments", icon: <ShieldCheck   size={18} />, href: "/assessments/blocks" },
+  {
+    label: "Assessments",
+    icon: <ClipboardList size={18} />,
+    children: [
+      { label: "Overview", href: "/assessments", icon: <ClipboardList size={16} /> },
+      { label: "Quizzes", href: "/assessments/quizzes", icon: <FileText size={16} /> },
+      { label: "Summative", href: "/assessments/summative", icon: <FileText size={16} /> },
+      { label: "Practical", href: "/assessments/practical", icon: <FileText size={16} /> },
+      { label: "Workbooks", href: "/assessments/workbooks", icon: <FileText size={16} /> },
+      { label: "Block Assessments", href: "/assessments/blocks", icon: <ShieldCheck size={16} /> },
+    ],
+  },
   { label: "Compliance",        icon: <ShieldCheck   size={18} />, href: "/compliance" },
   { label: "Remote Launch",     icon: <Cast          size={18} />, href: "/present/launch" },
 ];
@@ -55,11 +65,12 @@ const learnerNavItems: NavItem[] = [
 export default function AppSidebar() {
   const { role } = useAuth();
   const location = useLocation();
-  const [groupExpanded, setGroupExpanded] = useState<Record<string, boolean>>({ Academics: true });
+  const [groupExpanded, setGroupExpanded] = useState<Record<string, boolean>>({ Academics: true, Assessments: true });
   const [mobileOpen, setMobileOpen]       = useState(false);
   const [collapsed, setCollapsed]         = useState(false);
+  const isLearnerRole = role === "learner" || role === "user";
 
-  const items    = role === "learner" ? learnerNavItems : navItems;
+  const items    = isLearnerRole ? learnerNavItems : navItems;
   const isActive = (href: string) => location.pathname === href;
 
   const toggleGroup = (label: string) =>
@@ -91,7 +102,7 @@ export default function AppSidebar() {
               : "gap-2.5 px-3 py-2"}
           ${active
             ? "bg-sidebar-primary text-sidebar-primary-foreground font-medium"
-            : "text-sidebar-foreground hover:bg-sidebar-accent"
+            : "text-sidebar-foreground/85 hover:text-sidebar-accent-foreground hover:bg-sidebar-accent"
           }`}
       >
         <span className="shrink-0">{icon}</span>
@@ -119,7 +130,7 @@ export default function AppSidebar() {
                 DSA<span className="text-sidebar-primary"> Tracker</span>
               </h1>
               <p className="text-xs text-sidebar-muted mt-0.5">
-                {role === "learner" ? "Learner Portal" : "Course Management System"}
+                {isLearnerRole ? "Learner Portal" : "Course Management System"}
               </p>
             </div>
           </div>
@@ -146,7 +157,7 @@ export default function AppSidebar() {
                 <div>
                   <button
                     onClick={() => toggleGroup(item.label)}
-                    className="flex items-center justify-between w-full px-3 py-2 text-sm text-sidebar-foreground rounded-md hover:bg-sidebar-accent transition-colors"
+                    className="flex items-center justify-between w-full px-3 py-2 text-sm text-sidebar-foreground/85 rounded-md hover:text-sidebar-accent-foreground hover:bg-sidebar-accent transition-colors"
                   >
                     <span className="flex items-center gap-2.5">
                       {item.icon}
@@ -175,15 +186,15 @@ export default function AppSidebar() {
       {/* Footer — only shown when expanded */}
       {!collapsed && (
         <div className="px-5 py-3 border-t border-sidebar-border">
-          <p className="text-xs text-sidebar-muted">SAQA 78965 · NQF Level 4</p>
-          <p className="text-xs text-sidebar-muted mt-0.5">
-            {role === "learner" ? "Learner Access" : "CET Venda · Block 1–3"}
+          <p className="text-xs text-sidebar-foreground/70">SAQA 78965 · NQF Level 4</p>
+          <p className="text-xs text-sidebar-foreground/70 mt-0.5">
+            {isLearnerRole ? "Learner Access" : "CET Venda · Block 1–3"}
           </p>
           <a
             href="https://thedatascienceacademy.co.za/"
             target="_blank"
             rel="noreferrer"
-            className="text-xs text-sidebar-muted mt-1 inline-block hover:text-sidebar-foreground"
+            className="text-xs text-sidebar-foreground/70 mt-1 inline-block hover:text-sidebar-primary-foreground"
           >
             thedatascienceacademy.co.za
           </a>
@@ -194,7 +205,7 @@ export default function AppSidebar() {
       <button
         onClick={() => setCollapsed((v) => !v)}
         title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        className={`flex items-center border-t border-sidebar-border py-3 text-sidebar-muted
+        className={`flex items-center border-t border-sidebar-border py-3 text-sidebar-foreground/70
           hover:text-sidebar-foreground hover:bg-sidebar-accent transition-colors text-xs font-medium
           ${collapsed ? "justify-center" : "gap-2 px-5"}`}
       >

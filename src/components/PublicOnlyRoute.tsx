@@ -16,7 +16,7 @@ export default function PublicOnlyRoute() {
     return <Outlet />;
   }
 
-  if (role === "learner") {
+  if (role === "learner" || role === "user") {
     return <Navigate to="/learner" replace />;
   }
 

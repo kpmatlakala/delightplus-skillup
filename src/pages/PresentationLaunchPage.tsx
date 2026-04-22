@@ -77,7 +77,7 @@ export default function PresentationLaunchPage() {
   };
 
   /* ── Guard ── */
-  if (!user || (role !== "admin" && role !== "lecturer")) {
+  if (!user || (role !== "admin" && role !== "lecturer" && role !== "moderator")) {
     return (
       <div className="min-h-dvh flex flex-col items-center justify-center gap-4 bg-gray-950 text-white px-6 text-center">
         <Lock size={36} className="text-white/20" />
@@ -183,7 +183,7 @@ export default function PresentationLaunchPage() {
         {/* Block 2 ── */}
         <section>
           <p className="text-white/35 text-xs uppercase tracking-widest font-semibold mb-3">
-            Block 2 · Applied Programming
+            Block 2 · Applied Programming & Web Development
           </p>
           <div className="space-y-2">
             {block2.map((m) => (

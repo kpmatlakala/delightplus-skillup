@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520" role="img" aria-labelledby="title desc">
+  <title id="title">Decision Tree Template</title>
+  <desc id="desc">Decision tree showing attendance and mark pass fail logic for Block 1 assessment.</desc>
+  <style>
+    .title{font:700 26px Arial, sans-serif; fill:#16325c}
+    .label{font:700 16px Arial, sans-serif; fill:#1f2937}
+    .hint{font:14px Arial, sans-serif; fill:#4b5563}
+    .node{fill:#fff; stroke:#1f3c88; stroke-width:3}
+    .pass{fill:#ecfdf5; stroke:#16a34a; stroke-width:3}
+    .fail{fill:#fff1f2; stroke:#e11d48; stroke-width:3}
+    .line{stroke:#1f3c88; stroke-width:3}
+    .tagFill{fill:#eef5ff; stroke:#8aa7d6; stroke-width:1.5}
+    .tagText{font:700 12px Arial, sans-serif; fill:#16325c; letter-spacing:.4px}
+  </style>
+  <rect width="900" height="520" fill="#fbfdff"/>
+  <rect x="700" y="18" width="150" height="28" rx="14" class="tagFill"/>
+  <text x="775" y="36" text-anchor="middle" class="tagText">Section 5 · Fig B</text>
+
+  <rect x="335" y="90" width="230" height="60" rx="10" class="node"/>
+  <text x="450" y="126" text-anchor="middle" class="label">Attendance ≥ 80% ?</text>
+
+  <line x1="390" y1="150" x2="220" y2="245" class="line"/>
+  <text x="290" y="185" class="hint">No</text>
+  <rect x="120" y="245" width="200" height="60" rx="10" class="fail"/>
+  <text x="220" y="280" text-anchor="middle" class="label">Fail / Intervention</text>
+
+  <line x1="510" y1="150" x2="680" y2="245" class="line"/>
+  <text x="610" y="185" class="hint">Yes</text>
+  <rect x="565" y="245" width="230" height="60" rx="10" class="node"/>
+  <text x="680" y="280" text-anchor="middle" class="label">Mark ≥ 50% ?</text>
+
+  <line x1="620" y1="305" x2="500" y2="400" class="line"/>
+  <text x="550" y="350" class="hint">No</text>
+  <rect x="380" y="400" width="180" height="60" rx="10" class="fail"/>
+  <text x="470" y="435" text-anchor="middle" class="label">Fail</text>
+
+  <line x1="740" y1="305" x2="820" y2="400" class="line"/>
+  <text x="770" y="350" class="hint">Yes</text>
+  <rect x="720" y="400" width="140" height="60" rx="10" class="pass"/>
+  <text x="790" y="435" text-anchor="middle" class="label">Pass</text>
+</svg>
