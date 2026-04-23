@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import AdaptiveLayout from "@/components/AdaptiveLayout";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { FolderCheck, ChevronRight } from "lucide-react";
 
 interface UserProfile {
   id: string;
@@ -252,6 +253,24 @@ export default function ProfilePage() {
             </Button>
           </form>
         </div>
+
+        <Link
+          to="/poe"
+          className="block rounded-lg border border-border bg-card p-6 hover:bg-accent/40 transition-colors group"
+        >
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                <FolderCheck size={20} />
+              </div>
+              <div>
+                <h2 className="font-display text-lg font-semibold text-foreground">Portfolio of Evidence</h2>
+                <p className="text-sm text-muted-foreground mt-0.5">Track your PoE readiness and download your template.</p>
+              </div>
+            </div>
+            <ChevronRight size={18} className="text-muted-foreground group-hover:text-foreground transition-colors shrink-0" />
+          </div>
+        </Link>
 
         <div className="rounded-lg border border-border bg-card p-6">
           <h2 className="font-display text-lg font-semibold text-foreground">Security</h2>

@@ -1,7 +1,5 @@
 import { ReactNode } from "react";
-import { useAuth } from "@/hooks/useAuth";
-import AppLayout from "@/components/AppLayout";
-import LmisLayout from "@/_lmis/components/LmisLayout";
+import LearnerLayout from "@/learner/components/LearnerLayout";
 
 interface AdaptiveLayoutProps {
   children: ReactNode;
@@ -10,11 +8,11 @@ interface AdaptiveLayoutProps {
 }
 
 /**
- * Picks LmisLayout for admin/lecturer, AppLayout for learner.
- * Used by shared pages (Profile, Communications, PoE) accessible to all roles.
+ * On the learner branch, every authenticated user is treated as a learner.
+ * All shared pages (Profile, Communications, PoE) render inside LearnerLayout
+ * regardless of the user's actual DB role. The LMIS shell is intentionally
+ * not used here — it lives in a separate dedicated app.
  */
-export default function AdaptiveLayout({ children, title, subtitle }: AdaptiveLayoutProps) {
-  const { role } = useAuth();
-  const Layout = role === "learner" ? AppLayout : LmisLayout;
-  return <Layout title={title} subtitle={subtitle}>{children}</Layout>;
+export default function AdaptiveLayout({ children, title: _title, subtitle: _subtitle }: AdaptiveLayoutProps) {
+  return <LearnerLayout>{children}</LearnerLayout>;
 }
