@@ -34,6 +34,25 @@ export default function LearnerPortalPage() {
     .filter((a) => a.audience !== "Admin Only")
     .slice(0, 3);
 
+  // ── Course catalog (assumption-driven, not yet DB-backed) ────────
+  // Active emulated course = SAQA 78965 (the one we currently have content for).
+  // Everything else from the catalog is shown as "Coming soon".
+  const enrolledCourses = [
+    {
+      id: program.saqaId,
+      title: program.title,
+      saqaId: program.saqaId,
+      nqfLevel: program.nqfLevel,
+      moduleCount: modules.length,
+      progress: overallProgress,
+    },
+  ];
+  const enrolledIds = new Set([program.saqaId]);
+  const comingSoonCourses = dsaProgramCatalog.filter((c) => !enrolledIds.has(c.saqaId ?? ""));
+  const enrolledCount = enrolledCourses.length;
+  const availableCount = comingSoonCourses.length;
+  const inProgressCount = enrolledCourses.filter((c) => c.progress > 0 && c.progress < 100).length;
+
   return (
     <>
       {/* ── Welcome / overview ──────────────────────────────── */}
