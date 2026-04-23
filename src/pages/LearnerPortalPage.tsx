@@ -1,4 +1,5 @@
 import { modules, program } from "@/data/courseData";
+import { dsaProgramCatalog } from "@/data/dsaProgramCatalog";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -7,7 +8,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { BookOpen, MessageSquare, Bell, Clock3, PlayCircle, Lock, ChevronRight, RefreshCw, GraduationCap, Sparkles, ArrowRight, RotateCcw, ShieldCheck, CheckCircle2, Circle, KeyRound } from "lucide-react";
+import { BookOpen, MessageSquare, Bell, Clock3, PlayCircle, Lock, ChevronRight, RefreshCw, GraduationCap, Sparkles, ArrowRight, RotateCcw, ShieldCheck, CheckCircle2, Circle, KeyRound, Layers, Compass, Hourglass } from "lucide-react";
 import { useModuleProgress } from "@/hooks/useModuleProgress";
 import { useAnnouncements } from "@/hooks/useAnnouncements";
 
@@ -33,22 +34,37 @@ export default function LearnerPortalPage() {
     .filter((a) => a.audience !== "Admin Only")
     .slice(0, 3);
 
+  // ── Course catalog (assumption-driven, not yet DB-backed) ────────
+  // Active emulated course = SAQA 78965 (the one we currently have content for).
+  // Everything else from the catalog is shown as "Coming soon".
+  const enrolledCourses = [
+    {
+      id: program.saqaId,
+      title: program.title,
+      saqaId: program.saqaId,
+      nqfLevel: program.nqfLevel,
+      moduleCount: modules.length,
+      progress: overallProgress,
+    },
+  ];
+  const enrolledIds = new Set([program.saqaId]);
+  const comingSoonCourses = dsaProgramCatalog.filter((c) => !enrolledIds.has(c.saqaId ?? ""));
+  const enrolledCount = enrolledCourses.length;
+  const availableCount = comingSoonCourses.length;
+  const inProgressCount = enrolledCourses.filter((c) => c.progress > 0 && c.progress < 100).length;
+
   return (
     <>
+      {/* ── Welcome / overview ──────────────────────────────── */}
       <div className="rounded-lg border border-accent/20 bg-accent/5 p-4 mb-4">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
           <div>
-            <h2 className="font-display font-bold text-foreground text-base sm:text-lg">{program.title}</h2>
+            <h2 className="font-display font-bold text-foreground text-base sm:text-lg">
+              Welcome to TDSA Learning
+            </h2>
             <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-              SAQA {program.saqaId} • NQF {program.nqfLevel} • {modules.length} modules
+              Track your enrolled courses, browse the catalog, and continue where you left off.
             </p>
-          </div>
-          <div className="min-w-[14rem]">
-            <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
-              <span>Path progress</span>
-              <span className="font-medium text-foreground">{overallProgress}%</span>
-            </div>
-            <Progress value={overallProgress} className="h-2" />
           </div>
           <div className="flex items-center justify-start lg:justify-end">
             <img
@@ -60,20 +76,122 @@ export default function LearnerPortalPage() {
         </div>
       </div>
 
+      {/* ── Enrollment stats ─────────────────────────────────── */}
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 mb-4">
         <div className="rounded-lg border border-border bg-card p-3">
-          <p className="text-xs text-muted-foreground">Knowledge</p>
-          <p className="font-display text-xl font-bold mt-1">{knowledgeModules}</p>
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-muted-foreground">Enrolled courses</p>
+            <BookOpen size={14} className="text-accent" />
+          </div>
+          <p className="font-display text-xl font-bold mt-1">{enrolledCount}</p>
         </div>
         <div className="rounded-lg border border-border bg-card p-3">
-          <p className="text-xs text-muted-foreground">Practical</p>
-          <p className="font-display text-xl font-bold mt-1">{practicalModules}</p>
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-muted-foreground">In progress</p>
+            <Hourglass size={14} className="text-accent" />
+          </div>
+          <p className="font-display text-xl font-bold mt-1">{inProgressCount}</p>
         </div>
         <div className="rounded-lg border border-border bg-card p-3">
-          <p className="text-xs text-muted-foreground">Unread</p>
-          <div className="mt-1 flex items-center justify-between">
-            <p className="font-display text-xl font-bold">{unreadMessages}</p>
-            <MessageSquare size={16} className="text-accent" />
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-muted-foreground">Available</p>
+            <Compass size={14} className="text-accent" />
+          </div>
+          <p className="font-display text-xl font-bold mt-1">{availableCount}</p>
+        </div>
+        <div className="rounded-lg border border-border bg-card p-3">
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-muted-foreground">Unread</p>
+            <MessageSquare size={14} className="text-accent" />
+          </div>
+          <p className="font-display text-xl font-bold mt-1">{unreadMessages}</p>
+        </div>
+      </div>
+
+      {/* ── My Courses ────────────────────────────────────────── */}
+      <div className="rounded-lg border border-border bg-card p-4 mb-4">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="font-display font-semibold flex items-center gap-2">
+            <Layers size={16} className="text-accent" /> My Courses
+          </h3>
+          <span className="text-[11px] text-muted-foreground">{enrolledCount} enrolled</span>
+        </div>
+
+        {enrolledCourses.length === 0 ? (
+          <div className="rounded-md border border-dashed border-border p-4 text-center">
+            <p className="text-sm text-muted-foreground">You're not enrolled in any courses yet.</p>
+            <p className="text-xs text-muted-foreground mt-1">Check the "Coming soon" list below.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {enrolledCourses.map((course) => (
+              <div key={course.id} className="rounded-md border border-border p-3 hover:bg-secondary/40 transition-colors">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-foreground leading-snug">{course.title}</p>
+                    <p className="text-[11px] text-muted-foreground mt-0.5">
+                      {course.saqaId ? `SAQA ${course.saqaId} • ` : ""}{course.nqfLevel ? `NQF ${course.nqfLevel} • ` : ""}{course.moduleCount} modules
+                    </p>
+                  </div>
+                  <Badge variant="outline" className="shrink-0">Active</Badge>
+                </div>
+                <div className="mt-2">
+                  <div className="flex items-center justify-between text-[11px] text-muted-foreground mb-1">
+                    <span>Progress</span>
+                    <span className="font-medium text-foreground">{course.progress}%</span>
+                  </div>
+                  <Progress value={course.progress} className="h-1.5" />
+                </div>
+                <div className="mt-3 flex items-center justify-end">
+                  <a href="#active-course" className="inline-flex items-center gap-1 text-xs text-primary hover:underline">
+                    Continue <ArrowRight size={12} />
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* ── Coming soon (catalog preview) ─────────────────────── */}
+      {comingSoonCourses.length > 0 && (
+        <div className="rounded-lg border border-border bg-card p-4 mb-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-display font-semibold flex items-center gap-2">
+              <Sparkles size={16} className="text-accent" /> Coming soon
+            </h3>
+            <span className="text-[11px] text-muted-foreground">{comingSoonCourses.length} programs</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
+            {comingSoonCourses.slice(0, 6).map((c) => (
+              <div key={c.id} className="rounded-md border border-border p-2.5">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-xs font-medium text-foreground leading-snug">{c.title}</p>
+                  <Badge variant="secondary" className="shrink-0 text-[10px]">Soon</Badge>
+                </div>
+                <p className="text-[10px] text-muted-foreground mt-1">{c.type} • {c.category}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── Active course drill-down ─────────────────────────── */}
+      <div id="active-course" className="rounded-lg border border-accent/30 bg-accent/5 p-4 mb-4">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div className="min-w-0">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-accent">Active course</p>
+            <h3 className="font-display font-bold text-foreground text-sm sm:text-base mt-0.5">{program.title}</h3>
+            <p className="text-[11px] text-muted-foreground mt-0.5">
+              SAQA {program.saqaId} • NQF {program.nqfLevel} • {modules.length} modules
+            </p>
+          </div>
+          <div className="min-w-[14rem]">
+            <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
+              <span>Path progress</span>
+              <span className="font-medium text-foreground">{overallProgress}%</span>
+            </div>
+            <Progress value={overallProgress} className="h-2" />
           </div>
         </div>
       </div>
