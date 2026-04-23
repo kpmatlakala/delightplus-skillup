@@ -66,11 +66,11 @@
       "documentsFound": ["facilitator_guide", "learner_guide", "learner_workbook", "practical_assessment", "summative_assessment", "summative_memo", "assessment_guide"]
     },
     {
-      "moduleId": "ITSD-120379",
-      "unitStandardId": 120379,
+      "moduleId": "ITSD-14921",
+      "unitStandardId": 14921,
       "type": "Elective",
-      "folder": "/docs/SAQA_78965_CET_Training/02_Elective_UnitStandards/US 120379",
-      "documentsFound": ["facilitator_guide", "learner_guide", "learner_workbook", "summative_assessment", "summative_memo", "assessment_guide"]
+      "folder": "/docs/SAQA_78965_CET_Training/02_Elective_UnitStandards/US 14921",
+      "documentsFound": ["facilitator_guide", "learner_guide", "learner_workbook", "practical_assessment", "summative_assessment", "summative_memo", "assessment_guide"]
     },
     {
       "moduleId": "ITSD-14933",

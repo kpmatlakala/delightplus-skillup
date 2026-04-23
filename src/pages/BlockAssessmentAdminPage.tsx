@@ -50,14 +50,14 @@ const BLOCKS = [
     label: "Block 2",
     full: "Block 2 — Applied Programming and Systems Design",
     date: "04 May 2026 (AM)",
-    units: ["14910", "14933"],
+    units: ["14910", "14933", "14930"],
   },
   {
     key: "block-3",
     label: "Block 3",
     full: "Block 3 — Testing, Support and Integrated Assessment",
     date: "07/08 May 2026 (AM)",
-    units: ["14908", "14919", "120379"],
+    units: ["14921", "14908", "14919"],
   },
 ];
 

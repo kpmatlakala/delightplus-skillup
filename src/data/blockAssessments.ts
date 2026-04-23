@@ -68,14 +68,14 @@ export const BLOCK_ASSESSMENTS: BlockAssessmentMeta[] = [
     date: "Thursday 07 / Friday 08 May 2026 (AM)",
     route: "/learner/assessment/block/3",
     units: [
+      "US 14921: Describe the Types of Computer Systems and Associated Hardware Configurations",
       "US 14908: Testing IT Systems Against Specifications",
       "US 14919: Resolve Computer Users' Problems",
-      "US 120379: Work as a Project Team Member",
     ],
     totalMarks: 80,
     status: "coming-soon",
     ctaLabel: "Coming Soon",
-    paperMarkdown: `# Block 3 Summative Test\n\nThe in-app Block 3 paper is being prepared.\n\n**Included units:**\n- US 14908 — Testing IT Systems Against Specifications\n- US 14919 — Resolve Computer Users' Problems\n- US 120379 — Work as a Project Team Member\n\n> Placeholder only for now.`,
+    paperMarkdown: `# Block 3 Summative Test\n\nThe in-app Block 3 paper is being prepared.\n\n**Included units:**\n- US 14921 — Describe the Types of Computer Systems and Associated Hardware Configurations\n- US 14908 — Testing IT Systems Against Specifications\n- US 14919 — Resolve Computer Users' Problems\n\n> Placeholder only for now.`,
   },
 ];
 

@@ -10,7 +10,7 @@
   "delivery": {
     "blocks": [1, 2, 3],
     "coreUnitStandards": [14910, 14915, 14918, 14920, 14924, 14927, 14930],
-    "electiveUnitStandards": [14908, 14919, 120379],
+    "electiveUnitStandards": [14908, 14919, 14921],
     "referenceOnly": [14933]
   },
   "sourceRoot": "/docs/SAQA_78965_CET_Training",

@@ -386,11 +386,11 @@ export default function Dashboard() {
                       [4, "ITSD-14927", "Apply Problem-Solving Strategies", "Block 1 · Day 4", 4, "Analyse workplace problems, evaluate solutions against criteria, and develop an implementation plan"],
                       [5, "ITSD-14915", "Design a Computer Program to Specification", "Block 1 · Day 5", 8, "Design programs using structure diagrams, decision tables, pseudocode and desk-checking"],
                       [6, "ITSD-14910", "Apply Programming Principles", "Block 2 · Days 6–7", 8, "Write, test and debug structured programs applying data types, functions, control structures and error handling"],
-                      [7, "ITSD-14930", "Developing Software for the Internet", "Block 2 · Integrated support", 3, "Explain network, interface, ownership and security principles that support the web-development work in Block 2"],
-                      [8, "ITSD-14933", "Web Scripting", "Block 2 · Days 8–9", 6, "Build interactive web pages using HTML5, CSS3 and JavaScript with DOM manipulation and responsive design"],
-                      [9, "ITSD-14908", "Testing IT Systems", "Block 3 · Day 11", 6, "Design test cases, execute test plans, log defects and apply quality assurance principles"],
-                      [10, "ITSD-14919", "Resolve User Problems", "Block 3 · Day 12", 5, "Diagnose and resolve common IT user problems using structured troubleshooting methodology"],
-                      [11, "ITSD-120379", "Work as Project Team Member", "Block 3 · Day 13", 8, "Participate effectively in a project team, manage deliverables and communicate with stakeholders"],
+                      [7, "ITSD-14933", "Web Scripting", "Block 2 · Days 8–9", 6, "Build interactive web pages using HTML5, CSS3 and JavaScript with DOM manipulation and responsive design"],
+                      [8, "ITSD-14930", "Developing Software for the Internet", "Block 2 · Integrated support", 3, "Explain network, interface, ownership and security principles that support the web-development work in Block 2"],
+                      [9, "ITSD-14921", "Types of Computer Systems & Hardware Configurations", "Block 3 · Day 11", 6, "Describe computer system types, hardware components, peripherals, and fit-for-purpose configurations"],
+                      [10, "ITSD-14908", "Testing IT Systems", "Block 3 · Day 12", 6, "Design test cases, execute test plans, log defects and apply quality assurance principles"],
+                      [11, "ITSD-14919", "Resolve User Problems", "Block 3 · Day 13", 5, "Diagnose and resolve common IT user problems using structured troubleshooting methodology"],
                     ] as [number, string, string, string, number, string][]).map(([num, code, title, block, credits, purpose]) => (
                       <tr key={code} className="border-b last:border-0 odd:bg-muted/30">
                         <td className="py-1.5 px-3 text-muted-foreground">{num}</td>

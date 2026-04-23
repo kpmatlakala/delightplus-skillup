@@ -181,15 +181,15 @@ const programmeBriefingData = {
     {
       type: "content",
       title: "Your 11-Module Roadmap",
-      subtitle: "15 days · 3 blocks · 59 credits delivered",
+      subtitle: "15 days · 3 blocks · 57 credits delivered",
       bullets: [
         "Block 1 · Days 1–5 · Foundations (23 credits): Systems Analysis (today), Team Collaboration, Programming Principles, Problem Solving, Design",
-        "Block 2 · Days 6–9 · Applied Programming & Web Development (17 credits): 14910, 14930 internet foundations, and 14933 web scripting across the 4-day block",
+        "Block 2 · Days 6–9 · Applied Programming & Web Development (17 credits): 14910, 14933 web scripting, and 14930 internet foundations to close the block",
         "Optional Block 2 flex: if 14910 + 14933 are completed in 3 days, one elective unit can be nominated for the remaining day",
-        "Block 3 · Days 11–13 · Systems in Practice (19 credits): Testing IT Systems, Resolve User Problems, Work as Project Team Member",
+        "Block 3 · Days 11–13 · Systems in Practice (17 credits): Types of Computer Systems & Hardware Configurations, Testing IT Systems, then Resolve User Problems",
       ],
       highlight:
-        "You now complete 59 credits across 11 units, with Block 2 ready around 14910 + 14933 and a flexible elective option if pacing allows.",
+        "You now complete 57 credits across 11 units, with Block 2 ready around 14910 + 14933 and a flexible elective option if pacing allows.",
       phaseCards: [
         "Block 1 · Foundations",
         "Block 2 · Programming & Web",
