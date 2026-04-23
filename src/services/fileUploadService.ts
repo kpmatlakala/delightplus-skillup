@@ -181,27 +181,40 @@ export class FileUploadService {
       const submissionId = `temp_${Date.now()}`;
       const submittedAt = new Date().toISOString();
 
-      // The current supported path is storage upload + learner_progress update.
-      // Some deployed databases do not yet expose `cet_submit_assessment`, so we
-      // avoid calling it here to prevent noisy 400 errors during learner submission.
+      // Preferred path is learner submission RPC with fallback for older deployments.
       try {
-        const { error: progressError } = await supabase
-          .from('learner_progress')
-          .upsert({
-            user_id: userId,
-            module_unit_standard_id: moduleId,
-            assessment_submitted: true,
-            assessment_submitted_at: submittedAt,
-            assessment_unlocked: true,
-            submission_path: fileResult.filePath,
-            submission_uploaded_at: submittedAt,
-            updated_at: submittedAt
-          }, {
-            onConflict: 'user_id,module_unit_standard_id'
-          });
+        const supabaseAny = supabase as unknown as {
+          rpc: (fn: string, params?: Record<string, unknown>) => Promise<{ error: unknown }>;
+        };
 
-        if (progressError) {
-          console.warn('Failed to update learner progress:', progressError);
+        const assessmentAnswers = (options?.metadata as { assessmentAnswers?: unknown } | undefined)?.assessmentAnswers ?? null;
+
+        const { error: rpcError } = await supabaseAny.rpc('cet_learner_submit_assessment', {
+          p_module_unit_standard_id: moduleId,
+          p_submission_path: fileResult.filePath,
+          p_submission_uploaded_at: submittedAt,
+          p_assessment_answers: assessmentAnswers,
+        });
+
+        if (rpcError) {
+          const { error: progressError } = await supabase
+            .from('learner_progress')
+            .upsert({
+              user_id: userId,
+              module_unit_standard_id: moduleId,
+              assessment_submitted: true,
+              assessment_submitted_at: submittedAt,
+              assessment_unlocked: true,
+              submission_path: fileResult.filePath,
+              submission_uploaded_at: submittedAt,
+              updated_at: submittedAt
+            }, {
+              onConflict: 'user_id,module_unit_standard_id'
+            });
+
+          if (progressError) {
+            console.warn('Failed to update learner progress:', progressError);
+          }
         }
       } catch (progressError) {
         console.warn('Failed to update learner progress:', progressError);

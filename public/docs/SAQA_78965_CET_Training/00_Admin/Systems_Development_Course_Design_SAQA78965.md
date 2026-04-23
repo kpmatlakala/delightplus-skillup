@@ -47,22 +47,22 @@ Ten unit standards have been strategically selected to balance SAQA compliance, 
 | 7 | 14920 | Participate in groups/teams to recommend solutions | 4 | 3 | **Core (C)** | 1 | Group presentation + peer feedback |
 | 8 | 14908 | Demonstrate understanding of testing IT systems against given specifications | 4 | 6 | **Elective (E)** | 3 | Test plan + bug report submission |
 | 9 | 14919 | Resolve computer user's problems | 4 | 5 | **Elective (E)** | 3 | Role-play scenario + support log |
-| 10 | 120379 | Work as a project team member | 4 | 8 | **Elective (E)** | 3 | Retrospective report + role reflection |
+| 10 | 14921 | Describe the types of computer systems and associated hardware configurations | 4 | 6 | **Elective (E)** | 3 | Hardware configuration recommendation + justification |
 
 ## **3.1 Component Breakdown Summary**
 
 | **Component** | **Count** | **Total Credits** | **Strategic Rationale** |
 | --- | --- | --- | --- |
 | **Core (C)** | 7 standards | 41 credits | Mandatory technical backbone — non-negotiable for SAQA compliance and lecturer competency |
-| **Elective (E)** | 3 standards | 19 credits | High-value practical skills (testing, support, teamwork) directly supporting WIL supervision and student mentorship |
+| **Elective (E)** | 3 standards | 17 credits | High-value practical skills (testing, support, hardware configuration) directly supporting WIL supervision and student mentorship |
 | **Fundamental (F)** | 0 standards | 0 credits | Lecturers already possess NQF Level 3–4 communication/math competencies; focus retained on technical delivery skills |
 
 ## **3.2 Rationale for This Mix**
 
 -   Compliance First: All 7 Core standards ensure the training meets the qualification's mandatory technical requirements.
--   Practical Edge: The 3 Electives (testing, user support, project teamwork) directly support lecturers in supervising WIL and student assessments.
+-   Practical Edge: The 3 Electives (testing, user support, and hardware configuration) directly support lecturers in supervising WIL and student assessments.
 -   Time-Efficient: Skipping Fundamental standards respects lecturers' existing NQF Level 3–4 competencies and keeps focus on new technical delivery skills.
--   Flexible Scaling: If CET later wants a full 165-credit rollout, this 10-standard module serves as a perfect technical core foundation.
+-   Flexible Scaling: If CET later wants a broader elective mix, this 10-standard module serves as a strong technical core foundation.
 
 *Recommendation: Maintain the 7 Core + 3 Elective mix. Fundamental standards (e.g., 119465, 9015) can be added later if CET explicitly requests coverage of communication or data literacy outcomes.*
 
@@ -78,7 +78,7 @@ Ten unit standards have been strategically selected to balance SAQA compliance, 
 | Day 2 | Programming Logic Fundamentals | Variables, conditionals, loops (Python), pseudocode practice | 14918, 14927 | Pseudocode exercises + logic flowcharts |
 | Day 3 | Problem-Solving Frameworks | Decomposition exercises, flowcharts, debugging mindset | 14927, 14918 | Debugging checklist + case study solutions |
 | Day 4 | Requirements &amp; Design Thinking | User stories, use cases, wireframing a simple tool | 14924, 14915 | Requirements spec + low-fidelity wireframes |
-| Day 5 | Team Sprint Kick-off | Form teams, define capstone scope, assign roles, Git basics | 14920, 120379 | Capstone project brief + Git repo initialised |
+| Day 5 | Hardware Planning Kick-Off | Review user needs, compare system types, plan fit-for-purpose configurations | 14920, 14921 | Configuration brief + comparison worksheet |
 
 ## **BLOCK 2: Applied Programming & Design | 23–27 March 2026**
 
@@ -100,7 +100,7 @@ Ten unit standards have been strategically selected to balance SAQA compliance, 
 | --- | --- | --- | --- | --- |
 | Day 11 | Testing Fundamentals | Writing test cases, manual vs. automated checks | 14908 | Test plan + executed test log |
 | Day 12 | User Support &amp; Troubleshooting | Role-play: handling lecturer/student tech issues | 14919 | Support scenario responses + troubleshooting guide |
-| Day 13 | Capstone Build Sprint 2 | Finalise prototype, write user guide, prepare demo | 14908, 14919, 120379 | Prototype v2 + user guide (Sepedi/English) |
+| Day 13 | Hardware Configuration Workshop | Finalise system recommendations, justify component choices, prepare demo | 14908, 14919, 14921 | Configuration proposal + user guidance |
 | Day 14 | PoE Compilation Workshop | Structure evidence, map to unit standards, self-assessment | All 10 | Draft Portfolio of Evidence (PoE) |
 | Day 15 | Demo Day + ETQA Prep | Team presentations, feedback, moderation checklist, close-out | All 10 | Final PoE + presentation slides + moderation pack |
 
@@ -152,7 +152,7 @@ A simple, offline-capable web-based application that helps CET lecturers manage 
 | Design Document | PDF with wireframes, specs, architecture | 14915, 14924 | Clear traceability from requirements to design |
 | Test Plan | Checklist + executed test results + bug log | 14908 | Demonstrates systematic QA approach |
 | Support Log | Scenario responses + troubleshooting documentation | 14919 | Shows user-centric problem resolution |
-| Team Reflection | Retrospective report + role analysis + peer feedback | 14920, 120379 | Evidence of collaborative learning and growth |
+| Configuration Reflection | Hardware recommendation rationale + peer feedback | 14921 | Evidence of fit-for-purpose configuration decisions |
 | PoE Compilation | Structured folder with evidence index + self-assessment | All 10 | Moderation-ready: clear, organised, cross-referenced |
 
 Rubrics aligned to SAQA performance indicators and ETQA moderation requirements are provided for all components. All submissions are version-controlled and assessor checklists are included to ensure moderation-readiness.

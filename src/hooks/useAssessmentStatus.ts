@@ -45,18 +45,10 @@ export function useAssessmentStatus(unitStdId: string) {
         // Get assessment status from learner_progress table using user_id directly
         const { data: progressData, error: progressError } = await (supabase as unknown as any)
           .from('learner_progress')
-          .select(`
-            module_unit_standard_id,
-            assessment_submitted,
-            submission_path,
-            submission_uploaded_at,
-            assessment_grade,
-            assessment_feedback,
-            assessment_graded_at
-          `)
+          .select('*')
           .eq('user_id', user.id)
           .eq('module_unit_standard_id', unitStdId)
-          .single();
+          .maybeSingle();
 
         if (progressError && progressError.code !== 'PGRST116') {
           throw progressError;
@@ -68,8 +60,8 @@ export function useAssessmentStatus(unitStdId: string) {
             assessment_submitted: progressData.assessment_submitted || false,
             submission_path: progressData.submission_path,
             submitted_at: progressData.submission_uploaded_at,
-            assessment_grade: progressData.assessment_grade ?? null,
-            assessment_feedback: progressData.assessment_feedback ?? null,
+            assessment_grade: null,
+            assessment_feedback: null,
             graded_at: progressData.assessment_graded_at ?? null
           });
         } else {
@@ -113,18 +105,10 @@ export function useAssessmentStatus(unitStdId: string) {
       // Get updated status using user_id directly
       const { data: progressData, error: progressError } = await (supabase as unknown as any)
         .from('learner_progress')
-        .select(`
-          module_unit_standard_id,
-          assessment_submitted,
-          submission_path,
-          submission_uploaded_at,
-          assessment_grade,
-          assessment_feedback,
-          assessment_graded_at
-        `)
+        .select('*')
         .eq('user_id', user.id)
         .eq('module_unit_standard_id', unitStdId)
-        .single();
+        .maybeSingle();
 
       if (progressData) {
         setStatus({
@@ -132,8 +116,8 @@ export function useAssessmentStatus(unitStdId: string) {
           assessment_submitted: progressData.assessment_submitted || false,
           submission_path: progressData.submission_path,
           submitted_at: progressData.submission_uploaded_at,
-          assessment_grade: progressData.assessment_grade ?? null,
-          assessment_feedback: progressData.assessment_feedback ?? null,
+          assessment_grade: null,
+          assessment_feedback: null,
           graded_at: progressData.assessment_graded_at ?? null
         });
       }
@@ -176,7 +160,6 @@ export function useAssessmentSubmissions(unitStdId?: string) {
             submission_path,
             submission_uploaded_at,
             assessment_grade,
-            assessment_feedback,
             assessment_graded_at
           `)
           .eq('assessment_submitted', true);
@@ -198,8 +181,8 @@ export function useAssessmentSubmissions(unitStdId?: string) {
           module_unit_standard_id: item.module_unit_standard_id,
           submission_path: item.submission_path || '',
           submitted_at: item.submission_uploaded_at || '',
-          assessment_grade: item.assessment_grade ?? null,
-          assessment_feedback: item.assessment_feedback ?? null,
+          assessment_grade: null,
+          assessment_feedback: null,
           graded_at: item.assessment_graded_at ?? null,
           graded_by: null, // Not available in current schema
           grader_name: null // Not available in current schema
@@ -225,9 +208,6 @@ export function useAssessmentSubmissions(unitStdId?: string) {
   ): Promise<boolean> => {
     try {
       const updatePayload = {
-        assessment_grade: grade,
-        assessment_feedback: feedback ?? null,
-        assessment_graded_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };
 
@@ -261,7 +241,6 @@ export function useAssessmentSubmissions(unitStdId?: string) {
           submission_path,
           submission_uploaded_at,
           assessment_grade,
-          assessment_feedback,
           assessment_graded_at
         `)
         .eq('assessment_submitted', true);
@@ -282,8 +261,8 @@ export function useAssessmentSubmissions(unitStdId?: string) {
         module_unit_standard_id: item.module_unit_standard_id,
         submission_path: item.submission_path || '',
         submitted_at: item.submission_uploaded_at || '',
-        assessment_grade: item.assessment_grade ?? null,
-        assessment_feedback: item.assessment_feedback ?? null,
+        assessment_grade: null,
+        assessment_feedback: null,
         graded_at: item.assessment_graded_at ?? null,
         graded_by: null,
         grader_name: null

@@ -550,21 +550,15 @@ export default function LearnerPortalPage() {
                     ],
                     [
                       7,
-                      "ITSD-14930",
-                      "Developing Software for the Internet",
-                      "B2 · Integrated",
-                      3,
+                      "ITSD-14933",
+                      "Web Scripting",
+                      "B2 · D8-9",
+                      6,
                     ],
-                    [8, "ITSD-14933", "Web Scripting", "B2 · D8-9", 6],
-                    [9, "ITSD-14908", "Testing IT Systems", "B3 · D11", 6],
-                    [10, "ITSD-14919", "Resolve User Problems", "B3 · D12", 5],
-                    [
-                      11,
-                      "ITSD-120379",
-                      "Work as Project Team Member",
-                      "B3 · D13",
-                      8,
-                    ],
+                    [8, "ITSD-14930", "Developing Software for the Internet", "B2 · Integrated", 3],
+                    [9, "ITSD-14921", "Computer Systems & Hardware Configurations", "B3 · D11", 6],
+                    [10, "ITSD-14908", "Testing IT Systems", "B3 · D12", 6],
+                    [11, "ITSD-14919", "Resolve User Problems", "B3 · D13", 5],
                   ].map(([num, code, title, block, credits]) => (
                     <div
                       key={code}
@@ -653,27 +647,15 @@ export default function LearnerPortalPage() {
                         ],
                         [
                           7,
-                          "ITSD-14930",
-                          "Developing Software for the Internet",
-                          "B2 · Integrated",
-                          3,
+                          "ITSD-14933",
+                          "Web Scripting",
+                          "B2 · D8-9",
+                          6,
                         ],
-                        [8, "ITSD-14933", "Web Scripting", "B2 · D8-9", 6],
-                        [9, "ITSD-14908", "Testing IT Systems", "B3 · D11", 6],
-                        [
-                          10,
-                          "ITSD-14919",
-                          "Resolve User Problems",
-                          "B3 · D12",
-                          5,
-                        ],
-                        [
-                          11,
-                          "ITSD-120379",
-                          "Work as Project Team Member",
-                          "B3 · D13",
-                          8,
-                        ],
+                        [8, "ITSD-14930", "Developing Software for the Internet", "B2 · Integrated", 3],
+                        [9, "ITSD-14921", "Computer Systems & Hardware Configurations", "B3 · D11", 6],
+                        [10, "ITSD-14908", "Testing IT Systems", "B3 · D12", 6],
+                        [11, "ITSD-14919", "Resolve User Problems", "B3 · D13", 5],
                       ].map(([num, code, title, block, credits]) => (
                         <tr
                           key={code}

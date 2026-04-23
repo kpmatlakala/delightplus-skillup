@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, CheckCircle2, Circle, Download, FileText, Sparkles } from "lucide-react";
 import AppLayout from "@/components/AppLayout";
 import { modules } from "@/data/courseData";
+import { buildAssessmentMarkTemplate } from "@/lib/assessmentMarking";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -32,18 +33,14 @@ type TaskMark = {
   label: string;
   prompt: string;
   maxMarks: number;
-  markedCorrect: boolean | null;
+  sectionTitle?: string;
+  sectionModule?: string;
+  optionHints?: string[];
   awarded: number;
   note: string;
 };
 
 const practicalUnits = modules.filter((mod) => mod.type === "Practical");
-
-function parseMarks(activity: string, fallback = 5) {
-  const m = activity.match(/(\d+)\s*marks?/i);
-  const parsed = m ? Number(m[1]) : fallback;
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
-}
 
 function normalizeWords(value: string) {
   return value
@@ -106,12 +103,12 @@ export default function PracticalAssessmentAdminPage() {
   const summary = useMemo(() => {
     const score = taskMarks.reduce((sum, item) => sum + item.awarded, 0);
     const max = taskMarks.reduce((sum, item) => sum + item.maxMarks, 0);
-    const correct = taskMarks.filter((item) => item.markedCorrect === true).length;
-    const incorrect = taskMarks.filter((item) => item.markedCorrect === false).length;
-    const pending = taskMarks.filter((item) => item.markedCorrect === null).length;
+    const fullMarks = taskMarks.filter((item) => item.awarded === item.maxMarks).length;
+    const partial = taskMarks.filter((item) => item.awarded > 0 && item.awarded < item.maxMarks).length;
+    const noMarks = taskMarks.filter((item) => item.awarded === 0).length;
     const percentage = max > 0 ? Math.round((score / max) * 100) : 0;
 
-    return { score, max, correct, incorrect, pending, percentage };
+    return { score, max, fullMarks, partial, noMarks, percentage };
   }, [taskMarks]);
 
   const openSubmissionFile = async (path: string) => {
@@ -136,12 +133,14 @@ export default function PracticalAssessmentAdminPage() {
   };
 
   const seedTaskMarks = () => {
-    return activeUnit.activities.map((activity, index) => ({
-      id: `task-${index + 1}`,
-      label: `Task ${index + 1}`,
-      prompt: activity,
-      maxMarks: parseMarks(activity, 5),
-      markedCorrect: null,
+    return buildAssessmentMarkTemplate(activeUnit.id, activeUnit.activities).map((item) => ({
+      id: item.id,
+      label: item.label,
+      prompt: item.prompt,
+      maxMarks: item.maxMarks,
+      sectionTitle: item.sectionTitle,
+      sectionModule: item.sectionModule,
+      optionHints: item.optionHints,
       awarded: 0,
       note: "",
     }));
@@ -234,10 +233,10 @@ export default function PracticalAssessmentAdminPage() {
     navigate(`/assessments/practical/${activeUnit.id}`);
   };
 
-  const markTask = (taskId: string, isCorrect: boolean) => {
+  const markTask = (taskId: string, marks: number) => {
     setTaskMarks((prev) => prev.map((task) => (
       task.id === taskId
-        ? { ...task, markedCorrect: isCorrect, awarded: isCorrect ? task.maxMarks : 0 }
+        ? { ...task, awarded: Math.max(0, Math.min(marks, task.maxMarks)) }
         : task
     )));
   };
@@ -258,7 +257,6 @@ export default function PracticalAssessmentAdminPage() {
       const matched = keywords.some((keyword) => lowerText.includes(keyword));
       return {
         ...task,
-        markedCorrect: matched,
         awarded: matched ? task.maxMarks : 0,
         note: matched ? "Auto-check matched task keywords. Verify before saving." : "Auto-check found no task keywords. Verify manually.",
       };
@@ -273,10 +271,10 @@ export default function PracticalAssessmentAdminPage() {
   const saveCapture = async () => {
     if (!selectedLearner) return;
 
-    if (taskMarks.length === 0 || summary.pending > 0) {
+    if (taskMarks.length === 0 || taskMarks.some((t) => t.awarded === 0 && t.maxMarks > 0 && !t.note)) {
       toast({
         title: "Task grading incomplete",
-        description: "Mark each task as correct or incorrect before saving.",
+        description: "Assign marks to each task (or add a note for 0-mark tasks) before saving.",
         variant: "destructive",
       });
       return;
@@ -313,7 +311,7 @@ export default function PracticalAssessmentAdminPage() {
       }
 
       const taskSummaryLines = taskMarks.map((task) =>
-        `- ${task.label}: ${task.awarded}/${task.maxMarks}${task.note ? ` (${task.note})` : ""}`
+        `- ${task.label}: ${task.awarded}/${task.maxMarks} marks${task.note ? ` (${task.note})` : ""}`
       );
 
       const mergedFeedback = [
@@ -321,8 +319,7 @@ export default function PracticalAssessmentAdminPage() {
         "",
         "[Practical Assessor Capture]",
         `Task score: ${summary.score}/${summary.max}`,
-        `Correct tasks: ${summary.correct}`,
-        `Incorrect tasks: ${summary.incorrect}`,
+        `Full marks: ${summary.fullMarks}, Partial: ${summary.partial}, No marks: ${summary.noMarks}`,
         ...taskSummaryLines,
       ].filter(Boolean).join("\n");
 
@@ -365,7 +362,9 @@ export default function PracticalAssessmentAdminPage() {
             assessment_answers: Object.fromEntries(taskMarks.map((task) => [task.id, {
               label: task.label,
               prompt: task.prompt,
-              markedCorrect: task.markedCorrect,
+              sectionTitle: task.sectionTitle,
+              sectionModule: task.sectionModule,
+              optionHints: task.optionHints,
               awarded: task.awarded,
               maxMarks: task.maxMarks,
               note: task.note,
@@ -510,7 +509,7 @@ export default function PracticalAssessmentAdminPage() {
           <div className="grid gap-4 lg:grid-cols-[1.4fr_0.9fr]">
             <div className="space-y-3">
               <div className="flex flex-wrap items-center gap-2">
-                <Label>Task/Section grading</Label>
+                <Label>Task/Question-part grading</Label>
                 <Button type="button" size="sm" variant="outline" onClick={autoMarkByKeywords} disabled={!submissionText.trim()} className="gap-1">
                   <Sparkles size={12} /> Auto-check online text
                 </Button>
@@ -553,31 +552,41 @@ export default function PracticalAssessmentAdminPage() {
                       <div className="flex items-start justify-between gap-2">
                         <div>
                           <p className="font-semibold text-foreground">{task.label}</p>
+                          {(task.sectionTitle || task.sectionModule) ? (
+                            <p className="text-[10px] uppercase tracking-wide text-muted-foreground">{task.sectionTitle} · {task.sectionModule}</p>
+                          ) : null}
                           <p className="text-[11px] text-muted-foreground">{task.prompt}</p>
                         </div>
                         <span className="text-[11px] text-muted-foreground">{task.awarded}/{task.maxMarks}</span>
                       </div>
 
-                      <div className="flex flex-wrap gap-3 text-[11px]">
-                        <label className="inline-flex items-center gap-1.5 text-foreground">
-                          <input
-                            type="radio"
-                            name={`task-${task.id}`}
-                            checked={task.markedCorrect === true}
-                            onChange={() => markTask(task.id, true)}
+                        <div className="space-y-1">
+                          <Label className="text-[11px]">Marks awarded (0-{task.maxMarks})</Label>
+                          <Input
+                            type="number"
+                            min="0"
+                            max={task.maxMarks}
+                            step="0.5"
+                            value={task.awarded}
+                            onChange={(e) => markTask(task.id, Number(e.target.value) || 0)}
+                            placeholder="0"
+                            className="text-[12px]"
                           />
-                          Correct
-                        </label>
-                        <label className="inline-flex items-center gap-1.5 text-foreground">
-                          <input
-                            type="radio"
-                            name={`task-${task.id}`}
-                            checked={task.markedCorrect === false}
-                            onChange={() => markTask(task.id, false)}
-                          />
-                          Incorrect
-                        </label>
-                      </div>
+                        </div>
+
+                        {task.optionHints?.length ? (
+                          <details className="rounded-md border border-border/70 bg-background px-2.5 py-1.5">
+                            <summary className="cursor-pointer select-none text-[10px] uppercase tracking-wide text-muted-foreground font-semibold list-none flex items-center gap-1">
+                              <span className="inline-block transition-transform [details[open]>summary>&]:rotate-90">▶</span>
+                              Options to verify
+                            </summary>
+                            <ul className="mt-1 list-disc pl-4 text-[11px] text-muted-foreground space-y-0.5">
+                              {task.optionHints.map((option) => (
+                                <li key={`${task.id}-${option}`}>{option}</li>
+                              ))}
+                            </ul>
+                          </details>
+                        ) : null}
 
                       <div className="space-y-1">
                         <Label className="text-[11px]">Task note (optional)</Label>
@@ -602,12 +611,12 @@ export default function PracticalAssessmentAdminPage() {
                 <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
                   <span>Tasks</span>
                   <span className="text-right font-medium text-foreground">{taskMarks.length}</span>
-                  <span>Correct</span>
-                  <span className="text-right font-medium text-foreground">{summary.correct}</span>
-                  <span>Incorrect</span>
-                  <span className="text-right font-medium text-foreground">{summary.incorrect}</span>
-                  <span>Pending</span>
-                  <span className="text-right font-medium text-foreground">{summary.pending}</span>
+                  <span>Full marks</span>
+                  <span className="text-right font-medium text-foreground">{summary.fullMarks}</span>
+                  <span>Partial credit</span>
+                  <span className="text-right font-medium text-foreground">{summary.partial}</span>
+                  <span>No marks</span>
+                  <span className="text-right font-medium text-foreground">{summary.noMarks}</span>
                   <span>Total</span>
                   <span className="text-right font-medium text-foreground">{summary.score}/{summary.max}</span>
                   <span>Derived %</span>
@@ -629,7 +638,7 @@ export default function PracticalAssessmentAdminPage() {
 
           <div className="flex justify-end gap-2 pt-2">
             <Button type="button" variant="outline" onClick={closeCapture} disabled={saving}>Cancel</Button>
-            <Button type="button" onClick={() => void saveCapture()} disabled={saving || summary.pending > 0 || taskMarks.length === 0}>
+            <Button type="button" onClick={() => void saveCapture()} disabled={saving || taskMarks.length === 0}>
               {saving ? "Saving..." : "Save practical capture"}
             </Button>
           </div>

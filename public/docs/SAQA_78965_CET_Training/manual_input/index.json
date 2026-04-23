@@ -3,42 +3,6 @@
   "total_files": 120,
   "units": [
     {
-      "unit_standard_id": "14908",
-      "folder": "US_14908",
-      "documents": [
-        {
-          "label": "Facilitator Guide",
-          "txt_file": "facilitator_guide.txt",
-          "json_file": "facilitator_guide.json"
-        },
-        {
-          "label": "Learner Guide",
-          "txt_file": "learner_guide.txt",
-          "json_file": "learner_guide.json"
-        },
-        {
-          "label": "Learner Workbook",
-          "txt_file": "learner_workbook.txt",
-          "json_file": "learner_workbook.json"
-        },
-        {
-          "label": "Summative Assessment",
-          "txt_file": "summative_assessment.txt",
-          "json_file": "summative_assessment.json"
-        },
-        {
-          "label": "Summative Memo",
-          "txt_file": "summative_memo.txt",
-          "json_file": "summative_memo.json"
-        },
-        {
-          "label": "Assessment Guide",
-          "txt_file": "assessment_guide.txt",
-          "json_file": "assessment_guide.json"
-        }
-      ]
-    },
-    {
       "unit_standard_id": "14910",
       "folder": "US_14910",
       "documents": [
@@ -327,8 +291,8 @@
       ]
     },
     {
-      "unit_standard_id": "120379",
-      "folder": "US_120379",
+      "unit_standard_id": "14921",
+      "folder": "US_14921",
       "documents": [
         {
           "label": "Facilitator Guide",

@@ -271,111 +271,111 @@ By the end of this session, learners will be able to:
 **Duration:** 300 minutes (5 hours)  
 **Status:** Active
 
-# **LESSON PLAN — 120379: Work as a Project Team Member**
+# **LESSON PLAN — 14921: Types of Computer Systems and Hardware Configurations**
 
-**Module:** ITSD-120379 | Block 3 | Day 13  
+**Module:** ITSD-14921 | Block 3 | Day 13  
 **Training Intervention:** CET Lecturers Systems Development Training
 
 ## **Lesson Title**
 
-**Project Team Collaboration: Roles, Respect and Conflict Resolution**
+**Computer Systems and Hardware Configurations in Practice**
 
 ## **Lesson Overview**
 
-This session strengthens learners’ ability to function effectively within project teams. Emphasis is placed on collaboration, stakeholder engagement, diversity awareness, and constructive conflict resolution in CET project environments.
+This session strengthens learners' ability to identify computer system types, explain hardware components, and recommend fit-for-purpose configurations for CET and workplace environments.
 
 ## **Lesson Objectives**
 
 By the end of this session, learners will be able to:
 
-1.  Explain criteria for effective participation in project teams.  
+1.  Identify common types of computer systems and their uses.  
     
-2.  Collaborate to enhance team performance.  
+2.  Explain the purpose of core hardware components and peripherals.  
     
-3.  Build positive relationships with stakeholders.  
+3.  Compare different hardware configurations for different users.  
     
-4.  Apply strategies to manage diversity and resolve conflict.  
+4.  Recommend a suitable configuration for a practical scenario.  
     
 
 ## **Lesson Content**
 
-### **Session 1: Criteria for Effective Team Membership**
+### **Session 1: Types of Computer Systems**
 
--   Team roles: Leader, Contributor, Facilitator, Recorder, Timekeeper  
+-   Desktops, laptops, servers, mobile devices, and embedded systems  
     
--   Performance indicators: reliability, accountability, adaptability, communication  
+-   Typical use environments and user needs  
     
--   Project scale considerations in CET contexts  
-    
-
-### **Session 2: Improving Team Performance**
-
--   Benefits of teamwork: shared knowledge, workload distribution, innovation  
-    
--   Constructive behaviours: active listening, clarity, timely delivery  
-    
--   Disruptive behaviours and their impact  
+-   Strengths and limitations of each system type  
     
 
-### **Session 3: Building Team and Stakeholder Relations**
+### **Session 2: Core Hardware Components**
 
--   Stakeholder identification (lecturers, students, administrators, IT support, community partners)  
+-   CPU, RAM, motherboard, storage, power supply  
     
--   Communication planning and feedback loops  
+-   What each component does in system performance  
     
--   Cultural awareness and respect for diversity  
+-   How components work together as a complete configuration  
     
 
-### **Session 4: Conflict Management**
+### **Session 3: Peripherals and User Requirements**
 
--   Sources of conflict (role ambiguity, limited resources, communication gaps)  
+-   Input, output, communication, and storage peripherals  
     
--   Resolution techniques: mediation, compromise, structured escalation  
+-   Matching devices to user tasks  
     
--   Role-play practice of common project conflicts  
+-   Accessibility and practical deployment considerations  
+    
+
+### **Session 4: Configuration and Upgrade Decisions**
+
+-   Fit-for-purpose hardware selection  
+    
+-   Compatibility, support, and upgrade planning  
+    
+-   Scenario-based configuration recommendations  
     
 
 ## **Facilitator Activities**
 
--   Icebreaker: Positive and challenging team experiences.  
+-   Icebreaker: Match real workplace roles to likely computer system types.  
     
--   Mini-lecture: Team roles and performance criteria.  
+-   Mini-lecture: system types and hardware components.  
     
--   Stakeholder mapping exercise.  
+-   Guided hardware identification activity.  
     
--   Behaviour identification activity (constructive vs disruptive).  
+-   Peripheral classification exercise.  
     
--   Conflict resolution role-play session.  
+-   Group scenario: recommend a configuration for a CET admin office or lab.  
     
--   Distribution of Team Collaboration Quick-Start Toolkit (role cards, conflict flowchart).  
+-   Distribution of hardware comparison checklist.  
     
--   Peer review of team charters and communication plans.  
+-   Peer review of configuration recommendations.  
     
 
 ## **Learner Activities**
 
--   Identify team members and assigned roles.  
+-   Identify different types of computer systems.  
     
--   Explain the importance of teamwork in CET project delivery.  
+-   Explain the purpose of key internal components.  
     
--   Provide examples of effective teamwork practices.  
+-   Classify peripherals by role.  
     
--   Identify disruptive behaviours and impacts.  
+-   Compare hardware configurations for different users.  
     
--   Discuss diversity and respect strategies.  
+-   Discuss compatibility and upgrade issues.  
     
--   Participate in conflict resolution role-play.  
+-   Participate in a configuration recommendation activity.  
     
--   Group Task: Develop a Team Charter and Conflict Resolution Protocol.  
+-   Group Task: Produce a hardware configuration proposal for a defined scenario.  
     
 
 ## **Resources Required**
 
--   Team charter templates and role cards  
+-   Hardware comparison templates  
     
--   Conflict resolution flowchart  
+-   Component identification charts  
     
--   Stakeholder mapping templates  
+-   Sample device specification sheets  
     
 -   Whiteboard and flip charts  
     
@@ -383,22 +383,22 @@ By the end of this session, learners will be able to:
     
 -   Offline contingency materials  
     
--   Facilitator and Learner Guides (SAQA 120379)  
+-   Facilitator and Learner Guides (SAQA 14921)  
     
 -   Laptop and data projector  
     
 
 ## **Assessment (Formative)**
 
--   Observation checklist (constructive participation and respect for diversity)  
+-   Observation checklist (hardware identification and justification quality)  
     
--   Submitted Team Charter and Conflict Resolution Protocol  
+-   Submitted configuration recommendation  
     
 -   Peer feedback  
     
 -   Exit reflection ticket  
     
--   Evidence aligned to SAQA 120379 summative requirements  
+-   Evidence aligned to SAQA 14921 summative requirements  
     
 
 **Duration:** 300 minutes (5 hours)  

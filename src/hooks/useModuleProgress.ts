@@ -141,6 +141,58 @@ export function useModuleProgress() {
     }
   }, [user, fetchProgress]);
 
+  const submitLearnerAssessment = useCallback(async (
+    moduleId: string,
+    submissionPath?: string | null,
+    assessmentAnswers?: unknown
+  ): Promise<boolean> => {
+    if (!user) return false;
+
+    const submittedAt = new Date().toISOString();
+
+    try {
+      const supabaseAny = supabase as unknown as {
+        rpc: (fn: string, params?: Record<string, unknown>) => Promise<{ error: unknown }>;
+      };
+
+      const { error } = await supabaseAny.rpc('cet_learner_submit_assessment', {
+        p_module_unit_standard_id: moduleId,
+        p_submission_path: submissionPath ?? null,
+        p_submission_uploaded_at: submittedAt,
+        p_assessment_answers: assessmentAnswers ?? null,
+      });
+
+      if (error) {
+        console.error('Failed to submit learner assessment:', error);
+        return false;
+      }
+
+      setProgressMap((prev) => ({
+        ...prev,
+        [moduleId]: normalizeProgressEntry({
+          ...(prev[moduleId] ?? {
+            user_id: user.id,
+            module_unit_standard_id: moduleId,
+          }),
+          user_id: user.id,
+          module_unit_standard_id: moduleId,
+          assessment_unlocked: true,
+          assessment_submitted: true,
+          assessment_submitted_at: submittedAt,
+          submission_uploaded_at: submittedAt,
+          submission_path: submissionPath ?? prev[moduleId]?.submission_path ?? null,
+          updated_at: submittedAt,
+        }),
+      }));
+
+      fetchProgress();
+      return true;
+    } catch (error) {
+      console.error('Error submitting learner assessment:', error);
+      return false;
+    }
+  }, [user, fetchProgress]);
+
   const markAssessmentSubmitted = useCallback(async (
     moduleId: string,
     submittedAt?: string,
@@ -180,6 +232,7 @@ export function useModuleProgress() {
     progressMap,
     loading,
     updateProgress,
+    submitLearnerAssessment,
     markAssessmentSubmitted,
     clearMyModuleProgress,
     fetchProgress,

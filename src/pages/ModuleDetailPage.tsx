@@ -583,42 +583,39 @@ const staticQuizByModule: Record<
         "Listen actively and empathise with the user before proposing a solution",
     },
   ],
-  "120379": [
+  "14921": [
     {
       id: 0,
       question:
-        "What is the primary responsibility of a project manager in a team?",
+        "Which computer system is designed to provide shared services to multiple users over a network?",
       options: [
-        "To plan, coordinate, monitor progress, and ensure the project meets its objectives within scope, time, and budget",
-        "To write all the code for the project",
-        "To approve the project budget only",
+        "Server",
+        "Desktop PC",
+        "Tablet device",
       ],
-      answer:
-        "To plan, coordinate, monitor progress, and ensure the project meets its objectives within scope, time, and budget",
+      answer: "Server",
     },
     {
       id: 1,
       question:
-        "In agile project management, what does a sprint backlog contain?",
+        "What is the main role of RAM in a computer system?",
       options: [
-        "The specific tasks the team commits to completing during the current sprint",
-        "A record of the entire project history",
-        "Only the defects found during testing",
+        "To hold active data and instructions for fast CPU access",
+        "To permanently store all user files for many years",
+        "To supply electrical power to all components",
       ],
-      answer:
-        "The specific tasks the team commits to completing during the current sprint",
+      answer: "To hold active data and instructions for fast CPU access",
     },
     {
       id: 2,
       question:
-        "What does 'delivering within constraints' mean in a project context?",
+        "Which configuration best suits a user who mainly needs email, documents, and web browsing?",
       options: [
-        "Completing the project within the agreed scope, time, and budget limitations",
-        "Ignoring deadlines in order to guarantee quality",
-        "Working without a project plan",
+        "A standard office desktop with moderate RAM and SSD storage",
+        "A rack server with redundant power and high-end enterprise hardware",
+        "A graphics workstation with a powerful dedicated GPU for rendering",
       ],
-      answer:
-        "Completing the project within the agreed scope, time, and budget limitations",
+      answer: "A standard office desktop with moderate RAM and SSD storage",
     },
   ],
 };
@@ -670,7 +667,7 @@ function hasDocForCategory(
 export default function ModuleDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { role, user } = useAuth();
-  const { progressMap, updateProgress, fetchProgress } = useModuleProgress();
+  const { progressMap, updateProgress, fetchProgress, submitLearnerAssessment } = useModuleProgress();
   const { saveQuizAnswers, getAnswersForReview, hasCompletedQuiz, getQuizScore } = useQuizAnswers(id || '');
   const { saveAssessmentSubmission, hasSubmittedAssessment, downloadSubmission, printSubmission } = useAssessmentSubmissions(id || '');
   const { toast } = useToast();
@@ -880,12 +877,25 @@ export default function ModuleDetailPage() {
         submissionText: payload.submissionText
       };
 
-      // Update progress with the successful submission
-      const success = await updateProgress(id, {
-        assessment_submitted: true,
-        submission_path: result.filePath,
-        submission_uploaded_at: new Date().toISOString(),
-      });
+      const assessmentPayload = {
+        assessment_version: 1,
+        module_unit_standard_id: id,
+        module_code: mod.code,
+        source: 'learner-self-submission',
+        submitted_at: new Date().toISOString(),
+        response_format: 'indexed-text',
+        responses: Object.entries(assessmentAnswers).map(([questionIndex, answer]) => ({
+          question_index: Number(questionIndex),
+          answer,
+        })),
+      };
+
+      // Persist learner submission via dedicated learner RPC.
+      const success = await submitLearnerAssessment(
+        id,
+        result.filePath,
+        assessmentPayload
+      );
 
       if (success) {
         // Log submission success
