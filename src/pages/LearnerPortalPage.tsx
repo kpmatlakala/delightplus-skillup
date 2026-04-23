@@ -1,4 +1,5 @@
 import { modules, program } from "@/data/courseData";
+import { dsaProgramCatalog } from "@/data/dsaProgramCatalog";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -7,7 +8,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { BookOpen, MessageSquare, Bell, Clock3, PlayCircle, Lock, ChevronRight, RefreshCw, GraduationCap, Sparkles, ArrowRight, RotateCcw, ShieldCheck, CheckCircle2, Circle, KeyRound } from "lucide-react";
+import { BookOpen, MessageSquare, Bell, Clock3, PlayCircle, Lock, ChevronRight, RefreshCw, GraduationCap, Sparkles, ArrowRight, RotateCcw, ShieldCheck, CheckCircle2, Circle, KeyRound, Layers, Compass, Hourglass } from "lucide-react";
 import { useModuleProgress } from "@/hooks/useModuleProgress";
 import { useAnnouncements } from "@/hooks/useAnnouncements";
 
