@@ -60,7 +60,7 @@ export default function LearnerSidebar() {
           />
           {!collapsed && (
             <span className="font-display text-sm font-bold text-sidebar-foreground truncate">
-              CET Connect
+              TDSA Learning
             </span>
           )}
         </div>

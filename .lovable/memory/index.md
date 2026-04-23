@@ -4,12 +4,13 @@ Updated: today
 # Project Memory
 
 ## Core
-- Navy (#001A72, #072F6B), Space Grotesk/DM Sans. Logo only, no brand text labels. Glassmorphism.
+- Brand: **TDSA Learning (LMS)** — The Data Science Academy's LMS. (Was "CET Connect" — renamed.)
+- Navy (#001A72, #072F6B), Space Grotesk/DM Sans. Logo only, no brand text labels except "TDSA Learning" wordmark in sidebar. Glassmorphism.
 - Active dev on `lovable-main` branch.
 - Supabase (ebzsvbbmahvqlshydkxg), `dsa` schema, `dsa_` RPCs.
 - Use `.split().join()`, never `.replaceAll()`.
 - Project will split into 3 dedicated apps: Admin, Staff (facilitators/moderators/assessors), Students. CURRENT FOCUS: learner branch — every signed-in user is treated strictly as a learner regardless of DB role.
-- Auto-enroll users in SAQA 78965 on signup.
+- Auto-enroll users in SAQA 78965 on signup. Planned UX: register → login → browse modules/programs → enroll → "My Modules".
 
 ## Memories
 - [Branch Strategy](mem://constraints/branch-strategy) — 3 dedicated role apps; current focus is learner-only
