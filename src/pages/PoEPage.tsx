@@ -316,15 +316,13 @@ function LearnerPoEView() {
    PAGE SHELL
 ═══════════════════════════════════════════════════════════ */
 export default function PoEPage() {
-  const { role } = useAuth();
-  const isAdmin = role === "admin" || role === "lecturer";
-
+  // Learner branch: every authenticated user is treated as a learner.
   return (
     <AdaptiveLayout
       title="Portfolio of Evidence"
-      subtitle={isAdmin ? "Manage learner PoE templates and track submission pipeline" : "Track your PoE readiness and download your template"}
+      subtitle="Track your PoE readiness and download your template"
     >
-      {isAdmin ? <AdminPoEView /> : <LearnerPoEView />}
+      <LearnerPoEView />
     </AdaptiveLayout>
   );
 }
