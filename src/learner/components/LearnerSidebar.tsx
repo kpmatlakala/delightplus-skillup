@@ -1,8 +1,10 @@
 import {
   LayoutDashboard,
+  Compass,
   BookOpen,
   ShieldCheck,
   FolderOpen,
+  Bell,
   MessageSquare,
   User,
   LogOut,
@@ -23,13 +25,32 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-const navItems = [
-  { title: "Dashboard", url: "/learner", icon: LayoutDashboard },
-  { title: "My Modules", url: "/learner/modules", icon: BookOpen },
-  { title: "Assessments", url: "/learner/assessments", icon: ShieldCheck },
-  { title: "PoE", url: "/poe", icon: FolderOpen },
-  { title: "Messages", url: "/communications?tab=messages", icon: MessageSquare },
-  { title: "Profile", url: "/profile", icon: User },
+type NavItem = { title: string; url: string; icon: typeof LayoutDashboard };
+
+const navGroups: { label: string; items: NavItem[] }[] = [
+  {
+    label: "Learning",
+    items: [
+      { title: "Dashboard", url: "/learner", icon: LayoutDashboard },
+      { title: "Catalog", url: "/learner/catalog", icon: Compass },
+      { title: "My Modules", url: "/learner/modules", icon: BookOpen },
+      { title: "Assessments", url: "/learner/assessments", icon: ShieldCheck },
+      { title: "PoE", url: "/poe", icon: FolderOpen },
+    ],
+  },
+  {
+    label: "Communication",
+    items: [
+      { title: "Updates", url: "/communications", icon: Bell },
+      { title: "Messages", url: "/communications?tab=messages", icon: MessageSquare },
+    ],
+  },
+  {
+    label: "Account",
+    items: [
+      { title: "Profile", url: "/profile", icon: User },
+    ],
+  },
 ];
 
 export default function LearnerSidebar() {
@@ -43,7 +64,9 @@ export default function LearnerSidebar() {
       const [path, query] = url.split("?");
       return location.pathname === path && location.search.includes(query);
     }
-    // Exact match for dashboard, prefix for others
+    if (url === "/communications") {
+      return location.pathname === "/communications" && !location.search.includes("messages");
+    }
     if (url === "/learner") return location.pathname === "/learner";
     return location.pathname.startsWith(url);
   };
@@ -65,31 +88,34 @@ export default function LearnerSidebar() {
           )}
         </div>
 
-        <SidebarGroup>
-          <SidebarGroupLabel>Learning</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={isActive(item.url)}
-                  >
-                    <NavLink
-                      to={item.url}
-                      end={item.url === "/learner"}
-                      className="hover:bg-sidebar-accent/50"
-                      activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+        {navGroups.map((group) => (
+          <SidebarGroup key={group.label}>
+            {!collapsed && <SidebarGroupLabel>{group.label}</SidebarGroupLabel>}
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {group.items.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive(item.url)}
+                      tooltip={collapsed ? item.title : undefined}
                     >
-                      <item.icon className="mr-2 h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+                      <NavLink
+                        to={item.url}
+                        end={item.url === "/learner"}
+                        className="hover:bg-sidebar-accent/50"
+                        activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+                      >
+                        <item.icon className="mr-2 h-4 w-4" />
+                        {!collapsed && <span>{item.title}</span>}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
       </SidebarContent>
 
       <SidebarFooter className="p-2">
@@ -97,6 +123,7 @@ export default function LearnerSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton
               onClick={() => signOut()}
+              tooltip={collapsed ? "Sign Out" : undefined}
               className="text-sidebar-muted hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
             >
               <LogOut className="mr-2 h-4 w-4" />
