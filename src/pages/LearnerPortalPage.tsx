@@ -349,83 +349,9 @@ export default function LearnerPortalPage() {
             <p className="font-medium text-foreground mt-1">{unreadMessages} messages</p>
           </div>
           <div className="rounded-md border border-border p-2">
-            <p className="text-muted-foreground">Current mission</p>
-            <p className="font-medium text-foreground mt-1">{modulePath[currentModuleIndex]?.title ?? "Set module"}</p>
+            <p className="text-muted-foreground">Next check-in</p>
+            <p className="font-medium text-foreground mt-1">{upcomingCheckIn}</p>
           </div>
-        </div>
-      </div>
-
-      <div className="rounded-lg border border-border bg-card p-4 mb-4">
-        <h3 className="font-display font-semibold flex items-center gap-2 mb-2">
-          <BookOpen size={16} className="text-accent" /> Select a Module
-        </h3>
-        <p className="text-xs sm:text-sm text-muted-foreground">
-          Open a module to start/continue learning, preview in-app docs, and download supporting documents.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {modulePath.map((mod) => (
-          <Link
-            key={mod.id}
-            to={`/learner/modules/${mod.id}`}
-            className="rounded-md border border-border bg-card px-3 py-2 hover:bg-secondary/40 transition-colors"
-          >
-            <div className="flex items-center justify-between gap-2">
-              <p className="text-sm font-medium text-foreground truncate">{mod.title}</p>
-              <Badge variant="outline">{mod.type}</Badge>
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">{mod.code} • Block {mod.block} • {mod.duration / 60}h</p>
-          </Link>
-        ))}
-      </div>
-
-      {/* ── Block Assessments ──────────────────────────────────────────── */}
-      <div className="rounded-lg border border-border bg-card p-4 mb-4 mt-4">
-        <h3 className="font-display font-semibold flex items-center gap-2 mb-1">
-          <ShieldCheck size={16} className="text-accent" /> Summative Block Assessments
-        </h3>
-        <p className="text-xs text-muted-foreground mb-3">
-          Each block has a combined summative assessment covering all units in that block.
-          Your facilitator will issue an OTP at the start of the session to unlock your assessment.
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {([
-            { num: "1", label: "Block 1", sub: "Foundations of Systems Development", date: "06 April 2026 (AM)", units: 5 },
-            { num: "2", label: "Block 2", sub: "Applied Programming and Systems Design", date: "04 May 2026 (AM)",   units: 2 },
-            { num: "3", label: "Block 3", sub: "Testing, Support and Integrated Assessment", date: "07/08 May 2026 (AM)", units: 3 },
-          ] as const).map(({ num, label, sub, date, units }) => {
-            const submitted = !!progressMap[`block-${num}`]?.assessment_submitted;
-            return (
-              <Link
-                key={num}
-                to={`/learner/assessment/block/${num}`}
-                className="rounded-lg border border-border bg-background p-4 hover:bg-secondary/40 transition-colors space-y-2 block"
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-widest text-primary">{label}</p>
-                    <p className="text-sm font-semibold text-foreground leading-snug mt-0.5">{sub}</p>
-                  </div>
-                  {submitted
-                    ? <CheckCircle2 size={18} className="shrink-0 text-green-500 mt-0.5" />
-                    : <Circle       size={18} className="shrink-0 text-muted-foreground/40 mt-0.5" />}
-                </div>
-                <p className="text-[11px] text-muted-foreground">{units} unit{units > 1 ? "s" : ""} · {date}</p>
-                <div className="flex items-center gap-1.5">
-                  {submitted ? (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-green-500/10 border border-green-500/30 px-2 py-0.5 text-[10px] font-semibold text-green-600 dark:text-green-400">
-                      <CheckCircle2 size={9} /> Submitted
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-muted border border-border px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">
-                      <KeyRound size={9} /> Requires OTP
-                    </span>
-                  )}
-                </div>
-              </Link>
-            );
-          })}
         </div>
       </div>
 
