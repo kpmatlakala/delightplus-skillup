@@ -1,0 +1,16 @@
+{
+  "slug": "saqa-78965",
+  "title": "FET Certificate: IT Systems Development",
+  "saqaId": "78965",
+  "nqfLevel": 4,
+  "credits": 131,
+  "provider": "Data Science Academy",
+  "blocks": [
+    { "id": 1, "title": "Foundations of Systems Development", "units": [14910, 14915, 14918, 14920, 14924] },
+    { "id": 2, "title": "Applied Programming and Systems Design", "units": [14927, 14930] },
+    { "id": 3, "title": "Testing, Support and Integrated Assessment", "units": [14908, 14919, 120379] }
+  ],
+  "coverImage": "/catalog/covers/saqa-78965.jpg",
+  "sourceRoot": "/docs/SAQA_78965_CET_Training",
+  "lastUpdated": "2026-04-26"
+}

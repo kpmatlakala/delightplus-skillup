@@ -1,0 +1,11 @@
+{
+  "slug": "<course-slug>",
+  "title": "<Course Title>",
+  "saqaId": null,
+  "nqfLevel": null,
+  "credits": null,
+  "provider": "Data Science Academy",
+  "blocks": [],
+  "coverImage": "/catalog/covers/<course-slug>.jpg",
+  "lastUpdated": "YYYY-MM-DD"
+}
