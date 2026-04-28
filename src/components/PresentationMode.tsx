@@ -31,38 +31,41 @@ import {
   module14924SpeakerNotes,
   module14924SlideList,
   type Module14924SlideListItem,
-} from "@/data/block1/module14924Presentation";
+} from "@/data/module14924Presentation";
 import {
   module14920SpeakerNotes,
   module14920SlideList,
   type Module14920SlideListItem,
-} from "@/data/block1/module14920Presentation";
+} from "@/data/module14920Presentation";
 import {
   module14918SlideList,
   type Module14918SlideListItem,
-} from "@/data/block1/module14918Presentation";
+} from "@/data/module14918Presentation";
 import {
   module14927SlideList,
   type Module14927SlideListItem,
-} from "@/data/block1/module14927Presentation";
+} from "@/data/module14927Presentation";
 import {
   module14915SlideList,
   type Module14915SlideListItem,
-} from "@/data/block1/module14915Presentation";
+} from "@/data/module14915Presentation";
 import {
   module14910SpeakerNotes,
   module14910SlideList,
   type Module14910SlideListItem,
-} from "@/data/block2/module14910Presentation";
+} from "@/data/module14910Presentation";
 import {
   module14930SpeakerNotes,
   module14930SlideList,
   type Module14930SlideListItem,
-} from "@/data/block2/module14930Presentation";
+} from "@/data/module14930Presentation";
 import {
   module14933SpeakerNotes,
   module14933SlideList,
   type Module14933SlideListItem,
+<<<<<<< Updated upstream
+} from "@/data/module14933Presentation";
+=======
 } from "@/data/block2/module14933Presentation";
 import {
   module14908SlideList,
@@ -72,6 +75,11 @@ import {
   module14919SlideList,
   type Module14919SlideListItem,
 } from "@/data/block3/module14919Presentation";
+import {
+  module14921SlideList,
+  type Module14921SlideListItem,
+} from "@/data/block3/module14921Presentation";
+>>>>>>> Stashed changes
 import { programmeBriefingSlides } from "@/data/programmeBriefing";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -443,30 +451,30 @@ const PRESENTATION_QUIZZES: Record<string, QuizQ[]> = {
         "A structured troubleshooting method improves accuracy, communication, and repeatability in user support work.",
     },
   ],
-  "14921": [
+  "120379": [
     {
-      question: "Which type of computer system is designed to provide shared services to other computers on a network?",
+      question: "What is the 'triple constraint' in project work?",
       options: [
-        "Server",
-        "Tablet",
-        "USB hub",
-        "Projector",
+        "Scope, time, and cost",
+        "Code, browser, and printer",
+        "Planning, lunch, and meetings",
+        "Testing, colour, and attendance",
       ],
       correct: 0,
       explanation:
-        "A server is designed to provide shared resources or services to multiple client devices across a network.",
+        "Project delivery is usually balanced across scope, time, and cost — if one changes, the others are often affected.",
     },
     {
-      question: "Why is an SSD often preferred over a traditional HDD in a modern office PC?",
+      question: "What does effective participation in a project team mean most of all?",
       options: [
-        "It usually provides faster boot and application load times",
-        "It automatically increases internet bandwidth",
-        "It replaces the need for RAM",
-        "It acts as the system power supply",
+        "Just attending meetings quietly",
+        "Contributing to deliverables, communication, and agreed responsibilities",
+        "Waiting for others to finish the work",
+        "Changing the scope alone without agreement",
       ],
-      correct: 0,
+      correct: 1,
       explanation:
-        "SSDs typically improve responsiveness because they can read and write data much faster than many traditional hard drives.",
+        "Good team participation means active contribution, clear communication, and accountability for agreed tasks.",
     },
   ],
 };
@@ -932,6 +940,8 @@ function buildModule14933SlidesFromData(): Slide[] {
   ];
 }
 
+<<<<<<< Updated upstream
+=======
 function toModule14908Slide(item: Module14908SlideListItem): Slide {
   const lines = item.content
     .split("\n")
@@ -1020,6 +1030,51 @@ function buildModule14919SlidesFromData(): Slide[] {
   ];
 }
 
+function toModule14921Slide(item: Module14921SlideListItem): Slide {
+  const lines = item.content
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const bulletLines = lines.filter((line) => line.startsWith("• ")).map((line) => line.replace(/^•\s*/, ""));
+  const nonBulletLines = lines.filter((line) => !line.startsWith("• "));
+  const subtitle = nonBulletLines[0];
+  const body = nonBulletLines.slice(1).join("\n") || undefined;
+
+  const mappedType: SlideType =
+    item.type === "title"
+      ? "title"
+      : item.type === "summary"
+      ? "summary"
+      : item.type === "activity"
+      ? "activity"
+      : "content";
+
+  return {
+    type: mappedType,
+    title: item.title,
+    subtitle,
+    body,
+    bullets: bulletLines.length ? bulletLines : undefined,
+    cards: item.cards,
+    phaseCards: item.phaseCards,
+    imageUrl: item.imageUrl,
+    imageAlt: item.imageAlt,
+    speakerNote: item.notes,
+  };
+}
+
+function buildModule14921SlidesFromData(): Slide[] {
+  const mapped = module14921SlideList.map((item) => toModule14921Slide(item));
+  const summarySlides = mapped.filter((slide) => slide.type === "summary");
+  const coreSlides = mapped.filter((slide) => slide.type !== "summary");
+  return [
+    ...coreSlides,
+    ...getQuizSlides("14921", "Types of Computer Systems and Hardware Configurations"),
+    ...summarySlides,
+  ];
+}
+
+>>>>>>> Stashed changes
 /* ─────────────────────────────────────────────────────────────────────────────
    Per-module facilitator speaker notes
    These are the talking-point scripts displayed on the mobile remote.
@@ -1224,46 +1279,51 @@ const MODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes | Record<string, s
       "• Ensure EVERYTHING in the workbook is complete before the Block 3 assessment.",
   },
 
-  "14921": {
+  "120379": {
     title:
-      "Final unit — Types of Computer Systems and Hardware Configurations. Day 13.\n\n" +
-      "Welcome to the last delivery day of this qualification. This unit is practical because it helps learners justify why one system setup fits one user better than another.\n\n" +
-      "Opening: 'Think about the offices, labs, and support spaces you know. Do they all need the same computer setup?' Use the first few answers to surface the idea of fit-for-purpose configuration.",
+<<<<<<< Updated upstream
+      "Final unit — Work as a Project Team Member. Day 13.\n\n" +
+      "Welcome to the last delivery day of this qualification (well done — 14 days in!). This is also the most integrative unit: everything from the previous 9 units feeds into this one.\n\n" +
+      "Opening: 'Think about this 15-day programme as a project. What has been well-managed? What would you have done differently as the project manager?'\n\n" +
+      "Take 3–4 answers. This exercise simultaneously reviews content from the whole qualification AND introduces the project lifecycle. Strong entry point.",
     objectives:
-      "Walk through the outcomes in practical language:\n\n" +
-      "• Outcome 1: learners must identify major computer system types and where each is used.\n" +
-      "• Outcome 2: learners must explain what key hardware components and peripherals actually do.\n" +
-      "• Outcome 3: learners must recommend a suitable configuration based on user need, budget, and compatibility.\n\n" +
-      "Keep pushing learners away from memorising parts lists and toward making justified recommendations.",
+      "Walk through all 3 outcomes:\n\n" +
+      "• Outcome 1 (participate effectively): Participating effectively means contributing to DELIVERABLES, not just attending meetings. Ask: 'What is the difference between being PRESENT in a project team and being ENGAGED?'\n" +
+      "• Outcome 2 (project management fundamentals): PMBOK 5 process groups — Initiating, Planning, Executing, Monitoring/Controlling, Closing. Ask: 'Which phase do most IT projects underinvest in?' (Planning — they rush to start coding.)\n" +
+      "• Outcome 3 (deliver outputs within constraints): The triple constraint — Scope, Time, Cost. If any one increases, at least one of the others must flex. The client wants all three: fast, cheap, complete. They get to pick two.\n\n" +
+      "8 credits — significant weight. The capstone project kickoff IS the assessment deliverable.",
+=======
+      "Block 3, Day 11 — Types of Computer Systems and Hardware Configurations.\n\n" +
+      "Opening prompt: 'Would you buy the same machine for a reception desk, a coding lab, and a server room?'\n\n" +
+      "Set the expectation: learners must justify configuration decisions with user needs, compatibility, and support constraints.",
+    objectives:
+      "Walk through outcomes with applied framing:\n\n" +
+      "• Identify and compare common system types by environment and task profile\n" +
+      "• Explain the role of core components and key peripherals\n" +
+      "• Recommend fit-for-purpose configurations and justify trade-offs\n\n" +
+      "Keep learners focused on rationale, not only on naming hardware parts.",
+>>>>>>> Stashed changes
     activityIndividual:
-      "Pre-capstone work:\n\n" +
-      "• Each learner individually identifies their role in their capstone project team using the RACI matrix (Responsible, Accountable, Consulted, Informed).\n" +
-      "• Each learner writes their 2 strongest contributions and 1 area they'll need team support on.\n\n" +
-      "Stakeholder communication exercise:\n" +
-      "• Given a project progress update, learners write TWO versions: one for the technical team, one for a non-technical client.\n" +
-      "• Compare the two in class — what changed? What must stay consistent? (The facts. What changes is the language and level of detail.)",
+      "Workbook-first progression:\n\n" +
+      "• Complete system-type comparison activities using realistic workplace scenarios\n" +
+      "• Build a component-function mapping table (CPU, RAM, storage, motherboard, PSU, peripherals)\n" +
+      "• Draft one short recommendation note for a selected user profile\n\n" +
+      "Check that each answer includes both technical choice and reason.",
     activityGroup:
-      "Sprint planning exercise (40 minutes).\n\n" +
-      "Groups receive a fictional product backlog for an 'IT Learning Management System'.\n\n" +
-      "Task: Prioritise the backlog and plan a 1-week sprint:\n" +
-      "1. Assign 5–7 user stories to the sprint\n" +
-      "2. Estimate each story in hours or story points\n" +
-      "3. Assign stories to team members by skill match\n" +
-      "4. Identify the biggest risk in the sprint\n" +
-      "5. Present a simple sprint board (To Do / In Progress / Done)\n\n" +
-      "Each group presents their sprint plan (3 minutes). Class question: 'What would you cut first if you were 2 days behind midway through the sprint?'\n\n" +
-      "Connect: this is how real development teams at CET, government and private sector work — daily standups, sprint reviews, retrospectives.",
+      "Practical assessment rehearsal (scenario-based, 30–40 minutes).\n\n" +
+      "Each group receives a lab/office support scenario and must produce:\n" +
+      "1. User need summary\n" +
+      "2. Proposed configuration\n" +
+      "3. Compatibility checks\n" +
+      "4. Upgrade path and support notes\n\n" +
+      "Groups present their rationale. Peer question: 'What would fail first if this configuration is under-specified?'.",
     summary:
-      "Programme complete — CELEBRATE!\n\n" +
-      "Full-circle moment: 'On Day 1 I asked you about an IT system that failed. Now you know where failures come from — and what to do about them.'\n\n" +
-      "Round-robin close — every person in the room states:\n" +
-      "1. ONE thing they will do differently at work because of this qualification\n" +
-      "2. ONE unit standard they'd like to explore further\n\n" +
-      "Final reminders:\n" +
-      "• Block 3 assessment OTP → submit via portal\n" +
-      "• All workbook activities must be complete for the full PoE\n" +
-      "• PoE submission deadline: confirm with your institution\n" +
-      "• Any questions about certification or RPL — email Kabelo: matlakalakabelo1@gmail.com",
+      "Close with a four-point evidence check:\n" +
+      "• Learner guide sections were covered with examples\n" +
+      "• Workbook tasks are complete and reviewable\n" +
+      "• Practical scenario responses are justified and documented\n" +
+      "• Learners are ready for summative-style configuration questions\n\n" +
+      "Reminder: quality of explanation matters as much as the final hardware list.",
   },
 };
 
@@ -1541,21 +1601,21 @@ function getModuleAnchorConfig(moduleId: string): {
       ],
       anchorHighlight: "Testing quality is measured by evidence traceability, not just the number of tests run.",
     },
-    "14921": {
-      subtitle: "Computer system types and hardware configurations in context",
-      roadmapLead: "We match user needs to the correct devices, components, and upgrade choices.",
-      anchorTitle: "Hardware Configuration Anchor",
+    "120379": {
+      subtitle: "Project teamwork from planning to delivery control",
+      roadmapLead: "We align scope, roles and timelines before execution pressure starts.",
+      anchorTitle: "Project Teamwork Anchor",
       anchorDiagram:
-        "User Need -> System Type -> Core Components -> Peripherals -> Compatibility -> Support\n" +
-        "    |            |              |               |               |\n" +
-        "    v            v              v               v               v\n" +
-        "fit for purpose  correct device  balanced spec   usable setup    reliable operation",
+        "Scope -> Plan -> Roles -> Execute -> Track -> Adapt -> Close\n" +
+        "  |       |       |        |        |        |\n" +
+        "  v       v       v        v        v        v\n" +
+        "clear goals timeline tasks accountability progress control lessons captured",
       anchorBullets: [
-        "Different environments need different system types and performance levels",
-        "Hardware choices should be justified against user tasks and budget",
-        "Compatibility and support matter as much as raw performance",
+        "Shared scope understanding reduces scope creep and confusion",
+        "Tracking and adaptation protect delivery under changing conditions",
+        "Closure and retrospectives improve the next project cycle",
       ],
-      anchorHighlight: "Good hardware decisions come from matching technical choices to real user requirements.",
+      anchorHighlight: "Team projects succeed when planning discipline continues during execution.",
     },
     "14930": {
       subtitle: "Internet software from network principles to secure delivery",
@@ -1669,16 +1729,16 @@ function getModuleVisualExample(moduleId?: string): {
       diagram: "Ask -> Reproduce -> Isolate -> Fix -> Verify -> Document",
       highlight: "This gives learners a script they can reuse in real support situations.",
     },
-    "14921": {
-      title: "Hardware Selection Example",
-      subtitle: "Example: choosing systems for a CET admin office",
+    "120379": {
+      title: "Project Board Example",
+      subtitle: "Example: sprint planning in action",
       cards: [
-        "Match each user role to the applications they actually use every day",
-        "Select a balanced CPU, RAM, and storage combination for office productivity",
-        "Add the right peripherals, networking, and upgrade path for supportability",
+        "Break the work into To Do, In Progress, and Done",
+        "Assign owners and identify the main risk early",
+        "Review progress daily and adjust when blockers appear",
       ],
-      diagram: "User Tasks -> Performance Need -> Hardware Choice -> Peripherals -> Deployment",
-      highlight: "This keeps the conversation practical by showing how configurations are chosen for real environments rather than in theory alone.",
+      diagram: "Scope -> Plan -> Assign -> Track -> Adapt -> Deliver",
+      highlight: "Make the project workflow visible so team roles and accountability are easy to understand.",
     },
   };
 
@@ -1727,6 +1787,8 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
     return buildModule14933SlidesFromData();
   }
 
+<<<<<<< Updated upstream
+=======
   if (flow.moduleId === "14908") {
     // Module 14908 now uses a dedicated authored presentation data file.
     return buildModule14908SlidesFromData();
@@ -1737,6 +1799,12 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
     return buildModule14919SlidesFromData();
   }
 
+  if (flow.moduleId === "14921") {
+    // Module 14921 now uses a dedicated authored presentation data file.
+    return buildModule14921SlidesFromData();
+  }
+
+>>>>>>> Stashed changes
   const slides: Slide[] = [];
   const mn = MODULE_SPEAKER_NOTES[flow.moduleId];
   const sessions = flow.lessons.filter((l) => /^session-\d/.test(l.id));

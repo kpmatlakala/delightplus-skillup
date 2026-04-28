@@ -428,6 +428,11 @@ export default function BlockMarkdownAssessment({
 
     if (question.inputType === "textarea") {
       if (question.subFields?.length) {
+        const isPseudocodeBuilder = question.id === "b2-s1-b1";
+        const previewLines = question.subFields
+          .map((_, fieldIndex) => answers[`${question.id}::sub::${fieldIndex}`]?.trim() ?? "")
+          .filter((line) => line.length > 0 && !line.toLowerCase().startsWith("select line"));
+
         return (
           <div className="space-y-3">
             {question.subFields.map((field, fieldIndex) => {
@@ -474,6 +479,15 @@ export default function BlockMarkdownAssessment({
                 </div>
               );
             })}
+
+            {isPseudocodeBuilder ? (
+              <div className="rounded-md border border-border bg-background p-3">
+                <p className="mb-2 text-xs font-semibold text-foreground">Pseudocode Preview</p>
+                <pre className="whitespace-pre-wrap text-xs text-muted-foreground">
+{previewLines.length ? previewLines.join("\n") : "Choose options above to build your pseudocode preview."}
+                </pre>
+              </div>
+            ) : null}
           </div>
         );
       }
@@ -527,7 +541,7 @@ export default function BlockMarkdownAssessment({
           <div className="min-w-0 flex-1">
             <p className="text-sm text-foreground mt-1 leading-relaxed">
               <span className="font-bold text-primary mr-1">{displayLabel ?? question.label}</span>
-              {question.prompt}
+              <span dangerouslySetInnerHTML={{ __html: question.prompt }} />
             </p>
           </div>
           <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
@@ -838,7 +852,7 @@ export default function BlockMarkdownAssessment({
             {sectionBQuestions.map((question) => renderQuestionCard(question))}
           </div>
 
-          {sectionB3Questions.length > 0 && (
+          {sectionB3Questions.length > 0 && blockNum === "1" && (
             <div className="rounded-lg border border-border bg-muted/20 p-3 space-y-3">
               <div>
                 <p className="text-[11px] font-bold uppercase tracking-wide text-primary">
@@ -862,6 +876,12 @@ export default function BlockMarkdownAssessment({
               <div className="space-y-3">
                 {sectionB3Questions.map((question) => renderQuestionCard(question))}
               </div>
+            </div>
+          )}
+
+          {sectionB3Questions.length > 0 && blockNum !== "1" && (
+            <div className="space-y-3">
+              {sectionB3Questions.map((question) => renderQuestionCard(question))}
             </div>
           )}
         </div>
