@@ -15,17 +15,17 @@ SAQA ID: 78965 · NQF Level 4
 | **Assessor:** | Kabelo Matlakala |
 | **Qualification:** | FETC: IT Systems Development — NQF L4 |
 
-| **TIME ALLOWED: 2 Hours**   **TOTAL MARKS: 100**   PASS MARK: 60 marks (60%)   INSTRUCTIONS:   1\. Answer ALL questions in ALL five sections.   2\. For Section A (MCQ): circle or tick ONE answer per question.   3\. For Section B (Short Answer): write in clear, complete sentences or bullet points.   4\. Where a diagram sheet is provided, first identify the type of diagram, then label the required parts.   5\. Write legibly. Illegible answers will not be marked.   6\. No calculators, notes, or electronic devices permitted.   **NOTE: Each section covers one module from Block 1. Manage your time — allow approximately 24 minutes per section.** |
+| **TIME ALLOWED: 2 Hours**   **TOTAL MARKS: 125 (100 base + 25 bonus)**   PASS MARK: 60 marks (60%)   INSTRUCTIONS:   1\. Answer ALL questions in ALL five sections.   2\. For Section A (MCQ): circle or tick ONE answer per question.   3\. For Section B (Short Answer): write in clear, complete sentences or bullet points.   4\. Where a diagram sheet is provided, first identify the type of diagram, then label the required parts.   5\. Write legibly. Illegible answers will not be marked.   6\. No calculators, notes, or electronic devices permitted.   **NOTE: Each section covers one module from Block 1. Manage your time — allow approximately 24 minutes per section.** |
 | --- |
 
 | **Section** | **Module** | **Total** | **Mark Awarded** |
 | --- | --- | --- | --- |
-| **1** | 14924 — Systems Analysis | 20 |  |
-| **2** | 14920 — Team Collaboration &amp; Problem Solving | 20 |  |
-| **3** | 14918 — Programming Principles Introduction | 20 |  |
-| **4** | 14927 — Apply Problem-Solving Strategies | 20 |  |
-| **5** | 14915 — Design a Computer Program to Specification | 20 |  |
-|  | **TOTAL** | **100** |  |
+| **1** | 14924 — Systems Analysis | 25 (A:10 · B1+B2:10 · B3 bonus:5) |  |
+| **2** | 14920 — Team Collaboration &amp; Problem Solving | 25 (A:10 · B1+B2:10 · B3 bonus:5) |  |
+| **3** | 14918 — Programming Principles Introduction | 25 (A:10 · B1+B2:10 · B3 bonus:5) |  |
+| **4** | 14927 — Apply Problem-Solving Strategies | 25 (A:10 · B1+B2:10 · B3 bonus:5) |  |
+| **5** | 14915 — Design a Computer Program to Specification | 25 (A:10 · B1+B2:10 · B3 bonus:5) |  |
+|  | **TOTAL** | **125** |  |
 
   
 

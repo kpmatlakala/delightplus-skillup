@@ -63,7 +63,23 @@ import {
   module14933SpeakerNotes,
   module14933SlideList,
   type Module14933SlideListItem,
+<<<<<<< Updated upstream
 } from "@/data/module14933Presentation";
+=======
+} from "@/data/block2/module14933Presentation";
+import {
+  module14908SlideList,
+  type Module14908SlideListItem,
+} from "@/data/block3/module14908Presentation";
+import {
+  module14919SlideList,
+  type Module14919SlideListItem,
+} from "@/data/block3/module14919Presentation";
+import {
+  module14921SlideList,
+  type Module14921SlideListItem,
+} from "@/data/block3/module14921Presentation";
+>>>>>>> Stashed changes
 import { programmeBriefingSlides } from "@/data/programmeBriefing";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -924,6 +940,141 @@ function buildModule14933SlidesFromData(): Slide[] {
   ];
 }
 
+<<<<<<< Updated upstream
+=======
+function toModule14908Slide(item: Module14908SlideListItem): Slide {
+  const lines = item.content
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const bulletLines = lines.filter((line) => line.startsWith("• ")).map((line) => line.replace(/^•\s*/, ""));
+  const nonBulletLines = lines.filter((line) => !line.startsWith("• "));
+  const subtitle = nonBulletLines[0];
+  const body = nonBulletLines.slice(1).join("\n") || undefined;
+
+  const mappedType: SlideType =
+    item.type === "title"
+      ? "title"
+      : item.type === "summary"
+      ? "summary"
+      : item.type === "activity"
+      ? "activity"
+      : "content";
+
+  return {
+    type: mappedType,
+    title: item.title,
+    subtitle,
+    body,
+    bullets: bulletLines.length ? bulletLines : undefined,
+    cards: item.cards,
+    phaseCards: item.phaseCards,
+    imageUrl: item.imageUrl,
+    imageAlt: item.imageAlt,
+    speakerNote: item.notes,
+  };
+}
+
+function buildModule14908SlidesFromData(): Slide[] {
+  const mapped = module14908SlideList.map((item) => toModule14908Slide(item));
+  const summarySlides = mapped.filter((slide) => slide.type === "summary");
+  const coreSlides = mapped.filter((slide) => slide.type !== "summary");
+  return [
+    ...coreSlides,
+    ...getQuizSlides("14908", "Testing IT Systems Against Specifications"),
+    ...summarySlides,
+  ];
+}
+
+function toModule14919Slide(item: Module14919SlideListItem): Slide {
+  const lines = item.content
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const bulletLines = lines.filter((line) => line.startsWith("• ")).map((line) => line.replace(/^•\s*/, ""));
+  const nonBulletLines = lines.filter((line) => !line.startsWith("• "));
+  const subtitle = nonBulletLines[0];
+  const body = nonBulletLines.slice(1).join("\n") || undefined;
+
+  const mappedType: SlideType =
+    item.type === "title"
+      ? "title"
+      : item.type === "summary"
+      ? "summary"
+      : item.type === "activity"
+      ? "activity"
+      : "content";
+
+  return {
+    type: mappedType,
+    title: item.title,
+    subtitle,
+    body,
+    bullets: bulletLines.length ? bulletLines : undefined,
+    cards: item.cards,
+    phaseCards: item.phaseCards,
+    imageUrl: item.imageUrl,
+    imageAlt: item.imageAlt,
+    speakerNote: item.notes,
+  };
+}
+
+function buildModule14919SlidesFromData(): Slide[] {
+  const mapped = module14919SlideList.map((item) => toModule14919Slide(item));
+  const summarySlides = mapped.filter((slide) => slide.type === "summary");
+  const coreSlides = mapped.filter((slide) => slide.type !== "summary");
+  return [
+    ...coreSlides,
+    ...getQuizSlides("14919", "Resolve Computer Users' Problems"),
+    ...summarySlides,
+  ];
+}
+
+function toModule14921Slide(item: Module14921SlideListItem): Slide {
+  const lines = item.content
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const bulletLines = lines.filter((line) => line.startsWith("• ")).map((line) => line.replace(/^•\s*/, ""));
+  const nonBulletLines = lines.filter((line) => !line.startsWith("• "));
+  const subtitle = nonBulletLines[0];
+  const body = nonBulletLines.slice(1).join("\n") || undefined;
+
+  const mappedType: SlideType =
+    item.type === "title"
+      ? "title"
+      : item.type === "summary"
+      ? "summary"
+      : item.type === "activity"
+      ? "activity"
+      : "content";
+
+  return {
+    type: mappedType,
+    title: item.title,
+    subtitle,
+    body,
+    bullets: bulletLines.length ? bulletLines : undefined,
+    cards: item.cards,
+    phaseCards: item.phaseCards,
+    imageUrl: item.imageUrl,
+    imageAlt: item.imageAlt,
+    speakerNote: item.notes,
+  };
+}
+
+function buildModule14921SlidesFromData(): Slide[] {
+  const mapped = module14921SlideList.map((item) => toModule14921Slide(item));
+  const summarySlides = mapped.filter((slide) => slide.type === "summary");
+  const coreSlides = mapped.filter((slide) => slide.type !== "summary");
+  return [
+    ...coreSlides,
+    ...getQuizSlides("14921", "Types of Computer Systems and Hardware Configurations"),
+    ...summarySlides,
+  ];
+}
+
+>>>>>>> Stashed changes
 /* ─────────────────────────────────────────────────────────────────────────────
    Per-module facilitator speaker notes
    These are the talking-point scripts displayed on the mobile remote.
@@ -1130,6 +1281,7 @@ const MODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes | Record<string, s
 
   "120379": {
     title:
+<<<<<<< Updated upstream
       "Final unit — Work as a Project Team Member. Day 13.\n\n" +
       "Welcome to the last delivery day of this qualification (well done — 14 days in!). This is also the most integrative unit: everything from the previous 9 units feeds into this one.\n\n" +
       "Opening: 'Think about this 15-day programme as a project. What has been well-managed? What would you have done differently as the project manager?'\n\n" +
@@ -1140,35 +1292,38 @@ const MODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes | Record<string, s
       "• Outcome 2 (project management fundamentals): PMBOK 5 process groups — Initiating, Planning, Executing, Monitoring/Controlling, Closing. Ask: 'Which phase do most IT projects underinvest in?' (Planning — they rush to start coding.)\n" +
       "• Outcome 3 (deliver outputs within constraints): The triple constraint — Scope, Time, Cost. If any one increases, at least one of the others must flex. The client wants all three: fast, cheap, complete. They get to pick two.\n\n" +
       "8 credits — significant weight. The capstone project kickoff IS the assessment deliverable.",
+=======
+      "Block 3, Day 11 — Types of Computer Systems and Hardware Configurations.\n\n" +
+      "Opening prompt: 'Would you buy the same machine for a reception desk, a coding lab, and a server room?'\n\n" +
+      "Set the expectation: learners must justify configuration decisions with user needs, compatibility, and support constraints.",
+    objectives:
+      "Walk through outcomes with applied framing:\n\n" +
+      "• Identify and compare common system types by environment and task profile\n" +
+      "• Explain the role of core components and key peripherals\n" +
+      "• Recommend fit-for-purpose configurations and justify trade-offs\n\n" +
+      "Keep learners focused on rationale, not only on naming hardware parts.",
+>>>>>>> Stashed changes
     activityIndividual:
-      "Pre-capstone work:\n\n" +
-      "• Each learner individually identifies their role in their capstone project team using the RACI matrix (Responsible, Accountable, Consulted, Informed).\n" +
-      "• Each learner writes their 2 strongest contributions and 1 area they'll need team support on.\n\n" +
-      "Stakeholder communication exercise:\n" +
-      "• Given a project progress update, learners write TWO versions: one for the technical team, one for a non-technical client.\n" +
-      "• Compare the two in class — what changed? What must stay consistent? (The facts. What changes is the language and level of detail.)",
+      "Workbook-first progression:\n\n" +
+      "• Complete system-type comparison activities using realistic workplace scenarios\n" +
+      "• Build a component-function mapping table (CPU, RAM, storage, motherboard, PSU, peripherals)\n" +
+      "• Draft one short recommendation note for a selected user profile\n\n" +
+      "Check that each answer includes both technical choice and reason.",
     activityGroup:
-      "Sprint planning exercise (40 minutes).\n\n" +
-      "Groups receive a fictional product backlog for an 'IT Learning Management System'.\n\n" +
-      "Task: Prioritise the backlog and plan a 1-week sprint:\n" +
-      "1. Assign 5–7 user stories to the sprint\n" +
-      "2. Estimate each story in hours or story points\n" +
-      "3. Assign stories to team members by skill match\n" +
-      "4. Identify the biggest risk in the sprint\n" +
-      "5. Present a simple sprint board (To Do / In Progress / Done)\n\n" +
-      "Each group presents their sprint plan (3 minutes). Class question: 'What would you cut first if you were 2 days behind midway through the sprint?'\n\n" +
-      "Connect: this is how real development teams at CET, government and private sector work — daily standups, sprint reviews, retrospectives.",
+      "Practical assessment rehearsal (scenario-based, 30–40 minutes).\n\n" +
+      "Each group receives a lab/office support scenario and must produce:\n" +
+      "1. User need summary\n" +
+      "2. Proposed configuration\n" +
+      "3. Compatibility checks\n" +
+      "4. Upgrade path and support notes\n\n" +
+      "Groups present their rationale. Peer question: 'What would fail first if this configuration is under-specified?'.",
     summary:
-      "Programme complete — CELEBRATE!\n\n" +
-      "Full-circle moment: 'On Day 1 I asked you about an IT system that failed. Now you know where failures come from — and what to do about them.'\n\n" +
-      "Round-robin close — every person in the room states:\n" +
-      "1. ONE thing they will do differently at work because of this qualification\n" +
-      "2. ONE unit standard they'd like to explore further\n\n" +
-      "Final reminders:\n" +
-      "• Block 3 assessment OTP → submit via portal\n" +
-      "• All workbook activities must be complete for the full PoE\n" +
-      "• PoE submission deadline: confirm with your institution\n" +
-      "• Any questions about certification or RPL — email Kabelo: matlakalakabelo1@gmail.com",
+      "Close with a four-point evidence check:\n" +
+      "• Learner guide sections were covered with examples\n" +
+      "• Workbook tasks are complete and reviewable\n" +
+      "• Practical scenario responses are justified and documented\n" +
+      "• Learners are ready for summative-style configuration questions\n\n" +
+      "Reminder: quality of explanation matters as much as the final hardware list.",
   },
 };
 
@@ -1632,6 +1787,24 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
     return buildModule14933SlidesFromData();
   }
 
+<<<<<<< Updated upstream
+=======
+  if (flow.moduleId === "14908") {
+    // Module 14908 now uses a dedicated authored presentation data file.
+    return buildModule14908SlidesFromData();
+  }
+
+  if (flow.moduleId === "14919") {
+    // Module 14919 now uses a dedicated authored presentation data file.
+    return buildModule14919SlidesFromData();
+  }
+
+  if (flow.moduleId === "14921") {
+    // Module 14921 now uses a dedicated authored presentation data file.
+    return buildModule14921SlidesFromData();
+  }
+
+>>>>>>> Stashed changes
   const slides: Slide[] = [];
   const mn = MODULE_SPEAKER_NOTES[flow.moduleId];
   const sessions = flow.lessons.filter((l) => /^session-\d/.test(l.id));
