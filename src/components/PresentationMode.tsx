@@ -31,41 +31,38 @@ import {
   module14924SpeakerNotes,
   module14924SlideList,
   type Module14924SlideListItem,
-} from "@/data/module14924Presentation";
+} from "@/data/block1/module14924Presentation";
 import {
   module14920SpeakerNotes,
   module14920SlideList,
   type Module14920SlideListItem,
-} from "@/data/module14920Presentation";
+} from "@/data/block1/module14920Presentation";
 import {
   module14918SlideList,
   type Module14918SlideListItem,
-} from "@/data/module14918Presentation";
+} from "@/data/block1/module14918Presentation";
 import {
   module14927SlideList,
   type Module14927SlideListItem,
-} from "@/data/module14927Presentation";
+} from "@/data/block1/module14927Presentation";
 import {
   module14915SlideList,
   type Module14915SlideListItem,
-} from "@/data/module14915Presentation";
+} from "@/data/block1/module14915Presentation";
 import {
   module14910SpeakerNotes,
   module14910SlideList,
   type Module14910SlideListItem,
-} from "@/data/module14910Presentation";
+} from "@/data/block2/module14910Presentation";
 import {
   module14930SpeakerNotes,
   module14930SlideList,
   type Module14930SlideListItem,
-} from "@/data/module14930Presentation";
+} from "@/data/block2/module14930Presentation";
 import {
   module14933SpeakerNotes,
   module14933SlideList,
   type Module14933SlideListItem,
-<<<<<<< Updated upstream
-} from "@/data/module14933Presentation";
-=======
 } from "@/data/block2/module14933Presentation";
 import {
   module14908SlideList,
@@ -79,7 +76,6 @@ import {
   module14921SlideList,
   type Module14921SlideListItem,
 } from "@/data/block3/module14921Presentation";
->>>>>>> Stashed changes
 import { programmeBriefingSlides } from "@/data/programmeBriefing";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -940,8 +936,6 @@ function buildModule14933SlidesFromData(): Slide[] {
   ];
 }
 
-<<<<<<< Updated upstream
-=======
 function toModule14908Slide(item: Module14908SlideListItem): Slide {
   const lines = item.content
     .split("\n")
@@ -1074,7 +1068,6 @@ function buildModule14921SlidesFromData(): Slide[] {
   ];
 }
 
->>>>>>> Stashed changes
 /* ─────────────────────────────────────────────────────────────────────────────
    Per-module facilitator speaker notes
    These are the talking-point scripts displayed on the mobile remote.
@@ -1281,7 +1274,6 @@ const MODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes | Record<string, s
 
   "120379": {
     title:
-<<<<<<< Updated upstream
       "Final unit — Work as a Project Team Member. Day 13.\n\n" +
       "Welcome to the last delivery day of this qualification (well done — 14 days in!). This is also the most integrative unit: everything from the previous 9 units feeds into this one.\n\n" +
       "Opening: 'Think about this 15-day programme as a project. What has been well-managed? What would you have done differently as the project manager?'\n\n" +
@@ -1292,38 +1284,40 @@ const MODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes | Record<string, s
       "• Outcome 2 (project management fundamentals): PMBOK 5 process groups — Initiating, Planning, Executing, Monitoring/Controlling, Closing. Ask: 'Which phase do most IT projects underinvest in?' (Planning — they rush to start coding.)\n" +
       "• Outcome 3 (deliver outputs within constraints): The triple constraint — Scope, Time, Cost. If any one increases, at least one of the others must flex. The client wants all three: fast, cheap, complete. They get to pick two.\n\n" +
       "8 credits — significant weight. The capstone project kickoff IS the assessment deliverable.",
-=======
-      "Block 3, Day 11 — Types of Computer Systems and Hardware Configurations.\n\n" +
-      "Opening prompt: 'Would you buy the same machine for a reception desk, a coding lab, and a server room?'\n\n" +
-      "Set the expectation: learners must justify configuration decisions with user needs, compatibility, and support constraints.",
-    objectives:
-      "Walk through outcomes with applied framing:\n\n" +
-      "• Identify and compare common system types by environment and task profile\n" +
-      "• Explain the role of core components and key peripherals\n" +
-      "• Recommend fit-for-purpose configurations and justify trade-offs\n\n" +
-      "Keep learners focused on rationale, not only on naming hardware parts.",
->>>>>>> Stashed changes
     activityIndividual:
-      "Workbook-first progression:\n\n" +
-      "• Complete system-type comparison activities using realistic workplace scenarios\n" +
-      "• Build a component-function mapping table (CPU, RAM, storage, motherboard, PSU, peripherals)\n" +
-      "• Draft one short recommendation note for a selected user profile\n\n" +
-      "Check that each answer includes both technical choice and reason.",
+      "Capstone project kickoff — this is the final deliverable of the qualification.\n\n" +
+      "Each learner must produce a Project Charter for a real or realistic IT project. Minimum requirements:\n" +
+      "1. Project title and objective\n" +
+      "2. Scope statement (what is IN and what is OUT)\n" +
+      "3. Stakeholder list with roles\n" +
+      "4. High-level timeline (milestones)\n" +
+      "5. Resource requirements (people, tools, budget estimate)\n" +
+      "6. Risk register (at least 3 risks with mitigation)\n\n" +
+      "Suggested projects:\n" +
+      "• CET lab booking system\n" +
+      "• Learner attendance tracker\n" +
+      "• PoE submission portal\n" +
+      "• IT helpdesk ticketing system\n\n" +
+      "Allow 30 minutes for drafting. Circulate and coach — this is a PoE artefact.",
     activityGroup:
-      "Practical assessment rehearsal (scenario-based, 30–40 minutes).\n\n" +
-      "Each group receives a lab/office support scenario and must produce:\n" +
-      "1. User need summary\n" +
-      "2. Proposed configuration\n" +
-      "3. Compatibility checks\n" +
-      "4. Upgrade path and support notes\n\n" +
-      "Groups present their rationale. Peer question: 'What would fail first if this configuration is under-specified?'.",
+      "Project Charter peer review and refinement.\n\n" +
+      "Pair learners. Each pair swaps their Project Charter and reviews it against the 6 requirements above.\n\n" +
+      "Reviewer must:\n" +
+      "• Identify at least ONE missing or unclear element\n" +
+      "• Suggest at least ONE additional risk\n" +
+      "• Rate the scope statement: is it specific enough to know what is OUT of scope?\n\n" +
+      "After review, learners refine their charters based on feedback.\n\n" +
+      "Collect final versions — these are the capstone PoE artefacts.",
     summary:
-      "Close with a four-point evidence check:\n" +
-      "• Learner guide sections were covered with examples\n" +
-      "• Workbook tasks are complete and reviewable\n" +
-      "• Practical scenario responses are justified and documented\n" +
-      "• Learners are ready for summative-style configuration questions\n\n" +
-      "Reminder: quality of explanation matters as much as the final hardware list.",
+      "Qualification complete. CELEBRATE.\n\n" +
+      "Go round the room (every learner speaks): 'What is ONE thing from this 15-day programme that you will use in your work starting Monday?'\n\n" +
+      "Write the answers on the board. This is the real impact statement.\n\n" +
+      "Final reminders:\n" +
+      "• Block 3 assessment → OTP will be provided → submit via the portal\n" +
+      "• PoE submission deadline: [insert date]\n" +
+      "• Ensure ALL workbook activities from all 15 days are complete\n" +
+      "• Certificates will be issued after moderation is complete\n\n" +
+      "Thank the group. This is a significant achievement — 165 credits, NQF Level 4, 15 days of intensive delivery. Well done.",
   },
 };
 
@@ -1787,8 +1781,6 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
     return buildModule14933SlidesFromData();
   }
 
-<<<<<<< Updated upstream
-=======
   if (flow.moduleId === "14908") {
     // Module 14908 now uses a dedicated authored presentation data file.
     return buildModule14908SlidesFromData();
@@ -1803,8 +1795,6 @@ export function buildFlowSlides(flow: ModuleLessonFlow, mod?: Module): Slide[] {
     // Module 14921 now uses a dedicated authored presentation data file.
     return buildModule14921SlidesFromData();
   }
-
->>>>>>> Stashed changes
   const slides: Slide[] = [];
   const mn = MODULE_SPEAKER_NOTES[flow.moduleId];
   const sessions = flow.lessons.filter((l) => /^session-\d/.test(l.id));

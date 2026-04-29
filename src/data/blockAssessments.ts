@@ -1,9 +1,6 @@
 const BLOCK_1_DOC_BASE = "/docs/SAQA_78965_CET_Training/Block-1/Block1-Test";
-<<<<<<< Updated upstream
-=======
 const BLOCK_2_DOC_BASE = "/docs/SAQA_78965_CET_Training/Block-2/Block2-Test";
 const BLOCK_3_DOC_BASE = "/docs/SAQA_78965_CET_Training/Block-3/Block3-Test";
->>>>>>> Stashed changes
 
 export type BlockAssessmentStatus = "ready" | "coming-soon";
 
@@ -69,16 +66,6 @@ export const BLOCK_ASSESSMENTS: BlockAssessmentMeta[] = [
     date: "Thursday 07 / Friday 08 May 2026 (AM)",
     route: "/learner/assessment/block/3",
     units: [
-<<<<<<< Updated upstream
-      "US 14908: Testing IT Systems Against Specifications",
-      "US 14919: Resolve Computer Users' Problems",
-      "US 120379: Work as a Project Team Member",
-    ],
-    totalMarks: 80,
-    status: "coming-soon",
-    ctaLabel: "Coming Soon",
-    paperMarkdown: `# Block 3 Summative Test\n\nThe in-app Block 3 paper is being prepared.\n\n**Included units:**\n- US 14908 — Testing IT Systems Against Specifications\n- US 14919 — Resolve Computer Users' Problems\n- US 120379 — Work as a Project Team Member\n\n> Placeholder only for now.`,
-=======
       "US 14924: Information Systems Analysis",
       "US 14920: Participate in Groups/Teams",
       "US 14918: Describe Principles of Computer Programming",
@@ -98,7 +85,6 @@ export const BLOCK_ASSESSMENTS: BlockAssessmentMeta[] = [
     paperMarkdown: `# Block 3 Unified Group Practical Assessment\n\nThe Block 3 practical guide has been moved to the public docs folder.\n\n- Practical guide: ${BLOCK_3_DOC_BASE}/Block3_Practical_Assessment.md\n- Assessor memorandum: ${BLOCK_3_DOC_BASE}/Block3_Practical_Memorandum.md\n\n**Format:** 7 groups × 3 learners, 4 stations, individual sign-off and reflection.\n\n**Coverage:** Integrated evidence across Block 1–3 unit standards, including teamwork and service supervision outcomes.`,
     paperSourceHref: `${BLOCK_3_DOC_BASE}/Block3_Practical_Assessment.md`,
     memorandumHref: `${BLOCK_3_DOC_BASE}/Block3_Practical_Memorandum.md`,
->>>>>>> Stashed changes
   },
 ];
 
