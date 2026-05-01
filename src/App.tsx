@@ -26,6 +26,9 @@ import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import NotFound from "./pages/NotFound";
 import LearnerRoot from "./learner/pages/LearnerRoot";
+import CatalogPage from "./learner/pages/CatalogPage";
+import MyModulesPage from "./learner/pages/MyModulesPage";
+import LearnerAssessmentsPage from "./learner/pages/AssessmentsPage";
 import PresentationRemotePage from "./pages/PresentationRemotePage";
 import PresentationLaunchPage from "./_lmis/pages/PresentationLaunchPage";
 import PresentationDesktopPage from "./_lmis/pages/PresentationDesktopPage";
@@ -76,6 +79,9 @@ const App = () => (
             <Route element={<ProtectedRoute />}>
               <Route element={<LearnerRoot />}>
                 <Route path="/learner" element={<LearnerPortalPage />} />
+                <Route path="/learner/catalog" element={<CatalogPage />} />
+                <Route path="/learner/modules" element={<MyModulesPage />} />
+                <Route path="/learner/assessments" element={<LearnerAssessmentsPage />} />
                 <Route path="/learner/modules/:id" element={<ModuleDetailPage />} />
                 <Route path="/learner/assessment/block/:blockNum" element={<BlockAssessmentPage />} />
               </Route>
