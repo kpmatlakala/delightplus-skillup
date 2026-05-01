@@ -17,7 +17,7 @@ const rpc = supabase as unknown as {
   rpc: (fn: string, params?: Record<string, unknown>) => Promise<{ data: unknown; error: { message: string } | null }>;
 };
 
-const OTP_SUSPENDED = import.meta.env.DEV || import.meta.env.VITE_SUSPEND_ASSESSMENT_OTP === "true";
+const OTP_SUSPENDED = import.meta.env.VITE_SUSPEND_ASSESSMENT_OTP === "true";
 
 /* ─────────────────────────────────────────────────────────────────────────── */
 export default function BlockAssessmentPage() {
