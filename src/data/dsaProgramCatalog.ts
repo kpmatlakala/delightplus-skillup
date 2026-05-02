@@ -115,7 +115,7 @@ export const dsaProgramCatalog: DsaProgram[] = [
     nqfLevel: 4,
     totalCredits: 60,
     provider: "Beyond Capital (SDP)",
-    status: "Planned",
+    status: "Active",
     scope: "DSA LMS",
   },
   {
