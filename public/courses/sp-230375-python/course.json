@@ -1,0 +1,59 @@
+{
+  "slug": "sp-230375-python",
+  "title": "Occupational Certificate: Python Programmer",
+  "saqaId": "SP-230375",
+  "curriculumCode": "900221-000-00-00",
+  "nqfLevel": 4,
+  "credits": 60,
+  "provider": "Beyond Capital (SDP) — delivered via Data Science Academy",
+  "qctoAligned": true,
+  "modules": [
+    {
+      "code": "KM-01",
+      "title": "Introduction to Python Programming",
+      "nqfLevel": 4,
+      "credits": 2,
+      "topics": [
+        { "code": "KM-01-KT01", "title": "Computers", "weight": 10 },
+        { "code": "KM-01-KT02", "title": "Intro to Python programming", "weight": 10 },
+        { "code": "KM-01-KT03", "title": "Intro to IDE", "weight": 5 },
+        { "code": "KM-01-KT04", "title": "GIT", "weight": 10 },
+        { "code": "KM-01-KT05", "title": "Problem solving in programming", "weight": 10 },
+        { "code": "KM-01-KT06", "title": "Life cycle for developing a solution", "weight": 15 },
+        { "code": "KM-01-KT07", "title": "Python core concepts", "weight": 10 },
+        { "code": "KM-01-KT08", "title": "Python syntax", "weight": 15 },
+        { "code": "KM-01-KT09", "title": "Python variables", "weight": 15 }
+      ]
+    },
+    {
+      "code": "KM-02",
+      "title": "Python Data Types and Structures",
+      "nqfLevel": 4,
+      "credits": 6,
+      "topics": "KT01–KT10 (Strings, Numbers, Floats, Double, Boolean, Lists, Tuples, Dictionaries, Sets, Arrays)"
+    },
+    {
+      "code": "KM-03",
+      "title": "Principles of Programming with Python",
+      "nqfLevel": 4,
+      "credits": 4,
+      "topics": "KT01–KT05 (Decisions, Operators, Functions, Date/Time, Import & I/O)"
+    },
+    {
+      "code": "KM-04",
+      "title": "Intermediate Programming Principles in Python",
+      "nqfLevel": 4,
+      "credits": 6,
+      "topics": "KT01–KT05 (OOP, OOP Fundamentals, Algorithms, File Handling, Exception Handling)"
+    },
+    {
+      "code": "KM-05",
+      "title": "REST API and GUI in Python",
+      "nqfLevel": 4,
+      "credits": 2,
+      "topics": "KT01–KT02 (REST API, GUI Framework)"
+    }
+  ],
+  "coverImage": "/catalog/covers/sp-230375-python.jpg",
+  "lastUpdated": "2026-05-02"
+}

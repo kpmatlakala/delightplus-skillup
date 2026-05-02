@@ -16,3 +16,4 @@ Publish-ready learner material, one folder per course.
 | Slug | Title | Status |
 |---|---|---|
 | `saqa-78965` | FETC: IT Systems Development (NQF 4) | Active demo |
+| `sp-230375-python` | Occupational Certificate: Python Programmer (NQF 4) — Beyond Capital | Planned — awaiting materials |
