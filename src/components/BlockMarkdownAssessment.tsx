@@ -852,30 +852,43 @@ export default function BlockMarkdownAssessment({
             {sectionBQuestions.map((question) => renderQuestionCard(question))}
           </div>
 
-          {sectionB3Questions.length > 0 && blockNum === "1" && (
+          {currentSection.figureSrc && (
             <div className="rounded-lg border border-border bg-muted/20 p-3 space-y-3">
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-wide text-primary">
-                  {currentSection.title.replace("Section ", "")}.B3
-                </p>
-                <p className="text-sm text-foreground mt-1">
-                  Refer to Figure A below. First identify the diagram type, then complete markers 1–4 using the selectors below.
-                </p>
+                {sectionB3Questions.length > 0 && blockNum === "1" ? (
+                  <>
+                    <p className="text-[11px] font-bold uppercase tracking-wide text-primary">
+                      {currentSection.title.replace("Section ", "")}.B3
+                    </p>
+                    <p className="text-sm text-foreground mt-1">
+                      Refer to Figure A below. First identify the diagram type, then complete markers 1–4 using the selectors below.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-[11px] font-bold uppercase tracking-wide text-primary">
+                      {currentSection.title.replace("Section ", "")} — Figure A
+                    </p>
+                    <p className="text-sm text-foreground mt-1">
+                      Refer to Figure A below and answer the questions that follow.
+                    </p>
+                  </>
+                )}
               </div>
 
-              {currentSection.figureSrc && (
-                <div className="rounded-lg border border-border bg-white p-2">
-                  <img
-                    src={currentSection.figureSrc}
-                    alt={currentSection.figureAlt || `${currentSection.title} figure`}
-                    className="mx-auto w-full max-w-3xl rounded-md"
-                  />
+              <div className="rounded-lg border border-border bg-white p-2">
+                <img
+                  src={currentSection.figureSrc}
+                  alt={currentSection.figureAlt || `${currentSection.title} figure`}
+                  className="mx-auto w-full max-w-3xl rounded-md"
+                />
+              </div>
+
+              {sectionB3Questions.length > 0 && blockNum === "1" && (
+                <div className="space-y-3">
+                  {sectionB3Questions.map((question) => renderQuestionCard(question))}
                 </div>
               )}
-
-              <div className="space-y-3">
-                {sectionB3Questions.map((question) => renderQuestionCard(question))}
-              </div>
             </div>
           )}
 

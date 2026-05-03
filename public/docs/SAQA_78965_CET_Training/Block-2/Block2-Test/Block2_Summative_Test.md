@@ -214,7 +214,7 @@ END IF**
 
 ***(3) Display the result.***
 
-| ◼ SET total = 0 ◼ FOR total = 1 TO 5   ◼  INPUT total   ◼  FOR i = 1 TO 5 ◼  PRINT total   ◼  END FOR   ◼ WHILE i < 5   ◼ END WHILE ◼ SET i = total + 1 ◼ OUTPUT i |
+| ◼ SET total = 0 ◼ FOR total = 1 TO 5   ◼  INPUT total   ◼  FOR i = 1 TO 5 ◼  PRINT total   ◼  END FOR   ◼ WHILE i < 5   ◼ END WHILE ◼ SET total = total + 1 ◼ OUTPUT i ◼ OUTPUT total |
 | --- |
 
 | **Line 1 — your answer:** |  |

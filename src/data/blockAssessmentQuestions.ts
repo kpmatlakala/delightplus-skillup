@@ -883,7 +883,16 @@ export const BLOCK_INTERACTIVE_SECTIONS_MAP: Record<string, BlockAssessmentSecti
         {
           id: "b2-s1-a2",
           label: "1A2",
-          prompt: "A programmer writes the pseudocode below. What will it print when score = 72?\n\nIF score ≥ 75 THEN\n  PRINT \"Distinction\"\nELSE IF score ≥ 60 THEN\n  PRINT \"Pass\"\nELSE\n  PRINT \"Fail\"\nEND IF",
+          prompt: `A programmer writes the pseudocode below. What will it print when score = 72? 
+            <pre><code>
+            IF score ≥ 75 THEN
+              PRINT "Distinction"
+            ELSE IF score ≥ 60 THEN
+              PRINT "Pass"
+            ELSE
+              PRINT "Fail"
+            END IF
+            </code></pre>`,
           marks: 2,
           inputType: "radio",
           options: ["A) Distinction", "B) Pass", "C) Fail", "D) Nothing — the code contains an error"],
@@ -966,21 +975,34 @@ export const BLOCK_INTERACTIVE_SECTIONS_MAP: Record<string, BlockAssessmentSecti
         {
           id: "b2-s1-b1",
           label: "1B1",
-          prompt: "Build the pseudocode by selecting the best line in sequence for each step.\n\nThe pseudocode should:\n(1) Loop from 1 to 5\n(2) Add each number to a running total\n(3) Display the result",
+          prompt: `Build the pseudocode by selecting the best line in sequence for each step.
+          <pre>The pseudocode should:
+          (1) Loop from 1 to 5
+          (2) Add each number to a running total
+          (3) Display the result
+          </pre>`,
           marks: 10,
           inputType: "textarea",
           subFields: [
-            { label: "Line 1", inputType: "select", options: ["Select line", "SET total = 0", "FOR total = 1 TO 5", "INPUT total", "FOR i = 1 TO 5", "PRINT total", "END FOR", "WHILE i < 5", "END WHILE", "SET i = total + 1", "OUTPUT i"] },
-            { label: "Line 2", inputType: "select", options: ["Select line", "SET total = 0", "FOR total = 1 TO 5", "INPUT total", "FOR i = 1 TO 5", "PRINT total", "END FOR", "WHILE i < 5", "END WHILE", "SET i = total + 1", "OUTPUT i"] },
-            { label: "Line 3", inputType: "select", options: ["Select line", "SET total = 0", "FOR total = 1 TO 5", "INPUT total", "FOR i = 1 TO 5", "PRINT total", "END FOR", "WHILE i < 5", "END WHILE", "SET i = total + 1", "OUTPUT i"] },
-            { label: "Line 4", inputType: "select", options: ["Select line", "SET total = 0", "FOR total = 1 TO 5", "INPUT total", "FOR i = 1 TO 5", "PRINT total", "END FOR", "WHILE i < 5", "END WHILE", "SET i = total + 1", "OUTPUT i"] },
-            { label: "Line 5", inputType: "select", options: ["Select line", "SET total = 0", "FOR total = 1 TO 5", "INPUT total", "FOR i = 1 TO 5", "PRINT total", "END FOR", "WHILE i < 5", "END WHILE", "SET i = total + 1", "OUTPUT i"] },
+            { label: "Line 1", inputType: "select", options: ["Select line", "SET total = 0", "FOR total = 1 TO 5", "INPUT total", "FOR i = 1 TO 5", "PRINT total", "END FOR", "WHILE i < 5", "END WHILE", "SET total = total + 1", "OUTPUT i", "OUTPUT total"] },
+            { label: "Line 2", inputType: "select", options: ["Select line", "SET total = 0", "FOR total = 1 TO 5", "INPUT total", "FOR i = 1 TO 5", "PRINT total", "END FOR", "WHILE i < 5", "END WHILE", "SET total = total + 1", "OUTPUT i", "OUTPUT total"] },
+            { label: "Line 3", inputType: "select", options: ["Select line", "SET total = 0", "FOR total = 1 TO 5", "INPUT total", "FOR i = 1 TO 5", "PRINT total", "END FOR", "WHILE i < 5", "END WHILE", "SET total = total + 1", "OUTPUT i", "OUTPUT total"] },
+            { label: "Line 4", inputType: "select", options: ["Select line", "SET total = 0", "FOR total = 1 TO 5", "INPUT total", "FOR i = 1 TO 5", "PRINT total", "END FOR", "WHILE i < 5", "END WHILE", "SET total = total + 1", "OUTPUT i", "OUTPUT total"] },
+            { label: "Line 5", inputType: "select", options: ["Select line", "SET total = 0", "FOR total = 1 TO 5", "INPUT total", "FOR i = 1 TO 5", "PRINT total", "END FOR", "WHILE i < 5", "END WHILE", "SET total = total + 1", "OUTPUT i", "OUTPUT total"] },
           ],
         },
         {
           id: "b2-s1-b2",
           label: "1B2",
-          prompt: "Error detection task. (4 marks)\n\nThe pseudocode below is intended to print PASS when average ≥ 50.\n\nIF average > 50 THEN\n  PRINT \"PASS\"\nELSE\n  PRINT \"FAIL\"\nEND IF",
+          prompt: `Error detection task.
+          <pre>The pseudocode below is intended to print PASS when average ≥ 50.
+            <code>
+            IF average > 50 THEN
+              PRINT "PASS"
+            ELSE
+              PRINT "FAIL"
+            END IF
+            </code></pre>`,
           marks: 4,
           inputType: "textarea",
           subFields: [
@@ -1005,7 +1027,7 @@ export const BLOCK_INTERACTIVE_SECTIONS_MAP: Record<string, BlockAssessmentSecti
         {
           id: "b2-s1-b3",
           label: "1B3",
-          prompt: "A student writes a program to calculate totals but gets incorrect results and performs desk-checking. (4 marks)",
+          prompt: "A student writes a program to calculate totals but gets incorrect results and performs desk-checking.",
           marks: 4,
           inputType: "textarea",
           subFields: [
@@ -1036,7 +1058,16 @@ export const BLOCK_INTERACTIVE_SECTIONS_MAP: Record<string, BlockAssessmentSecti
         {
           id: "b2-s1-b4",
           label: "1B4",
-          prompt: "Code tracing and debugging. Study the Python code below: (4 marks)\n\ntotal = 0\nfor i in range(2):   # repeats 2 times\n    total = total + 10\nprint(total)",
+          prompt: `Code tracing and debugging. Study the Python code below: 
+          <pre>
+          <code>
+            total = 0
+            for i in range(2):   # repeats 2 times
+              total = total + 10
+            print(total)
+          </code>
+          The program should add 10 five times.
+          </pre>`,
           marks: 4,
           inputType: "textarea",
           subFields: [
@@ -1063,6 +1094,8 @@ export const BLOCK_INTERACTIVE_SECTIONS_MAP: Record<string, BlockAssessmentSecti
       title: "Section 2 · Module 14933",
       module: "14933 — Create Web Applications Using Scripting",
       totalMarks: 40,
+      figureSrc: "/docs/SAQA_78965_CET_Training/Block-2/Block2-Test/B2-FigA.png",
+      figureAlt: "Figure A — Restaurant Ordering Process",
       questions: [
         {
           id: "b2-s2-a1",
@@ -1303,7 +1336,7 @@ export const BLOCK_INTERACTIVE_SECTIONS_MAP: Record<string, BlockAssessmentSecti
         {
           id: "b2-s2-b5",
           label: "2B5",
-          prompt: "Study Figure A (the restaurant ordering process flowchart) and answer the questions that follow. (6 marks)",
+          prompt: "Study Figure A (the restaurant ordering process) and answer the questions that follow.",
           marks: 6,
           inputType: "textarea",
           subFields: [
@@ -1327,8 +1360,6 @@ export const BLOCK_INTERACTIVE_SECTIONS_MAP: Record<string, BlockAssessmentSecti
       title: "Section 3 · Module 14930",
       module: "14930 — Developing Software for Internet Technologies",
       totalMarks: 20,
-      figureSrc: "/docs/SAQA_78965_CET_Training/Block-2/Block2-Test/B2-FigA.png",
-      figureAlt: "Figure A — Restaurant Ordering Process",
       questions: [
         {
           id: "b2-s3-a1",

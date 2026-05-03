@@ -48,7 +48,7 @@ The pseudocode must loop from 1 to 5, add each number to a running total, and di
 | Line 2 | **FOR i = 1 TO 5** |
 | Line 3 | **SET total = total + i** *(accept `total = total + i`)* |
 | Line 4 | **END FOR** |
-| Line 5 | **OUTPUT i** *(accept `PRINT total`)* |
+| Line 5 | **OUTPUT total** *(accept `PRINT total`)* |
 
 > **Marking:** 2 marks per correct line. Accept logically equivalent alternatives. The key requirement is: initialise total, loop 1–5, accumulate, end loop, output.
 
