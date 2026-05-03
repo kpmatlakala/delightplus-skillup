@@ -1,4 +1,4 @@
-export type Module14908SlideListItem = {
+﻿export type Module14908SlideListItem = {
   slideNumber: number;
   id: string;
   title: string;
@@ -16,95 +16,151 @@ export const module14908SlideList: Module14908SlideListItem[] = [
   {
     slideNumber: 1,
     id: "14908-title",
-    title: "Testing IT Systems Against Specifications",
+    title: "Testing IT Systems Against Given Specifications",
     type: "title",
-    content:
-      "Block 3 dedicated facilitation deck for US 14908.\n" +
-      "Focus: test planning, execution, defect logging, and evidence capture.",
-    notes:
-      "Set the tone: testing is a quality discipline, not just a final checklist. Link this session to learner workbook evidence and quiz preparation.",
+    content: "SAQA 14908  Block 3  Day 11  6 Credits\nThree sessions: Select a test procedure - Apply the test procedure - Collect and record data from tests\nPlus Session 4: Prepare testing to ensure given specifications are addressed",
+    notes: "Opening question: How many of you have used software that crashed or gave a wrong result? What caused it?\n\nTake 3-4 answers. Most errors trace to insufficient or poorly structured testing — not bad code.\n\nTwo fundamental purposes of testing (from the learner guide): (1) verifying that what was specified is what was delivered, and (2) managing risk for both the acquiring agency and the developer.\n\nConnect to Block 2: the programs you built are your test subjects today. If they brought their code, open it. If not, use the class starter file.",
     duration: 5,
-    phaseCards: ["Plan", "Design", "Execute", "Log", "Report"],
+    phaseCards: ["Select", "Apply", "Collect", "Record", "Prepare"],
   },
   {
     slideNumber: 2,
     id: "14908-outcomes",
-    title: "Session Outcomes",
+    title: "Unit Outcomes and Assessment Tasks",
     type: "content",
-    content:
-      "By the end of this session, learners can:\n" +
-      "• Explain core testing levels and purposes\n" +
-      "• Write structured test cases with expected results\n" +
-      "• Record defects with clear reproduction steps\n" +
-      "• Compile testing evidence for workbook and PoE",
-    notes:
-      "Ask learners to identify one testing mistake they have seen before, then map it to one of the outcomes.",
+    content: "People credited with this unit standard are able to:\n• Select an appropriate test procedure for hardware and software\n• Apply the test procedure to hardware and software\n• Collect and record data from tests\n\nPractical assessment tasks (85% competence required in every task):\n• Task 1: Select an appropriate test procedure for the IT systems to be tested\n• Task 2: Apply the test procedure to the IT systems to be tested\n• Task 3: Collect and record data from tests\n• Task 4: Prepare the testing to ensure given specifications are addressed",
+    notes: "Walk through all 3 outcomes and 4 practical tasks.\n\nKey summative questions to prepare for:\n- Activity 1 (5 marks): What is the purpose of testing?\n- Activity 2 (6 marks): Discuss resource types with their allocation process\n- Activity 3 (5 marks): State the types of testing listed in SIT1 and SIT2\n- Activity 5 (8 marks): Discuss the Testing Type Descriptions for SIT1 and SIT2\n\nAsk: Is it possible to test a program completely? (No — you cannot test every possible input combination. This is why structured test procedures exist.)",
     duration: 6,
-    cards: ["Levels", "Test Cases", "Defects", "Evidence"],
+    cards: ["Select", "Apply", "Collect", "Prepare"],
   },
   {
     slideNumber: 3,
-    id: "14908-levels",
-    title: "Testing Levels At A Glance",
+    id: "14908-s1-purpose",
+    title: "Session 1: The Purpose of Testing",
     type: "content",
-    content:
-      "Four common testing levels:\n" +
-      "• Unit testing: one function/component in isolation\n" +
-      "• Integration testing: connected components together\n" +
-      "• System testing: full application behavior\n" +
-      "• Acceptance testing: user validation against requirements",
-    notes:
-      "Keep this practical. Use one learner project and explain which bug each level would detect first.",
-    duration: 7,
-    cards: ["Unit", "Integration", "System", "Acceptance"],
+    content: "Two fundamental purposes of testing (learner guide):\n• Verifying procurement specifications — confirming what was specified is what was delivered\n• Managing risk — for both the acquiring agency and the vendor/developer/integrator\n\nThe testing programme is used to identify when work has been completed so that the contract can be closed, the vendor paid, and the system shifted into warranty and maintenance.\n\nSystem testing: evaluates a complete, integrated system against its specified requirements\n• Falls within black-box testing — no knowledge of internal code required\n• Input: all integrated software components that have passed integration testing",
+    notes: "Summative Activity 1 (5 marks): What is the purpose of testing?\n\nLearners must cover both purposes: verifying specs AND managing risk.\n\nBlack-box vs white-box: black-box tests the system from the outside (what it does); white-box tests the internal logic (how it does it). System testing is black-box.\n\nAsk: Who is responsible for managing risk in a testing programme — the developer or the client? (Both — the testing programme is used to identify when work is completed so the contract can be closed and the system shifted to warranty/maintenance.)\n\nCost of finding bugs late (beyond guide): a bug found in production costs approximately 10x more to fix than one found during development. This is why structured testing early in the lifecycle matters.",
+    duration: 8,
+    cards: ["Verify Specs", "Manage Risk", "System Testing", "Black-Box"],
   },
   {
     slideNumber: 4,
-    id: "14908-testcase-structure",
-    title: "Minimum Test Case Structure",
-    type: "activity",
-    content:
-      "Each test case should include:\n" +
-      "• Test case ID\n" +
-      "• Input / preconditions\n" +
-      "• Expected result\n" +
-      "• Actual result\n" +
-      "• Pass/Fail status",
-    notes:
-      "Run a quick class activity: write one test case together for a login form and identify what makes it verifiable.",
-    duration: 8,
-    cards: ["ID", "Input", "Expected", "Actual", "Result"],
+    id: "14908-s1-hardware-phases",
+    title: "Session 1: The Six Hardware Test Phases",
+    type: "content",
+    content: "The hardware test program has six phases (learner guide):\n• Prototype Testing — electrical, electronic, and operational conformance in early design stages\n• Design Approval Testing (DAT) — final pre-production testing; fully demonstrates conformance to all specifications\n• Factory Acceptance Testing (FAT) — final vendor inspection before shipment; tests functionality, serviceability, performance, and construction\n• Site Testing — pre-installation testing, initial site acceptance, site integration testing; tests for shipping damage and proper installation\n• Burn-In and Observation Period Testing — 30 to 60 day period of operation and monitoring; if it fails, repairs are made and the test resumes\n• Final Acceptance Testing — verification that all purchased units function according to procurement specifications after extended operation",
+    notes: "These six phases come directly from the learner guide — learners must be able to name and describe all six.\n\nDraw the six phases as a horizontal timeline on the whiteboard.\n\nAsk: At which stage would you catch a problem caused by the building's power supply? (Site Testing — you cannot replicate the real environment in a factory.)\n\nBurn-in: the clock may start over at day one after a failure, or it may resume at the day count the device failed.\n\nCET context: when a new computer lab is installed, which stages should the school insist on? (At minimum: Site Testing and Final Acceptance.)\n\nFinal Acceptance requires that all devices be fully operational AND that all deliverables — documentation, training — have been completed.",
+    duration: 10,
+    cards: ["Prototype", "DAT", "FAT", "Site", "Burn-In", "Final Acceptance"],
   },
   {
     slideNumber: 5,
-    id: "14908-defect-log",
-    title: "Defect Log Essentials",
+    id: "14908-s1-software-phases",
+    title: "Session 1: The Software Test Program",
     type: "content",
-    content:
-      "For each defect, capture:\n" +
-      "• Defect ID and severity\n" +
-      "• Steps to reproduce\n" +
-      "• Expected vs actual behavior\n" +
-      "• Module/screen affected\n" +
-      "• Retest status after fix",
-    notes:
-      "Emphasize reproducibility. If another tester cannot reproduce the bug, the report is incomplete.",
-    duration: 7,
-    cards: ["Severity", "Reproduce", "Expected vs Actual", "Retest"],
+    content: "The software test program has three phases (learner guide):\n• Design Reviews — two major reviews: (1) Preliminary Design Review after high-level design documents, (2) Detailed Design Review after detailed design documents\n• Development Testing — prototype testing, unit testing, and software build integration testing; conducted at the developer's facility\n• Site Testing — hardware/software integration testing, subsystem testing, and system testing; completed at the final installation site with communications connectivity to field devices\n\nSafety-critical software systems:\n• A system whose failure may severely harm people's lives, environment, or equipment\n• Examples: patient monitors, nuclear power station control, railway systems, fly-by-wire aviation, NASA space shuttle",
+    notes: "Key distinction: software development testing happens at the developer's facility; site testing happens at the actual installation location.\n\nSafety-critical testing techniques (beyond guide): FMEA (Failure Modes and Effects Analysis), FTA (Fault Tree Analysis), HAZOP (Hazard and Operability Analysis), probabilistic risk assessment, cause-and-effect diagrams.\n\nKey principle from the learner guide: always test software against specifications — not just against what the developer thinks it should do.\n\nAsk: What additional testing techniques are used for safety-critical systems? (FMEA, FTA, HAZOP, probabilistic risk assessment.)\n\nIndependent verification is required for safety-critical systems — the testing cannot be done by the same team that built the system.",
+    duration: 8,
+    cards: ["Design Reviews", "Development Testing", "Site Testing", "Safety-Critical"],
   },
   {
     slideNumber: 6,
+    id: "14908-s1-factors",
+    title: "Session 1: Factors That Affect Test Effort",
+    type: "activity",
+    content: "Factors that affect the choice of test procedure and effort required (learner guide):\n• Documentation quality — detailed test cases require significant effort to produce and maintain\n• Product size — larger products increase project complexity disproportionately; large projects collapse at a higher rate\n• Life cycle model — V-model is fragile under late change; incremental models have high regression testing costs\n• Process maturity — mature processes manage change carefully, reducing execution cost\n• Time pressure — a reason to plan carefully, not to take unwarranted risks\n• People factors — individual skills, team alignment, stability, and trusting relationships\n• Test results quality — good-quality software at the start of test execution prevents delays",
+    notes: "Summative Activity 2 (6 marks): Discuss resource types with their allocation process.\n\nResource types from the learner guide:\n- Module resource: DLL and similar, with attributes such as version and date\n- Data resource: registry and file, with attributes referring to content\n- Storage resource: buffer, memory, disk, with attributes such as size and capacity\n- Semaphore resource: Ethernet and DB record, with attributes such as collision and lock\n\nResource Allocation Process:\n- Projects up to 7 PMs: Free Allocation\n- Projects 8-12 PMs: Intermediate Allocation\n- Projects more than 12 PMs: Full Allocation\n\nPaired exercise: give learners two scenarios — a school attendance system and a hospital patient monitoring system. Ask: Which requires more testing effort and why?",
+    duration: 10,
+    cards: ["Documentation", "Size", "Life Cycle", "Maturity", "Time", "People"],
+  },
+  {
+    slideNumber: 7,
+    id: "14908-s2-approach",
+    title: "Session 2: Test Approach Description — 10 Steps",
+    type: "content",
+    content: "The Test Approach Description (learner guide — 10 steps):\n1. Test all critical business functions at least once\n2. Confirm the key contact list (lead matrix) is updated\n3. Review and update tracking reports\n4. Review the issue management process\n5. Confirm test conditions, cycles, and plans — including security access conditions\n6. Group test conditions by business process; include end-to-end test plans\n7. Confirm the interface listing worksheet — all external interfaces, files received or sent\n8. Confirm critical path business processes are updated\n9. Identify risks that may jeopardise schedule completion\n10. Review with Central Offices; obtain acknowledgment of test plans",
+    notes: "This 10-step approach comes directly from the learner guide's PeopleSoft Upgrade System Testing example — it is the model for any structured test approach.\n\nKey concept: an end-to-end test plan follows a transaction through the ENTIRE system, not just at entry or exit points. This means a transaction is followed throughout the various modules it may touch.\n\nInterface listing worksheet: lists all external interfaces — files received or sent outside the system. This is critical for integration testing.\n\nAsk: What happens if you start testing without agreeing on exit criteria? (You never know when you are done — testing goes on forever or stops too early.)\n\nSecurity access conditions: test conditions should include conditions for testing users' security access — not just functional behaviour.",
+    duration: 10,
+    cards: ["Critical Functions", "Contact List", "Issue Management", "Test Conditions", "End-to-End", "Risk"],
+  },
+  {
+    slideNumber: 8,
+    id: "14908-s2-sit-phases",
+    title: "Session 2: System Integration Testing Phases",
+    type: "content",
+    content: "SIT1 — System Integration Testing Phase 1:\n• Integration, system, user, security, end-to-end, and regression testing\n• Tests all critical (A) conditions and high/medium change (B) conditions\n• Testers: developers, business analysts, help desk, business process owners, end users\n\nSIT2 — System Integration Testing Phase 2:\n• Regression (all failed SIT1 conditions), end-to-end, batch, system, integration, user testing\n• Tests low-priority (B and C) conditions\n\nAdditional phases:\n• Parallel Testing — validates all processes work together for successful payroll runs\n• Load Testing — validates critical functions meet production performance requirements during peak volumes\n• Model Office — end-users log in, perform typical tasks, verify security access; scheduled after hard-freeze\n• Infrastructure/Gateway Testing",
+    notes: "Summative Activity 3 (5 marks): State the types of testing listed in SIT1 and SIT2.\n\nLearners must know the SIT1/SIT2 structure — these are direct assessment questions.\n\nModel Office phase: enables end-users an opportunity to log into the system, perform their typical tasks on the new system, verify their security access, validate their procedures and get comfortable with the new system. Participation is at the discretion of each module.\n\nLoad Testing: validates that critical functions will meet production performance requirements during peak transaction volumes.\n\nAsk: Why is regression testing done as objects are migrated to fix errors? (To ensure that a fix did not cause another portion to break that was previously working.)",
+    duration: 8,
+    cards: ["SIT1", "SIT2", "Parallel", "Load Testing", "Model Office"],
+  },
+  {
+    slideNumber: 9,
+    id: "14908-s2-testing-types",
+    title: "Session 2: The Six Testing Types",
+    type: "content",
+    content: "Testing types performed during SIT1 and SIT2 (learner guide):\n• Integration Testing — finds errors in complete functions and processes within and between units; ensures everything is linked correctly\n• System Testing — validates that system functionality performs as specified by functional requirements\n• End-to-End Testing — validates a transaction through the entire system across all modules it touches; must be coordinated\n• Regression Testing — ensures a fix did not cause another portion to break that was previously working; done as objects are migrated\n• Security Testing — eliminates security accessibility errors\n• User Testing — same focus as integration and system testing, performed by actual users; validates production-readiness and data integrity",
+    notes: "Summative Activity 5 (8 marks): Discuss the Testing Type Descriptions that will be performed during SIT1 and SIT2.\n\nThis is the highest-mark summative question — learners must be able to describe all six types clearly.\n\nUser testing note from the learner guide: there is no separate user testing phase — how users are incorporated varies by module. It is the opportunity for users to validate functionality before the hard freeze.\n\nAsk: Which testing type would catch a bug where a fix for one module broke a different module that was previously working? (Regression testing.)\n\nAsk: Which testing type would catch a security vulnerability where a user can access data they should not see? (Security testing.)",
+    duration: 8,
+    cards: ["Integration", "System", "End-to-End", "Regression", "Security", "User"],
+  },
+  {
+    slideNumber: 10,
+    id: "14908-s2-activity",
+    title: "Activity: Apply the Test Procedure",
+    type: "activity",
+    content: "Practical Task 2 preparation — apply the test procedure:\n\nFor each phase of system testing (from the learner guide):\n1. Execute the test condition\n2. Check the output against the expected results\n3. Evaluate and document any unexpected results — use the testing incidents database\n4. Ensure required corrections are migrated and re-tested\n5. Ensure final testing components are accurate, complete, and documented to be repeatable and reusable\n6. Review and obtain acknowledgment of system test results where appropriate\n\nWorkbook exercise: write a Test Approach Description for the CET Connect portal using the 10-step model",
+    notes: "This activity directly prepares learners for Practical Task 2.\n\nKey principle: test conditions must be documented in such a way to make them repeatable and reusable. A test that cannot be repeated is not a test — it is a one-time check.\n\nFor the CET Connect portal exercise:\n- Critical business functions: learner login, module progress tracking, assessment submission, messaging\n- Interface listing: Supabase RPCs, file upload service, email notifications\n- Critical path: assessment submission must never fail\n\nCollect completed Test Approach Descriptions as PoE artefacts.",
+    duration: 20,
+    cards: ["Execute", "Check Output", "Document", "Re-test", "Repeatable"],
+  },
+  {
+    slideNumber: 11,
+    id: "14908-s3-collect",
+    title: "Session 3: Collecting and Recording Diagnostic Data",
+    type: "content",
+    content: "Using diagnostic data adapters (learner guide):\n• Collect each UI action step in text format\n• Record each UI action for playback\n• Collect system information\n• Collect event log data\n• Collect IntelliTrace data to help isolate non-reproducible bugs\n\nTest settings:\n• Manual runs — configured with diagnostic data adapters per machine role\n• Automated runs — same configuration, automated execution\n\nLab environments:\n• Standard environments — physical computers or virtual machines on any virtualisation framework\n• SCVMM environments — virtual machines managed by System Center Virtual Machine Manager\n• Roles assigned to each machine: Web Server, Desktop Client, Database Server",
+    notes: "The learner guide uses Microsoft Test Manager as the example tool — the principles apply to any test management system.\n\nKey principle: diagnostic data adapters can also CHANGE the behaviour of a test machine — for example, emulating network topology bottlenecks to evaluate performance under constrained conditions.\n\nTest controller and test agents: the test controller runs as a service and assigns tests to a test agent to run. The test controller manages the test agents registered to it.\n\nAsk: Why is it important to collect event log data during testing? (Logs capture what happened before, during, and after a failure — without logs, non-reproducible bugs cannot be isolated.)\n\nFor distributed applications: define a role for each computer — Web Server, Database Server, Desktop Client. Each role collects the data relevant to its function.",
+    duration: 8,
+    cards: ["UI Actions", "System Info", "Event Logs", "IntelliTrace", "Lab Environments"],
+  },
+  {
+    slideNumber: 12,
+    id: "14908-s3-test-case",
+    title: "Session 3: Test Case Anatomy and Defect Logging",
+    type: "content",
+    content: "Test case anatomy (beyond guide — industry standard):\n• Test Case ID — unique reference\n• Preconditions — what state the system must be in before the test\n• Steps to execute — numbered, specific actions\n• Expected result — specific and measurable; written BEFORE execution\n• Actual result — recorded DURING execution\n• Pass / Fail status\n\nDefect log essentials:\n• Defect ID and severity: Critical (system crash/data loss), High (major feature broken, no workaround), Medium (feature broken, workaround exists), Low (cosmetic issue)\n• Steps to reproduce — another tester must be able to repeat it\n• Expected vs actual behaviour\n• Module or screen affected\n• Retest status after the fix is applied",
+    notes: "This content goes beyond the learner guide but is essential for the practical assessment tasks.\n\nKey message: a test case is NOT just run the program and see what happens. It has a documented expected result written BEFORE execution. This forces the tester to think about what correct behaviour looks like.\n\nReproducibility: if another tester cannot reproduce the bug, the report is incomplete. The most common reason for a bug being closed as cannot reproduce is insufficient steps to reproduce.\n\nSeverity guide:\n- Critical: system crashes or data is lost\n- High: major feature broken, no workaround\n- Medium: feature broken but workaround exists\n- Low: cosmetic issue, minor inconvenience\n\nAsk: Who decides the severity — the tester or the developer? (The tester assigns initial severity; the project manager may adjust based on business impact.)",
+    duration: 8,
+    cards: ["Test Case ID", "Preconditions", "Expected Result", "Severity", "Reproducibility"],
+  },
+  {
+    slideNumber: 13,
+    id: "14908-s4-prepare",
+    title: "Session 4: Preparing Tests Against Specifications",
+    type: "content",
+    content: "Planning and preparation for System Integration Testing (learner guide — three categories):\n• Testing Hierarchy — build from simple to complex; from utility systems to end-user systems. Initiating a test at system level when components are not ready can be disastrous.\n• Climate/Environmental Interactions — systems must function over the entire range of conditions encountered. Testing plan must consider the commissioning schedule vs seasons; plan for deferred testing where necessary.\n• Operating Environment — compressed schedules and phased occupancy force phased start-ups of partially complete systems. The test plan must include contingencies for operating facilities without disrupting operations.\n\nTest Documentation: the complete suite of artefacts describing test planning, design, execution, results, and conclusions. Testing typically consumes 30-50% of project effort.",
+    notes: "Session 4 learning outcomes from the learner guide:\n- The preparation ensures a plan is prepared for the testing in line with the given specifications\n- The preparation ensures the plan specifies what needs to be tested\n- The preparation documents the test scenarios and test data to be used\n- The preparation documents the outcomes expected for each scenario\n\nKey message: testing represents a project within a project. Testing activities must be fully documented to support resource allocation, monitoring, and control.\n\nTest documentation tree: tests must be planned and documented to ensure that test coverage is systematic and complete.\n\nAsk: Why is it important to document expected outcomes BEFORE running the tests? (To prevent confirmation bias — if you write the expected result after seeing the actual result, you will always pass the test.)",
+    duration: 8,
+    cards: ["Testing Hierarchy", "Environment", "Operating Conditions", "Test Documentation"],
+  },
+  {
+    slideNumber: 14,
+    id: "14908-assessment-prep",
+    title: "Summative Assessment: What to Expect",
+    type: "content",
+    content: "Summative assessment questions (from the assessment pack):\n• Activity 1 (5 marks): What is the purpose of testing?\n• Activity 2 (6 marks): Discuss resource types with their allocation process\n• Activity 3 (5 marks): State the types of testing listed in SIT1 and SIT2\n• Activity 5 (8 marks): Discuss the Testing Type Descriptions for SIT1 and SIT2\n\nAssessment methods: written and/or verbal questioning + product sample + on-site assessment",
+    notes: "These are the exact questions from the summative assessment pack.\n\nRapid-fire verbal prep:\n1. Name the two fundamental purposes of testing. (Verify specs; manage risk.)\n2. Name the six hardware test phases in order. (Prototype, DAT, FAT, Site, Burn-In, Final Acceptance.)\n3. What does SIT stand for? (System Integration Testing.)\n4. Name three testing types performed in SIT1. (Integration, System, End-to-End, Regression, Security, User — any three.)\n5. What are the four resource types? (Module, Data, Storage, Semaphore.)\n6. What is the Resource Allocation Process for a project of 10 person-months? (Intermediate Allocation.)\n\nRemind learners: both formative workbook and summative assessments are retained as part of the PoE.",
+    duration: 8,
+    cards: ["Purpose", "Resources", "SIT Types", "Testing Descriptions"],
+  },
+  {
+    slideNumber: 15,
     id: "14908-summary",
-    title: "Wrap-Up And Evidence Checklist",
+    title: "Wrap-Up and Evidence Checklist",
     type: "summary",
-    content:
-      "Before closing the session, confirm:\n" +
-      "• Workbook testing activities are completed\n" +
-      "• At least one full test case set is captured\n" +
-      "• Defect log entries are clear and traceable\n" +
-      "• Learners are ready for the Block 3 knowledge quiz",
-    notes:
-      "Close by reminding learners that testing evidence and quiz performance are the two core completion signals for this block flow.",
-    duration: 5,
+    content: "Before closing the session, confirm:\n• Learners can name and describe all six hardware test phases\n• Learners can describe the three software test phases\n• Learners can describe the 10-step Test Approach Description\n• Learners can name and describe all six testing types (SIT1/SIT2)\n• Learners can explain how diagnostic data is collected and recorded\n• Learners can describe the three categories of test preparation\n• Workbook activities are complete and signed off as PoE artefacts",
+    notes: "Closing question: If you had to test the CET Connect portal right now, which of the six testing types would you start with and why?\n\nReminders:\n- Workbook activities are PoE artefacts — collect them now\n- Tomorrow: Resolve Computer Users' Problems (Day 12)\n- Day 13 is the final day — come prepared with all workbook activities complete\n- Block 3 assessment OTP will be provided — submit via the portal.",
+    duration: 7,
   },
 ];
+

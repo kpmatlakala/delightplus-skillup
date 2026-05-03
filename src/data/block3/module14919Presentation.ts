@@ -1,4 +1,4 @@
-export type Module14919SlideListItem = {
+﻿export type Module14919SlideListItem = {
   slideNumber: number;
   id: string;
   title: string;
@@ -18,93 +18,149 @@ export const module14919SlideList: Module14919SlideListItem[] = [
     id: "14919-title",
     title: "Resolve Computer Users' Problems",
     type: "title",
-    content:
-      "Block 3 dedicated facilitation deck for US 14919.\n" +
-      "Focus: structured troubleshooting and user communication.",
-    notes:
-      "Frame support as a methodical process: ask, isolate, resolve, verify, document.",
+    content: "SAQA 14919  Block 3  Day 12  5 Credits\nSessions: Receive problems - Investigate problems - Implement solutions - Close resolved problems - Forward unresolved problems",
+    notes: "Opening: When a user phones IT and says the computer is broken, what is the actual problem?\n\nTake 3-4 answers. The answer is almost never the computer itself.\n\nKey message from the learner guide: It is always better to focus on solutions rather than on problems. Sometimes you cannot find the right solution unless you spend time making sure you understand the problem.\n\nWrite the lifecycle on the board and keep it there all day: Receive - Investigate - Implement - Close - Forward.",
     duration: 5,
-    phaseCards: ["Ask", "Isolate", "Fix", "Verify", "Document"],
+    phaseCards: ["Receive", "Investigate", "Implement", "Close", "Forward"],
   },
   {
     slideNumber: 2,
     id: "14919-outcomes",
-    title: "Session Outcomes",
+    title: "Unit Outcomes and Assessment Tasks",
     type: "content",
-    content:
-      "By the end of this session, learners can:\n" +
-      "• Diagnose common user support issues logically\n" +
-      "• Apply top-down and bottom-up troubleshooting\n" +
-      "• Communicate fixes in plain language\n" +
-      "• Capture resolution notes for workbook evidence",
-    notes:
-      "Use one real scenario from your lab environment to anchor the outcomes.",
+    content: "People credited with this unit standard are able to:\n• Receive computer user's problems\n• Investigate computer user's problems\n• Implement solutions to computer user's problems\n• Close resolved computer user's problems\n• Forward unresolved problems to the appropriate area\n\nPractical tasks (85% competence required in every task):\n• Task 1: Investigate computer user's problems\n• Task 2: Implement solutions\n• Task 3: Close resolved problems\n• Task 4: Forward unresolved problems",
+    notes: "Walk through all 5 outcomes and 4 practical tasks.\n\nSummative questions to prepare for:\n- Activity 1: Name three attributes that define a problem\n- Activity 2: Why is it important to identify the type of problem?\n- Activity 3: What is required before you attempt to solve a problem?\n- Activity 4: Draw step 1b of the conceptual model\n- Activity 5: Illustrate the third step of solving a problem (diagram)\n- Activity 6: Outline the types of computer problems that require troubleshooting\n- Activity 7: Name and define three possible solutions\n- Activity 8: Discuss how to trail and monitor solutions for effectiveness\n\nNote: receiving is the entry point but the assessed competence starts at investigation.",
     duration: 6,
-    cards: ["Diagnosis", "Method", "Communication", "Evidence"],
+    cards: ["Receive", "Investigate", "Implement", "Close", "Forward"],
   },
   {
     slideNumber: 3,
-    id: "14919-workflow",
-    title: "Troubleshooting Workflow",
+    id: "14919-s1-attributes",
+    title: "Session 1: Three Attributes of Every Problem",
     type: "content",
-    content:
-      "Recommended workflow:\n" +
-      "• Ask clarifying questions\n" +
-      "• Reproduce the issue\n" +
-      "• Isolate root cause candidates\n" +
-      "• Implement and test a fix\n" +
-      "• Confirm with the user and document",
-    notes:
-      "Stress that skipping user verification causes repeat tickets.",
-    duration: 7,
-    cards: ["Ask", "Reproduce", "Isolate", "Fix", "Confirm"],
+    content: "Every problem has three attributes (learner guide):\n• Problem type — what kind of problem is it? Space, time, resource, access, performance?\n• Problem parameters — the fixed limits that control how you can solve it\n• Possible causes — where did the problem come from?\n\nWhy identify the type first?\nIf you do not know what type of problem you need to solve, you cannot solve it.\n\nInformation collected must meet the problem requirements — it must actually help you solve the problem, not just be related to it.",
+    notes: "Summative Activity 1: Name three attributes that define a problem. (Type, parameters, possible causes.)\nSummative Activity 2: Why is it important to identify the type of problem?\n\nUse the learner guide example: a company moving offices needs to store 20 new computers for one week. Problem type = space and time. Parameters = what the company will do. Possible causes = the boardroom table is still in the only available space.\n\nKey message: Slow is not a problem definition. The system takes 45 seconds to open a spreadsheet that used to open in 3 seconds IS a problem definition.\n\nAsk: What is the difference between a problem type and a possible cause? (Type = what kind; cause = why it happened.)",
+    duration: 8,
+    cards: ["Problem Type", "Parameters", "Possible Causes", "Information"],
   },
   {
     slideNumber: 4,
-    id: "14919-methods",
-    title: "Top-Down vs Bottom-Up",
-    type: "activity",
-    content:
-      "Compare troubleshooting approaches:\n" +
-      "• Top-Down: start at application/user layer\n" +
-      "• Bottom-Up: start at hardware/network layer\n" +
-      "• Choose based on symptoms and available evidence\n" +
-      "• Record why your team chose the method",
-    notes:
-      "Run a mini exercise: 'Cannot print' and 'Cannot login'. Ask which method is more efficient for each case and why.",
+    id: "14919-s1-model",
+    title: "Session 1: The Conceptual Problem-Solving Model",
+    type: "content",
+    content: "The conceptual model for solving a problem:\n• Step 1: Define the problem — identify type, parameters, and possible causes\n• Step 1b: Collect information that meets the problem requirements\n• Step 2: Determine a course of action — form ideas about what you will do (do not act yet)\n• Step 3: Evaluate solutions — most problems have more than one possible solution\n\nRequest received must:\n• Identify the user and their terms of support\n• Record sufficient information to begin an investigation\n• Employ personal communication techniques so users feel the problem will be resolved\n• Assign a timeframe and priority according to the support agreement",
+    notes: "Summative Activity 3: What is required before you attempt to solve a problem? (Collect information that meets the problem requirements.)\nSummative Activity 4: Draw step 1b of the conceptual model.\nSummative Activity 5: Illustrate the third step of solving a problem (diagram).\n\nStep 1b diagram: Problem -> Collect Information -> Does information meet requirements? -> Yes: proceed to Step 2 / No: collect more information.\n\nStep 3 diagram: List possible solutions -> Evaluate each against criteria -> Select best solution.\n\nPriority assignment: the support agreement defines response times. A critical system failure has a different priority than a cosmetic display issue.",
     duration: 8,
-    cards: ["Top-Down", "Bottom-Up", "Symptoms", "Evidence"],
+    cards: ["Define", "Collect Info", "Course of Action", "Evaluate Solutions"],
   },
   {
     slideNumber: 5,
-    id: "14919-resolution-note",
-    title: "Resolution Note Template",
+    id: "14919-s1-common-problems",
+    title: "Session 1: Common Computer Problems",
     type: "content",
-    content:
-      "Every resolved issue should include:\n" +
-      "• Ticket/problem summary\n" +
-      "• Root cause found\n" +
-      "• Action taken\n" +
-      "• User confirmation status\n" +
-      "• Follow-up recommendation",
-    notes:
-      "Good documentation improves handovers, audits, and learner portfolio quality.",
-    duration: 7,
-    cards: ["Summary", "Root Cause", "Fix", "Confirmation", "Follow-up"],
+    content: "Common PC problems from the learner guide:\n• Insufficient Memory — RAM shortage causes software crashes and slowdowns\n• Adware — mysterious pop-ups and banner ads; annoying but generally easy to remove\n• Slowdown — fragmented hard drive or overtaxed CPU; video out of sync, long load times\n• Weird Noises — pending mechanical failure or loose part\n• Failing Power Supply — sudden shutdowns or difficulty starting\n• Overheating — insufficient cooling; components burn out; fire hazard in extreme cases\n• Bad Hard Drive Sectors — data corruption throughout the system\n• Rootkits — remote control of victim computer; implicates user in attacker's crimes\n• Spyware — keystroke logging; banking records and passwords stolen; identity theft\n• Viruses — spread through network; no computer is truly immune",
+    notes: "Summative Activity 6: Outline the types of computer problems that require troubleshooting.\nSummative Activity 7: Name and define three possible solutions to the above mentioned computer problems.\n\nAsk: Which of these problems is most likely to affect a CET computer lab? (Adware and slowdown are most common in shared lab environments; overheating is common in poorly ventilated labs.)\n\nViruses: an infected computer is a danger to itself and every computer on its network. This is why antivirus software and network segmentation matter.\n\nRootkits are the most dangerous — they give an attacker complete control and the computer becomes a tool to attack others.",
+    duration: 8,
+    cards: ["Memory", "Adware", "Slowdown", "Power Supply", "Overheating", "Security"],
   },
   {
     slideNumber: 6,
+    id: "14919-s2-categories",
+    title: "Session 2: Five Categories of User Support Problems",
+    type: "content",
+    content: "User support problems fall into five categories (learner guide):\n• Hardware failure — failed component, unplugged cable, router or modem needing restart\n• Software issue — OS problem, Windows update, application update, software bug\n• User-created problem — user inadvertently disabled, changed, or deleted something\n• Training or documentation — no real problem; lack of knowledge or outdated documentation\n• Outside vendor issue — custom software or supported hardware experiencing issues\n\nIf a problem has two underlying reasons, fix in order:\nHardware first, then software (drivers), then user issues (configuration), then training",
+    notes: "Key message from the learner guide: try to identify which category the problem falls into as quickly as possible.\n\nGroup activity: give learners 5 scenarios and ask them to classify each. Debrief: classification determines who fixes it and how urgently.\n\nOutside vendor issues: the support obligation usually ends at the device itself. But always make yourself available to assist — approach it as a joint problem, not your problem to fix.\n\nTraining/documentation category is often overlooked. Sometimes there is no real problem — the user just does not know how to do something. In this case, training is the solution, not a technical fix.",
+    duration: 8,
+    cards: ["Hardware", "Software", "User-Created", "Training", "Vendor"],
+  },
+  {
+    slideNumber: 7,
+    id: "14919-s2-troubleshoot",
+    title: "Session 2: Troubleshooting Steps",
+    type: "content",
+    content: "Troubleshooting steps from the learner guide:\n• Reboot — try before calling support; but frequent reboots may indicate a deeper problem\n• Replicate the problem — make it happen again; experience it yourself\n• Retrace user steps — what changed? What was installed or uninstalled?\n• Device Manager — quick overview of hardware status; look for yellow or red warning tags\n• Error logs — reveal source and frequency of a problem\n• Isolate the problem — is it unique to one computer or affecting multiple users?\n• Seek obvious solutions — unplugged cords and cables are often the cause",
+    notes: "The learner guide example: a reported hard drive failure was actually a floppy disk left in the drive with the BIOS set to boot from floppy first. The obvious solution was the hardest to see.\n\nKey message: there is no one right way to troubleshoot all computer problems, and none of these steps are necessarily in any correct order.\n\nIsolating the problem is critical: is it one machine or many? If many machines are affected, the problem is likely at the network or server level, not the individual workstation.\n\nAsk: What is the difference between isolating a problem and replicating it? (Replicating = making it happen again; isolating = determining whether it affects one machine or many.)",
+    duration: 8,
+    cards: ["Reboot", "Replicate", "Retrace", "Device Manager", "Error Logs", "Isolate"],
+  },
+  {
+    slideNumber: 8,
+    id: "14919-s2-techniques",
+    title: "Session 2: Three Problem-Solving Techniques",
+    type: "content",
+    content: "Three problem-solving techniques from the learner guide:\n• Compare to previous problems — use information gathered about similar problems solved before. Example: monitor display fixed by accessing the menu buttons; same technique applied to a different monitor problem later.\n• Troubleshooting — eliminate all possible causes until you are left with the actual cause. Must be very methodical.\n• Seek expert help — internet, software manufacturers, hardware manufacturers, computer shops. Knowing when to ask for help is a professional skill.\n\nModern additions:\n• Knowledge base — documented solutions for reuse; connects to standardisation\n• Remote support tools — diagnose and fix without physical access",
+    notes: "The learner guide uses a baby-sitting analogy for seeking expert help: you do not know much about babies, the baby starts crying, you phone your mother for advice. She tells you the baby is probably hungry. You give the baby a bottle and she stops crying. You sought expert help to solve the problem.\n\nKnowledge base: every time you solve a new problem, document the solution. The next time the same problem occurs, you or a colleague can resolve it faster. This is the foundation of IT service management.\n\nAsk: Where do you find expert help about computer problems? (Internet, software manufacturers, hardware manufacturers, computer shops — from the learner guide.)",
+    duration: 7,
+    cards: ["Compare Previous", "Troubleshoot", "Expert Help", "Knowledge Base"],
+  },
+  {
+    slideNumber: 9,
+    id: "14919-s3-implement",
+    title: "Session 3: Implementing Solutions",
+    type: "content",
+    content: "Implementation learning outcomes:\n• Ensure the user's system is returned as soon as possible\n• Use reference data sources to identify known solutions to known problems\n• Design solutions for any new problems identified\n• Record the action taken in sufficient detail to allow it to be repeated\n• Monitor progress so users may be advised according to their support agreement\n\nWhat makes a solution effective?\nA solution that does not last is not effective. To be effective, a solution needs to solve the problem properly — not just make the symptom disappear temporarily.",
+    notes: "Summative Activity 8: Discuss how to trail and monitor solutions for effectiveness.\n\nTrail and monitor: after implementing a fix, follow up with the user. The learner guide example: a mouse roller was cleaned but the problem recurred after two weeks. The real cause was a faulty cable. If the technician had followed up after one week, the real problem would have been found sooner.\n\nRecording actions: record in sufficient detail to allow the action to be REPEATED. This is the standard for documentation quality.\n\nAsk: What is the difference between fixing a symptom and fixing a problem? (Fixing a symptom makes the visible issue go away temporarily; fixing the problem removes the root cause permanently.)",
+    duration: 8,
+    cards: ["Return System", "Known Solutions", "Record Actions", "Monitor Progress"],
+  },
+  {
+    slideNumber: 10,
+    id: "14919-s3-review",
+    title: "Session 3: Review, Modify, and Standardise Solutions",
+    type: "activity",
+    content: "Three steps after implementing a solution:\n• Review — evaluate the solution against the original problem definition. Does it achieve what you wanted? Ask: do the tidy cupboards save me time in the mornings?\n• Modify — if the solution is not working as expected, change it. Example: socks on a high shelf moved to a lower shelf.\n• Standardise — when a solution works best, use it for all problems of that type. Example: supermarket egg boxes — a standardised solution to a recurring breakage problem.\n\nConsulting stakeholders:\nInvolve everyone who needs to be involved. A group project where one person finishes early but the group needs more time — coordination matters.",
+    notes: "These three concepts come directly from the learner guide.\n\nStandardisation quote from the guide: When you standardise a solution to a problem, you are saying: This way of solving a problem works the best. So I am going to use it to solve all problems of this type.\n\nPaired exercise: draft a support ticket record for one of the scenarios from Session 2. The record must include: original problem, symptoms, when reported, troubleshooting steps, whether fixed or forwarded, when returned to user, what was done.\n\nPeer review: swap with another pair and check for completeness. Can they understand exactly what happened without asking any questions? If not, the documentation is incomplete.",
+    duration: 10,
+    cards: ["Review", "Modify", "Standardise", "Consult Stakeholders"],
+  },
+  {
+    slideNumber: 11,
+    id: "14919-s4-close",
+    title: "Session 4: Closing Resolved Problems",
+    type: "content",
+    content: "Reporting a resolution to the user:\n• Tell the user exactly what you did to repair the computer\n• Mention which parts were replaced and which were repaired or serviced\n• Explain how what you did has solved the problem\n\nRecording to organisation standards — the record must show:\n• What the original problem was\n• An explanation of the symptoms\n• When the user first reported the problem\n• All troubleshooting steps taken\n• Whether fixed or forwarded to technical support\n• When reported back to the user and when the computer was returned\n• What was done to fix it",
+    notes: "The learner guide uses the car workshop analogy: the job card records everything done to the car. The customer signs it and the repair is closed. The same principle applies to IT support.\n\nClosure learning outcomes: presents a report on the resolution to the user so they may judge it was satisfactorily resolved; records resolution according to organisation standards and procedures.\n\nAsk: What happens if you close a ticket without recording the resolution? (The next person who sees the same issue has to start from scratch. The same problem recurs and takes the same time to fix.)\n\nRole-play: facilitator plays the user receiving the resolution report. Learner must explain what was done in plain language — no jargon.",
+    duration: 8,
+    cards: ["Report to User", "Original Problem", "Symptoms", "Steps Taken", "Return Date"],
+  },
+  {
+    slideNumber: 12,
+    id: "14919-s5-forward",
+    title: "Session 5: Forwarding Unresolved Problems",
+    type: "content",
+    content: "When to forward an unresolved problem:\n• Problem exceeds your technical knowledge or access level\n• Resolution time is approaching the SLA deadline\n• The fix requires specialist tools or higher-level access\n• The problem affects multiple users or critical systems\n\nForwarding requirements (learner guide):\n• Find out who can fix it before phoning the user\n• Contact that person first; arrange for the computer to be looked at as soon as possible\n• Give the user as much information as possible when you phone them\n• If you cannot fix within the support agreement timeframe, provide a temporary computer\n• Advise third parties of progress according to the user's support agreement\n• Record additional information on unresolved problems",
+    notes: "The learner guide uses a car workshop analogy: the workshop cannot fix the damaged seat because they lack the equipment. The workshop manager phones to say they are looking for another place. The customer is unhappy but satisfied that the manager is doing everything possible.\n\nContrast: if the workshop told the customer to collect the car and find a place themselves, the customer would be very unhappy. The way you report unresolved problems is very important.\n\nKey message: forwarding is a professional skill — not a failure. Knowing your limits protects the user and the organisation.\n\nAsk: What information must you give the next-level support when you forward a problem? (Everything you have already tried — so they do not repeat your steps and waste time.)",
+    duration: 8,
+    cards: ["When to Forward", "Find Who Can Fix", "Temporary Computer", "Advise Third Parties"],
+  },
+  {
+    slideNumber: 13,
+    id: "14919-activity-roleplay",
+    title: "Activity: Full Support Lifecycle Role-Play",
+    type: "activity",
+    content: "Role-play the complete support lifecycle:\nReceive - Investigate - Implement - Close (or Forward)\n\nScenarios:\n• I cannot send emails — network, email client, or account issue?\n• The program is running slowly — RAM, CPU, storage, or background processes?\n• My document disappeared — save, sync, or deleted?\n• I can see the Wi-Fi but cannot connect — password, DNS, or firewall?\n\nRules:\n• No guessing — every action must be based on confirmed information\n• Class evaluates: clarifying questions, clear communication, documentation\n• After each round: complete a full resolution record",
+    notes: "Setup: one learner plays the user, one plays the support agent. The support agent faces away from the projector — must gather info only through questions.\n\nRun at least 3 rounds with different agents. Rotate.\n\nDebrief: What is the most common mistake we saw? (Assuming they know the problem. Always listen first.)\n\nCollect role-play documentation as PoE artefacts — these are the practical assessment evidence.\n\nSLA tiers for context (beyond guide): P1 = critical, 1-hour response; P2 = high, 4-hour response; P3 = medium, 8-hour response; P4 = low, next business day. Knowing the priority determines how urgently you act.",
+    duration: 25,
+    cards: ["Receive", "Investigate", "Implement", "Close", "Document"],
+  },
+  {
+    slideNumber: 14,
+    id: "14919-assessment-prep",
+    title: "Summative Assessment: What to Expect",
+    type: "content",
+    content: "Summative assessment questions (from the assessment pack):\n• Activity 1: Name three attributes that define a problem\n• Activity 2: Why is it important to identify the type of problem?\n• Activity 3: What is required before you attempt to solve a problem?\n• Activity 4: Draw step 1b of the conceptual model to solve a problem\n• Activity 5: With the help of a diagram, illustrate the third step of solving a problem\n• Activity 6: Outline the types of computer problems that require troubleshooting\n• Activity 7: Name and define three possible solutions to the above mentioned problems\n• Activity 8: Briefly discuss how to trail and monitor solutions for effectiveness",
+    notes: "These are the exact questions from the summative assessment pack.\n\nRapid-fire verbal prep:\n1. Name the three attributes that define a problem. (Type, parameters, possible causes.)\n2. Name the five categories of user support problems. (Hardware, software, user-created, training/docs, vendor.)\n3. What is the difference between reviewing and modifying a solution? (Review = evaluate; modify = change if not working as expected.)\n4. What must a resolution record include? (Original problem, symptoms, when reported, steps taken, fixed or forwarded, return date.)\n5. What is standardising a solution? (Using the same solution for all problems of that type because it works best.)\n\nRemind learners: both formative workbook and summative assessments are retained as part of the PoE.",
+    duration: 8,
+    cards: ["Attributes", "Categories", "Conceptual Model", "Trail and Monitor"],
+  },
+  {
+    slideNumber: 15,
     id: "14919-summary",
-    title: "Wrap-Up And Evidence Checklist",
+    title: "Wrap-Up and Evidence Checklist",
     type: "summary",
-    content:
-      "Before closing the session, confirm:\n" +
-      "• Workbook troubleshooting tasks are complete\n" +
-      "• At least one documented resolution note exists\n" +
-      "• Learners can explain their diagnostic steps\n" +
-      "• Learners are ready for the Block 3 knowledge quiz",
-    notes:
-      "Reinforce: clear troubleshooting logic plus clear communication is the main competency target.",
-    duration: 5,
+    content: "Before closing the session, confirm:\n• Learners can name the three attributes that define a problem\n• Learners can classify problems into the five categories\n• Learners can describe the troubleshooting steps from the learner guide\n• Learners can explain how to trail, review, modify, and standardise solutions\n• Resolution records are complete and signed off\n• Role-play documentation is collected as PoE evidence\n• Workbook activities 1-8 are complete",
+    notes: "Closing question: Which of the five support lifecycle steps do most IT people skip? (Close and Document — and that is why the same problem recurs.)\n\nReminders:\n- Tomorrow is Day 13 — final day, last unit, CELEBRATION\n- Ensure ALL workbook activities are complete before the Block 3 assessment\n- Block 3 assessment OTP will be provided — submit via the portal.",
+    duration: 7,
   },
 ];
+

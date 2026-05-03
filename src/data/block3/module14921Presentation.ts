@@ -1,4 +1,4 @@
-export type Module14921SlideListItem = {
+﻿export type Module14921SlideListItem = {
   slideNumber: number;
   id: string;
   title: string;
@@ -18,107 +18,149 @@ export const module14921SlideList: Module14921SlideListItem[] = [
     id: "14921-title",
     title: "Types of Computer Systems and Hardware Configurations",
     type: "title",
-    content:
-      "Block 3 dedicated facilitation deck for US 14921.\n" +
-      "Focus: system types, hardware selection, and fit-for-purpose configurations.",
-    notes:
-      "Open with context: this unit is about making justified configuration decisions, not memorizing parts lists.",
+    content: "SAQA 14921  Block 3  Day 13  6 Credits\nTwo sessions: Describe past, present and future hardware configurations - Describe categories of computer system applications",
+    notes: "Icebreaker: Match real workplace roles to likely computer system types. Give learners 2 minutes to pair: teacher, graphic designer, warehouse manager, field technician, data centre administrator.\n\nTake answers and discuss — there is no single right answer, which is the point. Context determines the right system.\n\nUnit purpose from the learner guide: provide conceptual knowledge for those working in, or entering, the area of Information Systems and Technology Management.\n\nKey message: by the end of today, you will be able to describe any computer system type and any application category — and justify your classification.",
     duration: 5,
-    phaseCards: ["Need", "System Type", "Components", "Validation", "Recommendation"],
+    phaseCards: ["Standalone", "Networked", "Midrange", "Client-Server", "Applications"],
   },
   {
     slideNumber: 2,
     id: "14921-outcomes",
-    title: "Session Outcomes",
+    title: "Unit Outcomes and Assessment Tasks",
     type: "content",
-    content:
-      "By the end of this session, learners can:\n" +
-      "• Differentiate common computer system types by use case\n" +
-      "• Explain the role of key hardware components\n" +
-      "• Match user requirements to suitable configurations\n" +
-      "• Justify hardware choices with compatibility and support in mind",
-    notes:
-      "Connect these outcomes to the learner guide sections before moving into examples.",
+    content: "People credited with this unit standard are able to:\n• Describe past, present and future computer hardware configurations\n• Describe categories of computer system applications\n\nPractical assessment tasks (85% competence required in every task):\n• Task 1: Identify and describe hardware configurations\n  Range: standalone and networked PCs, mid-range, mainframes, client-server, emerging systems (at least 3)\n• Task 2: Identify and describe application categories\n  Range: batch, interactive, real-time, process control, scientific, education, home (at least 3)",
+    notes: "Walk through both outcomes and both practical tasks.\n\nThe practical assessment range is explicit — learners must cover AT LEAST 3 from each range list. Encourage them to cover all.\n\nSummative assessment tasks:\n- Task 1: Demonstrate knowledge of computer configurations and hardware\n- Task 2: Illustrate advantages and disadvantages of network vs standalone\n- Task 3: Demonstrate knowledge of single processor and multiprocessor\n- Task 4: Distinguish batch processing and interactive processing\n- Task 5 (3 marks): Complete the summary table — Batch / Interactive / Real-Time\n\nBenchmark: 85% competence required in every practical task.",
     duration: 6,
-    cards: ["System Types", "Core Components", "User Needs", "Justified Selection"],
+    cards: ["Hardware Configs", "Application Categories", "Practical Task 1", "Practical Task 2"],
   },
   {
     slideNumber: 3,
-    id: "14921-guide-mapping",
-    title: "Learner Guide Focus Areas",
+    id: "14921-s1-configuration",
+    title: "Session 1: What is a Computer Configuration?",
     type: "content",
-    content:
-      "Use the learner guide to structure concept delivery:\n" +
-      "• Desktop, laptop, server, mobile, and embedded contexts\n" +
-      "• CPU, RAM, storage, motherboard, PSU, and peripherals\n" +
-      "• Fit-for-purpose hardware recommendations\n" +
-      "• Upgrade and compatibility considerations",
-    notes:
-      "As each topic is introduced, ask learners for one real environment where that system type is appropriate.",
-    duration: 7,
-    cards: ["System Types", "Hardware Roles", "Use Cases", "Compatibility"],
+    content: "Computer configuration (learner guide definition):\nAn arrangement of functional units according to their nature, number, and chief characteristics. Often, configuration pertains to the choice of hardware, software, firmware, and documentation. The configuration affects system function and performance.\n\nA configuration is complete when all major functional parts are assembled:\n• Main memory, hard disk drive, card reader, CPU, CD drive, monitor, modem, operating system\n\nKey consideration: ensure the computer can be upgraded after purchase — buy slightly above current needs",
+    notes: "Summative Task 1: Demonstrate knowledge of computer configurations and hardware.\n\nKey message from the guide: the performance and productivity of a computer completely depends on how smart is your choice of accessories.\n\nUpgrade planning: it will not matter whether you prefer a hard drive, floppy drive, power supply or some other type — you should look into shopping over the web to make a decision from a wider variety of options.\n\nAsk: What is the difference between hardware configuration and software configuration? (Hardware = physical components; software = OS, applications, firmware. Both affect performance.)\n\nConnect to CET context: when setting up a new computer lab, what configuration decisions must be made?",
+    duration: 8,
+    cards: ["Functional Units", "Hardware", "Software", "Firmware", "Upgrade Planning"],
   },
   {
     slideNumber: 4,
-    id: "14921-workbook-evidence",
-    title: "Workbook Evidence Targets",
-    type: "activity",
-    content:
-      "Workbook outputs should include:\n" +
-      "• System-type comparison table for at least three environments\n" +
-      "• Component-function mapping activity\n" +
-      "• Configuration recommendation with rationale\n" +
-      "• Upgrade planning with constraints and trade-offs",
-    notes:
-      "Tell learners these workbook artefacts form evidence for moderation and summative readiness.",
-    duration: 8,
-    cards: ["Comparison", "Mapping", "Recommendation", "Upgrade Plan"],
+    id: "14921-s1-standalone-networked",
+    title: "Session 1: Standalone vs Networked Computers",
+    type: "content",
+    content: "Standalone computer:\n• Self-sufficient system — no connection to any other computer\n• Advantage: more secure — hackers, spyware, and viruses cannot access it remotely\n• Disadvantage: cannot do anything requiring internet — email, browsing, file sharing\n\nNetworked computer:\n• Connected to one or more computers for communication\n• Advantages: shares resources (software, printers, disk drives, data files); centralised management; faster software installation; security via usernames and passwords\n• Disadvantages: if the file server fails, the whole network is unable to operate; higher technical skills needed; risk of hackers, viruses, spyware",
+    notes: "Summative Task 2: Illustrate the advantages and disadvantages of using a network compared to a standalone computer.\n\nFull advantages table from the learner guide:\n- Log on anywhere on the network and access work files\n- Centralised management — same software on each computer\n- Faster to install software once on a network\n- Sharing printers, plotters, modems saves money\n- Security via usernames and passwords\n- Easy to monitor users\n\nFull disadvantages table:\n- If file server fails, whole network unable to operate\n- Higher technical skills needed\n- Long trek to a printer with no paper\n- Users may use too much storage space\n- Users may use too much bandwidth\n\nCET context: a CET computer lab is a networked environment. Ask: What would happen to all learner data if the school's server failed and there was no backup?",
+    duration: 10,
+    cards: ["Standalone", "Networked", "Security", "Resource Sharing", "Failure Risk"],
   },
   {
     slideNumber: 5,
-    id: "14921-practical-brief",
-    title: "Practical Assessment Preparation",
-    type: "activity",
-    content:
-      "Practical assessment pattern:\n" +
-      "• Read a scenario (lab, office, or support environment)\n" +
-      "• Identify user tasks and performance needs\n" +
-      "• Propose a complete hardware configuration\n" +
-      "• Defend choices using cost, compatibility, and supportability",
-    notes:
-      "Coach learners to explain why they chose each major component, not just list specs.",
+    id: "14921-s1-midrange-mainframe",
+    title: "Session 1: Midrange, Mainframe, and Client-Server Systems",
+    type: "content",
+    content: "Midrange computers (midrange systems):\n• Fall between mainframe computers and microcomputers\n• Emerged in the 1960s as minicomputers (DEC PDP, HP3000, Sun SPARC)\n• Since the 1990s, universally known as servers in the client-server model\n\nClient-server model (developed at Xerox PARC, 1970s):\n• Servers provide resources or services; clients request them\n• Examples: email, World Wide Web, network printing\n• Time-sharing: allows multiple applications to use computer resources simultaneously\n• A single computer can run both web server and file server software at the same time\n\nMainframes: massive processing power, high reliability, used by banks, airlines, and government",
+    notes: "The learner guide explains: since the client-server model was developed in Unix-like operating systems, using this term frequently implies support of standard rather than proprietary protocols.\n\nClient-server communication: clients send requests; servers return responses. Both must have a common language (protocol) and follow rules so both know what to expect.\n\nEmerging systems (beyond guide): cloud computing is the modern evolution of the client-server model — the server is just hosted elsewhere. IoT (Internet of Things) devices are embedded systems connected to a network. Virtualisation allows multiple OS instances on one physical machine.\n\nAsk: Is the CET Connect portal a client-server application? (Yes — the browser is the client; Supabase is the server.)",
     duration: 8,
-    cards: ["Scenario", "Need Analysis", "Configuration", "Justification"],
+    cards: ["Midrange", "Mainframe", "Client", "Server", "Cloud", "IoT"],
   },
   {
     slideNumber: 6,
-    id: "14921-summative-readiness",
-    title: "Summative Assessment Readiness",
+    id: "14921-s1-multiuser-processor",
+    title: "Session 1: Multi-User Systems and Processor Types",
     type: "content",
-    content:
-      "Summative expectations:\n" +
-      "• Identify and describe suitable system types\n" +
-      "• Explain hardware roles accurately\n" +
-      "• Recommend fit-for-purpose configurations\n" +
-      "• Evaluate upgrade options and compatibility risks",
-    notes:
-      "Use one mini-question from the summative style and let learners answer verbally before closing.",
-    duration: 7,
-    cards: ["Knowledge", "Application", "Recommendation", "Risk Awareness"],
+    content: "Multi-user operating system types (learner guide):\n• Single-user, single-task — one user, one thing at a time (e.g., Palm OS)\n• Single-user, multi-tasking — one user, multiple programs simultaneously (Windows, macOS)\n• Multi-user — many users accessing resources simultaneously (Unix, VMS, mainframe MVS)\n\nSingle processor vs multiprocessor vs multi-core:\n• Single processor: one actual processor (may have multiple cores)\n• Multiprocessor: more than one processor — used for high-traffic servers and heavy computation\n• Multi-core: one processor with 2, 3, 4, or 8 cores — behaves like multiple processors\n• One core = one task at a time; multitasking = time-sharing between processes (switching so fast the user cannot tell)",
+    notes: "Summative Task 3: Demonstrate knowledge of single processor and multiprocessor.\n\nFrom the learner guide: one core can only do one task at a time. Multitasking is done by sharing the time of the processor between processes — one process runs for a short time, then another, then another. The switching is done so fast that the user will not know the difference.\n\nMultiple cores: can run multiple processes at once for real — not just time-sharing.\n\nAsk: If a computer is running slowly, is it more likely to be a processor problem or a memory problem? (Usually memory — RAM shortage causes paging to disk, which is much slower. CPU is rarely the bottleneck in everyday office use.)\n\nVirtualisation (beyond guide): running multiple OS instances on one physical machine — each instance thinks it has its own processor and memory.",
+    duration: 8,
+    cards: ["Single-User", "Multi-User", "Single Processor", "Multiprocessor", "Multi-Core"],
   },
   {
     slideNumber: 7,
+    id: "14921-s1-performance",
+    title: "Session 1: Performance and Environmental Requirements",
+    type: "content",
+    content: "Performance characteristics of configurations:\n• Modular computer: portable module + expansion module + docking module\n• Expansion adds: multimedia, enhanced sound, increased memory, faster speed, extended battery\n• Docking adds: enlarged keyboard and monitor, higher resolution, enhanced speakers, printer, scanner, network\n\nHigh-performance server configurations:\n• Clustered file systems, redundant networking, dedicated load balancers\n• Database clustering, increased resiliency in application hosting\n• Load balancer manages fluctuating traffic across multiple servers\n\nEnvironmental requirements:\n• Development, staging/testing, and production environments\n• Each environment has different configuration properties (datasource, file paths, domain names)",
+    notes: "The learner guide describes the modular computer concept — a portable module that can be expanded with additional modules for different performance characteristics.\n\nEnvironmental requirements: when developing an application you will most likely have a number of environments — development, staging/testing, and live production. If each member of your team is developing on their own machine, they may each have their own specific environment requirements.\n\nEnvironment properties that differ: assets path, documents path, datasource name, datasource user, datasource password.\n\nCommon properties across environments: assets URL, documents URL, company name.\n\nAsk: Why is it important to test in a staging environment before deploying to production? (To catch problems that only appear in the real environment — different data, different load, different configuration.)",
+    duration: 7,
+    cards: ["Modular", "High Performance", "Load Balancer", "Dev/Staging/Prod"],
+  },
+  {
+    slideNumber: 8,
+    id: "14921-s1-activity",
+    title: "Activity: Hardware Configuration Identification",
+    type: "activity",
+    content: "Practical Task 1 preparation — identify and describe at least 3 from the range:\n• Standalone PCs — self-sufficient, no network connection\n• Networked PCs — connected, shares resources\n• Mid-range systems — servers; between mainframe and microcomputer\n• Mainframes — massive processing power; banks, airlines, government\n• Client-server — distributed model; clients request, servers provide\n• Emerging systems — cloud computing, IoT, virtualisation, wearables\n\nFor each: describe what it is, give a real-world example, and explain when it is used",
+    notes: "Workbook activity: learners complete a comparison table for at least 3 hardware configurations.\n\nQuality check: a description without an example is incomplete. A description without a use case is incomplete. Learners must cover all three elements for each item.\n\nGroup scenario: recommend a hardware configuration for a CET admin office or computer lab. Groups must specify: system type, network or standalone, and justify each choice.\n\nCollect completed workbook activities as PoE artefacts before the session ends.",
+    duration: 15,
+    cards: ["Standalone", "Networked", "Midrange", "Mainframe", "Client-Server", "Emerging"],
+  },
+  {
+    slideNumber: 9,
+    id: "14921-s2-app-categories",
+    title: "Session 2: Five Categories of Computer Applications",
+    type: "content",
+    content: "Five categories of computer applications (learner guide):\n• Embedded Systems — computer programs embedded into chips inside devices (mobile phones, digital diaries, ATMs, traffic lights)\n• Windows Applications (Desktop Applications) — form-based, installed and run locally (Microsoft Word, Paint)\n• Web Applications — collection of web pages hosted on a web server; accessed through browsers from anywhere\n• Web Services — give services to other applications through the internet (Google Search, Yahoo Search — allow other applications to delegate searching)\n• Console Applications — run inside the command prompt (DOS window); lightweight; used commonly for test applications",
+    notes: "The learner guide notes: it is not easy to divide computer applications into any exact categories, as there is no clear definition available.\n\nEmbedded systems example from the guide: when a name, address and other information is saved in the Mobile Phone or Digital Diary, a small computer program embedded into a chip in the device completes the task.\n\nCET Connect portal: which category? (Web Application — runs in a browser, accessed over the internet.)\n\nAsk: What is the difference between a web application and a web service? (Web app = for humans to use in a browser; web service = for other applications to consume via an API.)\n\nGeneral purpose vs special purpose vs bespoke (beyond guide): general purpose = word processor, spreadsheet; special purpose = camera app, chess game; bespoke = custom factory robot software, hospital management system.",
+    duration: 8,
+    cards: ["Embedded", "Desktop", "Web Application", "Web Service", "Console"],
+  },
+  {
+    slideNumber: 10,
+    id: "14921-s2-batch",
+    title: "Session 2: Batch Processing",
+    type: "content",
+    content: "Batch processing (learner guide):\n• Data is processed in batches — large groups of identical type\n• No user interaction is required\n• Usually takes place during evenings or weekends when there is less demand on the processor\n• Daily work can continue with little disruption\n• Main problem: delay in receiving the output from the data input\n\nCommon examples:\n• Processing of bank statements\n• Utility bills\n• Credit card transactions\n\nProblem with delay: you can pay for something using a credit card, but the money is not taken out straight away — if you are not aware of this and think you have that money, you might go spending it, putting you into debt",
+    notes: "Summative Task 4: Distinguish batch processing and interactive processing.\nSummative Task 5: Complete the summary table — Batch / Interactive / Real-Time.\n\nBatch processing summary table answers:\n- Processing: data processed in large identical batches\n- Response time: delayed — results available after the batch completes\n- User interface requirements: minimal or none — no user interaction required\n\nAsk: Name another example of batch processing in a school environment. (End-of-term report generation, payroll for staff, bulk email sending to parents.)\n\nThe delay is the defining characteristic of batch processing — it is acceptable when the data does not need to be processed immediately.",
+    duration: 8,
+    cards: ["Large Batches", "No User Interaction", "Evening/Weekend", "Delayed Output"],
+  },
+  {
+    slideNumber: 11,
+    id: "14921-s2-interactive-realtime",
+    title: "Session 2: Interactive and Real-Time Processing",
+    type: "content",
+    content: "Interactive processing (also known as transactional processing):\n• Data is processed one transaction at a time\n• Any response or update must be completed before the next transaction can take place\n• Data inputs tend to be small and input interactively by the user\n• The user inputs data when prompted; their actions are limited to what the system allows\n\nReal-time processing:\n• Data is processed within a given maximum time limit (usually under 4 seconds)\n• It is normally assumed that data will be processed as soon as it is received\n• This could result in data being updated straight away on a database, or an action taking place\n• Example: autopilot systems — they would not be useful if they processed data in batches",
+    notes: "Interactive processing summary table answers:\n- Processing: one transaction at a time; response before next transaction\n- Response time: immediate — system responds to each user action\n- User interface requirements: full UI required; user prompted for input\n\nReal-time processing summary table answers:\n- Processing: data processed as received; results affect ongoing operations\n- Response time: instantaneous (under 4 seconds)\n- User interface requirements: may have no UI (embedded systems like autopilot)\n\nThe learner guide uses the autopilot analogy: a batch autopilot would be useless — it would process flight corrections hours after they were needed. Real-time processing is essential for safety-critical systems.\n\nAsk: Is an ATM transaction batch, interactive, or real-time? (Interactive — one transaction at a time, immediate response.)",
+    duration: 8,
+    cards: ["One Transaction", "Immediate Response", "Real-Time", "Under 4 Seconds", "Autopilot"],
+  },
+  {
+    slideNumber: 12,
+    id: "14921-s2-summary-table",
+    title: "Activity: Complete the Summary Table",
+    type: "activity",
+    content: "Complete the summary table (Summative Task 5 — 3 marks):\n\nRows: Processing | Response time | User interface requirements\nColumns: Batch | Interactive | Real-Time\n\nBatch answers:\n• Processing: large identical batches, no user interaction\n• Response time: delayed — results after batch completes\n• UI requirements: minimal or none\n\nInteractive answers:\n• Processing: one transaction at a time\n• Response time: immediate\n• UI requirements: full UI, user prompted\n\nReal-Time answers:\n• Processing: data processed as received\n• Response time: instantaneous (under 4 seconds)\n• UI requirements: may have no UI",
+    notes: "This is Summative Task 5 — worth 3 marks. Learners must complete this table correctly.\n\nAdditional application categories from the practical assessment range (beyond the three processing types):\n- Process control: industrial automation (factory machines, traffic lights, conveyor belts)\n- Scientific: simulations, data analysis, research computing, weather modelling\n- Education: e-learning platforms, computer-based training, educational games\n- Home: entertainment, personal finance, home automation, social media\n\nAsk learners to give one example for each of the additional categories. Collect completed tables as PoE artefacts.",
+    duration: 20,
+    cards: ["Batch", "Interactive", "Real-Time", "Summary Table"],
+  },
+  {
+    slideNumber: 13,
+    id: "14921-s2-software-types",
+    title: "Session 2: General Purpose, Special Purpose, and Bespoke Software",
+    type: "content",
+    content: "General purpose application software:\n• Can be used for a variety of tasks — not limited to one function\n• Examples: word processors, spreadsheets, presentation software\n• A word processor could write a novel, create a menu, or make a poster\n\nSpecial purpose application software:\n• Created to execute one specific task\n• Examples: camera application (only takes and shares pictures), chess game (only plays chess), web browsers, calculators, media players\n\nBespoke application software:\n• Tailor-made for a specific user and purpose\n• Examples: factory robot software, military systems, hospital management, bank software\n• Advantages: meets precise needs\n• Disadvantages: expensive, takes time to develop, more likely to have bugs (fewer users testing it)",
+    notes: "This content comes from the learner guide Session 2 section on application categories.\n\nKey message: do not use brand names when describing software types — describe the category, not the product.\n\nBespoke software considerations from the guide: software will be expensive as you have to cover all of the production costs; it may take some time to develop when special purpose software could be bought straight away; the software is more likely to be buggy as it probably will not have thousands of clients using and testing it.\n\nCET context: the CET Connect portal is bespoke software — built specifically for this training programme. Ask: What are the advantages and disadvantages of using bespoke software for CET Connect vs an off-the-shelf LMS?",
+    duration: 7,
+    cards: ["General Purpose", "Special Purpose", "Bespoke", "Examples"],
+  },
+  {
+    slideNumber: 14,
+    id: "14921-assessment-prep",
+    title: "Summative Assessment: What to Expect",
+    type: "content",
+    content: "Summative assessment tasks (from the assessment pack):\n• Task 1: Demonstrate knowledge of computer configurations and hardware\n• Task 2: Illustrate advantages and disadvantages of network vs standalone\n• Task 3: Demonstrate knowledge of single processor and multiprocessor\n• Task 4: Distinguish batch processing and interactive processing\n• Task 5 (3 marks): Complete the summary table — Batch / Interactive / Real-Time\n  Rows: Processing - Response time - User interface requirements",
+    notes: "These are the exact tasks from the summative assessment pack.\n\nRapid-fire verbal prep:\n1. What is the difference between a standalone and a networked computer? (Standalone = isolated, more secure; networked = connected, shares resources)\n2. Name three types of multi-user operating systems. (Single-user single-task, single-user multi-tasking, multi-user)\n3. What is the difference between a single processor and a multiprocessor? (Single = one CPU; multiprocessor = more than one CPU)\n4. Give an example of a batch processing application. (Payroll, end-of-day bank transactions, utility bills)\n5. Give an example of a real-time processing application. (Autopilot systems, stock trading, industrial process control)\n6. What is bespoke software? (Tailor-made for a specific user and purpose)\n\nRemind learners: both formative workbook and summative assessments are retained as part of the PoE.",
+    duration: 8,
+    cards: ["Configurations", "Network vs Standalone", "Processors", "Batch vs Interactive", "Summary Table"],
+  },
+  {
+    slideNumber: 15,
     id: "14921-summary",
     title: "Wrap-Up and Evidence Checklist",
     type: "summary",
-    content:
-      "Before closing, confirm:\n" +
-      "• Learner guide topics were covered with examples\n" +
-      "• Workbook activities are completed and signed off\n" +
-      "• Practical scenario responses include clear rationale\n" +
-      "• Learners are prepared for the Block 3 summative structure",
-    notes:
-      "Close with a quick recap: user need first, then system type, then component decisions.",
-    duration: 5,
+    content: "Before closing, confirm:\n• Learners can describe standalone vs networked computers with full advantages and disadvantages\n• Learners can describe midrange, mainframe, and client-server systems\n• Learners can distinguish single-user, multi-user, single-processor, and multiprocessor\n• Learners can name and describe at least 3 hardware configuration types from the range\n• Learners can complete the batch/interactive/real-time summary table correctly\n• Learners can name and describe at least 3 application categories from the range\n• Workbook activities are complete and signed off as PoE artefacts",
+    notes: "Block 3 complete — CELEBRATE this milestone.\n\nGo round the room (every learner speaks): What is ONE thing from this 15-day programme that you will use in your work starting Monday?\n\nWrite the answers on the board. This is the real impact statement.\n\nFinal reminders:\n- Block 3 assessment OTP will be provided — submit via the portal\n- PoE submission deadline: confirm date with facilitator\n- Ensure ALL workbook activities from all 15 days are complete\n- Certificates will be issued after moderation is complete\n\nThank the group. This is a significant achievement — 165 credits, NQF Level 4, 15 days of intensive delivery. Well done.",
+    duration: 7,
   },
 ];
+

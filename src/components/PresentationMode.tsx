@@ -397,54 +397,152 @@ const PRESENTATION_QUIZZES: Record<string, QuizQ[]> = {
   ],
   "14908": [
     {
-      question: "Which test type checks a single function or module in isolation?",
+      question: "What are the TWO fundamental purposes of testing according to the learner guide?",
       options: [
-        "Acceptance testing",
-        "System testing",
-        "Unit testing",
-        "User training",
-      ],
-      correct: 2,
-      explanation:
-        "Unit testing focuses on one small component at a time before broader integration or system checks.",
-    },
-    {
-      question: "What should a proper test case include besides the input?",
-      options: [
-        "Only the file name",
-        "Expected result and pass/fail evidence",
-        "The developer's lunch break",
-        "A random screenshot with no notes",
+        "Finding bugs and writing reports",
+        "Verifying procurement specifications and managing risk",
+        "Training developers and testing hardware",
+        "Checking code quality and measuring performance",
       ],
       correct: 1,
       explanation:
-        "A useful test case records expected output, actual output, and whether the result passed or failed.",
+        "The learner guide states: testing verifies that what was specified is what was delivered, and manages risk for both the acquiring agency and the vendor/developer.",
+    },
+    {
+      question: "Which hardware test phase involves a 30–60 day period of operation and monitoring after installation?",
+      options: [
+        "Factory Acceptance Testing (FAT)",
+        "Site Testing",
+        "Burn-In and Observation Period Testing",
+        "Design Approval Testing (DAT)",
+      ],
+      correct: 2,
+      explanation:
+        "Burn-In Testing is a 30–60 day period where a new device is operated and monitored. If it fails, repairs are made and the test resumes.",
+    },
+    {
+      question: "Which testing type ensures that a fix did not break something that was previously working?",
+      options: [
+        "Security Testing",
+        "End-to-End Testing",
+        "User Testing",
+        "Regression Testing",
+      ],
+      correct: 3,
+      explanation:
+        "Regression testing re-tests the application to ensure that a fix did not cause another portion to break that was previously working.",
+    },
+    {
+      question: "What does an end-to-end test plan validate?",
+      options: [
+        "Only the entry point of a transaction",
+        "A transaction through the entire system across all modules it touches",
+        "The security access of individual users",
+        "The performance of the database server only",
+      ],
+      correct: 1,
+      explanation:
+        "End-to-end testing validates a transaction through the entire system — not just at entry and exit points. It follows the transaction across all modules it may touch.",
     },
   ],
   "14919": [
     {
-      question: "What is usually the FIRST step when a user reports that 'the computer is broken'?",
+      question: "According to the learner guide, every problem has three attributes. Which set is correct?",
       options: [
-        "Replace the computer immediately",
-        "Ask clarifying questions and define the actual problem",
-        "Escalate without checking anything",
-        "Install new software straight away",
+        "Type, severity, and resolution",
+        "Type, parameters, and possible causes",
+        "Category, priority, and owner",
+        "Hardware, software, and user",
       ],
       correct: 1,
       explanation:
-        "Support starts by understanding the real problem clearly before diagnosing or fixing anything.",
+        "The learner guide states that all problems have a type (what kind of problem), parameters (fixed limits), and possible causes (where it came from).",
     },
     {
-      question: "Which troubleshooting sequence best reflects good support practice?",
+      question: "A user reports 'the computer is slow.' According to the learner guide, what is the FIRST step?",
       options: [
-        "Guess -> Fix -> Hope",
-        "Ask -> Reproduce -> Isolate -> Fix -> Verify -> Document",
-        "Document -> Ignore -> Close",
-        "Reboot -> Escalate -> Leave",
+        "Replace the computer immediately",
+        "Reboot and call the vendor",
+        "Define the problem — identify its type, parameters, and possible causes",
+        "Install new antivirus software",
+      ],
+      correct: 2,
+      explanation:
+        "The learner guide emphasises: you cannot find the right solution unless you spend time making sure you understand the problem. Define the problem type, parameters, and possible causes first.",
+    },
+    {
+      question: "Which category of user support problem describes a situation where a user inadvertently deleted a file?",
+      options: [
+        "Hardware failure",
+        "Software issue",
+        "User-created problem",
+        "Outside vendor issue",
+      ],
+      correct: 2,
+      explanation:
+        "User-created problems are usually unintentional — a user might inadvertently disable something, change something, or delete something.",
+    },
+    {
+      question: "What does 'standardising a solution' mean according to the learner guide?",
+      options: [
+        "Documenting the solution in a formal report",
+        "Using the same solution for all problems of that type because it works best",
+        "Escalating the problem to a senior technician",
+        "Testing the solution in a staging environment",
       ],
       correct: 1,
       explanation:
-        "A structured troubleshooting method improves accuracy, communication, and repeatability in user support work.",
+        "The learner guide states: 'When you standardise a solution to a problem, you are saying: This way of solving a problem works the best. So I am going to use it to solve all problems of this type.'",
+    },
+  ],
+  "14921": [
+    {
+      question: "According to the learner guide, what is a computer configuration?",
+      options: [
+        "Only the software installed on a computer",
+        "An arrangement of functional units according to their nature, number, and chief characteristics",
+        "The colour and size of the computer case",
+        "The brand name of the computer manufacturer",
+      ],
+      correct: 1,
+      explanation:
+        "The learner guide defines configuration as an arrangement of functional units according to their nature, number, and chief characteristics — covering hardware, software, firmware, and documentation.",
+    },
+    {
+      question: "What is the main ADVANTAGE of a standalone computer over a networked computer?",
+      options: [
+        "It can share files with other computers easily",
+        "It is more secure — hackers, spyware, and viruses cannot access it remotely",
+        "It can use shared printers and software",
+        "It allows users to log on from anywhere",
+      ],
+      correct: 1,
+      explanation:
+        "A standalone computer is more secure because there is no network connection through which hackers, spyware, or viruses can compromise confidential information.",
+    },
+    {
+      question: "Which processing type processes data in groups without user interaction and has a delayed response time?",
+      options: [
+        "Interactive processing",
+        "Real-time processing",
+        "Batch processing",
+        "Process control",
+      ],
+      correct: 2,
+      explanation:
+        "Batch processing processes data in groups (batches) without user interaction. Results are available after the batch completes — the response time is delayed.",
+    },
+    {
+      question: "What is the difference between a single-processor and a multiprocessor system?",
+      options: [
+        "A single-processor system is always faster",
+        "A multiprocessor system has more than one actual processor and is used for high-traffic servers and heavy computation",
+        "A multiprocessor system can only run one program at a time",
+        "There is no practical difference between them",
+      ],
+      correct: 1,
+      explanation:
+        "A multiprocessor system has more than one actual processor. Multiple processors have long been used in systems that need a lot of processing power, like high-traffic servers.",
     },
   ],
   "120379": [
@@ -1270,6 +1368,50 @@ const MODULE_SPEAKER_NOTES: Record<string, ModuleSpeakerNotes | Record<string, s
       "• Role-play documentation is a PoE artefact\n" +
       "• Tomorrow is Day 13 — final day, capstone project, CELEBRATION\n" +
       "• Ensure EVERYTHING in the workbook is complete before the Block 3 assessment.",
+  },
+
+  "14921": {
+    title:
+      "Block 3, Day 13 — Types of Computer Systems and Hardware Configurations. Final delivery day.\n\n" +
+      "Icebreaker: 'Match real workplace roles to likely computer system types.' Give learners 2 minutes to pair: teacher, graphic designer, warehouse manager, field technician, data centre administrator.\n\n" +
+      "Take answers and discuss — there is no single right answer, which is the point. Context determines the right system.\n\n" +
+      "Key message: 'By the end of today, you will be able to recommend a hardware configuration for any scenario and justify every choice.'",
+    objectives:
+      "Walk through all 4 outcomes:\n\n" +
+      "• Outcome 1 (system types): Not just desktops and laptops — servers, mobile devices, and embedded systems are all in scope. Ask: 'Name a device in this room that contains a computer but isn't a computer.' (Projector, air conditioner, smart board, printer.)\n" +
+      "• Outcome 2 (hardware components): Focus on FUNCTION, not just names. CPU = brain, RAM = working memory, storage = filing cabinet. The analogy matters for retention.\n" +
+      "• Outcome 3 (compare configurations): The same budget can produce very different configurations depending on the use case. A gaming PC and a school admin PC may cost the same but look completely different.\n" +
+      "• Outcome 4 (recommend): A recommendation without justification is just a guess. Learners must explain WHY each component was chosen.\n\n" +
+      "Connect these outcomes to the learner guide sections before moving into examples.",
+    activityIndividual:
+      "Component identification and peripheral classification exercises.\n\n" +
+      "• Component mapping: give learners a blank diagram of a computer system. They must label each component and write one sentence explaining its function.\n" +
+      "• Peripheral classification: list of 15 peripherals — classify each as input, output, communication, or storage. Some are dual-purpose (touchscreen, network card) — discuss why.\n" +
+      "• Configuration comparison: give learners three user profiles (office worker, graphic designer, field technician). They must specify the most important hardware difference for each and justify it.\n\n" +
+      "Allow 8 minutes per activity. Circulate and ask: 'Why did you choose that component for that user?' Push for justification, not just identification.",
+    activityGroup:
+      "Hardware Configuration Proposal — the capstone activity for this unit.\n\n" +
+      "Groups receive a scenario brief (CET admin office, school computer lab, or field technician kit).\n\n" +
+      "Deliverable must include:\n" +
+      "1. System type selection with justification\n" +
+      "2. Core components: CPU, RAM, storage with specifications\n" +
+      "3. Peripheral list matched to user tasks\n" +
+      "4. Upgrade path: what would you add in 2 years?\n" +
+      "5. Compatibility check: confirm all components work together\n\n" +
+      "Groups present in 3 minutes. Class challenge: 'What is the weakest choice in their configuration and why?'\n\n" +
+      "Collect proposals as PoE artefacts.",
+    summary:
+      "Rapid-fire close (hands up wins):\n" +
+      "1. 'Which component holds data temporarily while the computer is on?' (RAM)\n" +
+      "2. 'Which is faster — SSD or HDD?' (SSD)\n" +
+      "3. 'What does the motherboard do?' (Connects all components and determines compatibility)\n" +
+      "4. 'Name one input and one output peripheral.' (Various correct answers)\n\n" +
+      "Block 3 complete — CELEBRATE this milestone.\n\n" +
+      "Final reminders:\n" +
+      "• Configuration proposals are PoE artefacts — collect them now\n" +
+      "• Block 3 assessment → OTP will be provided → submit via the portal\n" +
+      "• Ensure ALL workbook activities from all 15 days are complete\n" +
+      "• Certificates will be issued after moderation is complete.",
   },
 
   "120379": {
