@@ -143,7 +143,7 @@ export default function LearnerPortalPage() {
                       {course.saqaId ? `SAQA ${course.saqaId} • ` : ""}{course.nqfLevel ? `NQF ${course.nqfLevel} • ` : ""}{course.moduleCount} modules
                     </p>
                   </div>
-                  <Badge variant="outline" className="shrink-0">Active</Badge>
+                  <Badge variant={course.status === "Active" ? "default" : "secondary"} className="shrink-0 text-[10px]">{course.status}</Badge>
                 </div>
                 <div className="mt-2">
                   <div className="flex items-center justify-between text-[11px] text-muted-foreground mb-1">
