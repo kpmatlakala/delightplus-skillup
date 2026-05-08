@@ -176,6 +176,9 @@ export default function LandingPage() {
           </Link>
 
           <div className="hidden md:flex items-center gap-6 text-sm font-medium">
+            <a href="#now-delivering" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
+              <GraduationCap className="h-4 w-4" /> Now Enrolling
+            </a>
             <a href="#programs" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
               <BookOpen className="h-4 w-4" /> Explore Courses
             </a>
