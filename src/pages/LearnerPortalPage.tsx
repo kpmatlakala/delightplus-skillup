@@ -153,9 +153,12 @@ export default function LearnerPortalPage() {
                   <Progress value={course.progress} className="h-1.5" />
                 </div>
                 <div className="mt-3 flex items-center justify-end">
-                  <a href="#active-course" className="inline-flex items-center gap-1 text-xs text-primary hover:underline">
-                    Continue <ArrowRight size={12} />
-                  </a>
+                  <Link
+                    to={course.status === "Active" ? "#active-course" : "/learner/modules"}
+                    className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                  >
+                    {course.status === "Active" ? "Continue" : "View modules"} <ArrowRight size={12} />
+                  </Link>
                 </div>
               </div>
             ))}
