@@ -45,9 +45,19 @@ export default function LearnerPortalPage() {
       nqfLevel: program.nqfLevel,
       moduleCount: modules.length,
       progress: overallProgress,
+      status: "Active" as const,
+    },
+    {
+      id: "SP-230375",
+      title: "Occupational Certificate: Python Programmer",
+      saqaId: "SP-230375",
+      nqfLevel: 4,
+      moduleCount: 5,
+      progress: 0,
+      status: "Planned" as const,
     },
   ];
-  const enrolledIds = new Set([program.saqaId]);
+  const enrolledIds = new Set(enrolledCourses.map((c) => c.saqaId));
   const comingSoonCourses = dsaProgramCatalog.filter((c) => !enrolledIds.has(c.saqaId ?? ""));
   const enrolledCount = enrolledCourses.length;
   const availableCount = comingSoonCourses.length;
