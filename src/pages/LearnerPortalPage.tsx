@@ -45,9 +45,19 @@ export default function LearnerPortalPage() {
       nqfLevel: program.nqfLevel,
       moduleCount: modules.length,
       progress: overallProgress,
+      status: "Active" as const,
+    },
+    {
+      id: "SP-230375",
+      title: "Occupational Certificate: Python Programmer",
+      saqaId: "SP-230375",
+      nqfLevel: 4,
+      moduleCount: 5,
+      progress: 0,
+      status: "Planned" as const,
     },
   ];
-  const enrolledIds = new Set([program.saqaId]);
+  const enrolledIds = new Set(enrolledCourses.map((c) => c.saqaId));
   const comingSoonCourses = dsaProgramCatalog.filter((c) => !enrolledIds.has(c.saqaId ?? ""));
   const enrolledCount = enrolledCourses.length;
   const availableCount = comingSoonCourses.length;
@@ -133,7 +143,7 @@ export default function LearnerPortalPage() {
                       {course.saqaId ? `SAQA ${course.saqaId} • ` : ""}{course.nqfLevel ? `NQF ${course.nqfLevel} • ` : ""}{course.moduleCount} modules
                     </p>
                   </div>
-                  <Badge variant="outline" className="shrink-0">Active</Badge>
+                  <Badge variant={course.status === "Active" ? "default" : "secondary"} className="shrink-0 text-[10px]">{course.status}</Badge>
                 </div>
                 <div className="mt-2">
                   <div className="flex items-center justify-between text-[11px] text-muted-foreground mb-1">
@@ -143,9 +153,12 @@ export default function LearnerPortalPage() {
                   <Progress value={course.progress} className="h-1.5" />
                 </div>
                 <div className="mt-3 flex items-center justify-end">
-                  <a href="#active-course" className="inline-flex items-center gap-1 text-xs text-primary hover:underline">
-                    Continue <ArrowRight size={12} />
-                  </a>
+                  <Link
+                    to={course.status === "Active" ? "#active-course" : "/learner/modules"}
+                    className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                  >
+                    {course.status === "Active" ? "Continue" : "View modules"} <ArrowRight size={12} />
+                  </Link>
                 </div>
               </div>
             ))}

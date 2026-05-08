@@ -176,6 +176,9 @@ export default function LandingPage() {
           </Link>
 
           <div className="hidden md:flex items-center gap-6 text-sm font-medium">
+            <a href="#now-delivering" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
+              <GraduationCap className="h-4 w-4" /> Now Enrolling
+            </a>
             <a href="#programs" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
               <BookOpen className="h-4 w-4" /> Explore Courses
             </a>
@@ -259,6 +262,75 @@ export default function LandingPage() {
               className={`w-3 h-3 rounded-full transition-all ${i === slideIndex ? "bg-white scale-125" : "bg-white/45"}`}
             />
           ))}
+        </div>
+      </section>
+
+      {/* ── Currently Delivering (live cohorts) ──── */}
+      <section id="now-delivering" className="py-16 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0} className="text-center mb-10">
+            <span className="inline-block text-[11px] font-bold uppercase tracking-widest text-accent mb-2">
+              Now Enrolling
+            </span>
+            <h2 className="font-display text-3xl sm:text-4xl font-extrabold">
+              <span className="dsa-gradient-text">Currently Delivering</span>
+            </h2>
+            <p className="text-sm text-muted-foreground mt-3 max-w-xl mx-auto">
+              Two accredited qualifications running on the TDSA Learning portal — full facilitator support, structured assessments and PoE.
+            </p>
+            <div className="w-24 h-1 mx-auto mt-4 rounded-full bg-gradient-to-r from-primary to-accent opacity-80" />
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+            {[
+              {
+                badge: "Active Cohort",
+                badgeTone: "bg-accent text-accent-foreground",
+                title: "FETC: IT Systems Development",
+                meta: "SAQA 78965 · NQF 4 · 165 credits",
+                desc: "Three-block delivery covering systems analysis, programming, databases, web development and project work. MICT-SETA aligned.",
+                tags: ["10 modules", "3 blocks", "15 delivery days"],
+              },
+              {
+                badge: "Next Intake",
+                badgeTone: "bg-primary text-primary-foreground",
+                title: "Occupational Cert: Python Programmer",
+                meta: "SAQA SP-230375 · NQF 4 · 60 credits",
+                desc: "Five knowledge modules from Python fundamentals through OOP, REST APIs and GUI development. Delivered with Beyond Capital (SDP).",
+                tags: ["5 modules", "Python 3", "REST + GUI"],
+              },
+            ].map((c, i) => (
+              <motion.div
+                key={c.title}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-30px" }}
+                variants={fadeUp}
+                custom={i}
+                className="rounded-2xl border border-border bg-card p-6 shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-300"
+              >
+                <span className={`inline-block text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${c.badgeTone}`}>
+                  {c.badge}
+                </span>
+                <h3 className="font-display text-xl font-bold text-foreground mt-3">{c.title}</h3>
+                <p className="text-xs text-muted-foreground mt-1">{c.meta}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed mt-3">{c.desc}</p>
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {c.tags.map((t) => (
+                    <span key={t} className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-secondary text-secondary-foreground">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                <Link
+                  to="/auth/signup"
+                  className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+                >
+                  Apply for this programme <ArrowRight className="h-4 w-4" />
+                </Link>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
