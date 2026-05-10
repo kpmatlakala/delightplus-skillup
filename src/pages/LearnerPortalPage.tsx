@@ -1,35 +1,19 @@
 import { modules, program } from "@/data/courseData";
-import { dsaProgramCatalog } from "@/data/dsaProgramCatalog";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
-import { BookOpen, MessageSquare, Bell, Clock3, PlayCircle, Lock, ChevronRight, RefreshCw, GraduationCap, Sparkles, ArrowRight, RotateCcw, ShieldCheck, CheckCircle2, Circle, KeyRound, Layers, Compass, Hourglass } from "lucide-react";
+import { BookOpen, MessageSquare, Bell, Clock3, ChevronRight, RefreshCw, ArrowRight, Layers, Compass, Hourglass } from "lucide-react";
 import { useModuleProgress } from "@/hooks/useModuleProgress";
 import { useAnnouncements } from "@/hooks/useAnnouncements";
 
 export default function LearnerPortalPage() {
-  const { progressMap, clearMyModuleProgress } = useModuleProgress();
-  const [clearingModuleId, setClearingModuleId] = useState<string | null>(null);
+  const { progressMap } = useModuleProgress();
   const modulePath = modules;
-
-  // Derive progress from DB data
   const completedModules = modulePath.filter((m) => !!progressMap[m.id]?.guide_completed).length;
-  const firstUndoneIndex = modulePath.findIndex((m) => !progressMap[m.id]?.guide_completed);
-  const currentModuleIndex = firstUndoneIndex === -1 ? modulePath.length : firstUndoneIndex;
   const overallProgress = Math.round((completedModules / modules.length) * 100);
-  const practicalModules = modules.filter((m) => m.type === "Practical").length;
-  const knowledgeModules = modules.filter((m) => m.type === "Knowledge").length;
   const unreadMessages = 3;
   const upcomingCheckIn = "Friday, 09:00";
-  const navigate = useNavigate();
-  const [orientationOpen, setOrientationOpen] = useState(false);
   const { items: liveAnnouncements, loading: announcementsLoading, source: announcementsSource } = useAnnouncements();
-  // Show pinned first, max 3, exclude Admin Only (already filtered by RLS)
   const feedItems = liveAnnouncements
     .filter((a) => a.audience !== "Admin Only")
     .slice(0, 3);
