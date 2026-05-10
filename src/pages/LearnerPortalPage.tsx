@@ -154,7 +154,7 @@ export default function LearnerPortalPage() {
                 </div>
                 <div className="mt-3 flex items-center justify-end">
                   <Link
-                    to={course.status === "Active" ? "#active-course" : "/learner/modules"}
+                    to={`/learner/programs/${course.saqaId}`}
                     className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
                   >
                     {course.status === "Active" ? "Continue" : "View modules"} <ArrowRight size={12} />
