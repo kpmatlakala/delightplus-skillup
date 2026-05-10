@@ -166,189 +166,44 @@ export default function LearnerPortalPage() {
         )}
       </div>
 
-      {/* ── Coming soon (catalog preview) ─────────────────────── */}
-      {comingSoonCourses.length > 0 && (
-        <div className="rounded-lg border border-border bg-card p-4 mb-4">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-display font-semibold flex items-center gap-2">
-              <Sparkles size={16} className="text-accent" /> Coming soon
-            </h3>
-            <span className="text-[11px] text-muted-foreground">{comingSoonCourses.length} programs</span>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
-            {comingSoonCourses.slice(0, 6).map((c) => (
-              <div key={c.id} className="rounded-md border border-border p-2.5">
-                <div className="flex items-start justify-between gap-2">
-                  <p className="text-xs font-medium text-foreground leading-snug">{c.title}</p>
-                  <Badge variant="secondary" className="shrink-0 text-[10px]">Soon</Badge>
-                </div>
-                <p className="text-[10px] text-muted-foreground mt-1">{c.type} • {c.category}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* ── Active course drill-down ─────────────────────────── */}
-      <div id="active-course" className="rounded-lg border border-accent/30 bg-accent/5 p-4 mb-4">
-        <div className="flex items-center justify-between gap-3 flex-wrap">
-          <div className="min-w-0">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-accent">Active course</p>
-            <h3 className="font-display font-bold text-foreground text-sm sm:text-base mt-0.5">{program.title}</h3>
-            <p className="text-[11px] text-muted-foreground mt-0.5">
-              SAQA {program.saqaId} • NQF {program.nqfLevel} • {modules.length} modules
-            </p>
-          </div>
-          <div className="min-w-[14rem]">
-            <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
-              <span>Path progress</span>
-              <span className="font-medium text-foreground">{overallProgress}%</span>
+      {/* ── Ops Feed ───────────────────────────────────────────── */}
+      <div className="rounded-lg border border-border bg-card p-4 mb-4">
+        <h3 className="font-display font-semibold flex items-center gap-2 mb-2">
+          <Bell size={16} className="text-accent" /> Ops Feed
+          {announcementsSource === "db" && (
+            <RefreshCw size={10} className="ml-auto text-green-500 dark:text-green-400 animate-spin" style={{ animationDuration: "4s" }} />
+          )}
+        </h3>
+        <div className="space-y-2 mb-3">
+          {announcementsLoading && (
+            <div className="rounded-md border border-border p-2">
+              <p className="text-xs text-muted-foreground">Loading updates…</p>
             </div>
-            <Progress value={overallProgress} className="h-2" />
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 mb-4">
-        <div className="xl:col-span-2 rounded-lg border border-border bg-card p-4">
-          <h3 className="font-display font-semibold flex items-center gap-2 mb-2">
-            <PlayCircle size={16} className="text-accent" /> Learning Path
-          </h3>
-          <p className="text-xs text-muted-foreground mb-3">Select a module to continue your mission path.</p>
-
-          <div className="space-y-2 max-h-[19rem] overflow-auto pr-1">
-            {/* Step 0 — Programme orientation (always unlocked, opens modal) */}
-            <button
-              onClick={() => setOrientationOpen(true)}
-              className="w-full text-left flex items-start gap-3 rounded-md border-2 border-accent/40 bg-accent/5 px-3 py-3 transition-colors hover:bg-accent/10 group"
-            >
-              <div className="shrink-0 mt-0.5 h-7 w-7 rounded-full bg-accent/20 flex items-center justify-center">
-                <GraduationCap size={14} className="text-accent" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <p className="text-sm font-semibold text-foreground">Welcome to Information Technology: Systems Development</p>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-accent/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-accent">
-                    <Sparkles size={9} /> Start Here
-                  </span>
-                </div>
-                <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                  Before you begin your 10-module journey — understand what a system is, what systems development means,
-                  and how this qualification connects to your IT career.
-                </p>
-                <span className="mt-2.5 inline-flex items-center gap-1.5 rounded-md bg-accent px-3 py-1.5 text-xs font-semibold text-accent-foreground shadow-sm group-hover:bg-accent/90 transition-colors">
-                  Open Programme Orientation →
-                </span>
-              </div>
-            </button>
-
-            {/* Divider between orientation and the numbered modules */}
-            <div className="flex items-center gap-2 py-1">
-              <div className="flex-1 h-px bg-border" />
-              <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">Your 10 Modules</span>
-              <div className="flex-1 h-px bg-border" />
+          )}
+          {!announcementsLoading && feedItems.length === 0 && (
+            <div className="rounded-md border border-border p-2">
+              <p className="text-xs text-muted-foreground">No announcements yet.</p>
             </div>
-
-            {modulePath.map((mod, index) => {
-              const isCompleted = !!progressMap[mod.id]?.guide_completed;
-              const isCurrent = index === currentModuleIndex;
-              const isLocked = index > currentModuleIndex && !isCompleted;
-              const hasProgress = !!progressMap[mod.id];
-              const isClearing = clearingModuleId === mod.id;
-
-              return (
-                <div
-                  key={mod.id}
-                  className={`group flex items-center justify-between gap-3 rounded-md border px-3 py-2 transition-colors ${
-                    isCurrent
-                      ? "border-primary bg-primary/10"
-                      : "border-border hover:bg-secondary/40"
-                  }`}
-                >
-                  {/* Clickable area navigates to module */}
-                  <Link
-                    to={`/learner/modules/${mod.id}`}
-                    className="min-w-0 flex items-center gap-2.5 flex-1"
-                  >
-                    <Avatar className="h-7 w-7 shrink-0">
-                      <AvatarFallback className="text-[11px] font-bold bg-primary/10 text-primary">
-                        {index + 1}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-medium text-foreground truncate">{mod.title}</p>
-                        {isCompleted && <Badge variant="outline">Done</Badge>}
-                        {isCurrent && <Badge>Current</Badge>}
-                        {isLocked && <Badge variant="secondary">Locked</Badge>}
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-0.5">{mod.code} • Block {mod.block} • {mod.credits} credits</p>
-                    </div>
-                  </Link>
-
-                  {/* Right side: clear button (shown when module has progress) or lock icon */}
-                  {hasProgress ? (
-                    <button
-                      title="Clear progress (retest)"
-                      disabled={isClearing}
-                      onClick={async () => {
-                        setClearingModuleId(mod.id);
-                        await clearMyModuleProgress(mod.id);
-                        setClearingModuleId(null);
-                      }}
-                      className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive disabled:opacity-50"
-                    >
-                      <RotateCcw size={13} className={isClearing ? "animate-spin" : ""} />
-                    </button>
-                  ) : isLocked ? (
-                    <Lock size={14} className="text-muted-foreground shrink-0" />
-                  ) : (
-                    <ChevronRight size={14} className="text-muted-foreground shrink-0" />
-                  )}
-                </div>
-              );
-            })}
-          </div>
+          )}
+          {feedItems.map((item) => (
+            <div key={item.id} className={`rounded-md border p-2 ${item.pinned ? "border-accent/30 bg-accent/5" : "border-border"}`}>
+              {item.pinned && <p className="text-[10px] font-semibold uppercase tracking-wide text-accent mb-0.5">Pinned</p>}
+              <p className="text-xs font-medium text-foreground leading-snug">{item.title}</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-2">{item.message}</p>
+            </div>
+          ))}
         </div>
-
-        <div className="rounded-lg border border-border bg-card p-4">
-          <h3 className="font-display font-semibold flex items-center gap-2 mb-2">
-            <Bell size={16} className="text-accent" /> Ops Feed
-            {announcementsSource === "db" && (
-              <RefreshCw size={10} className="ml-auto text-green-500 dark:text-green-400 animate-spin" style={{ animationDuration: "4s" }} />
-            )}
-          </h3>
-          <div className="space-y-2 mb-3">
-            {announcementsLoading && (
-              <div className="rounded-md border border-border p-2">
-                <p className="text-xs text-muted-foreground">Loading updates…</p>
-              </div>
-            )}
-            {!announcementsLoading && feedItems.length === 0 && (
-              <div className="rounded-md border border-border p-2">
-                <p className="text-xs text-muted-foreground">No announcements yet.</p>
-              </div>
-            )}
-            {feedItems.map((item) => (
-              <div key={item.id} className={`rounded-md border p-2 ${item.pinned ? "border-accent/30 bg-accent/5" : "border-border"}`}>
-                {item.pinned && <p className="text-[10px] font-semibold uppercase tracking-wide text-accent mb-0.5">Pinned</p>}
-                <p className="text-xs font-medium text-foreground leading-snug">{item.title}</p>
-                <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-2">{item.message}</p>
-              </div>
-            ))}
-          </div>
-          <Link
-            to="/communications"
-            className="flex items-center justify-end gap-1 text-[11px] text-primary hover:underline mb-2 mt-1"
-          >
-            Show more <ChevronRight size={11} />
-          </Link>
-          <div className="rounded-md border border-border p-2">
-            <p className="text-xs text-muted-foreground">Next check-in</p>
-            <p className="text-sm font-medium text-foreground mt-1 flex items-center gap-1.5">
-              <Clock3 size={14} className="text-accent" /> {upcomingCheckIn}
-            </p>
-          </div>
+        <Link
+          to="/communications"
+          className="flex items-center justify-end gap-1 text-[11px] text-primary hover:underline mb-2 mt-1"
+        >
+          Show more <ChevronRight size={11} />
+        </Link>
+        <div className="rounded-md border border-border p-2">
+          <p className="text-xs text-muted-foreground">Next check-in</p>
+          <p className="text-sm font-medium text-foreground mt-1 flex items-center gap-1.5">
+            <Clock3 size={14} className="text-accent" /> {upcomingCheckIn}
+          </p>
         </div>
       </div>
 
