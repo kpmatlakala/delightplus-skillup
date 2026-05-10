@@ -69,7 +69,7 @@ export default function LearnerPortalPage() {
       </div>
 
       {/* ── Enrollment stats ─────────────────────────────────── */}
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 mb-4">
+      <div className="grid grid-cols-3 gap-3 mb-4">
         <div className="rounded-lg border border-border bg-card p-3">
           <div className="flex items-center justify-between">
             <p className="text-xs text-muted-foreground">Enrolled courses</p>
@@ -84,13 +84,13 @@ export default function LearnerPortalPage() {
           </div>
           <p className="font-display text-xl font-bold mt-1">{inProgressCount}</p>
         </div>
-        <div className="rounded-lg border border-border bg-card p-3">
+        <Link to="/learner/catalog" className="rounded-lg border border-border bg-card p-3 hover:bg-secondary/40 transition-colors">
           <div className="flex items-center justify-between">
-            <p className="text-xs text-muted-foreground">Available</p>
+            <p className="text-xs text-muted-foreground">Browse</p>
             <Compass size={14} className="text-accent" />
           </div>
-          <p className="font-display text-xl font-bold mt-1">{availableCount}</p>
-        </div>
+          <p className="font-display text-sm font-medium mt-1">Catalog</p>
+        </Link>
         <div className="rounded-lg border border-border bg-card p-3">
           <div className="flex items-center justify-between">
             <p className="text-xs text-muted-foreground">Unread</p>
