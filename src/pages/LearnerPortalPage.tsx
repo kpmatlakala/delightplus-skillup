@@ -41,10 +41,8 @@ export default function LearnerPortalPage() {
       status: "Planned" as const,
     },
   ];
-  const enrolledIds = new Set(enrolledCourses.map((c) => c.saqaId));
-  const comingSoonCourses = dsaProgramCatalog.filter((c) => !enrolledIds.has(c.saqaId ?? ""));
   const enrolledCount = enrolledCourses.length;
-  const availableCount = comingSoonCourses.length;
+  const availableCount = 0;
   const inProgressCount = enrolledCourses.filter((c) => c.progress > 0 && c.progress < 100).length;
 
   return (
