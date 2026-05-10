@@ -102,6 +102,12 @@ export default function MyModulesPage() {
                 <p className="text-xs text-muted-foreground mt-0.5">
                   SAQA {prog.saqaId} • NQF {prog.nqfLevel}
                 </p>
+                <Link
+                  to={`/learner/programs/${prog.saqaId}`}
+                  className="inline-flex items-center gap-1 text-xs text-primary hover:underline mt-1"
+                >
+                  Open program path <ChevronRight size={12} />
+                </Link>
               </div>
               <div className="min-w-[14rem]">
                 <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
