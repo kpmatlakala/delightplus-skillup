@@ -24,21 +24,21 @@ type EnrolledModule = {
   href?: string;
 };
 
-const sdGroups = [1, 2, 3].map((b) => ({
-  id: `block-${b}`,
-  label: `Block ${b}`,
-  modules: sdModules
-    .filter((m) => m.block === b)
-    .map<EnrolledModule>((m) => ({
+const sdGroups = [
+  {
+    id: "course-modules",
+    label: "Course Modules",
+    modules: sdModules.map<EnrolledModule>((m) => ({
       id: m.id,
       code: m.code,
       title: m.title,
       type: m.type,
       credits: m.credits,
-      meta: `${m.code} • ${m.credits} credits • ${m.days}`,
+      meta: `${m.code} • ${m.credits} credits`,
       href: `/learner/modules/${m.id}`,
     })),
-}));
+  },
+];
 
 // Python Programmer (SP-230375) — sourced from public/courses/sp-230375-python/course.json
 const pythonModules: EnrolledModule[] = [

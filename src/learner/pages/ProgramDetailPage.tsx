@@ -158,7 +158,7 @@ function SystemsDevProgramView() {
                       {isLocked && <Badge variant="secondary">Locked</Badge>}
                     </div>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      {mod.code} • Block {mod.block} • {mod.credits} credits
+                      Module {index + 1} • {mod.code} • {mod.credits} credits
                     </p>
                   </div>
                 </Link>
@@ -207,9 +207,10 @@ function SystemsDevProgramView() {
           <ScrollArea className="max-h-[65vh]">
             <div className="px-6 py-5 text-sm space-y-4 text-muted-foreground leading-relaxed">
               <p>
-                This qualification builds you into a junior systems developer over 15 delivery days across 3 blocks.
-                You'll learn analysis, design, programming and testing — not just how to write code, but how to build
-                the right system in the first place.
+                This qualification builds you into a junior systems developer through a structured set of modules
+                covering analysis, design, programming and testing — not just how to write code, but how to build
+                the right system in the first place. Earlier intakes were delivered in three CET blocks; you can now
+                progress through the full course at your own pace.
               </p>
               <p>
                 Use the module path on this page to work through each unit standard in order. Your facilitator,
