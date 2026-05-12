@@ -7,7 +7,7 @@ export const program: Program = {
   nqfLevel: 4,
   totalCredits: 165,
   coveredCredits: 56,
-  duration: "15 days (3 blocks)",
+  duration: "Full qualification (self-paced)",
   provider: "Data Science Academy",
 };
 
