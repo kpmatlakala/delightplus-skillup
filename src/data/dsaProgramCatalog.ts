@@ -5,10 +5,17 @@
  * Includes FET Certificates, Occupational Certificates, and short courses.
  */
 
+export type QualificationType =
+  | "unit_standard"              // SAQA/SETA Fundamental/Core/Elective (e.g. 78965)
+  | "occupational_full"          // QCTO KM/PM/WM + EISA
+  | "skills_programme_occupational" // Subset of an OC, KM/PM/WM, no EISA (e.g. SP-230375)
+  | "short_course";              // DSA internal CPD, flat module list
+
 export interface DsaProgram {
   id: string;
   title: string;
   type: "FET Certificate" | "Occupational Certificate" | "Short Course";
+  qualificationType: QualificationType;
   category: "AI & Data Science" | "Software Development" | "Cyber Security" | "Cloud Computing" | "Emerging Technologies" | "Telecommunications";
   saqaId: string | null;
   nqfLevel: number | null;
