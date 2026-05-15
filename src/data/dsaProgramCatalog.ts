@@ -5,10 +5,17 @@
  * Includes FET Certificates, Occupational Certificates, and short courses.
  */
 
+export type QualificationType =
+  | "unit_standard"              // SAQA/SETA Fundamental/Core/Elective (e.g. 78965)
+  | "occupational_full"          // QCTO KM/PM/WM + EISA
+  | "skills_programme_occupational" // Subset of an OC, KM/PM/WM, no EISA (e.g. SP-230375)
+  | "short_course";              // DSA internal CPD, flat module list
+
 export interface DsaProgram {
   id: string;
   title: string;
   type: "FET Certificate" | "Occupational Certificate" | "Short Course";
+  qualificationType: QualificationType;
   category: "AI & Data Science" | "Software Development" | "Cyber Security" | "Cloud Computing" | "Emerging Technologies" | "Telecommunications";
   saqaId: string | null;
   nqfLevel: number | null;
@@ -23,6 +30,7 @@ export const dsaProgramCatalog: DsaProgram[] = [
   {
     id: "saqa-78965",
     title: "FET Certificate: IT Systems Development",
+    qualificationType: "unit_standard",
     type: "FET Certificate",
     category: "Software Development",
     saqaId: "78965",
@@ -35,6 +43,7 @@ export const dsaProgramCatalog: DsaProgram[] = [
   {
     id: "saqa-telecom",
     title: "FET Certificate: Telecommunication Network Operations",
+    qualificationType: "unit_standard",
     type: "FET Certificate",
     category: "Telecommunications",
     saqaId: null,
@@ -49,6 +58,7 @@ export const dsaProgramCatalog: DsaProgram[] = [
   {
     id: "oc-cloud-admin",
     title: "Occupational Certificate: Cloud Administrator",
+    qualificationType: "occupational_full",
     type: "Occupational Certificate",
     category: "Cloud Computing",
     saqaId: null,
@@ -61,6 +71,7 @@ export const dsaProgramCatalog: DsaProgram[] = [
   {
     id: "oc-ai-software-dev",
     title: "Occupational Certificate: AI Software Developer",
+    qualificationType: "occupational_full",
     type: "Occupational Certificate",
     category: "AI & Data Science",
     saqaId: null,
@@ -73,6 +84,7 @@ export const dsaProgramCatalog: DsaProgram[] = [
   {
     id: "oc-cyber-security",
     title: "Occupational Certificate: Cyber Security Analyst",
+    qualificationType: "occupational_full",
     type: "Occupational Certificate",
     category: "Cyber Security",
     saqaId: null,
@@ -85,6 +97,7 @@ export const dsaProgramCatalog: DsaProgram[] = [
   {
     id: "oc-iot-dev",
     title: "Occupational Certificate: Internet-of-Things Developer",
+    qualificationType: "occupational_full",
     type: "Occupational Certificate",
     category: "Emerging Technologies",
     saqaId: null,
@@ -97,6 +110,7 @@ export const dsaProgramCatalog: DsaProgram[] = [
   {
     id: "oc-frontend-designer",
     title: "Occupational Certificate: Front-End Web Designer",
+    qualificationType: "occupational_full",
     type: "Occupational Certificate",
     category: "Software Development",
     saqaId: null,
@@ -109,6 +123,7 @@ export const dsaProgramCatalog: DsaProgram[] = [
   {
     id: "sp-230375-python",
     title: "Occupational Certificate: Python Programmer",
+    qualificationType: "skills_programme_occupational",
     type: "Occupational Certificate",
     category: "Software Development",
     saqaId: "SP-230375",
@@ -121,6 +136,7 @@ export const dsaProgramCatalog: DsaProgram[] = [
   {
     id: "oc-systems-dev",
     title: "Occupational Certificate: Systems Developer",
+    qualificationType: "occupational_full",
     type: "Occupational Certificate",
     category: "Software Development",
     saqaId: null,
