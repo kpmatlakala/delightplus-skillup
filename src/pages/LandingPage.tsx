@@ -24,6 +24,19 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { dsaProgramCatalog, PROGRAM_CATEGORIES, type ProgramCategory } from "@/data/dsaProgramCatalog";
+
+const categoryIcon: Record<ProgramCategory, typeof Brain> = {
+  "AI & Data Science": Brain,
+  "Software Development": Code,
+  "Cyber Security": Shield,
+  "Cloud Computing": Cloud,
+  "Emerging Technologies": Globe,
+  "Drone & Hardware Tech": Cpu,
+  "Telecommunications": Smartphone,
+};
 
 /* ── Animation variants ──────────────────────────── */
 const fadeUp = {
