@@ -5,13 +5,14 @@ import { Progress } from "@/components/ui/progress";
 import { BookOpen, MessageSquare, Bell, Clock3, ChevronRight, RefreshCw, ArrowRight, Layers, Compass, Hourglass } from "lucide-react";
 import { useModuleProgress } from "@/hooks/useModuleProgress";
 import { useAnnouncements } from "@/hooks/useAnnouncements";
+import { useUnreadCount } from "@/hooks/useUnreadCount";
 
 export default function LearnerPortalPage() {
   const { progressMap } = useModuleProgress();
+  const unreadMessages = useUnreadCount();
   const modulePath = modules;
   const completedModules = modulePath.filter((m) => !!progressMap[m.id]?.guide_completed).length;
   const overallProgress = Math.round((completedModules / modules.length) * 100);
-  const unreadMessages = 3;
   const upcomingCheckIn = "Friday, 09:00";
   const { items: liveAnnouncements, loading: announcementsLoading, source: announcementsSource } = useAnnouncements();
   const feedItems = liveAnnouncements
@@ -106,7 +107,7 @@ export default function LearnerPortalPage() {
           <h3 className="font-display font-semibold flex items-center gap-2">
             <Layers size={16} className="text-accent" /> My Courses
           </h3>
-          <span className="text-[11px] text-muted-foreground">{enrolledCount} enrolled</span>
+          <span className="text-[11px] text-muted-foreground">{enrolledCount} enrolled · {inProgressCount} in progress</span>
         </div>
 
         {enrolledCourses.length === 0 ? (
@@ -189,21 +190,6 @@ export default function LearnerPortalPage() {
         </div>
       </div>
 
-      <div className="rounded-lg border border-border bg-card p-4 mb-4">
-        <h3 className="font-display font-semibold flex items-center gap-2 mb-2">
-          <BookOpen size={16} className="text-accent" /> Quick Access
-        </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-          <div className="rounded-md border border-border p-2">
-            <p className="text-muted-foreground">Unread communication</p>
-            <p className="font-medium text-foreground mt-1">{unreadMessages} messages</p>
-          </div>
-          <div className="rounded-md border border-border p-2">
-            <p className="text-muted-foreground">Next check-in</p>
-            <p className="font-medium text-foreground mt-1">{upcomingCheckIn}</p>
-          </div>
-        </div>
-      </div>
     </>
   );
 }

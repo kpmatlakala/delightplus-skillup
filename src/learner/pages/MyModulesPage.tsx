@@ -78,7 +78,7 @@ export default function MyModulesPage() {
           <Layers size={18} className="text-accent" /> My Modules
         </h1>
         <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-          You're enrolled in {enrolledPrograms.length} programs.
+          You're enrolled in {enrolledPrograms.length} {enrolledPrograms.length === 1 ? "program" : "programs"}.
         </p>
       </div>
 
