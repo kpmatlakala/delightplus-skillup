@@ -6,10 +6,12 @@ import { BookOpen, MessageSquare, Bell, Clock3, ChevronRight, RefreshCw, ArrowRi
 import { useModuleProgress } from "@/hooks/useModuleProgress";
 import { useAnnouncements } from "@/hooks/useAnnouncements";
 import { useUnreadCount } from "@/hooks/useUnreadCount";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function LearnerPortalPage() {
   const { progressMap } = useModuleProgress();
-  const unreadMessages = useUnreadCount();
+  const { user } = useAuth();
+  const unreadMessages = useUnreadCount(user?.id ?? null);
   const modulePath = modules;
   const completedModules = modulePath.filter((m) => !!progressMap[m.id]?.guide_completed).length;
   const overallProgress = Math.round((completedModules / modules.length) * 100);
