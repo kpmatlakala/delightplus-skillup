@@ -16,7 +16,7 @@ export interface DsaProgram {
   title: string;
   type: "FET Certificate" | "Occupational Certificate" | "Short Course";
   qualificationType: QualificationType;
-  category: "AI & Data Science" | "Software Development" | "Cyber Security" | "Cloud Computing" | "Emerging Technologies" | "Telecommunications";
+  category: ProgramCategory;
   saqaId: string | null;
   nqfLevel: number | null;
   totalCredits: number | null;
