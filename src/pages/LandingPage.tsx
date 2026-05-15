@@ -435,35 +435,111 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Course Categories ────────────────────── */}
-      <section className="py-20 bg-gradient-to-br from-background via-card to-background">
+      {/* ── Explore Programs by Category ─────────── */}
+      <section id="explore" className="py-20 bg-gradient-to-br from-background via-card to-background">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0} className="text-center mb-14">
-            <h2 className="font-display text-3xl sm:text-4xl font-extrabold text-foreground">Our Course Categories</h2>
-            <div className="w-28 h-1 mx-auto mt-4 rounded-full bg-gradient-to-r from-primary to-accent opacity-80" />
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} custom={0} className="text-center mb-10">
+            <span className="inline-block text-[11px] font-bold uppercase tracking-widest text-accent mb-2">
+              Explore Courses
+            </span>
+            <h2 className="font-display text-3xl sm:text-4xl font-extrabold text-foreground">
+              Programs by Category
+            </h2>
+            <p className="text-sm text-muted-foreground mt-3 max-w-2xl mx-auto">
+              All qualifications across our six tech tracks. Some run as full FET / Occupational Certificates,
+              others as Skills Programmes — and learners can borrow units across related programmes.
+            </p>
+            <div className="w-24 h-1 mx-auto mt-4 rounded-full bg-gradient-to-r from-primary to-accent opacity-80" />
           </motion.div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-7">
-            {categories.map((cat, i) => (
-              <motion.a
-                key={cat.label}
-                href={cat.link}
-                target="_blank"
-                rel="noreferrer"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-30px" }}
-                variants={fadeUp}
-                custom={i}
-                className="group bg-card/75 backdrop-blur-sm rounded-2xl p-6 text-center border border-border shadow-md hover:-translate-y-2.5 hover:shadow-lg transition-all duration-300"
-              >
-                <div className="w-16 h-16 mx-auto mb-3 rounded-full dsa-gradient-bg flex items-center justify-center text-white shadow-md group-hover:scale-110 group-hover:rotate-[4deg] transition-transform duration-300">
-                  <cat.icon className="h-7 w-7" />
-                </div>
-                <h3 className="text-sm font-bold text-foreground">{cat.label}</h3>
-              </motion.a>
-            ))}
-          </div>
+          <Tabs defaultValue={PROGRAM_CATEGORIES[1]} className="w-full">
+            <TabsList className="flex flex-wrap h-auto justify-center gap-2 bg-transparent p-0 mb-8">
+              {PROGRAM_CATEGORIES.map((cat) => {
+                const Icon = categoryIcon[cat];
+                const count = dsaProgramCatalog.filter((p) => p.category === cat).length;
+                return (
+                  <TabsTrigger
+                    key={cat}
+                    value={cat}
+                    className="rounded-full border border-border bg-card data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-white px-4 py-2 text-xs sm:text-sm font-semibold gap-2"
+                  >
+                    <Icon className="h-4 w-4" />
+                    {cat}
+                    <span className="text-[10px] opacity-70">({count})</span>
+                  </TabsTrigger>
+                );
+              })}
+            </TabsList>
+
+            {PROGRAM_CATEGORIES.map((cat) => {
+              const programs = dsaProgramCatalog.filter((p) => p.category === cat);
+              const Icon = categoryIcon[cat];
+              return (
+                <TabsContent key={cat} value={cat} className="mt-0">
+                  {programs.length === 0 ? (
+                    <div className="text-center py-12 rounded-2xl border border-dashed border-border bg-card/50">
+                      <Icon className="h-10 w-10 mx-auto text-muted-foreground/60 mb-3" />
+                      <p className="text-sm text-muted-foreground">
+                        New {cat} programmes coming soon. Apply to be notified when intake opens.
+                      </p>
+                      <Button asChild size="sm" className="mt-4 bg-gradient-to-r from-accent to-primary">
+                        <Link to="/auth/signup">Notify me</Link>
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                      {programs.map((p, i) => (
+                        <motion.div
+                          key={p.id}
+                          initial="hidden"
+                          whileInView="visible"
+                          viewport={{ once: true, margin: "-30px" }}
+                          variants={fadeUp}
+                          custom={i}
+                          className="group rounded-2xl border border-border bg-card p-5 shadow-md hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300 flex flex-col"
+                        >
+                          <div className="flex items-start justify-between gap-3 mb-3">
+                            <div className="w-11 h-11 rounded-xl dsa-gradient-bg flex items-center justify-center text-white shadow-sm shrink-0">
+                              <Icon className="h-5 w-5" />
+                            </div>
+                            <Badge
+                              variant={p.status === "Active" ? "default" : "secondary"}
+                              className={p.status === "Active" ? "bg-success text-success-foreground" : ""}
+                            >
+                              {p.status === "Active" ? "Enrolling" : p.status}
+                            </Badge>
+                          </div>
+
+                          <h3 className="font-display text-base font-bold text-foreground leading-snug mb-1">
+                            {p.title}
+                          </h3>
+                          <p className="text-[11px] text-muted-foreground mb-3">
+                            {p.type}
+                            {p.saqaId ? ` · SAQA ${p.saqaId}` : ""}
+                            {p.nqfLevel ? ` · NQF ${p.nqfLevel}` : ""}
+                            {p.totalCredits ? ` · ${p.totalCredits} credits` : ""}
+                          </p>
+
+                          <div className="mt-auto pt-3 flex gap-2">
+                            <Button asChild size="sm" className="flex-1 bg-gradient-to-r from-accent to-primary">
+                              <Link to="/auth/signup">
+                                Apply Now <ArrowRight className="ml-1 h-3.5 w-3.5" />
+                              </Link>
+                            </Button>
+                            <Button asChild size="sm" variant="outline" className="flex-1">
+                              <Link to={`/auth/login?redirect=/learner/programs/${p.id}`}>
+                                View Info
+                              </Link>
+                            </Button>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
+                </TabsContent>
+              );
+            })}
+          </Tabs>
         </div>
       </section>
 
