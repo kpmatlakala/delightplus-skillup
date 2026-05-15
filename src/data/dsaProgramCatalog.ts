@@ -11,12 +11,30 @@ export type QualificationType =
   | "skills_programme_occupational" // Subset of an OC, KM/PM/WM, no EISA (e.g. SP-230375)
   | "short_course";              // DSA internal CPD, flat module list
 
+export type ProgramCategory =
+  | "AI & Data Science"
+  | "Software Development"
+  | "Cyber Security"
+  | "Cloud Computing"
+  | "Emerging Technologies"
+  | "Drone & Hardware Tech"
+  | "Telecommunications";
+
+export const PROGRAM_CATEGORIES: ProgramCategory[] = [
+  "AI & Data Science",
+  "Software Development",
+  "Cyber Security",
+  "Cloud Computing",
+  "Emerging Technologies",
+  "Drone & Hardware Tech",
+];
+
 export interface DsaProgram {
   id: string;
   title: string;
   type: "FET Certificate" | "Occupational Certificate" | "Short Course";
   qualificationType: QualificationType;
-  category: "AI & Data Science" | "Software Development" | "Cyber Security" | "Cloud Computing" | "Emerging Technologies" | "Telecommunications";
+  category: ProgramCategory;
   saqaId: string | null;
   nqfLevel: number | null;
   totalCredits: number | null;
