@@ -52,6 +52,7 @@ const App = () => (
             {/* Public landing page */}
             <Route path="/" element={<LandingPage />} />
             <Route path="/home" element={<LandingPage />} />
+            <Route path="/category/:slug" element={<CategoryPage />} />
 
             <Route element={<PublicOnlyRoute />}>
               <Route path="/auth/login" element={<LoginPage />} />
