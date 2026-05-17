@@ -7,6 +7,7 @@ import { AuthProvider } from "./hooks/useAuth";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicOnlyRoute from "./components/PublicOnlyRoute";
 import LandingPage from "./pages/LandingPage";
+import CategoryPage from "./pages/CategoryPage";
 import Index from "./_lmis/pages/Index";
 import ModulesPage from "./_lmis/pages/ModulesPage";
 import ModuleDetailPage from "./pages/ModuleDetailPage";
