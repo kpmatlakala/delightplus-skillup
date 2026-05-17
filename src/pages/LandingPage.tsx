@@ -79,28 +79,28 @@ const heroSlides = [
 /* ── Course cards ──────────────────────────────── */
 const courses = [
   {
-    title: "Artificial Intelligence",
-    description: "Master AI systems, automation, and intelligent technologies shaping the future.",
+    title: "AI & Data Science",
+    description: "Master AI systems, machine learning, automation and intelligent technologies shaping the future.",
     image: "https://images.pexels.com/photos/5473955/pexels-photo-5473955.jpeg?auto=compress&cs=tinysrgb&w=600",
-    link: "https://thedatascienceacademy.co.za/ai-data-science/",
+    link: `/category/${CATEGORY_SLUGS["AI & Data Science"]}`,
   },
   {
     title: "Cyber Security",
     description: "Develop industry-grade cyber defence, ethical hacking and security skills.",
     image: "https://images.pexels.com/photos/5380642/pexels-photo-5380642.jpeg?auto=compress&cs=tinysrgb&w=600",
-    link: "https://thedatascienceacademy.co.za/cyber-security/",
+    link: `/category/${CATEGORY_SLUGS["Cyber Security"]}`,
   },
   {
     title: "Cloud Computing",
     description: "Gain expertise in AWS, Azure and multi-cloud infrastructure engineering.",
     image: "https://images.pexels.com/photos/1181345/pexels-photo-1181345.jpeg?auto=compress&cs=tinysrgb&w=600",
-    link: "https://thedatascienceacademy.co.za/cloud-computing/",
+    link: `/category/${CATEGORY_SLUGS["Cloud Computing"]}`,
   },
   {
     title: "Software Development",
-    description: "Master Python, Java, JavaScript, HTML, C++ and modern full-stack workflows.",
+    description: "FETC: IT Systems Development plus Python and modern full-stack pathways.",
     image: "https://images.pexels.com/photos/3861964/pexels-photo-3861964.jpeg?auto=compress&cs=tinysrgb&w=600",
-    link: "https://thedatascienceacademy.co.za/software-development/",
+    link: `/category/${CATEGORY_SLUGS["Software Development"]}`,
   },
 ];
 
@@ -110,16 +110,6 @@ const whyCards = [
   { icon: Cpu, title: "4IR-Focused", text: "Training that prepares you for AI, Data Science, Cyber Security & more." },
   { icon: Users, title: "Expert Facilitators", text: "Learn from industry professionals with real-world tech experience." },
   { icon: Rocket, title: "Career-Centric", text: "Programs designed to boost employability and future opportunities." },
-];
-
-/* ── Course Categories ───────────────────────────── */
-const categories = [
-  { icon: Brain, label: "AI & Data Science", link: "https://thedatascienceacademy.co.za/ai-data-science" },
-  { icon: Shield, label: "Cyber Security & Cloud", link: "https://thedatascienceacademy.co.za/cyber-cloud" },
-  { icon: Code, label: "Software Development", link: "https://thedatascienceacademy.co.za/software-development" },
-  { icon: Globe, label: "Emerging Technologies", link: "https://thedatascienceacademy.co.za/emerging-technologies" },
-  { icon: Smartphone, label: "Mobile & Device Tech", link: "https://thedatascienceacademy.co.za/mobile-device-tech" },
-  { icon: Laptop, label: "Drone & Hardware Tech", link: "https://thedatascienceacademy.co.za/drone-hardware-tech" },
 ];
 
 /* ── Testimonials ────────────────────────────────── */
