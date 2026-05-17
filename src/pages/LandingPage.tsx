@@ -678,11 +678,11 @@ export default function LandingPage() {
                 <span className="absolute bottom-0 left-0 w-11 h-0.5 bg-accent rounded" />
               </h4>
               <ul className="space-y-2.5 text-sm text-white/80">
-                {categories.map((cat) => (
-                  <li key={cat.label}>
-                    <a href={cat.link} target="_blank" rel="noreferrer" className="hover:text-white hover:translate-x-1.5 transition-all inline-flex items-center gap-1.5">
-                      <ChevronRight className="h-3 w-3" /> {cat.label}
-                    </a>
+                {PROGRAM_CATEGORIES.map((cat) => (
+                  <li key={cat}>
+                    <Link to={`/category/${CATEGORY_SLUGS[cat]}`} className="hover:text-white hover:translate-x-1.5 transition-all inline-flex items-center gap-1.5">
+                      <ChevronRight className="h-3 w-3" /> {cat}
+                    </Link>
                   </li>
                 ))}
               </ul>
