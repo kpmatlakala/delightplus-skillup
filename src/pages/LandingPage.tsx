@@ -349,11 +349,8 @@ export default function LandingPage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {courses.map((c, i) => (
-              <motion.a
+              <motion.div
                 key={c.title}
-                href={c.link}
-                target="_blank"
-                rel="noreferrer"
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-30px" }}
@@ -361,17 +358,19 @@ export default function LandingPage() {
                 custom={i}
                 className="group bg-card/75 backdrop-blur-sm rounded-2xl overflow-hidden border border-border shadow-lg hover:-translate-y-2.5 hover:shadow-xl transition-all duration-300"
               >
-                <div className="relative overflow-hidden h-48">
-                  <img src={c.image} alt={c.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
-                </div>
-                <div className="p-5 text-left">
-                  <h3 className="font-display text-lg font-bold text-foreground mb-2">{c.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{c.description}</p>
-                  <span className="inline-block px-5 py-2.5 rounded-full text-sm font-semibold text-white bg-gradient-to-r from-accent to-primary shadow-md group-hover:scale-105 transition-transform">
-                    View More Info
-                  </span>
-                </div>
-              </motion.a>
+                <Link to={c.link} className="block">
+                  <div className="relative overflow-hidden h-48">
+                    <img src={c.image} alt={c.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                  </div>
+                  <div className="p-5 text-left">
+                    <h3 className="font-display text-lg font-bold text-foreground mb-2">{c.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">{c.description}</p>
+                    <span className="inline-block px-5 py-2.5 rounded-full text-sm font-semibold text-white bg-gradient-to-r from-accent to-primary shadow-md group-hover:scale-105 transition-transform">
+                      View More Info
+                    </span>
+                  </div>
+                </Link>
+              </motion.div>
             ))}
           </div>
         </div>
