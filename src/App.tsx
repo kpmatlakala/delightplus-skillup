@@ -7,6 +7,7 @@ import { AuthProvider } from "./hooks/useAuth";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicOnlyRoute from "./components/PublicOnlyRoute";
 import LandingPage from "./pages/LandingPage";
+import CategoryPage from "./pages/CategoryPage";
 import Index from "./_lmis/pages/Index";
 import ModulesPage from "./_lmis/pages/ModulesPage";
 import ModuleDetailPage from "./pages/ModuleDetailPage";
@@ -51,6 +52,7 @@ const App = () => (
             {/* Public landing page */}
             <Route path="/" element={<LandingPage />} />
             <Route path="/home" element={<LandingPage />} />
+            <Route path="/category/:slug" element={<CategoryPage />} />
 
             <Route element={<PublicOnlyRoute />}>
               <Route path="/auth/login" element={<LoginPage />} />

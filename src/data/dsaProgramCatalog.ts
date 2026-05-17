@@ -29,6 +29,30 @@ export const PROGRAM_CATEGORIES: ProgramCategory[] = [
   "Drone & Hardware Tech",
 ];
 
+export const CATEGORY_SLUGS: Record<ProgramCategory, string> = {
+  "AI & Data Science": "ai-data-science",
+  "Software Development": "software-development",
+  "Cyber Security": "cyber-security",
+  "Cloud Computing": "cloud-computing",
+  "Emerging Technologies": "emerging-technologies",
+  "Drone & Hardware Tech": "drone-hardware-tech",
+  "Telecommunications": "telecommunications",
+};
+
+export const SLUG_TO_CATEGORY: Record<string, ProgramCategory> = Object.fromEntries(
+  Object.entries(CATEGORY_SLUGS).map(([cat, slug]) => [slug, cat as ProgramCategory])
+);
+
+export const CATEGORY_BLURB: Record<ProgramCategory, string> = {
+  "AI & Data Science": "Machine learning, data engineering and AI software development pathways.",
+  "Software Development": "Full-stack, systems and applications development qualifications — including our flagship FETC: IT Systems Development.",
+  "Cyber Security": "Defensive, offensive and governance tracks aligned to MICT-SETA and QCTO standards.",
+  "Cloud Computing": "Cloud administration and DevOps qualifications across AWS, Azure and hybrid environments.",
+  "Emerging Technologies": "IoT, blockchain and 4IR-focused programmes shaping the next wave of innovation.",
+  "Drone & Hardware Tech": "Drone piloting, embedded systems and hardware engineering programmes.",
+  "Telecommunications": "Network operations and telecommunications infrastructure qualifications.",
+};
+
 export interface DsaProgram {
   id: string;
   title: string;

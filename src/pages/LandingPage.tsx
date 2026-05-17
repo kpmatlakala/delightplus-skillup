@@ -26,7 +26,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { dsaProgramCatalog, PROGRAM_CATEGORIES, type ProgramCategory } from "@/data/dsaProgramCatalog";
+import { dsaProgramCatalog, PROGRAM_CATEGORIES, CATEGORY_SLUGS, type ProgramCategory } from "@/data/dsaProgramCatalog";
 
 const categoryIcon: Record<ProgramCategory, typeof Brain> = {
   "AI & Data Science": Brain,
@@ -79,28 +79,28 @@ const heroSlides = [
 /* ── Course cards ──────────────────────────────── */
 const courses = [
   {
-    title: "Artificial Intelligence",
-    description: "Master AI systems, automation, and intelligent technologies shaping the future.",
+    title: "AI & Data Science",
+    description: "Master AI systems, machine learning, automation and intelligent technologies shaping the future.",
     image: "https://images.pexels.com/photos/5473955/pexels-photo-5473955.jpeg?auto=compress&cs=tinysrgb&w=600",
-    link: "https://thedatascienceacademy.co.za/ai-data-science/",
+    link: `/category/${CATEGORY_SLUGS["AI & Data Science"]}`,
   },
   {
     title: "Cyber Security",
     description: "Develop industry-grade cyber defence, ethical hacking and security skills.",
     image: "https://images.pexels.com/photos/5380642/pexels-photo-5380642.jpeg?auto=compress&cs=tinysrgb&w=600",
-    link: "https://thedatascienceacademy.co.za/cyber-security/",
+    link: `/category/${CATEGORY_SLUGS["Cyber Security"]}`,
   },
   {
     title: "Cloud Computing",
     description: "Gain expertise in AWS, Azure and multi-cloud infrastructure engineering.",
     image: "https://images.pexels.com/photos/1181345/pexels-photo-1181345.jpeg?auto=compress&cs=tinysrgb&w=600",
-    link: "https://thedatascienceacademy.co.za/cloud-computing/",
+    link: `/category/${CATEGORY_SLUGS["Cloud Computing"]}`,
   },
   {
     title: "Software Development",
-    description: "Master Python, Java, JavaScript, HTML, C++ and modern full-stack workflows.",
+    description: "FETC: IT Systems Development plus Python and modern full-stack pathways.",
     image: "https://images.pexels.com/photos/3861964/pexels-photo-3861964.jpeg?auto=compress&cs=tinysrgb&w=600",
-    link: "https://thedatascienceacademy.co.za/software-development/",
+    link: `/category/${CATEGORY_SLUGS["Software Development"]}`,
   },
 ];
 
@@ -110,16 +110,6 @@ const whyCards = [
   { icon: Cpu, title: "4IR-Focused", text: "Training that prepares you for AI, Data Science, Cyber Security & more." },
   { icon: Users, title: "Expert Facilitators", text: "Learn from industry professionals with real-world tech experience." },
   { icon: Rocket, title: "Career-Centric", text: "Programs designed to boost employability and future opportunities." },
-];
-
-/* ── Course Categories ───────────────────────────── */
-const categories = [
-  { icon: Brain, label: "AI & Data Science", link: "https://thedatascienceacademy.co.za/ai-data-science" },
-  { icon: Shield, label: "Cyber Security & Cloud", link: "https://thedatascienceacademy.co.za/cyber-cloud" },
-  { icon: Code, label: "Software Development", link: "https://thedatascienceacademy.co.za/software-development" },
-  { icon: Globe, label: "Emerging Technologies", link: "https://thedatascienceacademy.co.za/emerging-technologies" },
-  { icon: Smartphone, label: "Mobile & Device Tech", link: "https://thedatascienceacademy.co.za/mobile-device-tech" },
-  { icon: Laptop, label: "Drone & Hardware Tech", link: "https://thedatascienceacademy.co.za/drone-hardware-tech" },
 ];
 
 /* ── Testimonials ────────────────────────────────── */
@@ -359,11 +349,8 @@ export default function LandingPage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {courses.map((c, i) => (
-              <motion.a
+              <motion.div
                 key={c.title}
-                href={c.link}
-                target="_blank"
-                rel="noreferrer"
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-30px" }}
@@ -371,17 +358,19 @@ export default function LandingPage() {
                 custom={i}
                 className="group bg-card/75 backdrop-blur-sm rounded-2xl overflow-hidden border border-border shadow-lg hover:-translate-y-2.5 hover:shadow-xl transition-all duration-300"
               >
-                <div className="relative overflow-hidden h-48">
-                  <img src={c.image} alt={c.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
-                </div>
-                <div className="p-5 text-left">
-                  <h3 className="font-display text-lg font-bold text-foreground mb-2">{c.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{c.description}</p>
-                  <span className="inline-block px-5 py-2.5 rounded-full text-sm font-semibold text-white bg-gradient-to-r from-accent to-primary shadow-md group-hover:scale-105 transition-transform">
-                    View More Info
-                  </span>
-                </div>
-              </motion.a>
+                <Link to={c.link} className="block">
+                  <div className="relative overflow-hidden h-48">
+                    <img src={c.image} alt={c.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                  </div>
+                  <div className="p-5 text-left">
+                    <h3 className="font-display text-lg font-bold text-foreground mb-2">{c.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">{c.description}</p>
+                    <span className="inline-block px-5 py-2.5 rounded-full text-sm font-semibold text-white bg-gradient-to-r from-accent to-primary shadow-md group-hover:scale-105 transition-transform">
+                      View More Info
+                    </span>
+                  </div>
+                </Link>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -688,11 +677,11 @@ export default function LandingPage() {
                 <span className="absolute bottom-0 left-0 w-11 h-0.5 bg-accent rounded" />
               </h4>
               <ul className="space-y-2.5 text-sm text-white/80">
-                {categories.map((cat) => (
-                  <li key={cat.label}>
-                    <a href={cat.link} target="_blank" rel="noreferrer" className="hover:text-white hover:translate-x-1.5 transition-all inline-flex items-center gap-1.5">
-                      <ChevronRight className="h-3 w-3" /> {cat.label}
-                    </a>
+                {PROGRAM_CATEGORIES.map((cat) => (
+                  <li key={cat}>
+                    <Link to={`/category/${CATEGORY_SLUGS[cat]}`} className="hover:text-white hover:translate-x-1.5 transition-all inline-flex items-center gap-1.5">
+                      <ChevronRight className="h-3 w-3" /> {cat}
+                    </Link>
                   </li>
                 ))}
               </ul>
