@@ -1,19 +1,34 @@
-﻿# CET Connect Portal
+﻿# Learning Programmes Portal
 
 ## Overview
 
-Full-stack learner/facilitator portal for the **FET Certificate: IT Systems Development**
-delivered by the Data Science Academy (DSA) at CET Venda.
+Full-stack learner/facilitator portal for **accredited qualifications and skills programmes**.
+Supports multiple full qualifications (e.g., IT Systems Development, Cloud Computing, End User Computing) and custom interventions/skills programmes.
 
-| Field | Value |
-|---|---|
-| Qualification | FET Certificate: IT Systems Development |
-| SAQA ID | 78965 |
-| NQF Level | 4 |
-| Total Credits | 131 |
-| Provider | Data Science Academy |
-| Delivery site | CET Venda |
-| Blocks | 3 (Block 1: Feb–Mar 2026) |
+---
+
+## Multi-Programme Support
+
+- All full qualifications are stored in `public/Courses_Actual/` (one folder per course)
+- Interventions/skills programmes are in `public/docs/Interventions/` (can reference modules from any course)
+- Platform supports dynamic selection and delivery of any course or intervention
+
+### Example Folder Structure
+
+```
+public/Courses_Actual/
+  Systems_Development/
+    README.md
+    Module_14924.md
+    ...
+  Cloud_Computing/
+    README.md
+    ...
+public/docs/Interventions/
+  CET_Systems_Dev_Skills_Programme.md
+  Digital_Literacy_Short_Programme.md
+  ...
+```
 
 ---
 

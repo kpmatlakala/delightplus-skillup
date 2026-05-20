@@ -1,56 +1,61 @@
-# CET Connect Portal — Vision, Purpose, and Recommendations
 
-## Vision Statement
+# Platform Vision & Recommendations
 
-“To be a catalyst for an inclusive, 4IR-driven, innovative knowledge economy.”
+## Vision
 
-## Platform Purpose
+Transition from a CET-only intervention platform to a general, dynamic system supporting:
+- Multiple full qualifications (e.g., Systems Development, Cloud Computing, End User Computing)
+- Multiple interventions/skills programmes (custom module selections)
+- Flexible course/intervention management and delivery
 
-CET Connect Portal is a digital platform designed to:
-- Deliver accredited qualification courses and short courses for CET lecturers and learners
-- Support blended and flexible learning (in-person, online, and self-paced)
-- Enable evidence-based assessment, moderation, and certification
-- Foster collaboration, peer learning, and professional development
-- Empower learners and facilitators with accessible, high-quality resources
+## Key Recommendations
 
-## Key Features
- Downloadable workbooks and assessment packs for each unit (in markdown and docx)
- Dual assessment system:
-    - Summative assessments: Take-home, completed at home after unit quiz, with set due dates (1–2 weeks)
-    - Block-based assessments: Scheduled in-person, require OTP and timer (currently unavailable)
- Learner profile and portfolio tracking
- Resource library (lesson plans, guides, templates, glossaries)
- Communication tools for announcements and feedback
- Compliance with SAQA, MICT SETA, and ETQA requirements
+### 1. Course Abstraction
+- Refactor data models and UI to treat “course” as a dynamic entity, not hardcoded to CET.
+- Store all courses in `public/Courses_Actual/`, each with its own folder, metadata, and modules.
 
-## Recommendations for Growth
-1. **Expand Course Offerings:**
-   - Add more 4IR-aligned short courses (AI, cloud, coding, digital skills)
-   - Partner with industry for micro-credentials and digital badges
+### 2. Intervention Flexibility
+- Allow interventions/skills programmes to reference any combination of modules from any course.
+- Store interventions in `public/docs/Interventions/`, with clear mapping to source modules.
 
-2. **Enhance Accessibility:**
-   - Ensure all resources are mobile-friendly and available offline
-   - Provide multilingual support (e.g., Sepedi, Tshivenda)
+### 3. Dynamic Routing & Role Logic
+- Update routing, menus, and permissions to support multiple programmes and interventions.
+- Ensure admin/facilitator tools work for any course, not just CET.
 
-3. **Strengthen Assessment Integrity:**
-   - Maintain dual assessment approach: take-home summative (post-quiz, due dates) and in-person block-based (when available)
-   - Integrate plagiarism checks and digital submission tracking
+### 4. Metadata & Indexing
+- Add metadata files (e.g., README.md, course.json) in each course/intervention folder for:
+  - Qualification name, SAQA ID, NQF Level, credits, description
+  - List of modules/unit standards
+- Build a dynamic course/intervention catalogue for selection and reporting.
 
-4. **Support Continuous Professional Development:**
-   - Offer CPD modules for facilitators
-   - Enable peer review and mentorship features
+### 5. Assessment & PoE
+- Ensure assessment flows, PoE, and compliance features are generic and can be mapped to any course/intervention.
 
-5. **Data-Driven Improvement:**
-   - Use analytics to track learner progress and identify support needs
-   - Regularly review and update content based on feedback and moderation
+## Example Structure
 
-6. **Foster Community and Collaboration:**
-   - Create forums and discussion spaces for sharing best practices
-   - Highlight success stories and innovative projects
+```
+public/Courses_Actual/
+  Systems_Development/
+    README.md
+    Module_14924.md
+    ...
+  Cloud_Computing/
+    README.md
+    ...
+public/docs/Interventions/
+  CET_Systems_Dev_Skills_Programme.md
+  Digital_Literacy_Short_Programme.md
+  ...
+```
 
-## Summary
-The CET Connect Portal now uses a dual assessment system: take-home summative assessments (completed after unit quizzes, with due dates) and block-based in-person assessments (scheduled, currently unavailable). This approach supports compliance, flexibility, and innovation for the CET sector, ensuring accessible resources and robust assessment integrity.
+## Migration Steps
 
----
+1. Refactor code and data to remove CET-specific assumptions.
+2. Add support for dynamic course/intervention loading and selection.
+3. Update documentation and onboarding to reflect the new, general-purpose platform.
 
-*For further development, prioritize user experience, compliance, and continuous improvement to remain a leader in CET digital learning.*
+## Benefits
+
+- Scalable to any qualification or intervention.
+- Reusable for new clients, providers, or SETA/SAQA-aligned programmes.
+- Easier to maintain, audit, and extend.
