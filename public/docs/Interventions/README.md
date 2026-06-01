@@ -24,3 +24,8 @@ docs/Interventions/
 1. Create a new markdown file for the intervention.
 2. List the parent course(s) and included modules.
 3. Document learning outcomes, credits, and assessment strategy.
+
+## Relationship to Courses
+
+- Interventions should reference canonical course modules from `public/docs/Courses_Actual/` rather than duplicating module content.
+- Keep assessment source-of-truth in `public/docs` and avoid divergent local copies in the app or other folders.

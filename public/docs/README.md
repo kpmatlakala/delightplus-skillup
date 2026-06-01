@@ -13,3 +13,13 @@ This directory contains supporting documentation, lecture notes, and reference m
 
 - Use this directory to store any reference, compliance, or teaching materials that support the delivery of courses and interventions.
 - Keep documentation organized by topic, course, or intervention for easy access and reuse.
+
+## Platform objectives (summary)
+
+- The repository supports two content models:
+	- **Courses** — full accredited programmes stored under `public/docs/Courses_Actual/`.
+	- **Interventions** — curated or special deliveries stored under `public/docs/Interventions/` (examples: CET_SP, UL_DigitalHub).
+
+- Author canonical assessment content as Markdown under `public/docs` so the app can consume the same source for in-app tests, printable papers, and memoranda.
+
+- See [Objectives](Objectives.md) for a short mission brief and near-term priorities.
