@@ -22,11 +22,19 @@ import {
   MapPin,
   Star,
   ChevronDown,
+  Facebook,
+  Twitter,
+  Youtube,
+  Instagram,
+  Info,
+  User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { dsaProgramCatalog, PROGRAM_CATEGORIES, CATEGORY_SLUGS, type ProgramCategory } from "@/data/dsaProgramCatalog";
+import Footer from "@/components/Footer";
+import Header from "@/components/Home/Header";
 
 const categoryIcon: Record<ProgramCategory, typeof Brain> = {
   "AI & Data Science": Brain,
@@ -153,6 +161,7 @@ const partners = [
    ════════════════════════════════════════════════════ */
 export default function LandingPage() {
   const [slideIndex, setSlideIndex] = useState(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => setSlideIndex((i) => (i + 1) % heroSlides.length), 5800);
@@ -163,45 +172,7 @@ export default function LandingPage() {
     <div className="min-h-screen bg-background text-foreground">
 
       {/* ── Top Bar ──────────────────────────────── */}
-      <div className="hidden md:flex dsa-gradient-bg text-white text-xs px-6 py-2 justify-between items-center">
-        <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1.5"><Phone className="h-3 w-3" /> +27 83 2000 205</span>
-          <span className="flex items-center gap-1.5"><Mail className="h-3 w-3" /> info@thedatascienceacademy.co.za</span>
-          <span className="flex items-center gap-1.5"><MapPin className="h-3 w-3" /> 28 Jorissen St, Polokwane, 0700</span>
-        </div>
-      </div>
-
-      {/* ── Navbar ───────────────────────────────── */}
-      <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3">
-            <img src="/logos/dsa-logo.png" alt="DSA" className="h-12 w-auto object-contain" />
-          </Link>
-
-          <div className="hidden md:flex items-center gap-6 text-sm font-medium">
-            <a href="#now-delivering" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
-              <GraduationCap className="h-4 w-4" /> Now Enrolling
-            </a>
-            <a href="#programs" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
-              <BookOpen className="h-4 w-4" /> Explore Courses
-            </a>
-            <a href="#why" className="text-muted-foreground hover:text-foreground transition-colors">About</a>
-            <a href="#testimonials" className="text-muted-foreground hover:text-foreground transition-colors">Testimonials</a>
-            <a href="#accreditations" className="text-muted-foreground hover:text-foreground transition-colors">Accreditation</a>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/auth/login">Student Portal</Link>
-            </Button>
-            <Button size="sm" asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
-              <Link to="/auth/signup">
-                Apply Now <ArrowRight className="ml-1 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </nav>
+      <Header />
 
       {/* ── Hero Slider ──────────────────────────── */}
       <section className="relative h-[88vh] overflow-hidden">
@@ -638,75 +609,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Footer ───────────────────────────────── */}
-      <footer className="dsa-gradient-bg text-white py-16 relative overflow-hidden">
-        {/* Glow */}
-        <div className="absolute -top-28 -right-28 w-64 h-64 bg-white/15 rounded-full blur-[120px]" />
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
-            {/* About */}
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <img src="/logos/dsa-logo.png" alt="DSA" className="h-14 w-auto object-contain brightness-0 invert" />
-              </div>
-              <p className="text-sm text-white/85 leading-relaxed max-w-xs">
-                A future-forward learning institution dedicated to equipping the next generation of African
-                innovators with practical skills in data science, artificial intelligence, and emerging technologies.
-              </p>
-            </div>
-
-            {/* Quick Links */}
-            <div>
-              <h4 className="font-bold text-lg mb-4 relative pb-2">
-                Quick Links
-                <span className="absolute bottom-0 left-0 w-11 h-0.5 bg-accent rounded" />
-              </h4>
-              <ul className="space-y-2.5 text-sm text-white/80">
-                <li><Link to="/" className="hover:text-white hover:translate-x-1.5 transition-all inline-flex items-center gap-1.5"><ChevronRight className="h-3 w-3" /> Home</Link></li>
-                <li><a href="#programs" className="hover:text-white hover:translate-x-1.5 transition-all inline-flex items-center gap-1.5"><ChevronRight className="h-3 w-3" /> Explore Courses</a></li>
-                <li><a href="#accreditations" className="hover:text-white hover:translate-x-1.5 transition-all inline-flex items-center gap-1.5"><ChevronRight className="h-3 w-3" /> Accreditation</a></li>
-                <li><Link to="/auth/login" className="hover:text-white hover:translate-x-1.5 transition-all inline-flex items-center gap-1.5"><ChevronRight className="h-3 w-3" /> Student Portal</Link></li>
-                <li><Link to="/auth/signup" className="hover:text-white hover:translate-x-1.5 transition-all inline-flex items-center gap-1.5"><ChevronRight className="h-3 w-3" /> Apply Now</Link></li>
-              </ul>
-            </div>
-
-            {/* Course Categories */}
-            <div>
-              <h4 className="font-bold text-lg mb-4 relative pb-2">
-                Course Categories
-                <span className="absolute bottom-0 left-0 w-11 h-0.5 bg-accent rounded" />
-              </h4>
-              <ul className="space-y-2.5 text-sm text-white/80">
-                {PROGRAM_CATEGORIES.map((cat) => (
-                  <li key={cat}>
-                    <Link to={`/category/${CATEGORY_SLUGS[cat]}`} className="hover:text-white hover:translate-x-1.5 transition-all inline-flex items-center gap-1.5">
-                      <ChevronRight className="h-3 w-3" /> {cat}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Contact */}
-            <div>
-              <h4 className="font-bold text-lg mb-4 relative pb-2">
-                Contact Us
-                <span className="absolute bottom-0 left-0 w-11 h-0.5 bg-accent rounded" />
-              </h4>
-              <div className="space-y-3 text-sm text-white/85">
-                <div className="flex items-start gap-2.5"><Phone className="h-4 w-4 mt-0.5 shrink-0" /> +27 83 2000 205</div>
-                <div className="flex items-start gap-2.5"><Mail className="h-4 w-4 mt-0.5 shrink-0" /> info@thedatascienceacademy.co.za</div>
-                <div className="flex items-start gap-2.5"><MapPin className="h-4 w-4 mt-0.5 shrink-0" /> 28 Jorissen St, Polokwane Central, Polokwane, 0700</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Copyright */}
-          <div className="border-t border-white/25 mt-14 pt-5 text-center text-xs text-white/80">
-            © {new Date().getFullYear()} The Data Science Academy. All Rights Reserved.
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

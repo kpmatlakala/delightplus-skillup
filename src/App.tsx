@@ -2,11 +2,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./hooks/useAuth";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicOnlyRoute from "./components/PublicOnlyRoute";
-import LandingPage from "./pages/LandingPage";
+
 import Index from "./pages/Index";
 import ModulesPage from "./pages/ModulesPage";
 import ModuleDetailPage from "./pages/ModuleDetailPage";
@@ -38,6 +38,10 @@ import SummativeAssessmentAdminPage from "./pages/SummativeAssessmentAdminPage";
 import PracticalAssessmentAdminPage from "./pages/PracticalAssessmentAdminPage";
 import QuizAssessmentAdminPage from "./pages/QuizAssessmentAdminPage";
 
+import RootRouter from "./components/RootRouter";
+import ContactPage from "./pages/Home/ContactPage";
+import AccreditationPage from "./pages/Home/AccredPage";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -48,8 +52,11 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            {/* Public landing page */}
-            <Route path="/home" element={<LandingPage />} />
+            {/* NEW: Single root route with conditional rendering */}
+            <Route path="/" element={<RootRouter />} />
+            <Route path="/home" element={<Navigate to="/" replace />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/accreditation" element={<AccreditationPage />} />
 
             <Route element={<PublicOnlyRoute />}>
               <Route path="/auth/login" element={<LoginPage />} />
@@ -65,7 +72,8 @@ const App = () => (
               <Route path="/modules/:id" element={<ModuleDetailPage />} />
               <Route path="/learners" element={<LearnersPage />} />
               <Route path="/lesson-plans" element={<LessonPlansPage />} />
-              <Route path="/assessments" element={<AssessmentsPage />} />
+              <Route path="/assessments" element={<AssessmentsPage />}
+              />
               <Route path="/assessments/quizzes" element={<QuizAssessmentAdminPage />} />
               <Route path="/assessments/quizzes/:unitId" element={<QuizAssessmentAdminPage />} />
               <Route path="/assessments/quizzes/:unitId/capture/:userId" element={<QuizAssessmentAdminPage />} />
